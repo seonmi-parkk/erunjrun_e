@@ -35,3 +35,4 @@ mvnw
 mvnw.cmd
 .mvn/
 src/test/java/kr/co/erunjrun/ErunJrunApplicationTests.java
+src/test/
