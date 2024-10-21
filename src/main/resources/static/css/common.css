@@ -57,7 +57,168 @@
     	color: var(--font-color);
     	text-decoration: none;
     }
+    
+    
+    /* 헤더 */
+   	header {
+	    width: 100%;
+	    position: fixed;
+	    z-index: 999;
+	    top: 0;
+	    left: 50%;
+	    transform: translateX(-50%);
+		padding : 16px 10px 17px;
+		border-bottom: 1px solid #F2F3F4;
+	    background: #fff;
+	}
+	
+	.header-inner {
+		max-width: 1300px;
+		margin: 0 auto;
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-pack: space-between; -ms-flex-pack: space-between; justify-content: space-between;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
+	}
+	
+	header .menu {
+		display : flex; display: -webkit-box; display: -moz-box; display: -ms-flexbox;
+	}
+	
+	header .menu li a{
+		padding: 10px 14px;
+		margin: 0 9px;
+		font-size: 18px;
+	}
+	
+	header .menu li a:hover{
+		color: var(--main-color);
+	}
+	
+	.menu > li {
+		position: relative;
+	}
+	
+	.menu .depth2 {
+		display: none;
+	    position: absolute;
+    	top: 52px;
+   	    left: 50%;
+    	transform: translateX(-50%);
+   	    width: max-content;
+    	padding: 30px 0;
+    	text-align: center;
+    	background : rgba(255,255,255,0.8);
+    	box-shadow: 0px 4px 13px 0px rgba(0, 0, 0, 0.12);
+    	backdrop-filter: blur(3px);
+	}
+	
+	.menu .depth2 a {
+		display: inline-block;
+		padding: 6px 14px;
+		font-size: 16px;
+	}
+	
+	.menu .depth2 a:hover {
+		color: var(--main-color);
+	}
+	
+	header .login-box {
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;
+	}
+	
+	header .login {
+		margin-right : 20px;
+	}
+	
+	header .profile-box {
+		width : 46px;
+		height : 46px;
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
+	}
+	
+	header .profile-box .profile-img{
+		width: 32px;
+	}
+	
+	header .notice{
+		position: relative;
+	    padding: 6px;
+		cursor: pointer;
+	}
+	
+	header .notice .num-box{
+		position: absolute;
+		right: -1px;
+   		top: 0px;
+		right: 6px;
+		width: 16px; 
+		height: 16px;
+		line-height: 16px;
+		text-align: center;
+		background: var(--main-color);
+		border-radius: 50%;
+	}
+	header .notice .num-box span{
+		color: #fff;
+		font-size: 11px;
+	}
+	
+	
+    /* 푸터 */
+    .footer {
+		padding : 44px 0 44px;
+		background: #f9f9f9;
+	}
+	.footer-inner {
+		position: relative;
+		max-width: 1300px;
+		margin: 0 auto;
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-pack: space-between; -ms-flex-pack: space-between; justify-content: space-between;
+		-webkit-box-align: start; -ms-flex-align: start; align-items: flex-start;  
+		font-size: 14px;
+	}
+	.footer .col {
+		padding: 0;
+	}
+	.footer .col li {
+		margin: 10px 0;
+	}
+	.footer .col .footer-tit {
+	    margin-bottom: 18px;
+	    font-size: 18px;
+		color: #777;
+		font-weight: 500;
+	}
+	.footer a{
+		font-size: 15px;
+		
+	}
+	.footer .col:last-child{
+		position: initial;
+		display: -moz-box; display: -ms-flexbox; display: flex;
+		-webkit-box-orient: vertical; -ms-flex-direction: column; flex-direction: column;
+		-webkit-box-pack: space-between; -ms-flex-pack: space-between; justify-content: space-between;
+	}
+	.footer .col:last-child li:first-child a{
+		font-size: 14px;
+	}
+	.footer .copyright{
+	    position: absolute;
+   	    bottom: 11px;
+		color: #999;
+		font-weight: 300;
+	}
+    
 
+	/* 공통 태그 */
+	.inner {
+		max-width: 1300px;
+		margin: 0 auto;	
+	}
 
     /* 색상 (쓸때는 => var(--main-color) ) */
     :root{
@@ -269,123 +430,51 @@
         top: 50%; left: 50%;
         transform: translate(-50%, -50%);
         background-image: url('../img/common/ico_check.png');
-        visibility: hidden;
+        /* visibility: hidden; */
     }
 
     input[type="checkbox"]:checked {
         border-color: var(--main-color);
 		background-color: var(--main-color);
 	}
+	
     input[type="checkbox"]:checked::after {
         visibility: visible;
     }
-    
-    
-    
-    input[type="checkbox"].input-tag {
-    	
-    }
-    
-    .tile{
-    display: inline-block;
-    padding: 10px 14px;
-    height: 38px;
-    position: relative;
-    border-radius: 20pxl;
-    border: 1px solid #f2f2f2;
-}
-	.tile input[type="checkbox"]{
-	    -webkit-appearance: none;
-	    position: relative;
-	    height: 100%;
-	    width: 100%;
-	    background-color: #ffffff;
-	    border-radius: 10px;
-	    cursor: pointer;
-	    border: 3px solid transparent;
-	    outline: none;
-	    box-shadow: 15px 15px 25px rgba(2,28,53,0.05);
-	}
-	.tile input[type="checkbox"]:after{
-	    position: absolute;
-	    font-family: "Font Awesome 5 Free";
-	    font-weight: 400;
-	    content: "\f111";
-	    font-size: 22px;
-	    top: 10px;
-	    left: 10px;
-	    color: #e2e6f3;
-	}
-	.tile input[type="checkbox"]:hover{
-	    transform: scale(1.08);
-	}
-	.tile input[type="checkbox"]:checked{
-	    border: 3px solid #478bfb;
-	}
-	.tile input[type="checkbox"]:checked:after{
-	    font-weight: 900;
-	    content: "\f058";
-	    color: #478bfb;
-	}
-	.tile label{
-	    display: flex;
-	    flex-direction: column;
-	    align-items: center;
-	    justify-content: center;
-	    gap: 20px;
-	    height: 80%;
-	    width: 100%;
-	    position: absolute;
-	    bottom: 0;
-	    cursor: pointer;
-	}
-	.tile label .fas{
-	    font-size: 60px;
-	    color: #2c2c51;
-	}
-	.tile input[type="checkbox"]:checked + label .fas{
-	    animation: grow 0.5s;
-	}
-	
-	
-/* 	#tagFilters label {
+
+	#tagFilters label {
+		display: -moz-box; display: -ms-flexbox; display: flex;
+		-webkit-box-pack: space-between; -ms-flex-pack: space-between; justify-content: space-between;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
 	 	padding: 5px 14px;
+	 	width: fit-content;
     	height: 38px;
     	line-height: 38px;
    	 	position: relative;
     	border-radius: 100px;
-    	border: 1px solid #f2f2f2;
+    	border: 1px solid rgba(0,0,0,0.07);
 	 	margin-right: 15px;
 	  	font-size: 16px;
 	  	cursor: pointer;
 	}
 	
 	#tagFilters input[type="checkbox"] {
-	  margin-right: 5px;
-	   appearance: none; 기본(네이티브) 모양을 제거
+	    position: absolute;
+		width: 0px;
+    	height: 0px;
+	   	margin-right: 5px;
+	   	appearance: none;
+	   	visibility: hidden;
 	}
-	
-
-
     
    	#tagFilters label.checked {
 		background-color: rgba(253,111,34,0.22);
-	} */
+	} 
     
-    #tagFilters label {
-    	padding: 5px 14px;
-    	height: 38px;
-    	line-height: 38px;
-   	 	position: relative;
-    	border-radius: 100px;
-    	border: 1px solid #f2f2f2;
-	 	margin-right: 15px;
-	  	font-size: 16px;
-	  	cursor: pointer;
+    #tagFilters input[type="checkbox"]:after, #tagFilters input[type="checkbox"]:checked::after {
+    	display: none; 
+    	visibility: hidden;
     }
-    #tagFilters input[type="text"] + label {
-    }
-    
     
     
     select{
