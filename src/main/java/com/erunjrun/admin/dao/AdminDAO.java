@@ -9,6 +9,12 @@ import com.erunjrun.admin.dto.AdminDTO;
 @Mapper
 public interface AdminDAO {
 
-	List<AdminDTO> memberList();
+	/* List<AdminDTO> list(int limit, int offset); */
+
+	
+
+	List<AdminDTO> memberlist(int limit, int offset);
+
+	int count(int cnt);
 
 }

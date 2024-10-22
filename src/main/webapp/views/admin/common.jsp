@@ -3,23 +3,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>이런저런</title>
+<title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+
+
 <style>
 	
 </style>
 </head>
 <body>
 	<!-- 헤더 -->
-	<jsp:include page="header.jsp"/> 
+	<jsp:include page="header.jsp"/>
 	
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
 	<div class="inner">
 			
-		<br/><p class="title1">--------타이틀 폰트1--------</p>
+		<br/><p class="title1">--------타이틀 폰트--------</p>
 	    <p class="title1">대제목 34px</p>
 	    <p class="title2">소제목 20px</p>
 	
@@ -38,8 +40,6 @@
 	    <div class="btn01-s">버튼 s</div>
 	    <div class="btn02-s">버튼 s</div>
 	    <div class="btn03-s">버튼 s</div>
-	    <div class="btn-like btn02-s"><img src="resources/img/common/ico_heart_no_act.png" alt="좋아요"></div>
-	    <div class="btn-like btn02-s"><img src="resources/img/common/ico_heart_act.png" alt="좋아요"></div>
 	
 	    <br/><br/><p class="title1">--------input--------</p>
 	    <input type="radio" name="" id=""/>
@@ -111,8 +111,6 @@
 	<!-- 푸터 -->
 	<jsp:include page="footer.jsp"/>
 </body>
-
-
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <script src="resources/js/common.js" type="text/javascript"></script>
 <script src="resources/js/layerPopup.js"></script>
@@ -159,8 +157,6 @@ $('#pagination').twbsPagination({
 		pageCall(page);
 	} */
 });
-
-
     
 </script>
 </html>
