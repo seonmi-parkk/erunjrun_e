@@ -1,0 +1,15 @@
+diff a/src/main/java/com/erunjrun/main/controller/MainController.java b/src/main/java/com/erunjrun/main/controller/MainController.java	(rejected hunks)
+@@ -17,8 +17,11 @@
+ 	Logger logger = LoggerFactory.getLogger(getClass());
+ 	
+ 	@RequestMapping(value="/")
+-	public String main() {
+-		
++	public String main(HttpSession session) {
++		session.setAttribute("loginId", "kimee01");
++		session.setAttribute("profileImg", "/photo/profile_img1.jpg");
++		session.setAttribute("iconImg", "resources/img/icon/icon1.png");
++		session.setAttribute("adminYn", "N");
+ 		return "main";
+ 	}
+ 	
