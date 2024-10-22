@@ -26,6 +26,7 @@
 		<p class="title1">러닝크루 등록</p>
 		
 		<p class="title2">크루명 <input type="text" name="crew_name" required/></p>
+		<p>수정</p>
 	
 	</div>
 	<jsp:include page="footer.jsp"/>
