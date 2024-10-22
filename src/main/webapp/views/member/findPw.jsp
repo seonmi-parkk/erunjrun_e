@@ -64,8 +64,8 @@
                 <input type="text" id="id" name="id" required />
             </div>
             <div class="form-group">
-                <label for="nickName">닉네임</label>
-                <input type="text" id="nickName" name="nickName" required />
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" required />
             </div>
             <div class="form-group">
                 <label for="email">이메일</label>
