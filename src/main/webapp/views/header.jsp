@@ -40,17 +40,25 @@
 			</li>
 		</ul>
 		<div class="login-box">
-			<a class="login" href="#">로그인</a>
-			<a href="#">회원가입</a>
-			<a class="profile-box" href="#">
-				<img class="profile-img" src="resources/img/common/profile.png" alt="프로필 이미지"/>
-			</a>
-			<div class="notice">
-				<div class="num-box">
-					<span>3</span>
-				</div>
-				<img class="profile-img" src="resources/img/common/ico_notice.png" alt="알림"/>
-			</div>
+			<c:choose>
+				<c:when test="${sessionScope.id}">
+					<a class="login" href="#">로그인</a>
+					<a href="#">회원가입</a>
+				</c:when>
+				<c:otherwise>
+					<a class="profile-box" href="#">
+						<c:when test="${sessionScope.profileImg}">
+							<img class="profile-img" src="resources/img/common/profile.png" alt="프로필 이미지"/>
+						</c:when>
+					</a>	
+					<div class="notice">
+						<div class="num-box">
+							<span>3</span>
+						</div>
+						<img class="profile-img" src="resources/img/common/ico_notice.png" alt="알림"/>
+					</div>
+				</c:otherwise>
+			</c:choose>
 		</div>
 
 	</div>
