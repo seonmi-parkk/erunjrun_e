@@ -1,5 +1,4 @@
 
-
 function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = btn2Act) {
     // 대화 상자를 HTML 요소로 생성
     var confirmBox = document.createElement('div');
@@ -31,7 +30,7 @@ function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = 
     };
 
     // 확인 버튼 클릭 시
-    var confirmButton = document.querySelector('.confirm');
+    var confirmButton = document.querySelector('.confirm-box .confirm');
     confirmButton.addEventListener('click', function() {
         removeAlert();  // 기존 confirmBox 닫기
         btn1Callback();  // 
@@ -39,7 +38,7 @@ function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = 
 
     // 취소 버튼이 있을 때 클릭 이벤트 처리
     if(btn2){
-        var cancelButton = document.querySelector('.cancel');
+        var cancelButton = document.querySelector('.confirm-box .cancel');
         cancelButton.addEventListener('click', function() {
             removeAlert();  // 기존 confirmBox 닫기
             btn2Callback();  
@@ -50,7 +49,7 @@ function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = 
     overlay.addEventListener('click', removeAlert);
     
     // 닫기 버튼 클릭 시 팝업 닫기
-    var closeBtn = document.getElementsByClassName('btn-close')[0];
+    var closeBtn = confirmBox.getElementsByClassName('btn-close')[0];
     closeBtn.addEventListener('click', removeAlert);
 
     // 키보드 동작 막기

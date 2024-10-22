@@ -20,11 +20,6 @@ public class AdminController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired AdminService admin_service;
-	
-	@GetMapping(value = "/")
-	public String main() {
-		return "main";
-	}
 
 	@GetMapping(value = "/memberList")
 	public String memberlist(Model model) {

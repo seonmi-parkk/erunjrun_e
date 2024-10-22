@@ -25,5 +25,12 @@ public class MainController {
 		return "main";
 	}
 	
+//	임시
+	@RequestMapping(value="/profileDetail")
+	public String profileDetail(HttpSession session) {
+
+		return "mate/profileDetail";
+	}
+	
 	
 }

@@ -19,7 +19,7 @@
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
 	<div class="inner">
 			
-		<br/><p class="title1">--------타이틀 폰트--------</p>
+		<br/><p class="title1">--------타이틀 폰트1--------</p>
 	    <p class="title1">대제목 34px</p>
 	    <p class="title2">소제목 20px</p>
 	
@@ -38,6 +38,8 @@
 	    <div class="btn01-s">버튼 s</div>
 	    <div class="btn02-s">버튼 s</div>
 	    <div class="btn03-s">버튼 s</div>
+	    <div class="btn-like btn02-s"><img src="resources/img/common/ico_heart_no_act.png" alt="좋아요"></div>
+	    <div class="btn-like btn02-s"><img src="resources/img/common/ico_heart_act.png" alt="좋아요"></div>
 	
 	    <br/><br/><p class="title1">--------input--------</p>
 	    <input type="radio" name="" id=""/>
@@ -157,6 +159,8 @@ $('#pagination').twbsPagination({
 		pageCall(page);
 	} */
 });
+
+
     
 </script>
 </html>
