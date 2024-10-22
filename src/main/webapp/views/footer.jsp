@@ -5,7 +5,7 @@
 	<div class="footer-inner">
 		<div class="col">
 			<a href="/">
-				<img src="resources/img/common/logo.png" alt="이런저런"/>
+				<img src="/resources/img/common/logo.png" alt="이런저런"/>
 			</a>
 		</div>
 		<div class="col menu">

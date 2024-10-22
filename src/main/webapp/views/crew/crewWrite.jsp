@@ -12,9 +12,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    
     <script src="/resources/js/summernote.js"></script>
-    <script src="/resources/js/daumapi.js"></script>
     
 
 <style>
@@ -23,9 +21,12 @@
 </head>
 <body>
     <jsp:include page="../header.jsp"/>
+    <div class="crewWriteView">
     <div class="inner">
 	    <form>
 	        <p class="title1">러닝크루 등록</p>
+	        
+	        <div class="박스임"></div>
 	        
 	        <div class="boxheigth"><span class="title2">크루명 </span><input type="text" name="crew_name" required/></div> 
 	       
@@ -33,16 +34,17 @@
 	             
 	        <span class="title2" >태그</span>
 	        <span id="tagFilters">
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
-		 		<label><input type="checkbox" name="tag_idx" value="소셜 모임"> 소셜 모임</label>
+		 		<label><input type="checkbox" name="tag_idx" value="1">🏃‍♂️ 러닝에 집중</label>
+		 		<label><input type="checkbox" name="tag_idx" value="2">🙋‍♀️ 친목도 중요</label>
+		 		<label><input type="checkbox" name="tag_idx" value="3"> 남성만 가능</label>
+		 		<label><input type="checkbox" name="tag_idx" value="4"> 여성만 가능</label>
+		 		<label><input type="checkbox" name="tag_idx" value="5"> 혼성</label>
+		 		<label><input type="checkbox" name="tag_idx" value="6"> <b style='color:FD6F22'>E</b> 환영해요</label>
+		 		<label><input type="checkbox" name="tag_idx" value="7"> <b style='color:116DCA'>I</b> 환영해요</label>
+		 		<label><input type="checkbox" name="tag_idx" value="8">🐂 소규모 크루</label>
+		 		<label><input type="checkbox" name="tag_idx" value="9">🏆 대회 목적</label>
+		 		<label><input type="checkbox" name="tag_idx" value="10">💦 러닝 고수만</label>
+		 		<label><input type="checkbox" name="tag_idx" value="11">🥳 초보도 환영</label>
 		    </span>
 	        
 	        <br>
@@ -82,7 +84,7 @@
 	    	
 	    	<br>
 	    	
-	    	<div class="title2">크루 설명</div> <br>
+	    	<div class="title2">크루 설명</div> <br/>
 	    	<div class="post-form">
 				<textarea name="postContent" id="summernote" maxlength="10000" ></textarea>
 			</div>
@@ -94,9 +96,13 @@
 	    </form>
     	
     </div>
+    </div>
     <jsp:include page="../footer.jsp"/>
 </body>
+
 <script src="/resources/js/common.js"></script>
+
+    <script src="/resources/js/daumapi.js"></script>
 
 <script>
 	var dayCheckboxes = [];  // 선택된 요일 체크박스를 추적할 배열
@@ -138,15 +144,19 @@
 		var content =  $('#summernote').summernote('code');
     	
     	
-    	formData.append('user_name', 'admin'); // 세션값 체크해서 넣어줘야 함!
-    	formData.append('subject', $('#subject').val());  // 제목 추가
+    	formData.append('id', 'test'); // 세션값 체크해서 넣어줘야 함!
     	formData.append('content', content);  // summernote의 HTML 내용 추가 (이미지 포함)
     	
-        formData.append('roadAddr', roadAddr); // 화면에 출력
+        formData.append('address', roadAddr); // 화면에 출력
         formData.append('sigungu', sigungu);
         formData.append('sido', sido);
-        formData.append('shotsido', shotsido);
+        formData.append('shortsido', shortsido);
+        
       
+	     console.log('roadAddr =>', roadAddr);
+	     console.log('sigungu =>', sigungu);
+	     console.log('sido =>', sido);
+	     console.log('shotssido =>', shortsido);
     	
         // 게시글 에디터 이미지 검증을 위한 코드
 	    var tempDom = $('<div>').html(content);
@@ -163,7 +173,7 @@
 
 	    // new_filename과 일치하는 항목만 필터링
 	    var finalImgs = tempImg.filter(function(temp) {
-	        return imgsInEditor.includes(temp.new_filename);  // 에디터에 있는 파일과 tempImg의 new_filename 비교
+	        return imgsInEditor.includes(temp.img_new);  // 에디터에 있는 파일과 tempImg의 new_filename 비교
 	    });
 	    
 	    console.log("최종 전송할 이미지 쌍:", finalImgs);
@@ -185,7 +195,7 @@
 	        error: function(e) {
 	            console.log('글 전송 에러:', e);
 	        }
-	    }); 
+	    });  
     }
 </script>
 
