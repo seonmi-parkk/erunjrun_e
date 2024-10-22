@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+<mapper namespace="com.erunjrun.admin.dao.AdminDAO">
+  	<select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+  		SELECT 
+	    m.id,
+	    m.nickname,
+	    m.email,
+	    m.join_date,
+	    CASE 
+	        WHEN b.id IS NOT NULL THEN 'Y'
+	        ELSE 'N'
+	    END AS report_status,
+	    (SELECT COUNT(*) 
+	    FROM report_write rw
+	   		 WHERE rw.id = m.id) AS report_count
+		FROM 
+		    member m
+		LEFT JOIN 
+		    ban b ON m.id = b.id;
+  	</select>
+  	
+  	<select id="count" resultType="int">
+		SELECT CEIL(count(id)/#{param1}) AS pages FROM member
+	</select>
+  
+  </mapper>

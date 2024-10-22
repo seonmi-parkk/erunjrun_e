@@ -1,6 +1,8 @@
 package com.erunjrun.admin.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +19,30 @@ public class AdminService {
 	
 	@Autowired AdminDAO admin_dao;
 
-	public List<AdminDTO> memberList() {
-		
-		return admin_dao.memberList();
-	}
+	
+	 public Map<String, Object> memberlist(int page, int cnt) {
+	 logger.info("현재페이지 :"+page); 
+	 logger.info("한페이지에 보여줄 갯수 :"+cnt);
+	  
+	 int limit = cnt;
+	 int offset = (page-1)*cnt;
+	 int totalPage = admin_dao.count(cnt);
+	  
+	 Map<String, Object> result = new HashMap<String, Object>();
+	 result.put("totalPages", totalPage); 
+	 result.put("currPage", page);
+	 result.put("list", admin_dao.memberlist(limit,offset));
+	 
+	 
+	 
+	 return result; }
+
+
+	
+	 
+//	public List<AdminDTO> memberlist(int page_, int cnt_) {
+//		
+//		return admin_dao.memberlist();
+//	}
 	
 }

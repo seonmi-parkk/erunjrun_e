@@ -3,7 +3,10 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 
-<!-- <mapper namespace="">
-
+<mapper namespace="com.erunjrun.board.dao.RunBoardDAO">
 	
-</mapper> -->
+	<select id="list" resultType="com.erunjrun.board.dto.RunBoardDTO">
+		
+	</select>
+	
+</mapper>
