@@ -40,6 +40,7 @@
 			</li>
 		</ul>
 		<div class="login-box">
+<<<<<<< HEAD
 		<%-- 	<c:choose>
 				<c:when test="${sessionScope.id}">
 					<a class="login" href="#">로그인</a>
@@ -59,6 +60,19 @@
 					</div>
 				</c:otherwise>
 			</c:choose> --%>
+=======
+			<a class="login" href="login">로그인</a>
+			<a href="join">회원가입</a>
+			<a class="profile-box" href="#">
+				<img class="profile-img" src="resources/img/common/profile.png" alt="프로필 이미지"/>
+			</a>
+			<div class="notice">
+				<div class="num-box">
+					<span>3</span>
+				</div>
+				<img class="profile-img" src="resources/img/common/ico_notice.png" alt="알림"/>
+			</div>
+>>>>>>> 4f135a9fb886270b4f5fd0ccfe2708f37278dccc
 		</div>
 
 	</div>
