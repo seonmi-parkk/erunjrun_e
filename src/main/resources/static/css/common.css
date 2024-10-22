@@ -74,7 +74,7 @@
 	
 	.header-inner {
 		max-width : 1300px;
-		margin : 80px auto;
+		margin : 0 auto;
 		display : flex; display: -moz-box; display: -ms-flexbox;
 		-webkit-box-pack: space-between; -ms-flex-pack: space-between; justify-content: space-between;
 		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
@@ -217,7 +217,7 @@
 	/* 공통 태그 */
 	.inner {
 		max-width: 1300px;
-		margin: 0 auto;	
+		margin: 80px auto 0;	
 	}
 
     /* 색상 (쓸때는 => var(--main-color) ) */

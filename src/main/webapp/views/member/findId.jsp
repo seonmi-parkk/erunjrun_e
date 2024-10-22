@@ -66,8 +66,8 @@
         <h3>아이디 찾기</h3>
         <form id="findForm" action="findIdCheck" method="post">
             <div class="form-group">
-                <label for="nickName">이름</label>
-                <input type="text" name="nickName" id="nickName" placeholder="이름" required>
+                <label for="name">이름</label>
+                <input type="text" name="name" id="name" placeholder="이름" required>
             </div>
             <div class="form-group">
                 <label for="email">이메일</label>

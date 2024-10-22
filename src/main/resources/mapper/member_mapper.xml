@@ -32,15 +32,15 @@
 	</select>
 
 	<select id="findMemberId" resultType="com.erunjrun.member.dto.MemberDTO">
-		SELECT id, nickname, email
+		SELECT id, name, email
 		FROM member
-		WHERE nickname = #{nickname} AND email = #{email}
+		WHERE name = #{name} AND email = #{email}
 	</select>
 
 	<select id="findMemberPw" resultType="com.erunjrun.member.dto.MemberDTO">
 		SELECT id, nickname, email
 		FROM member
-		WHERE id = #{id} AND nickname = #{nickname} AND email =
+		WHERE id = #{id} AND name = #{name} AND email =
 		#{email}
 	</select>
 

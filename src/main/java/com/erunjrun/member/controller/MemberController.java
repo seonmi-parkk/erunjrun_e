@@ -94,7 +94,7 @@ public class MemberController {
 	}
 
 	@PostMapping(value = "/findIdCheck")
-	public String searchId(HttpServletRequest request, Model model, MemberDTO dto, @RequestParam String name,
+	public String findMemberId(HttpServletRequest request, Model model, MemberDTO dto, @RequestParam String name,
 			@RequestParam String email) {
 		dto.setName(name);
 		dto.setEmail(email);
