@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.erunjrun.mate.dao.MateDAO">
+	<insert id="mateApplication">
+		INSERT INTO mate_application (id,unlike_id) VALUES (#{fromUserId},#{toUserId})
+	</insert>
+
+	<insert id="mateHistory">
+		<!-- 신청은 히스토리 테이블에 안넣어도 되는지? -->
+		INSERT INTO mate_application (id,code_name,unlike_id) VALUES (#{fromUserId},'',#{toUserId})
+	</insert>
+	
+
+</mapper>
