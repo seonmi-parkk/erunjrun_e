@@ -25,7 +25,12 @@
                 sido = data.sido; // 나중에 앞에 2글자만 짤라서 사용
                 
                 // 시/도 앞 2글자만 사용
-                shotsido = sido.substring(0, 2);
+                shortsido = sido.substring(0, 2);
+                
+                console.log(roadAddr);
+                console.log(sigungu);
+                console.log(sido);
+                console.log(shortsido);
             }
         }).open();
     };

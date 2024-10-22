@@ -5,7 +5,7 @@
             $('#summernote').summernote({
                 // 에디터 크기 설정
                 height: 400,
-                width: 1100,
+                width: 1300,
                 // 에디터 한글 설정
                 lang: 'ko-KR',
                 // 에디터에 커서 이동 (input창의 autofocus라고 생각하시면 됩니다.)
@@ -56,6 +56,8 @@
         var formData = new FormData($('form')[0]);
         formData.append('file', file);
         
+        console.log('이미지');
+        
         $.ajax({
             type: 'POST',
             url: '/crew/image-upload',
@@ -65,14 +67,16 @@
             enctype: 'multipart/form-data',
             success: function(data){
                 
-            $(el).summernote('insertImage', data.new_filename, function($image) {
+            $(el).summernote('insertImage', data.img_new, function($image) {
                 $image.css('width', "100%");
             });
                 
-            var newFilename = data.new_filename.split('/').pop(); 
-            var oriFilename = data.ori_filename;
+            var newFilename = data.img_new.split('/').pop(); 
+            var oriFilename = data.img_ori;
             
-            tempImg.push({'new_filename' : newFilename, 'ori_filename' : oriFilename});
+            tempImg.push({'img_new' : newFilename, 'img_ori' : oriFilename});
+            
+            console.log('이미지 잘 받아옴');
             
             },error: function(e){
                 console.log(e);

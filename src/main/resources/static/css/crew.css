@@ -244,6 +244,7 @@
         font-weight: 500;
         display: inline-block;
    		width: 100px;
+   		float: left; /*옆으로 나열!!*/
     }
 
 
@@ -435,7 +436,7 @@
 		visibility: visible;
 	}
 
-    input[type="checkbox"] {
+    .crewWriteView input[type="checkbox"] {
         position: relative;
         width: 20px; height: 20px;
         margin-right: 6px;
@@ -443,7 +444,8 @@
         border: 1px solid var(--input-bd);
         border-radius: 2px;
         cursor: pointer;
-        vertical-align: text-bottom;
+        display: inline-block;
+       
         
     }
 
@@ -522,7 +524,7 @@
         background: url('../img/common/ico_select.png') center right 10px no-repeat;
     }
     input[type="text"]{
-        width: 360px;
+        width: 500px;
         padding: 7px 8px;
         margin-right: 4px;
         font-size: 16px;
