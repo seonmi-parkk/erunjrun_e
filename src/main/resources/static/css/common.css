@@ -134,6 +134,7 @@
 	header .profile-box {
 		width : 46px;
 		height : 46px;
+		margin-right: 2px;
 		display : flex; display: -moz-box; display: -ms-flexbox;
 		-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
 		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
@@ -141,6 +142,7 @@
 	
 	header .profile-box .profile-img{
 		width: 32px;
+		border-radius: 100%;
 	}
 	
 	header .notice{
@@ -151,9 +153,8 @@
 	
 	header .notice .num-box{
 		position: absolute;
-		right: -1px;
-   		top: 0px;
-		right: 6px;
+   		top: -1px;
+    	right: 0px;
 		width: 16px; 
 		height: 16px;
 		line-height: 16px;
@@ -164,6 +165,55 @@
 	header .notice .num-box span{
 		color: #fff;
 		font-size: 11px;
+	}
+	
+	header .admin-menu {
+		display : none;
+	}
+	
+	header .admin-mod {
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
+	}
+	
+	header .admin-mod .toggle-slider{
+	    display: inline-block;
+	    cursor: pointer;
+	    width: 48px;
+	    height: 24px;
+   		margin: 0 4px 0 18px;
+	    background-color: #e0e0e0;
+	    border-radius: 25px;
+	    position:relative;
+	    transition: 0.3s ease-out;
+	}
+	
+	header .admin-mod .toggle-slider::after {
+	    content: ''; 
+	    width: 18px; 
+	    height: 18px;
+	    background-color: #fff;
+	    position: absolute;
+	    border-radius: 50%;
+	    top: 3px;
+	    left: 2px;
+	    transition: 0.3s ease-out;
+	}
+	
+	header .admin-mod.on .toggle-slider{
+	    background-color: #444;
+	}
+
+	header .admin-mod.on .toggle-slider::after {
+	    left:calc(100% - 20px);
+	    background-color: #fff;
+	}
+	
+	header .admin-mod span {
+		display: inline-block;
+		width: 37px;
+		font-size: 14px;
+		font-weight: 600;
 	}
 	
 	
