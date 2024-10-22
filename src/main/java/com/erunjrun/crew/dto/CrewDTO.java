@@ -3,19 +3,20 @@ package com.erunjrun.crew.dto;
 import java.sql.Date;
 import java.util.List;
 
-import kr.co.gudi.dto.FileDTO;
+import com.erunjrun.image.dto.ImageDTO;
+
 
 public class CrewDTO {
     
     // crew 테이블
-    private int crew_idx; // crew_tag, crew_chat
+    private Integer crew_idx=0; // crew_tag, crew_chat
     private String crew_name;
-    private int member;
-    private int current_member;
+    private Integer member = 0;
+    private Integer current_member = 0;
     private Date create_date; // tag, crew_chat, crew_chat_content 
     private Date update_date; // tag
-    private int minute;
-    private int distance;
+    private Integer minute = 0;
+    private Integer distance = 0;
     private String content;
     private String days;
     private String address;
@@ -25,20 +26,52 @@ public class CrewDTO {
     private String is_recruit; // 모집여부
     private String use_yn; // 활성여부 tag
     
-    private List<FileDTO> imgs;
+    private List<ImageDTO> imgs;
     
-    // tag 테이블
-    private int tag_idx; // crew_tag
+    private String id;
+    
+	// tag 테이블
+    private int tag_idx = 0; // crew_tag
     private String tag_name;
 
     // crew_chat 테이블
-    private int chat_idx; // crew_chat_content 
+    private int chat_idx = 0; // crew_chat_content 
     private String code_cp;
     
     // crew_chat_content 테이블
-    private int content_idx;
+    private int content_idx = 0;
     private Date end_date;
     private String nickname;
+    
+    public String getId() {
+    	return id;
+    }
+    public void setId(String id) {
+    	this.id = id;
+    }
+    public void setCrew_idx(Integer crew_idx) {
+    	this.crew_idx = crew_idx;
+    }
+    public void setMember(Integer member) {
+    	this.member = member;
+    }
+    public void setCurrent_member(Integer current_member) {
+    	this.current_member = current_member;
+    }
+    public void setMinute(Integer minute) {
+    	this.minute = minute;
+    }
+    public void setDistance(Integer distance) {
+    	this.distance = distance;
+    }
+    
+    public List<ImageDTO> getImgs() {
+    	return imgs;
+    }
+    public void setImgs(List<ImageDTO> imgs) {
+    	this.imgs = imgs;
+    }
+    
 	public int getCrew_idx() {
 		return crew_idx;
 	}
@@ -183,10 +216,13 @@ public class CrewDTO {
 				+ current_member + ", create_date=" + create_date + ", update_date=" + update_date + ", minute="
 				+ minute + ", distance=" + distance + ", content=" + content + ", days=" + days + ", address=" + address
 				+ ", sido=" + sido + ", sigungu=" + sigungu + ", shortsido=" + shortsido + ", is_recruit=" + is_recruit
-				+ ", use_yn=" + use_yn + ", tag_idx=" + tag_idx + ", tag_name=" + tag_name + ", chat_idx=" + chat_idx
-				+ ", code_cp=" + code_cp + ", content_idx=" + content_idx + ", end_date=" + end_date + ", nickname="
-				+ nickname + "]";
+				+ ", use_yn=" + use_yn + ", imgs=" + imgs.toString() + ", id=" + id + ", tag_idx=" + tag_idx + ", tag_name="
+				+ tag_name + ", chat_idx=" + chat_idx + ", code_cp=" + code_cp + ", content_idx=" + content_idx
+				+ ", end_date=" + end_date + ", nickname=" + nickname + "]";
 	}
-    
+
+	
+	
+	
     
 }

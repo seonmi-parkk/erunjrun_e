@@ -14,15 +14,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.crew.dto.CrewDTO;
 import com.erunjrun.crew.service.CrewService;
+import com.erunjrun.image.dto.ImageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
-@Controller
+
+
+@RestController
 @RequestMapping("/crew")
 @RequiredArgsConstructor
 public class CrewController {
@@ -30,15 +34,13 @@ public class CrewController {
     Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired CrewService crew_service;
     
-    @GetMapping(value="/crewWriteView")
-    public String crewWriteView() {
-        return "crew/crewWrite";
-    }
+
     
 	@PostMapping(value="/image-upload")
-	public ResponseEntity<?> imageUpload(@RequestParam("file") MultipartFile file, CrewDTO crewDto){
+	public ResponseEntity<?> imageUpload(@RequestParam("file") MultipartFile file){
 		
 		logger.info("file : " + file.getOriginalFilename());
+		
 		
 		try {
 			Map<String, Object> resultFileMap = crew_service.saveFile(file);
@@ -49,31 +51,31 @@ public class CrewController {
 		}
 	}
 	
-	@PostMapping(value="/submit")
-	public Map<String, Object> submitPost(@ModelAttribute BoardDTO boardDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
+	@PostMapping(value="/write")
+	public Map<String, Object> submitPost(@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
 		
 		// JSON -> List<FileDto> 변환
 		ObjectMapper objectMapper = new ObjectMapper();
-		List<FileDTO> imgs = null;
+		List<ImageDTO> imgs = null;
 		try {
 			// TypeFactory를 사용하여 제네릭 타입을 처리
-	        imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, FileDTO.class));
-	        boardDto.setImgs(imgs);  // 변환한 리스트를 BoardDTO에 설정
+	        imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ImageDTO.class));
+	        crewDto.setImgs(imgs);  // 변환한 리스트를 BoardDTO에 설정
 		} catch (Exception e) {
 			logger.error("파싱 오류 : {}", e.getMessage());
 			return Map.of("error", e.getMessage());
 		}
 		
 		if (imgs != null && !imgs.isEmpty()) {
-		    for (FileDTO img : imgs) {
-		        logger.info("Original Filename: " + img.getOri_filename());
-		        logger.info("New Filename: " + img.getNew_filename());
+		    for (ImageDTO img : imgs) {
+		        logger.info("Original Filename: " + img.getImg_ori());
+		        logger.info("New Filename: " + img.getImg_new());
 		    }
 		}
 		
-		logger.info("DTO : " + boardDto.toString());
+		logger.info("DTO : " + crewDto.toString());
 
-		if(boardService.sumbitPost(boardDto)) {
+		if(crew_service.sumbitPost(crewDto)) {
 			// 저장 완료 후 응답 반환
 			// return ResponseEntity.ok("글 저장 성공");
 			
