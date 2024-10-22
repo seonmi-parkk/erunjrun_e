@@ -21,6 +21,11 @@ public class AdminController {
 	
 	@Autowired AdminService admin_service;
 
+    @GetMapping(value = "/")
+    public String main() {
+        return "main";
+    }
+	
 	@GetMapping(value = "/memberList")
 	public String memberlist(Model model) {
 		List<AdminDTO> memberList = admin_service.memberList();
