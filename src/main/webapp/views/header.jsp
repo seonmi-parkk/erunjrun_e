@@ -40,8 +40,8 @@
 			</li>
 		</ul>
 		<div class="login-box">
-			<a class="login" href="#">로그인</a>
-			<a href="#">회원가입</a>
+			<a class="login" href="login">로그인</a>
+			<a href="join">회원가입</a>
 			<a class="profile-box" href="#">
 				<img class="profile-img" src="resources/img/common/profile.png" alt="프로필 이미지"/>
 			</a>
