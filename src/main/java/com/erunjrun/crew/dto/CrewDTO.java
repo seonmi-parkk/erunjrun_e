@@ -1,6 +1,9 @@
 package com.erunjrun.crew.dto;
 
 import java.sql.Date;
+import java.util.List;
+
+import kr.co.gudi.dto.FileDTO;
 
 public class CrewDTO {
     
@@ -21,6 +24,8 @@ public class CrewDTO {
     private String shortsido;
     private String is_recruit; // 모집여부
     private String use_yn; // 활성여부 tag
+    
+    private List<FileDTO> imgs;
     
     // tag 테이블
     private int tag_idx; // crew_tag

@@ -40,7 +40,7 @@
 			</li>
 		</ul>
 		<div class="login-box">
-			<c:choose>
+		<%-- 	<c:choose>
 				<c:when test="${sessionScope.id}">
 					<a class="login" href="#">로그인</a>
 					<a href="#">회원가입</a>
@@ -58,7 +58,7 @@
 						<img class="profile-img" src="resources/img/common/ico_notice.png" alt="알림"/>
 					</div>
 				</c:otherwise>
-			</c:choose>
+			</c:choose> --%>
 		</div>
 
 	</div>
