@@ -9,7 +9,7 @@
 	</insert>
 
 	<insert id="mateHistory">
-		INSERT INTO mate_application (id,code_name,unlike_id) VALUES (#{fromUserId},'M100',#{toUserId})
+		INSERT INTO mate_history (id,code_name,unlike_id) VALUES (#{fromUserId},'M100',#{toUserId})
 	</insert>
 	
 

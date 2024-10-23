@@ -1,3 +1,15 @@
+// 팝업을 제거하는 함수
+var removeAlert = function(confirmBox) {
+	
+    document.body.removeChild($('.confirm-box')[0]);
+    document.body.removeChild($('.overlay')[0]);
+    window.removeEventListener('keydown', handleKeyDown);
+};
+
+// 키 눌림 이벤트 방지
+var handleKeyDown = function(event) {
+    event.preventDefault();
+};
 
 function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = btn2Act) {
     // 대화 상자를 HTML 요소로 생성
@@ -17,22 +29,9 @@ function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = 
     overlay.setAttribute('class', 'overlay');
     document.body.appendChild(overlay);
 
-    // 팝업을 제거하는 함수
-    var removeAlert = function() {
-        document.body.removeChild(confirmBox);
-        document.body.removeChild(overlay);
-        window.removeEventListener('keydown', handleKeyDown);
-    };
-
-    // 키 눌림 이벤트 방지
-    var handleKeyDown = function(event) {
-        event.preventDefault();
-    };
-
     // 확인 버튼 클릭 시
     var confirmButton = document.querySelector('.confirm-box .confirm');
     confirmButton.addEventListener('click', function() {
-        removeAlert();  // 기존 confirmBox 닫기
         btn1Callback();  // 
     });
 
@@ -40,7 +39,6 @@ function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = 
     if(btn2){
         var cancelButton = document.querySelector('.confirm-box .cancel');
         cancelButton.addEventListener('click', function() {
-            removeAlert();  // 기존 confirmBox 닫기
             btn2Callback();  
         });
     }

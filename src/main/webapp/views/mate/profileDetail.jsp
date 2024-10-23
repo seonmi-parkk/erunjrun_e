@@ -122,46 +122,54 @@
 <script src="resources/js/common.js" type="text/javascript"></script>
 <script src="resources/js/layerPopup.js"></script>
 <script>
+	console.log("test");
 	/* 메이트 신청하기 버튼 이벤트 */
 	$('.btn-mate-appl').on('click',function(){
 		layerPopup('ㅇㅇㅇ님께 러닝메이트를 신청하시겠습니까?','신청','취소' ,applBtn1Act, applBtn2Act);
 	});
 	function applBtn1Act() {
 	    // 1번버튼 클릭시 수행할 내용
-	    console.log('1번버튼');
+	    //confirm-box
+		//var confirmBox = $('.confirm-box')[0];
 	    console.log($('input[name="id"]')[0].defaultValue);
 	    $.ajax({
 	    	type:'POST',
 			url:'/mateAppliaction',
 			data:{
-				fromUserId: ${sessionScope.loginId},
+				fromUserId: '${sessionScope.loginId}',
 				toUserId: $('input[name="id"]')[0].defaultValue
 			},
 			dataType:'JSON',
 			success:function(data){
-				console.log(data);
-				
+				console.log(data.success);
+				// 신청완료 팝업
+				if(data.success){
+					removeAlert(); // 기존 confirmBox 닫기
+			    	layerPopup('운동메이트 신청이 완료되었습니다.', '확인','내 운동메이트로 이동',appl2Btn1Act , appl2Btn2Act);
+				}
 			},
 			error:function(e){
-				console.log(e);		
+				removeAlert();  // 기존 confirmBox 닫기
+				layerPopup('운동메이트 신청 실패하였습니다.', '재신청','취소',applBtn1Act , applBtn2Act);
 			}
 	    	
 	    });
-	    // 신청완료 팝업
-	    layerPopup('운동메이트 신청이 완료되었습니다.', '확인','내 운동메이트로 이동',appl2Btn1Act , appl2Btn2Act);
+	    
 	}
 	
 	function applBtn2Act() {
-	    // 2번버튼 클릭시 수행할 내용
-	    console.log('2번 버튼 동작');
+	    // 취소 버튼 클릭시
+	    removeAlert(); // 기존 confirmBox 닫기
 	}
 	
 	function appl2Btn1Act() {
-	    // 2번버튼 클릭시 수행할 내용
-	    console.log('2번 버튼 동작');
+	    // 신청완료 팝업 - 확인 버튼 클릭시
+	     removeAlert(); // 기존 confirmBox 닫기
 	}
 	function appl2Btn2Act() {
-	    // 2번버튼 클릭시 수행할 내용
+	    // 신청완료 팝업 - 내 운동메이트로 이동 버튼 클릭시
+	    removeAlert();
+	    location.href='/';
 	    console.log('2번 버튼 동작');
 	}
 	
