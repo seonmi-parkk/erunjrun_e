@@ -122,6 +122,7 @@
 <script src="resources/js/common.js" type="text/javascript"></script>
 <script src="resources/js/layerPopup.js"></script>
 <script>
+	console.log("test");
 	/* 메이트 신청하기 버튼 이벤트 */
 	$('.btn-mate-appl').on('click',function(){
 		layerPopup('ㅇㅇㅇ님께 러닝메이트를 신청하시겠습니까?','신청','취소' ,applBtn1Act, applBtn2Act);
