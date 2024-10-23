@@ -77,17 +77,27 @@
 
                         <span class="title2">태그</span>
                         <span id="tagFilters">
-                            <label><input type="checkbox" name="tag_idx_list" value="1">🏃‍♂️러닝에 집중</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="2">🙋‍♀️ 친목도 중요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="3"> 남성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="4"> 여성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="5"> 혼성</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="6"> <b style='color: FD6F22'>E</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="7"> <b style='color: 116DCA'>I</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="8">🐂 소규모 크루</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="9">🏆 대회 목적</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="10">💦 러닝 고수만</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="11">🥳 초보도 환영</label>
+                        	<c:forEach var="tag" items="${result.tag_idx_list}">
+    <label><input type="checkbox" name="tag_idx_list" value="${tag}" 
+           <c:if test="${tag == 1}">checked</c:if>>🏃‍♂️러닝에 집중</label>
+    <label><input type="checkbox" name="tag_idx_list" value="${tag}" 
+           <c:if test="${tag == 2}">checked</c:if>>🙋‍♀️ 친목도 중요</label>
+    <label><input type="checkbox" name="tag_idx_list" value="${tag}" 
+           <c:if test="${tag == 3}">checked</c:if>> 남성만 가능</label>
+           <label><input type="checkbox" name="tag_idx_list" value="${tag}" 
+           <c:if test="${tag == 4}">checked</c:if>> 44남성만 가능</label>
+</c:forEach>
+                         <%--    <label><input type="checkbox" name="tag_idx_list" value="1" ${result.tag_idx.contains('1') ? 'checked' : ''}>🏃‍♂️러닝에 집중</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="2" ${result.tag_idx.contains('2') ? 'checked' : ''}>🙋‍♀️ 친목도 중요</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="3" ${result.tag_idx.contains('3') ? 'checked' : ''}> 남성만 가능</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="4" ${result.tag_idx.contains('4') ? 'checked' : ''}> 여성만 가능</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="5" ${result.tag_idx.contains('5') ? 'checked' : ''}> 혼성</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="6" ${result.tag_idx.contains('6') ? 'checked' : ''}> <b style='color: FD6F22'>E</b> 환영해요</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="7" ${result.tag_idx.contains('7') ? 'checked' : ''}> <b style='color: 116DCA'>I</b> 환영해요</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="8" ${result.tag_idx.contains('8') ? 'checked' : ''}>🐂 소규모 크루</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="9" ${result.tag_idx.contains('9') ? 'checked' : ''}>🏆 대회 목적</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="10" ${result.tag_idx.contains('10') ? 'checked' : ''}>💦 러닝 고수만</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="11" ${result.tag_idx.contains('11') ? 'checked' : ''}>🥳 초보도 환영</label> --%>
                         </span> <br>
 
                         <div class="boxheigth">
@@ -129,7 +139,9 @@
                     <div class="content_layout"> <!-- 레이아웃 구성을 위한 div -->
                         <span class="title2">크루 설명</span> <br><br>
                         <div class="post-form">
-                            <textarea name="postContent" id="summernote" maxlength="10000"></textarea>
+                            <textarea name="postContent" id="summernote" maxlength="10000" > </textarea>
+                            
+                            <!-- value="${result.content}" -->
                         </div>
                     </div>
 
