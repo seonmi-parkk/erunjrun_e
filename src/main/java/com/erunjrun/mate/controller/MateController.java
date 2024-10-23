@@ -1,5 +1,6 @@
 package com.erunjrun.mate.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -8,10 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erunjrun.mate.service.MateService;
+import com.erunjrun.member.service.MemberService;
 
 @Controller
 public class MateController {
@@ -31,10 +35,14 @@ public class MateController {
 	}
 
 	@RequestMapping(value="/mateAppliaction")
-	public String mateApplication(String fromUserId, String toUserId) {
+	@ResponseBody
+	public Map<String, Object> mateApplication(String fromUserId, String toUserId, Model model) {
 		logger.info("[controller] mateApplication");
-		boolean result = mateService.mateApplication(fromUserId, toUserId);
-		logger.info("result : "+result);
-		return "mate/profileDetail";
+		logger.info("fromUserId : {}, toUserId : {}", fromUserId, toUserId);
+		boolean success = mateService.mateApplication(fromUserId, toUserId);
+		logger.info("success : "+success);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("success", success);
+		return result;
 	}
 }

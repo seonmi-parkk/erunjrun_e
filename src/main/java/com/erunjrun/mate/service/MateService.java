@@ -15,15 +15,16 @@ public class MateService {
 	@Autowired MateDAO mateDAO;
 	Logger logger = LoggerFactory.getLogger(getClass());
 
+	
+	
 	@Transactional
 	public boolean mateApplication(String fromUserId, String toUserId) {
 		boolean result = false;
 		int appRst = mateDAO.mateApplication(fromUserId, toUserId);
 		int historyRst = mateDAO.mateHistory(fromUserId, toUserId);
-		logger.info("appRst: {}, historyRst: {}", appRst, historyRst);
-		if(appRst > 0 && historyRst > 0) {
-			result = true;
-		}
+		logger.info("appRst: {}, historyRst: {}", appRst, historyRst); 
+		if(appRst > 0 && historyRst > 0) { result = true; }
+		
 		return result;
 	}
 
