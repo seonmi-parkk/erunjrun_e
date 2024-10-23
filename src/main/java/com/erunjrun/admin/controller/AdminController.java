@@ -23,11 +23,17 @@ public class AdminController {
 
 	
 	@GetMapping(value = "/adminMember")
-	public String memberListForm() {
+	public String memberList() {
 		return "admin/memberList";
 	}
-
-
+		
+	@GetMapping(value = "/admin")
+	public String adminList() {
+		return "admin/adminList";
+	}
+	
+	
+	
 	  @GetMapping(value = "/memberList") 
 	  @ResponseBody 
 	  public Map<String,Object> memberlist(String page, String cnt,String keyword){
