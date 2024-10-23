@@ -216,9 +216,28 @@
 
 	/* 공통 태그 */
 	.inner {
-		max-width: 1300px;
-		margin: 80px auto 0;	
+	    max-width: 1300px;
+	    margin: 80px auto 0;
+	    display: flex;                  /* Flexbox로 좌우 배치 */
+	    justify-content: space-between; /* 두 박스를 좌우로 배치 */
+	    align-items: flex-start;        /* 상단 정렬 */
+	    gap: 20px;                      /* 박스 사이 간격 */
 	}
+	
+	.firstbox {
+	    width: 70%;                     /* 첫 번째 박스의 너비를 70%로 설정 */
+	    padding: 20px;                  /* 내부 여백 추가 */
+	    box-sizing: border-box;          /* padding이 박스 크기에 포함되도록 설정 */
+	}
+	
+	/*옆으로 보내고 싶은게 위에 있어야 함!!*/
+	.twobox {
+	    width: 28%;                     /* 두 번째 박스의 너비를 28%로 설정 */
+	    padding: 20px;                  /* 내부 여백 추가 */
+	    box-sizing: border-box;   
+	    float: inline-end;       /* padding이 박스 크기에 포함되도록 설정 */
+	}
+
 
     /* 색상 (쓸때는 => var(--main-color) ) */
     :root{
@@ -236,6 +255,7 @@
         font-size: 34px;
         font-weight: 700;
         padding: 35px 0px;
+        margin-bottom: -40px;
     }
     .title2 {
         color: var(--main-color);
@@ -407,7 +427,7 @@
     
     
     
-    input[type="radio"]{
+    .crewWriteView input[type="radio"]{
         position: relative;
         -webkit-appearance: none; 
         -moz-appearance: none;
@@ -416,6 +436,7 @@
         border-radius: 50%;
         cursor: pointer;
         width: 20px; height: 20px;
+        margin: 4px 11px -3px;
 
     }
     input[type="radio"]::before {
@@ -445,7 +466,7 @@
         border-radius: 2px;
         cursor: pointer;
         display: inline-block;
-       
+        margin: 0px 10px -3px 10px
         
     }
 
@@ -485,7 +506,7 @@
    	 	position: relative;
     	border-radius: 100px;
     	border: 1px solid rgba(0,0,0,0.07);
-	 	margin-right: 15px;
+	 	margin-right: 20px;
 	  	font-size: 16px;
 	  	cursor: pointer;
 	}

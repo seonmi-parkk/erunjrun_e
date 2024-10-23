@@ -1,5 +1,6 @@
 package com.erunjrun.crew.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,7 +54,10 @@ public class CrewController {
 	}
 	
 	@PostMapping(value="/write")
-	public Map<String, Object> submitPost(@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
+	public Map<String, Object> submitPost(@RequestParam("crew_img") MultipartFile crew_img, @ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
+		
+		
+		logger.info("ori_name =>" + crew_img.getOriginalFilename());
 		
 		// JSON -> List<FileDto> 변환
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -75,7 +80,7 @@ public class CrewController {
 		
 		logger.info("DTO : " + crewDto.toString());
 
-		if(crew_service.sumbitPost(crewDto)) {
+		if(crew_service.sumbitPost(crewDto, crew_img)) {
 			// 저장 완료 후 응답 반환
 			// return ResponseEntity.ok("글 저장 성공");
 			
@@ -86,4 +91,21 @@ public class CrewController {
 		return null;
 	}
 
+	@DeleteMapping(value="/delete")
+	public Map<String, Object> crewDelete(int crew_idx){
+		
+		logger.info("cres_idx => "+crew_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		if(crew_service.crewDelete(crew_idx)) {
+			resultMap.put("success", true);
+		}else {
+			resultMap.put("success", false);
+		}
+		
+		return resultMap;
+	}
+	
+	
 }

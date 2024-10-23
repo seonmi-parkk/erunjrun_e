@@ -21,10 +21,7 @@ public class MainController {
 		return "main";
 	}
 	
-    @GetMapping(value="/crewWriteView")
-    public String crewWriteView() {
-        return "crew/crewWrite";
-    }
+
 	
 	
 }

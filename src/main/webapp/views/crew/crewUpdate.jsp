@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>crewWrite</title>
+<title>crewUpdate</title>
 	<link rel="stylesheet" href="/resources/css/crew.css">
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
@@ -48,11 +48,20 @@
 
         <div class="inner">
             <form enctype="multipart/form-data">
-                <p class="title1">러닝크루 등록</p>
+                <p class="title1">러닝크루 수정</p>
 
                 <div id="dori">
                     <div class="twobox">
-                        <div id="img_miri"></div>
+                        <div id="img_miri"> <!-- 이미지 없을 경우 기본이미지 -->
+                        	<c:choose>
+								<c:when test="${not empty result.img}">
+									<img src="${result.img}" width="300" height="200"/>
+								</c:when>
+								<c:otherwise>
+									<img src="/resources/img/crew/crewImg300.png" width="300" height="200"/>
+								</c:otherwise>                        	
+                        	</c:choose>
+                        </div> 
                         <span style='color:#d3d3d3'>※ 권장 사이즈 800px / 400px</span>
                         <input type="file" name="crew_img" onchange="readFile(this)" id="file" />
                         <label for="file">
@@ -63,7 +72,7 @@
 
                         <div class="boxheigth">
                             <span class="title2">크루명 </span>
-                            <input type="text" name="crew_name" required />
+                            <input type="text" name="crew_name" value="${result.crew_name}" required />
                         </div> <br>
 
                         <span class="title2">태그</span>
@@ -94,25 +103,31 @@
 
                         <div class="boxheigth">
                             <span class="title2">인원</span> 
-                            <input type="number" name="member" min="2" required />
+                            <input type="number" name="member" min="2" required value="${result.member}" />
                         </div> <br>
 
                         <div class="boxheigth">
                             <span class="title2">운동강도</span>
-                            <input type="number" name="minute" min="1" required /><span class="basictex"> / </span>
-                            <input type="number" name="distance" min="1" required /><span class="basictex"> km </span>
+                            <input type="number" name="minute" min="1" required value="${result.minute}"/><span class="basictex" > / </span>
+                            <input type="number" name="distance" min="1" required value="${result.distance}"/><span class="basictex"> km </span>
                         </div> <br>
 
                         <div class="boxheigth">
                             <span class="title2">지역</span>
-                            <input type="text" name="address" id="sample4_roadAddress" required disabled />
+                            <input type="text" name="address" id="sample4_roadAddress" value="${result.address}" required disabled />
                             <input type="button" onclick="search()" class="btn02-m" value="검색">
+                        </div>
+                        
+                        <div class="boxheigth">
+                        	<span class="title2">모집</span>
+                        	<input type="radio" name="is_recruit" value="Y" checked/>모집
+                        	<input type="radio" name="is_recruit" value="N"/>마감
                         </div>
 
                     </div> <!-- 레이아웃 구성을 위한 div --> <br>
 
                     <div class="content_layout"> <!-- 레이아웃 구성을 위한 div -->
-                        <p class="title2">크루 설명</p> <br><br>
+                        <span class="title2">크루 설명</span> <br><br>
                         <div class="post-form">
                             <textarea name="postContent" id="summernote" maxlength="10000"></textarea>
                         </div>
@@ -121,12 +136,13 @@
                 </div>
 
                 <div class="btn-parent">
-                    <button type="button" class="btn03-l">등록 취소하기</button>
-                    <button type="button" class="btn01-l" onclick="submitPost()">크루 등록하기</button>
+                    <button type="button" class="btn03-l">수정 취소하기</button>
+                    <button type="button" class="btn01-l" onclick="submitPost()">크루 수정하기</button>
                 </div>
             </form>
 
         </div>
+        <button type="button" class="btn03-s" onclick="crewDelete()">크루 삭제하기</button>
     </div>
     <jsp:include page="../footer.jsp" />
 </body>
@@ -256,6 +272,34 @@
             }
         });
     }
+    
+    // 크루 삭제 => use_yn = 'N' (crew_member, crew_tag => delete)
+    // 팝업 추가 필요!
+    function crewDelete(){
+    	
+    	console.log('delete?');
+    	
+    	var crew_idx = 39; // 히든으로 숨겨서 받아서 넘겨야 함! (상세페이지)
+    	
+    	$.ajax({
+    		type: 'DELETE',
+    		url: '/crew/delete',
+    		data: {'crew_idx' : crew_idx},
+    		dataType: 'JSON',
+    		success: function(data){
+    			if(data.success){
+	    			alert('크루 삭제 성공');
+    			}else{
+    				alert('크루 삭제 실패');
+    			}
+    		},error: function(e){
+    			console.log('삭제 에러 => ',e);
+    		}
+    		
+    	});
+    	
+    }
+    
 </script>
 
 </html>

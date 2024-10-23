@@ -3,6 +3,8 @@ package com.erunjrun.crew.dto;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.erunjrun.image.dto.ImageDTO;
 
 
@@ -26,12 +28,15 @@ public class CrewDTO {
     private String is_recruit; // 모집여부
     private String use_yn; // 활성여부 tag
     
+//    private String crew_img;
+    
     private List<ImageDTO> imgs;
     
     private String id;
     
 	// tag 테이블
-    private int tag_idx = 0; // crew_tag
+    private int tag_idx; // crew_tag
+    private String tag_idx_list;
     private String tag_name;
 
     // crew_chat 테이블
@@ -49,7 +54,13 @@ public class CrewDTO {
     public void setId(String id) {
     	this.id = id;
     }
-    public void setCrew_idx(Integer crew_idx) {
+//    public String getCrew_img() {
+//		return crew_img;
+//	}
+//	public void setCrew_img(String crew_img) {
+//		this.crew_img = crew_img;
+//	}
+	public void setCrew_idx(Integer crew_idx) {
     	this.crew_idx = crew_idx;
     }
     public void setMember(Integer member) {
@@ -174,6 +185,12 @@ public class CrewDTO {
 	public void setTag_idx(int tag_idx) {
 		this.tag_idx = tag_idx;
 	}
+	public String getTag_idx_list() {
+		return tag_idx_list;
+	}
+	public void setTag_idx_list(String tag_idx_list) {
+		this.tag_idx_list = tag_idx_list;
+	}
 	public String getTag_name() {
 		return tag_name;
 	}
@@ -216,12 +233,14 @@ public class CrewDTO {
 				+ current_member + ", create_date=" + create_date + ", update_date=" + update_date + ", minute="
 				+ minute + ", distance=" + distance + ", content=" + content + ", days=" + days + ", address=" + address
 				+ ", sido=" + sido + ", sigungu=" + sigungu + ", shortsido=" + shortsido + ", is_recruit=" + is_recruit
-				+ ", use_yn=" + use_yn + ", imgs=" + imgs.toString() + ", id=" + id + ", tag_idx=" + tag_idx + ", tag_name="
-				+ tag_name + ", chat_idx=" + chat_idx + ", code_cp=" + code_cp + ", content_idx=" + content_idx
-				+ ", end_date=" + end_date + ", nickname=" + nickname + "]";
+				+ ", use_yn=" + use_yn + ", imgs=" + imgs.toString() + ", id=" + id + ", tag_idx="
+				+ tag_idx + ", tag_idx_list=" + tag_idx_list + ", tag_name=" + tag_name + ", chat_idx=" + chat_idx
+				+ ", code_cp=" + code_cp + ", content_idx=" + content_idx + ", end_date=" + end_date + ", nickname="
+				+ nickname + "]";
 	}
-
 	
+	
+
 	
 	
     
