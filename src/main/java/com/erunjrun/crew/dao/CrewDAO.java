@@ -1,5 +1,7 @@
 package com.erunjrun.crew.dao;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.crew.dto.CrewDTO;
@@ -24,5 +26,7 @@ public interface CrewDAO {
 	int crewMemberDelete(int crew_idx);
 
 	int crewTagDelete(int crew_idx);
+
+	Map<String, Object> crewUpdate(int crew_idx);
 
 }

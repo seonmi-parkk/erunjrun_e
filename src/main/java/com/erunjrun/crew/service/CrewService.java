@@ -174,5 +174,10 @@ public class CrewService {
 		
 		return false;
 	}
+
+	public Map<String, Object> crewUpdate(int crew_idx) {
+		
+		return crew_dao.crewUpdate(crew_idx);
+	}
     
 }

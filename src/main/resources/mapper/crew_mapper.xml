@@ -43,5 +43,12 @@
 	<delete id="crewTagDelete" parameterType="int">
 		DELETE FROM crew_tag WHERE crew_idx = #{crew_idx}
 	</delete>
+	
+	<select id="crewUpdate" resultType="map" parameterType="int">
+		SELECT c.*, i.img_ori, i.img_new, ct.tag_idx FROM crew c
+			LEFT JOIN image i ON c.crew_idx = i.img_no AND i.code_name = 'I101'
+			LEFT JOIN crew_tag ct ON c.crew_idx = ct.crew_idx
+			WHERE c.crew_idx = #{crew_idx};
+	</select>
 
 </mapper>
