@@ -6,19 +6,24 @@
 <mapper namespace="com.erunjrun.member.dao.MemberDAO">
 
 	<insert id="join" parameterType="map">
-		INSERT INTO member(id, pw, name, nickName, address, birth, gender, email, phone)
-		VALUES(#{id}, #{pw}, #{name}, #{nickName}, #{address}, #{birth}, #{gender},
-		#{email}, #{phone})
+		INSERT INTO member(id, pw, name,
+		nickName, address, birth, gender, email, phone)
+		VALUES(#{id}, #{pw},
+		#{name}, #{nickName}, #{address}, #{birth}, #{gender},
+		#{email},
+		#{phone})
 	</insert>
 
 	<select id="login" resultType="int">
 		SELECT COUNT(id) FROM member
-		WHERE id = #{id} AND pw = #{pw}
+		WHERE
+		id = #{id} AND pw = #{pw}
 	</select>
 
 	<select id="idOverlay" resultType="int">
 		SELECT COUNT(id) FROM
-		member WHERE id = #{id}
+		member
+		WHERE id = #{id}
 	</select>
 
 	<select id="nickNameOverlay" resultType="int">
@@ -31,21 +36,60 @@
 		member WHERE email = #{email}
 	</select>
 
-	<select id="findMemberId" resultType="com.erunjrun.member.dto.MemberDTO">
+	<select id="findMemberId"
+		resultType="com.erunjrun.member.dto.MemberDTO">
 		SELECT id, name, email
 		FROM member
-		WHERE name = #{name} AND email = #{email}
+		WHERE name = #{name} AND
+		email = #{email}
 	</select>
 
-	<select id="findMemberPw" resultType="com.erunjrun.member.dto.MemberDTO">
+	<select id="findMemberPw"
+		resultType="com.erunjrun.member.dto.MemberDTO">
 		SELECT id, nickname, email
 		FROM member
-		WHERE id = #{id} AND name = #{name} AND email =
+		WHERE id = #{id} AND
+		name = #{name} AND email =
 		#{email}
 	</select>
 
 	<update id="updatePw">
 		UPDATE member SET pw = #{tempPw} WHERE id = #{id}
 	</update>
-	
+
+	<select id="profileView"
+		resultType="com.erunjrun.member.dto.MemberDTO">
+		SELECT
+		nickname,
+		point,
+		phone,
+		address,
+		pw,
+		email
+		FROM
+		member
+		WHERE
+		id = #{id}
+	</select>
+
+	<update id="profileUpdate" parameterType="map">
+		UPDATE member
+		<set>
+			<if test="pw != null">pw = #{pw},</if>
+			<if test="nickname != null">nickname = #{nickname},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="phone != null">phone = #{phone}</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<select id="findSessionId" parameterType="String"
+		resultType="com.erunjrun.member.dto.MemberDTO">
+		SELECT * FROM member WHERE id = #{id}
+	</select>
+
+	<update id="setUseY" parameterType="String">
+		UPDATE member SET use_yn = 'Y' WHERE id = #{id}
+	</update>
+
 </mapper>   

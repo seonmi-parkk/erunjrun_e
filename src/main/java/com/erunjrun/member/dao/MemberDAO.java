@@ -25,4 +25,12 @@ public interface MemberDAO {
 
 	void updatePw(String id, String tempPw);
 
+	MemberDTO profileView(String id);
+
+	int profileUpdate(Map<String, String> params);
+
+	MemberDTO findSessionId(String id);
+
+	void setUseY(String id);
+
 }

@@ -64,4 +64,24 @@ public class MemberService {
 		
 	}
 
+	public MemberDTO profileView(String id) {
+		return memberDao.profileView(id);
+	}
+
+	public void profileUpdate(Map<String, String> params) {
+		int row = memberDao.profileUpdate(params);
+		logger.info("Update ID: {}", params.get("id"));
+		logger.info("update row: "+row);
+	
+	}
+
+	public MemberDTO findSessionId(String id) {
+		return memberDao.findSessionId(id);
+	}
+
+	public void setUseY(String id) {
+		 memberDao.setUseY(id);
+	}
+
+
 }
