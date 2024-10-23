@@ -1,5 +1,7 @@
 package com.erunjrun.crew.dao;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.crew.dto.CrewDTO;
@@ -11,18 +13,33 @@ public interface CrewDAO {
 
 	int submitPost(CrewDTO crewDto);
 
-	void fileWrite(ImageDTO img);
+	int fileWrite(ImageDTO img);
 
-	void memberUpdate(CrewMemberDTO crewMemberDto);
+	int memberUpload(CrewMemberDTO crewMemberDto);
 
-	void tagUpdate(CrewDTO crewDto);
+	int tagUpload(CrewDTO crewDto);
 
-	void fileUpload(ImageDTO imageDto);
+	int fileUpload(ImageDTO imageDto);
 
 	int crewDelete(int crew_idx);
 
 	int crewMemberDelete(int crew_idx);
 
 	int crewTagDelete(int crew_idx);
+	
+	int crewImgDelete(int img_no);
+
+	Map<String, Object> crewUpdateView(int crew_idx);
+
+	int crewUpdate(CrewDTO crewDto);
+
+	int tagUpdate(CrewDTO crewDto);
+
+	int fileUpdate(ImageDTO imageDto);
+
+	int fileTemUpdate(ImageDTO img);
+
+	
+	
 
 }
