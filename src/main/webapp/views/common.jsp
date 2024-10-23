@@ -40,6 +40,8 @@
 	    <div class="btn01-s">버튼 s</div>
 	    <div class="btn02-s">버튼 s</div>
 	    <div class="btn03-s">버튼 s</div>
+	    <div class="btn-like btn02-s"><img src="resources/img/common/ico_heart_no_act.png" alt="좋아요"></div>
+	    <div class="btn-like btn02-s"><img src="resources/img/common/ico_heart_act.png" alt="좋아요"></div>
 	
 	    <br/><br/><p class="title1">--------input--------</p>
 	    <input type="radio" name="" id=""/>

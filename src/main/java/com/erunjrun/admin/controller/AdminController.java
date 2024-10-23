@@ -18,12 +18,12 @@ public class AdminController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired AdminService admin_service;
+
 	
 	@GetMapping(value = "/admin")
 	public String memberListForm() {
 		return "admin/memberList";
 	}
-
 	
 	  @GetMapping(value = "/memberList") 
 	  @ResponseBody
