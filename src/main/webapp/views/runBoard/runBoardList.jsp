@@ -3,12 +3,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="resources/css/common.css">
+<title>runBoardList</title>
+<link rel="stylesheet" href="/resources/css/common.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-    <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+    <script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 	#searchForm {
         float: right;
@@ -149,7 +149,7 @@
             }
 			
 			content +='<td>'+view.nickname+'</td>';
-			content +='<td><a href="detail.go?idx='+view.board_idx+'">'+view.subject+'<a/></td>';
+			content +='<td><a href="runBoardDetail/'+view.board_idx+'">'+view.subject+'<a/></td>';
 			content +='<td>'+view.bHit+'</td>';
 			content +='<td>'+view.likes+'</td>';
 
