@@ -24,7 +24,9 @@ public class MateController {
 
 	@RequestMapping(value="/mateAppliaction")
 	public String mateApplication(String fromUserId, String toUserId) {
+		logger.info("[controller] mateApplication");
 		boolean result = mateService.mateApplication(fromUserId, toUserId);
+		logger.info("result : "+result);
 		return "mate/profileDetail";
 	}
 }
