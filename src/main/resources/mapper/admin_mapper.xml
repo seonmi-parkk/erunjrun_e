@@ -20,10 +20,25 @@
 		    member m
 		LEFT JOIN 
 		    ban b ON m.id = b.id;
+	     <where>
+         <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
+            m.id LIKE CONCAT('%',#{keyword},'%')
+         </if>
+         <if test="keyword != null and !keyword.equals('') and opt.equals('nickname')">         
+            m.nickname LIKE CONCAT('%',#{keyword},'%')
+         </if>
+         <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
+            m.email LIKE CONCAT('%',#{keyword},'%')
+         </if>      
+      </where>
   	</select>
   	
   	<select id="count" resultType="int">
 		SELECT CEIL(count(id)/#{param1}) AS pages FROM member
 	</select>
+  
+  	<select id="adminlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+  		SELECT admin_id,name,join_date FROM admin
+  	</select>
   
   </mapper>
