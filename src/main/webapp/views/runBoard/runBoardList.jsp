@@ -3,12 +3,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="resources/css/common.css">
+<title>runBoardList</title>
+<link rel="stylesheet" href="/resources/css/common.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-    <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+    <script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 	#searchForm {
         float: right;
@@ -21,6 +21,18 @@
 	.container{
 		margin-top: 18px;
 	}
+	.highlight {
+    	background-color: FFEADE;
+    	
+    }
+    .tag-l-bd{
+    	margin-left: 51px;
+    	background-color: #FB7E3A;
+    	color: #fff;
+    }
+    .title1{
+    	margin-top: 160px;
+    }
 </style>
 </head>
 <body>
@@ -30,7 +42,7 @@
 	<form id="searchForm">
     <select id="searchOption">
         <option value="subject">제목</option>
-        <option value="user_name">작성자</option>
+        <option value="nickname">작성자</option>
         <option value="content">내용</option>
     </select>
     <input class="input-txt-l" type="text" id="searchKeyword" placeholder="검색어를 입력하세요"/>
@@ -55,7 +67,7 @@
 				<div class="container">
 		    		<nav aria-label="Page navigation">
 		        		<ul class="pagination" id="pagination"></ul>
-						<div class="btn01-l">게시글 등록</div>
+						<div class="btn01-l" onclick="location.href='runBoardWrite'">게시글 등록</div>
 		    		</nav>
 				</div>
 			</th>
@@ -66,12 +78,15 @@
 </body>
 <script>
 	var show = 1;
+	var paginationInitialized = false;
 	
 	pageCall(show);
 	
 	// 검색 폼 제출 시 AJAX 호출
 	$('#searchForm').on('submit', function(event) {
 	    event.preventDefault();  // 폼 제출 기본 동작 중지
+	    show = 1;
+	    paginationInitialized = false;
 	    pageCall(show);  // 검색어가 추가된 상태에서 호출
 	});
 	
@@ -82,7 +97,7 @@
 	
 	    $.ajax({
 	        type: 'GET',
-	        url: 'list',
+	        url: 'runBoardList',
 	        data: {
 	            'page': page,
 	            'cnt': 15,
@@ -92,19 +107,28 @@
 	        datatype: 'JSON',
 	        success: function(data) {
 	            console.log(data.resultList);
-	            console.log(data.totalpages);
-	            drawList(data.resultList);
+	            var totalCount = data.totalpages;  // 총 게시글 수를 서버에서 가져옴
+	            var pageSize = 15;  // 한 페이지당 게시글 수
+	            var totalPages = Math.ceil(totalCount / pageSize);  // 총 페이지 수 계산
+	            console.log('총 페이지 수',totalPages);
 	            
-	            $('#pagination').twbsPagination({
-	                startPage: 1,
-	                totalPages: data.totalpages,
-	                visiblePages: 10,
-	                onPageClick: function(evt, page) {
-	                    console.log('evt', evt);
-	                    console.log('page', page);
-	                    pageCall(page);
-	                }
-	            });
+	            drawList(data.resultList,page,keyword);
+	            
+	            if(!paginationInitialized || keyword !== ''){
+	            	$('#pagination').twbsPagination('destroy');
+		            $('#pagination').twbsPagination({
+		                startPage: page,
+		                totalPages: totalPages,
+		                visiblePages: 10,
+		                initiateStartPageClick: false,
+		                onPageClick: function(evt, page) {
+		                    console.log('evt', evt);
+		                    console.log('page', page);
+		                    pageCall(page);
+		                }
+		            });
+		            paginationInitialized = true;
+	            }
 	        },
 	        error: function(e) {
 	            console.log(e);
@@ -112,17 +136,27 @@
 	    });
 	}
 
-	function drawList(resultList) {
+	function drawList(resultList,page,keyword) {
 		var content ='';
-		resultList.forEach(function(view,idx){ 
-			content += '<tr>';
-			content +='<td>'+view.board_no+'</td>';
+		resultList.forEach(function(view,idx){
+			
+			if (page == 1 && !keyword && idx < 3) {
+                content += '<tr class="highlight">';
+                content += '<td><div class="tag-l-bd">추천코스</div></td>';
+            } else {
+                content += '<tr>';
+                content +='<td>'+view.board_idx+'</td>';
+            }
+			
 			content +='<td>'+view.nickname+'</td>';
-			content +='<td><a href="detail.go?idx='+view.board_no+'">'+view.subject+'<a/></td>';
+			content +='<td><a href="runBoardDetail/'+view.board_idx+'">'+view.subject+'<a/></td>';
 			content +='<td>'+view.bHit+'</td>';
 			content +='<td>'+view.likes+'</td>';
-			content +='<td>'+view.create_date+'</td>';
-			content +='</tr>';
+
+	        // 날짜 부분만 추출
+	        var dateOnly = view.create_date.split('T')[0];
+	        content += '<td>' + dateOnly + '</td>';
+	        content += '</tr>';
 		});
 		$('#list').html(content);
 	}

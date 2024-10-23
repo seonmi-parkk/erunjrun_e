@@ -19,6 +19,8 @@ public class MainController {
 	
 	@RequestMapping(value="/")
 	public String main(HttpSession session) {
+
+		//check!!임시 세션(나중에 빼기)
 		session.setAttribute("loginId", "kimee01");
 		session.setAttribute("profileImg", "/photo/profile_img1.jpg");
 		session.setAttribute("iconImg", "resources/img/icon/icon1.png");
@@ -26,11 +28,6 @@ public class MainController {
 		
 		return "main";
 	}
-	
-    @GetMapping(value="/crewWriteView")
-    public String crewWriteView() {
-        return "crew/crewWrite";
-    }
 	
 	
 }

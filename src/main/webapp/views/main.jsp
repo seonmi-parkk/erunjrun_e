@@ -105,7 +105,12 @@
 		 <div id="tagFilters">
 		 	<label><input type="checkbox" value="소셜 모임"> 소셜 모임</label>
 		 </div>
-		 	 <br/><br/><p class="title1">--------  --------</p>
+	 	 
+	 	 
+	 	 <br/><br/><p class="title1">-------- 로딩중 --------</p>
+		 <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+		 <br/><br/><p class="title1">--------  --------</p>	 
+		 
 	</div>
 	
 	<!-- 푸터 -->
@@ -118,6 +123,10 @@
 <script src="resources/js/layerPopup.js"></script>
 
 <script>
+var msg = '${msg}';
+if (msg != '') {
+   alert(msg);
+}
 
 /* 레이어팝업 */
 function btn1Act() {
@@ -160,7 +169,10 @@ $('#pagination').twbsPagination({
 	} */
 });
 
-
+var msg = '${msg}';
+if (msg != '') {
+   alert(msg);
+}
     
 </script>
 </html>

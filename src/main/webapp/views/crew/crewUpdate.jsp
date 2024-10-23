@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>crewWrite</title>
+<title>crewUpdate</title>
 	<link rel="stylesheet" href="/resources/css/crew.css">
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
@@ -14,6 +14,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="/resources/js/summernote.js"></script>
+	
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 
     <style>
@@ -43,19 +46,25 @@
     </style>
 </head>
 <body>
-    <a href="/crewUpdateView">크루 업데이트 페이지로 이동</a>
     <jsp:include page="../header.jsp" />
-    
-    
     <div class="crewWriteView"> <!-- 체크박스 순위 올리기 위함 -->
 
         <div class="inner">
             <form enctype="multipart/form-data">
-                <p class="title1">러닝크루 등록</p>
+                <p class="title1">러닝크루 수정</p>
 
                 <div id="dori">
                     <div class="twobox">
-                        <div id="img_miri"></div>
+                        <div id="img_miri"> <!-- 이미지 없을 경우 기본이미지 -->
+                        	<c:choose>
+								<c:when test="${not empty result.img_new}">
+									<img src="/photo/${result.img_new}" width="300" height="200"/>
+								</c:when>
+								<c:otherwise>
+									<img src="/resources/img/crew/crewImg300.png" width="300" height="200"/>
+								</c:otherwise>                        	
+                        	</c:choose>
+                        </div> 
                         <span style='color:#d3d3d3'>※ 권장 사이즈 800px / 400px</span>
                         <input type="file" name="crew_img" onchange="readFile(this)" id="file" />
                         <label for="file">
@@ -66,69 +75,108 @@
 
                         <div class="boxheigth">
                             <span class="title2">크루명 </span>
-                            <input type="text" name="crew_name" required />
+                            <input type="text" name="crew_name" value="${result.crew_name}" required />
                         </div> <br>
 
                         <span class="title2">태그</span>
                         <span id="tagFilters">
-                            <label><input type="checkbox" name="tag_idx_list" value="1">🏃‍♂️러닝에 집중</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="2">🙋‍♀️ 친목도 중요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="3"> 남성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="4"> 여성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="5"> 혼성</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="6"> <b style='color: FD6F22'>E</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="7"> <b style='color: 116DCA'>I</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="8">🐂 소규모 크루</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="9">🏆 대회 목적</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="10">💦 러닝 고수만</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="11">🥳 초보도 환영</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '1')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="1" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '1')}">checked</c:if>/>🏃‍♂️러닝에 집중</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '2')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="2" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '2')}">checked</c:if>/>🙋‍♀️ 친목도 중요</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '3')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="3" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '3')}">checked</c:if>/> 남성만 가능</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '4')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="4" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '4')}">checked</c:if>/> 여성만 가능</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '5')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="5" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '5')}">checked</c:if>/> 혼성</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '6')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="6" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '6')}">checked</c:if>/> <b style='color: FD6F22'>E</b> 환영해요</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '7')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="7" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '7')}">checked</c:if>/> <b style='color: 116DCA'>I</b> 환영해요</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '8')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="8" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '8')}">checked</c:if>/>🐂 소규모 크루</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '9')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="9" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '9')}">checked</c:if>/>🏆 대회 목적</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '10')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="10" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '10')}">checked</c:if>/>💦 러닝 고수만</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '11')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="11" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '11')}">checked</c:if>/>🥳 초보도 환영</label>
                         </span> <br>
 
                         <div class="boxheigth">
                             <span class="title2">요일</span>
-                            <input type="checkbox" name="days" value="mon" /><span class="basictex">월</span>
-                            <input type="checkbox" name="days" value="tue" /><span class="basictex">화</span>
-                            <input type="checkbox" name="days" value="wen" /><span class="basictex">수</span>
-                            <input type="checkbox" name="days" value="thu" /><span class="basictex">목</span>
-                            <input type="checkbox" name="days" value="fri" /><span class="basictex">금</span>
-                            <input type="checkbox" name="days" value="sat" /><span class="basictex">토</span>
-                            <input type="checkbox" name="days" value="sun" /><span class="basictex">일</span>
+                            <input type="checkbox" name="days" value="mon" 
+                            	<c:if test="${fn:contains(result.days, 'mon')}">checked</c:if>/><span class="basictex" >월</span>
+                            <input type="checkbox" name="days" value="tue" 
+                            	<c:if test="${fn:contains(result.days, 'tue')}">checked</c:if>/><span class="basictex">화</span>
+                            <input type="checkbox" name="days" value="wen" 
+                            	<c:if test="${fn:contains(result.days, 'wen')}">checked</c:if>/><span class="basictex">수</span>
+                            <input type="checkbox" name="days" value="thu" 
+                            	<c:if test="${fn:contains(result.days, 'thu')}">checked</c:if>/><span class="basictex" >목</span>
+                            <input type="checkbox" name="days" value="fri" 
+                            	<c:if test="${fn:contains(result.days, 'fri')}">checked</c:if>/><span class="basictex" >금</span>
+                            <input type="checkbox" name="days" value="sat" 
+                            	<c:if test="${fn:contains(result.days, 'sat')}">checked</c:if>/><span class="basictex" >토</span>
+                            <input type="checkbox" name="days" value="sun" 
+                            	<c:if test="${fn:contains(result.days, 'sun')}">checked</c:if>/><span class="basictex">일</span>
                         </div> <br>
 
                         <div class="boxheigth">
                             <span class="title2">인원</span> 
-                            <input type="number" name="member" min="2" required />
+                            <input type="number" name="member" min="2" required value="${result.member}" />
                         </div> <br>
 
                         <div class="boxheigth">
                             <span class="title2">운동강도</span>
-                            <input type="number" name="minute" min="1" required /><span class="basictex"> / </span>
-                            <input type="number" name="distance" min="1" required /><span class="basictex"> km </span>
+                            <input type="number" name="minute" min="1" required value="${result.minute}"/><span class="basictex" > / </span>
+                            <input type="number" name="distance" min="1" required value="${result.distance}"/><span class="basictex"> km </span>
                         </div> <br>
 
                         <div class="boxheigth">
                             <span class="title2">지역</span>
-                            <input type="text" name="address" id="sample4_roadAddress" required disabled />
+                            <input type="text" name="address" id="sample4_roadAddress" value="${result.address}" required disabled />
                             <input type="button" onclick="search()" class="btn02-m" value="검색">
+                        </div>
+                        
+                        <div class="boxheigth">
+                        	<span class="title2">모집</span>
+                        	<input type="radio" name="is_recruit" value="Y" checked/>모집
+                        	<input type="radio" name="is_recruit" value="N"/>마감
                         </div>
 
                     </div> <!-- 레이아웃 구성을 위한 div --> <br>
 
                     <div class="content_layout"> <!-- 레이아웃 구성을 위한 div -->
-                        <p class="title2">크루 설명</p> <br><br>
+                        <span class="title2">크루 설명</span> <br><br>
                         <div class="post-form">
-                            <textarea name="postContent" id="summernote" maxlength="10000"></textarea>
+                            <textarea name="postContent" id="summernote" maxlength="10000" > </textarea>
+                            
+                            <!-- value="${result.content}" -->
                         </div>
                     </div>
 
                 </div>
 
                 <div class="btn-parent">
-                    <button type="button" class="btn03-l">등록 취소하기</button>
-                    <button type="button" class="btn01-l" onclick="submitPost()">크루 등록하기</button>
+                    <button type="button" class="btn03-l">수정 취소하기</button>
+                    <button type="button" class="btn01-l" onclick="submitPost()">크루 수정하기</button>
                 </div>
             </form>
+
         </div>
+        <button type="button" class="btn03-s" onclick="crewDelete()">크루 삭제하기</button>
     </div>
     <jsp:include page="../footer.jsp" />
 </body>
@@ -137,6 +185,16 @@
 <script src="/resources/js/daumapi.js"></script>
 
 <script>
+
+$(document).ready(function() {
+    // 서버에서 가져온 content 값을 에디터에 삽입
+    var content = '<c:out value="${result.content}" escapeXml="false" />';
+    if (content) {
+        // summernote가 초기화된 후에만 내용을 설정
+        $('#summernote').summernote('code', content);
+    }
+});
+
 
 	// 크루 대표 이미지 미리보기
     function readFile(input) {
@@ -185,30 +243,23 @@
     });
 
     function submitPost() {
-        // formData 생성
         var formData = new FormData($('form')[0]);
-
-        var content = $('#summernote').summernote('code');
+        var content = $('#summernote').summernote('code'); // summernote 코드
 
         var fileInput = $('input[type="file"]')[0]; // 파일 input에서 파일 가져오기
         if (fileInput.files.length > 0) {
             formData.append('crew_img', fileInput.files[0]); // 파일 데이터 추가
-            console.log(fileInput);
+            console.log(formData.crew_img);
         }
 
         formData.append('id', 'test'); // 세션값 체크해서 넣어줘야 함!
+        
         formData.append('content', content);  // summernote의 HTML 내용 추가 (이미지 포함)
 
         formData.append('address', roadAddr); // 화면에 출력
         formData.append('sigungu', sigungu);
         formData.append('sido', sido);
         formData.append('shortsido', shortsido);
-
-        console.log('tagCheckboxes=>', tagCheckboxes);
-        console.log('roadAddr =>', roadAddr);
-        console.log('sigungu =>', sigungu);
-        console.log('sido =>', sido);
-        console.log('shotssido =>', shortsido);
 
         var selectedTags = "";
         $('input[name="tag_idx_list"]:checked').each(function () {
@@ -244,30 +295,52 @@
         formData.append('imgsJson', JSON.stringify(finalImgs));  // new_filename과 일치하는 값만 전
 
         $.ajax({
-            type: 'POST',
-            url: '/crew/write',  // 서버에 전송할 URL
+            type: 'PUT',
+            url: '/crew/update',  // 서버에 전송할 URL
             data: formData,  // formData 객체 전송
             contentType: false,  // formData 사용 시 false로 설정
             processData: false,  // formData 사용 시 false로 설정
             enctype: 'multipart/form-data',  // multipart/form-data 사용
             success: function (response) {
-                console.log('글 전송 성공:', response);
+                console.log('글 수정 성공:', response);
                 if(response.success){
-                	console.log(response.page);
-                 	/* location.href=response.page;  */
+	                alert('수정 성공');
                 }
+        
+                
             },
             error: function (e) {
-                console.log('글 전송 에러:', e);
+                console.log('글 수정 에러:', e);
             }
         });
     }
     
-    
-
-    
-    
-    
+    // 크루 삭제 => use_yn = 'N' (crew_member, crew_tag => delete)
+    // 팝업 추가 필요!
+    function crewDelete(){
+    	
+    	console.log('delete?');
+    	
+    	var crew_idx = 39; // 히든으로 숨겨서 받아서 넘겨야 함! (상세페이지)
+    	
+    	$.ajax({
+    		type: 'DELETE',
+    		url: '/crew/delete',
+    		data: {'crew_idx' : crew_idx},
+    		dataType: 'JSON',
+    		success: function(data){
+    			if(data.success){
+	    			alert('크루 삭제 성공');
+    			}else{
+    				alert('크루 삭제 실패');
+    			}
+    		},error: function(e){
+    			console.log('삭제 에러 => ',e);
+    		}
+    		
+    	});
+    	
+    }
     
 </script>
 

@@ -5,6 +5,7 @@
   
 <mapper namespace="com.erunjrun.crew.dao.CrewDAO">
 
+	<!-- 크루 정보 입력 -->
 	<insert id="submitPost"
 		useGeneratedKeys="true"
 		keyColumn="crew_idx"
@@ -13,15 +14,79 @@
 		
 		INSERT INTO crew(crew_name, member, minute, distance, content, days, address, sido, sigungu, shortsido) 
 			VALUES(#{crew_name}, #{member}, #{minute}, #{distance}, #{content}, #{days}, #{address}, #{sido}, #{sigungu}, #{shortsido})
-	
 	</insert>
 	
 	<insert id="fileWrite" parameterType="com.erunjrun.image.dto.ImageDTO">
 		INSERT INTO image(code_name, img_ori, img_new, img_no) VALUES(#{code_name}, #{img_ori}, #{img_new}, #{img_no})
 	</insert>
 	
-	<insert id="memberUpdate" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
+	<insert id="memberUpload" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
 		INSERT INTO crew_member(crew_idx, id, is_leader) VALUES(#{crew_idx}, #{id}, #{is_leader})
 	</insert>
+	
+	<insert id="tagUpload" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
+		INSERT INTO crew_tag VALUES(#{crew_idx}, #{tag_idx})
+	</insert>
+	
+	<insert id="fileUpload" parameterType="com.erunjrun.image.dto.ImageDTO">
+		INSERT INTO image(code_name, img_ori, img_new, img_no) VALUES(#{code_name}, #{img_ori}, #{img_new}, #{img_no})
+	</insert>
+	
+	<!-- 크루 삭제 -->
+	<update id="crewDelete" parameterType="int">
+		UPDATE crew SET current_member = 0, use_yn = 'N' WHERE crew_idx = #{crew_idx}
+	</update>
+	
+	<delete id="crewMemberDelete" parameterType="int">
+		DELETE FROM crew_member WHERE crew_idx = #{crew_idx} 
+	</delete>
+	
+	<delete id="crewTagDelete" parameterType="int">
+		DELETE FROM crew_tag WHERE crew_idx = #{crew_idx}
+	</delete>
+	
+	<delete id="crewImgDelete" parameterType="int">
+		DELETE FROM image WHERE img_no = #{img_no} AND code_name IN ('I100', 'I101')
+	</delete>
+	
+	<!-- 수정form 이동 -->
+	<select id="crewUpdateView" resultType="map" parameterType="int">
+	    SELECT 
+	        c.*, 
+	        i.img_ori, 
+	        i.img_new, 
+	        GROUP_CONCAT(DISTINCT ct.tag_idx) AS tag_idxs 
+	    FROM 
+	        crew c
+	    LEFT JOIN 
+	        image i ON c.crew_idx = i.img_no AND i.code_name in ('I101', 'I100')
+	    LEFT JOIN 
+	        crew_tag ct ON c.crew_idx = ct.crew_idx
+	    WHERE 
+	        c.crew_idx = #{crew_idx}
+	    GROUP BY 
+	        c.crew_idx;
+	</select>
+	
+	<!-- 크루 수정 -->
+	<update id="crewUpdate" parameterType="com.erunjrun.crew.dto.CrewDTO">
+		UPDATE crew 
+			SET crew_name = #{crew_name}, member = #{member}, minute = #{minute}, distance = #{distance}, content = #{content}, 
+				days = #{days}, address = #{address}, sido = #{sido}, sigungu = #{sigungu}, shortsido = #{shortsido}, is_recruit = #{is_recruit} 
+			WHERE crew_idx = #{crew_idx}
+	</update>
+	
+	<!-- <update id="tagUpdate" parameterType="com.erunjrun.crew.dto.CrewDTO">
+		UPDATE crew_tag SET tag_idx = #{tag_idx} WHERE crew_idx = #{crew_idx}
+	</update> -->
+	
+	<!-- 크루 대표 이미지 업데이트 -->
+	<update id="fileUpdate" parameterType="com.erunjrun.image.dto.ImageDTO">
+		UPDATE image SET img_ori = #{img_ori}, img_new = #{img_new}, code_name = #{code_name} WHERE img_no = ${img_no}
+	</update>
+	
+	<update id="fileTemUpdate" parameterType="com.erunjrun.image.dto.ImageDTO">
+		UPDATE image SET img_ori = #{img_ori}, img_new = #{img_new}, code_name = #{code_name} WHERE img_no = ${img_no}
+	</update>
 
 </mapper>

@@ -3,6 +3,37 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 <mapper namespace="com.erunjrun.admin.dao.AdminDAO">
+  	
+  	<select id="getAllowedIp" resultType="String">
+      SELECT ip FROM admin WHERE
+      admin_id = #{id}
+   </select>
+
+   <select id="adminLogin" parameterType="map" resultType="boolean">
+      SELECT
+      COUNT(admin_id) > 0
+      FROM admin
+      WHERE admin_id = #{id} AND admin_pw = #{pw}
+   </select>
+
+   <select id="getAuthority" parameterType="String"
+      resultType="String">
+      SELECT is_admin
+      FROM admin
+      WHERE admin_id = #{id}
+   </select> 
+  	
+  	<insert id="adminJoin" parameterType="String">
+      INSERT INTO admin
+      (admin_id, admin_pw, name, ip)
+      VALUES (#{id}, #{pw}, #{name}, #{ip})
+   </insert>
+   
+   <select id="SgetAllowedIp" resultType="String">
+      SELECT ip FROM admin WHERE
+      admin_id = #{id}
+   </select>
+  	
   	<select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
   		SELECT 
 	    m.id,
@@ -19,11 +50,40 @@
 		FROM 
 		    member m
 		LEFT JOIN 
-		    ban b ON m.id = b.id;
+		    ban b ON m.id = b.id
+	     <where>
+        <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
+            m.id LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="keyword != null and !keyword.equals('') and opt.equals('nickname')">         
+            m.nickname LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
+            m.email LIKE CONCAT('%', #{keyword}, '%')
+        </if>      
+    </where>
   	</select>
   	
   	<select id="count" resultType="int">
 		SELECT CEIL(count(id)/#{param1}) AS pages FROM member
 	</select>
+	
+  	<select id="adminlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+  		SELECT admin_id,name,join_date FROM admin
+  	</select>
+  
+  	<select id="admincount" resultType="int">
+		SELECT CEIL(count(admin_id)/#{param1}) AS pages FROM admin
+	</select>
+	
+	<select id="memberdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
+		SELECT id,nickname,email,address,gender,birth,phone FROM member where id = #{param1}
+	</select>
+	
+  
+  	<select id="reportlist" resultType="com.erunjrun.admin.dto.AdminDTO" >
+  	  	SElECT code_name,unlike_id,use_yn,create_Date From report_write where id = #{param1}
+  	</select>
+  
   
   </mapper>

@@ -1,5 +1,6 @@
 package com.erunjrun.crew.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +55,12 @@ public class CrewController {
 	}
 	
 	@PostMapping(value="/write")
-	public Map<String, Object> submitPost(@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
+	public Map<String, Object> submitPost(@RequestParam("crew_img") MultipartFile crew_img, 
+			@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		logger.info("ori_name =>" + crew_img.getOriginalFilename());
 		
 		// JSON -> List<FileDto> 변환
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -75,15 +83,80 @@ public class CrewController {
 		
 		logger.info("DTO : " + crewDto.toString());
 
-		if(crew_service.sumbitPost(crewDto)) {
+		if(crew_service.sumbitPost(crewDto, crew_img)) {
 			// 저장 완료 후 응답 반환
 			// return ResponseEntity.ok("글 저장 성공");
 			
 			logger.info("글 업로드 완료");
 			
+			resultMap.put("success", true);
+			resultMap.put("page", "crewUpdate");
+			
 		}
 
-		return null;
+		return resultMap;
 	}
 
+	@DeleteMapping(value="/delete")
+	public Map<String, Object> crewDelete(int crew_idx){
+		
+		logger.info("cres_idx => "+crew_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		if(crew_service.crewDelete(crew_idx)) {
+			resultMap.put("success", true);
+		}else {
+			resultMap.put("success", false);
+		}
+		
+		return resultMap;
+	}
+	
+	@PutMapping(value="/update")
+	public Map<String, Object> crewUpdate(@RequestParam("crew_img") MultipartFile crew_img, 
+			@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson){
+		
+		// 나중에 빼줘야 함
+		int crew_idx = 39;
+		crewDto.setCrew_idx(crew_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		logger.info("ori_name =>" + crew_img.getOriginalFilename());
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		List<ImageDTO> imgs = null;
+		try {
+	        imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ImageDTO.class));
+	        crewDto.setImgs(imgs);  
+		} catch (Exception e) {
+			logger.error("파싱 오류 : {}", e.getMessage());
+			return Map.of("error", e.getMessage());
+		}
+		
+		if (imgs != null && !imgs.isEmpty()) {
+		    for (ImageDTO img : imgs) {
+		        logger.info("Original Filename: " + img.getImg_ori());
+		        logger.info("New Filename: " + img.getImg_new());
+		    }
+		}
+		
+		logger.info("수정하는 DTO : " + crewDto.toString());
+
+		if(crew_service.crewUpdate(crewDto, crew_img)) {
+			logger.info("글 업로드 완료");
+			
+			String page = "crewUpdateView";
+			
+			resultMap.put("success", true);
+			resultMap.put("page", page);
+			
+		}
+
+		return resultMap;
+		
+	}
+	
+	
 }

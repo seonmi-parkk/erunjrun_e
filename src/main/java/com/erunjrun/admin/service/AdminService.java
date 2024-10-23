@@ -1,8 +1,6 @@
 package com.erunjrun.admin.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,30 +17,64 @@ public class AdminService {
 	
 	@Autowired AdminDAO admin_dao;
 
+	public String getAllowedIp(String id) {
+        return admin_dao.getAllowedIp(id);
+    }
+
+   public boolean adminLogin(String id, String pw) {
+      return admin_dao.adminLogin(id, pw);
+   }
+   
+   public String getAuthority(String id) {
+       return admin_dao.getAuthority(id);
+   }
 	
-	 public Map<String, Object> memberlist(int page, int cnt) {
-	 logger.info("현재페이지 :"+page); 
-	 logger.info("한페이지에 보여줄 갯수 :"+cnt);
-	  
-	 int limit = cnt;
-	 int offset = (page-1)*cnt;
-	 int totalPage = admin_dao.count(cnt);
-	  
-	 Map<String, Object> result = new HashMap<String, Object>();
-	 result.put("totalPages", totalPage); 
-	 result.put("currPage", page);
-	 result.put("list", admin_dao.memberlist(limit,offset));
-	 
-	 
-	 
-	 return result; }
+   public String SgetAllowedIp(String superAdminId) {
+	      return admin_dao.getAllowedIp(superAdminId);
+	      
+	   }
+
+   public boolean adminJoin(String id, String pw, String name,String ip) {
+	   
+	      return admin_dao.adminJoin(id,pw,name,ip);
+	   }
+   
+   
+	public int count(int cnt_) {
+		
+		return admin_dao.count(cnt_);
+	}
+
+
+	public List<AdminDTO> memberlist(String opt, String keyword, int limit, int offset) {
+		
+		return admin_dao.memberlist(opt, keyword ,limit, offset);
+	}
+
+	public int admincount(int cnt_) {
+	
+		return admin_dao.admincount(cnt_);
+	}
+
+	public List<AdminDTO> adminlist(String opt, String keyword, int limit, int offset) {
+	
+		return admin_dao.adminlist(opt, keyword, limit, offset);
+	}
+
+
+	public List<AdminDTO> reportlist(String id) {
+		
+		return admin_dao.reportlist(id);
+	}
+
+	public AdminDTO memberdetail(String id) {
+		
+		return admin_dao.memberdetail(id);
+	}
 
 
 	
 	 
-//	public List<AdminDTO> memberlist(int page_, int cnt_) {
-//		
-//		return admin_dao.memberlist();
-//	}
+
 	
 }

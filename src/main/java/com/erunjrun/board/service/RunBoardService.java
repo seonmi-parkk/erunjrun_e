@@ -17,30 +17,41 @@ public class RunBoardService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired RunBoardDAO runBoardDAO;
 	
-//public int count(int cnt_) {
+	public int count(int cnt_) {
+		
+		return runBoardDAO.count(cnt_);
+	}
+
+
+	public List<RunBoardDTO> bHitList() {
+		
+		return runBoardDAO.bHitList();
+	}
+
+	public List<RunBoardDTO> list(int limit, int offset, String code_name, String use_yn, String is_map) {
+		
+		return runBoardDAO.list(limit, offset,code_name,use_yn,is_map);
+	}
+
+	public List<RunBoardDTO> searchList(String opt, String keyword, int limit, int offset) {
+
+		return runBoardDAO.search(opt, keyword, limit, offset);
+	}
+
+	public int getSearchTotalPages(String opt, String keyword) {
+
+		return runBoardDAO.getSearchTotalPages(opt, keyword);
+	}
+
+
+//	public void mapWrite(RunBoardDTO boardDTO) {
 //		
-//		return runBoardDAO.count(cnt_);
-//	}
+//		int boardIdx = boardDTO.getBoard_idx();
+//        for (RunBoardDTO map : boardDTO.mapWrite()) {
+//        	map.setBoard_idx(boardIdx);
 //
-//
-//	public List<RunBoardDTO> bHitList() {
+//        }
 //		
-//		return runBoardDAO.bHitList();
-//	}
-//
-//	public List<RunBoardDTO> list(int limit, int offset) {
-//		
-//		return runBoardDAO.list(limit,offset);
-//	}
-//
-//	public List<RunBoardDTO> searchList(String opt, String keyword, int limit, int offset) {
-//
-//		return runBoardDAO.search(opt, keyword, limit, offset);
-//	}
-//
-//	public int getSearchTotalPages(String opt, String keyword) {
-//
-//		return runBoardDAO.getSearchTotalPages(opt, keyword);
 //	}
 	
 }
