@@ -57,6 +57,12 @@ input::placeholder {
 	align-items: center;
 }
 
+.checkbox-group {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    align-items: center;
+}
+
 button {
 	width: 100%;
 	padding: 10px;
@@ -75,6 +81,11 @@ button:hover {
 	text-align: center;
 	margin-top: 10px;
 }
+
+.links a:last-child {
+    margin-top: 10px; /* 관리자 전용 링크에만 적용 */
+    display: block; /* 블록 요소로 설정하여 줄 바꿈 */
+}
 </style>
 </head>
 <body>
@@ -90,34 +101,17 @@ button:hover {
 					placeholder="비밀번호" required />
 			</div>
 			<div class="form-group checkbox-group">
-				<input type="checkbox" id="adminOnly" name="adminOnly" /> 관리자 전용 <input type="checkbox" id="saveId"
-					name="saveId" /> <label for="saveId">아이디 저장</label>
+			<input type="checkbox" id="saveId" name="saveId" /> <label for="saveId">아이디 저장</label>
 			</div>
 			<button type="submit">LOGIN</button>
 			<div class="links">
-				<a href="join">회원가입</a> | <a href="findId">아이디/비밀번호 찾기</a>
+				<a href="join">회원가입</a> | <a href="findId">아이디/비밀번호 찾기</a><a href="adminLogin">관리자전용</a>
 			</div>
 		</form>
 	</div>
 
 	<script>
-		// 관리자 전용 체크시, 관리자 로그인이 가능해야 한다.
-		$('form').off('submit').on('submit', function(event) {
-			// 체크박스가 선택되지 않았으면 일반 로그인으로 처리
-			if (!$('#adminCheck').is(':checked')) {
-				// adminOnly 파라미터를 포함하지 않음
-				// 일반회원 로그인 요청이기 때문에 그냥 제출
-				return; // 추가적인 처리 필요 없음
-			} else {
-				// 체크박스가 선택된 경우, 관리자 전용 요청을 구분
-				$('<input>').attr({
-					type : 'hidden',
-					name : 'adminOnly',
-					value : 'true'
-				}).appendTo('form');
-			}
-		});
-
+		
 		// 폼 제출 시 쿠키에 ID 저장
 		$('form').on('submit', function() {
 			if ($('#saveId').is(':checked')) {
