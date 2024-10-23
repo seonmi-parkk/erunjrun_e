@@ -20,27 +20,27 @@ public class AdminService {
 	@Autowired AdminDAO admin_dao;
 
 	
-	 public Map<String, Object> memberlist(int page, int cnt) {
-	 logger.info("현재페이지 :"+page); 
-	 logger.info("한페이지에 보여줄 갯수 :"+cnt);
-	  
-	 int limit = cnt;
-	 int offset = (page-1)*cnt;
-	 int totalPage = admin_dao.count(cnt);
-	  
-	 Map<String, Object> result = new HashMap<String, Object>();
-	 result.put("totalPages", totalPage); 
-	 result.put("currPage", page);
-	 result.put("list", admin_dao.memberlist(limit,offset));
-	 
-	 
-	 
-	 return result; }
+	public int count(int cnt_) {
+		
+		return admin_dao.count(cnt_);
+	}
+
+
+	public List<AdminDTO> memberlist(int limit, int offset, String keyword) {
+		
+		return admin_dao.memberlist(limit, offset, keyword);
+	}
+
+
+	public List<AdminDTO> adminlist(int limit, int offset) {
+	
+		return admin_dao.adminlist(limit, offset);
+	}
 
 
 	
 	 
-//	public List<AdminDTO> memberlist(int page_, int cnt_) {
+//	public List<AdminDTO> memberlist() {
 //		
 //		return admin_dao.memberlist();
 //	}
