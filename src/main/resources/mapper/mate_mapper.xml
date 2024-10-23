@@ -12,5 +12,45 @@
 		INSERT INTO mate_history (id,code_name,unlike_id) VALUES (#{fromUserId},'M100',#{toUserId})
 	</insert>
 	
+	<select id="checkMate" resultType="int">
+		SELECT count(mate_idx) FROM mate WHERE id IN(#{fromUserId},#{toUserId}) OR unlike_id IN(#{fromUserId},#{toUserId})
+	</select>
+
+	<select id="checkBlock" resultType="int"> <!-- unlike_id 신청회원 -->
+		SELECT count(unlike_id) FROM block_member WHERE unlike_id = #{fromUserId} AND id = #{toUserId}
+	</select>
+
+	<select id="profileOpen" resultType="String">
+		SELECT profile_use FROM profile WHERE id = #{toUserId}
+	</select>
+
+	<select id="checkLike" resultType="int">
+		SELECT count(unlike_id) FROM interest_member WHERE unlike_id = #{fromUserId} AND id = #{toUserId}    
+	</select>
+	
+	<select id="getProfile" resultType="com.erunjrun.mate.dto.MateDTO"> 
+		SELECT 
+			 image, nickname, dong, shortsido, gender, birth
+			<if test="isOpened">
+			,m.id, exercise_min, exercise_dis, exercise, mate, content 
+			</if>
+			FROM member m JOIN profile p ON m.id = p.id WHERE m.id = #{toUserId}
+	</select>
+		<!-- <select id="getProfile" resultType="com.erunjrun.mate.dto.MateDTO"> 
+		SELECT 
+			m.id, gender, birth
+			<if test="isOpened.equals(true)">
+				exercise_min, exercise_dis, exercise, mate, content 
+			</if>
+			FROM member m JOIN profile p ON m.id = p.id WHERE m.id = #{toUserId}
+	</select> -->
+	
+	
+				<!-- gender, birth, exercise_min, exercise_dis, exercise, mate, content -->
+
+
+	
+
+	
 
 </mapper>
