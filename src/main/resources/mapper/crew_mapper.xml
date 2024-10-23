@@ -23,5 +23,25 @@
 	<insert id="memberUpdate" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
 		INSERT INTO crew_member(crew_idx, id, is_leader) VALUES(#{crew_idx}, #{id}, #{is_leader})
 	</insert>
+	
+	<insert id="tagUpdate" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
+		INSERT INTO crew_tag VALUES(#{crew_idx}, #{tag_idx})
+	</insert>
+	
+	<insert id="fileUpload" parameterType="com.erunjrun.image.dto.ImageDTO">
+		INSERT INTO image(code_name, img_ori, img_new, img_no) VALUES(#{code_name}, #{img_ori}, #{img_new}, #{img_no})
+	</insert>
+	
+	<update id="crewDelete" parameterType="int">
+		UPDATE crew SET current_member = 0, use_yn = 'N' WHERE crew_idx = #{crew_idx}
+	</update>
+	
+	<delete id="crewMemberDelete" parameterType="int">
+		DELETE FROM crew_member WHERE crew_idx = #{crew_idx} 
+	</delete>
+	
+	<delete id="crewTagDelete" parameterType="int">
+		DELETE FROM crew_tag WHERE crew_idx = #{crew_idx}
+	</delete>
 
 </mapper>

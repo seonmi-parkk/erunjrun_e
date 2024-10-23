@@ -2,6 +2,9 @@ package com.erunjrun.crew.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.crew.dao.CrewDAO;
@@ -55,7 +59,8 @@ public class CrewService {
 		return resultFileMap;
 	}
 
-	public boolean sumbitPost(CrewDTO crewDto) {
+	@Transactional
+	public boolean sumbitPost(CrewDTO crewDto, MultipartFile crew_img) {
 		
 		boolean success = false;
 		
@@ -71,7 +76,7 @@ public class CrewService {
 //					String new_filename = img.getNew_filename();
 
 					img.setImg_no(img_no);
-					img.setCode_name("I101");
+					img.setCode_name("I100");
 					fileWrite(img);
 					
 				}
@@ -79,6 +84,7 @@ public class CrewService {
 			
 			success= true;
 			
+			// 크루장 crew_member 테이블에 insert
 			CrewMemberDTO crewMemberDto = new CrewMemberDTO();
 			crewMemberDto.setCrew_idx(img_no);
 			crewMemberDto.setId(crewDto.getId());
@@ -86,9 +92,46 @@ public class CrewService {
 			
 			crew_dao.memberUpdate(crewMemberDto);
 			
+			String[] tag_idx_list = crewDto.getTag_idx_list().split(",");
+			for(String tag_idx : tag_idx_list) {
+				crewDto.setTag_idx(Integer.parseInt(tag_idx));
+				crew_dao.tagUpdate(crewDto);
+			}
+			
+			
+			fileUpload(img_no, crew_img);
+			
 		}
 		
 		return success;
+		
+	}
+
+	private void fileUpload(int img_no, MultipartFile crew_img) {
+		
+		String img_ori = crew_img.getOriginalFilename();
+		String ext = img_ori.substring(img_ori.lastIndexOf("."));
+		String img_new = UUID.randomUUID().toString() + ext;
+		
+		
+		ImageDTO imageDto = new ImageDTO();
+		
+		imageDto.setCode_name("I101");
+		imageDto.setImg_ori(img_ori);
+		imageDto.setImg_new(img_new);
+		imageDto.setImg_no(img_no);
+		
+		byte[] arr;
+		try {
+			arr = crew_img.getBytes();
+			Path path = Paths.get("C:/upload/"+img_new);
+			Files.write(path, arr);
+			crew_dao.fileUpload(imageDto);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 
@@ -113,6 +156,23 @@ public class CrewService {
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Transactional
+	public boolean crewDelete(int crew_idx) {
+		
+		int deleteRow = crew_dao.crewDelete(crew_idx);
+		
+		if(deleteRow > 0) {
+			int memberDeleteRow = crew_dao.crewMemberDelete(crew_idx);
+			int tagDeleteRow = crew_dao.crewTagDelete(crew_idx);
+			
+			if(memberDeleteRow > 0 && tagDeleteRow > 0) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
     
 }

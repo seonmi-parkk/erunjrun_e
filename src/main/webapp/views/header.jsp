@@ -4,74 +4,95 @@
 <header>
 	<div class="header-inner">
 		<a href="/">
-			<img src="/resources/img/common/logo.png" alt="이런저런"/>
+			<img src="resources/img/common/logo.png" alt="이런저런"/>
 		</a>
-		<ul class="menu">
-			<li>
-				<a href="#">러닝크루</a>
-				<ul class="depth2">
+		
+		<c:choose>
+			<c:when test="${sessionScope.adminYn eq 'N'}">
+				<ul class="menu">
 					<li>
-						<a href="#">러닝크루</a>			
+						<a href="#">러닝크루</a>
+						<ul class="depth2">
+							<li>
+								<a href="#">러닝크루</a>			
+							</li>
+							<li>
+								<a href="#">러닝크루 개설</a>			
+							</li>
+						</ul>
 					</li>
 					<li>
-						<a href="#">러닝크루 개설</a>			
+						<a href="#">러닝메이트</a>
+					</li>
+					<li>
+						<a href="#">게시판</a>
+						<ul class="depth2">
+							<li>
+								<a href="#">러닝코스 게시판</a>			
+							</li>
+							<li>
+								<a href="#">자유주제 게시판</a>			
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#">아이콘몰</a>
+					</li>
+					<li>
+						<a href="#">문의하기</a>
 					</li>
 				</ul>
-			</li>
-			<li>
-				<a href="#">러닝메이트</a>
-			</li>
-			<li>
-				<a href="#">게시판</a>
-				<ul class="depth2">
-					<li>
-						<a href="#">러닝코스 게시판</a>			
-					</li>
-					<li>
-						<a href="#">자유주제 게시판</a>			
-					</li>
-				</ul>
-			</li>
-			<li>
-				<a href="#">아이콘몰</a>
-			</li>
-			<li>
-				<a href="#">문의하기</a>
-			</li>
-		</ul>
-		<div class="login-box">
-		<%-- 	<c:choose>
-				<c:when test="${sessionScope.id}">
-					<a class="login" href="#">로그인</a>
-					<a href="#">회원가입</a>
-				</c:when>
-				<c:otherwise>
-					<a class="profile-box" href="#">
-						<c:when test="${sessionScope.profileImg}">
-							<img class="profile-img" src="resources/img/common/profile.png" alt="프로필 이미지"/>
+				
+				<div class="login-box">
+					<c:choose>
+						<c:when test="${not empty sessionScope.loginId}">
+							<a class="profile-box" href="#">
+								<c:choose>
+									<c:when test="${not empty sessionScope.profileImg}">  
+										<!-- 이부분 주소 변경 --><img class="profile-img" src="${sessionScope.profileImg}" alt="프로필 이미지"/>
+									</c:when>
+									<c:otherwise>
+										<img class="profile-img" src="resources/img/common/profile.png" alt="프로필 이미지"/>
+									</c:otherwise>
+								</c:choose>
+							</a>	
+							<div class="notice">
+								<div class="num-box">
+									<span>3</span>
+								</div>
+								<img class="profile-img" src="resources/img/common/ico_notice.png" alt="알림"/>
+							</div>
 						</c:when>
-					</a>	
-					<div class="notice">
-						<div class="num-box">
-							<span>3</span>
-						</div>
-						<img class="profile-img" src="resources/img/common/ico_notice.png" alt="알림"/>
-					</div>
-				</c:otherwise>
-			</c:choose> --%>
-			<a class="login" href="login">로그인</a>
-			<a href="join">회원가입</a>
-			<a class="profile-box" href="#">
-				<img class="profile-img" src="/resources/img/common/profile.png" alt="프로필 이미지"/>
-			</a>
-			<div class="notice">
-				<div class="num-box">
-					<span>3</span>
+						<c:otherwise>
+							<a class="login" href="/login">로그인</a>
+							<a href="/join">회원가입</a>
+						</c:otherwise>
+					</c:choose>
 				</div>
-				<img class="profile-img" src="/resources/img/common/ico_notice.png" alt="알림"/>
+			</c:when>
+		<c:otherwise>
+			<div class="admin-menu"> <!-- 관리자일 경우에만 display: block -->
+				<img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+				<div class="admin-mod on">
+					<div class="toggle-slider"></div>
+					<span>관리자</span>
+				</div>
 			</div>
-		</div>
-
+		</c:otherwise>
+	</c:choose>
+	
 	</div>
 </header>
+	
+<script>
+	// 아이콘 체크 
+	if('${sessionScope.iconImg}' != ''){
+		$('header .profile-box').css('background','url(${sessionScope.iconImg}) center center/100% no-repeat ');
+	}
+	
+	console.log('${sessionScope.adminYn}');
+	console.log('${sessionScope.loginId}');
+	console.log('${sessionScope.profileImg}');
+	console.log('${sessionScope.iconImg}');
 
+</script>

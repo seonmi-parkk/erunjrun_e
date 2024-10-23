@@ -20,18 +20,14 @@ public class AdminController {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired AdminService admin_service;
+
 	
 	@GetMapping(value = "/adminMember")
 	public String memberListForm() {
 		return "admin/memberList";
 	}
-	
-	@GetMapping(value = "/admin")
-	public String adminListForm() {
-		return "admin/adminList";
-	}
 
-	
+
 	  @GetMapping(value = "/memberList") 
 	  @ResponseBody 
 	  public Map<String,Object> memberlist(String page, String cnt,String keyword){

@@ -15,4 +15,14 @@ public interface CrewDAO {
 
 	void memberUpdate(CrewMemberDTO crewMemberDto);
 
+	void tagUpdate(CrewDTO crewDto);
+
+	void fileUpload(ImageDTO imageDto);
+
+	int crewDelete(int crew_idx);
+
+	int crewMemberDelete(int crew_idx);
+
+	int crewTagDelete(int crew_idx);
+
 }

@@ -23,17 +23,17 @@ $('.menu > li ').on({
 	},
 });
 
+// 관리자모드 헤더 토글
+$('.toggle-slider').on('click',function(){
+	$(this).parent().toggleClass('on');
+	if($('.admin-mod').hasClass('on')){
+		$(this).siblings('span').text('관리자');
+	}else{
+		$(this).siblings('span').text('일반');
+	}
+});
+
 
 // 태그 체크박스 클릭시 label에 클래스 추가
-var checkboxes = document.querySelectorAll('#tagFilters input[type="checkbox"]');
 
-checkboxes.forEach(function(checkbox){
-  checkbox.addEventListener('click', function() {
-    if (this.checked) {
-      this.parentElement.classList.add('checked');
-    } else {
-      this.parentElement.classList.remove('checked');
-    }
-  });
-});
  
