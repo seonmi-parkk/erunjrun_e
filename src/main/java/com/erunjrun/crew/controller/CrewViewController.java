@@ -16,19 +16,19 @@ public class CrewViewController {
 	
     @GetMapping(value="/crewWriteView")
     public String crewWriteView() {
-        return "crew/crewWrite";
+        return "/crew/crewWrite";
     }
     
     @GetMapping(value="/crewUpdateView")
     public String crewUpdateView(Model model) {
     	
-    	int crew_idx = 39;
+    	int crew_idx = 42;
     	
     	Map<String, Object> resultMap = crew_service.crewUpdateView(crew_idx);
     	
     	model.addAttribute("result", resultMap);
     	
-        return "crew/crewUpdate";
+        return "/crew/crewUpdate";
     }
 
 }

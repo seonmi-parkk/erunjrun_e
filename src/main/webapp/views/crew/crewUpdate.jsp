@@ -57,7 +57,7 @@
                     <div class="twobox">
                         <div id="img_miri"> <!-- 이미지 없을 경우 기본이미지 -->
                         	<c:choose>
-								<c:when test="${not empty result.img}">
+								<c:when test="${not empty result.img_new}">
 									<img src="/photo/${result.img_new}" width="300" height="200"/>
 								</c:when>
 								<c:otherwise>
@@ -80,28 +80,57 @@
 
                         <span class="title2">태그</span>
                         <span id="tagFilters">
-                            <label><input type="checkbox" name="tag_idx_list" value="1" ${result.tag_idx == 1 ? 'checked' : ''}>🏃‍♂️러닝에 집중</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="2" ${result.tag_idx == 2 ?'checked' : '' }>🙋‍♀️ 친목도 중요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="3" ${result.tag_idx == 3 ?'checked' : '' }> 남성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="4" ${result.tag_idx == 4 ?'checked' : '' }> 여성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="5" ${result.tag_idx == 5 ? 'checked' : ''}> 혼성</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="6" ${result.tag_idx == 6 ? 'checked' : ''}> <b style='color: FD6F22'>E</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="7" ${result.tag_idx == 7 ? 'checked' : ''}> <b style='color: 116DCA'>I</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="8" ${result.tag_idx == 8 ? 'checked' : ''}>🐂 소규모 크루</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="9" ${result.tag_idx == 9 ? 'checked' : ''}>🏆 대회 목적</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="10" ${result.tag_idx == 10 ? 'checked' : ''}>💦 러닝 고수만</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="11" ${result.tag_idx == 11 ? 'checked' : ''}>🥳 초보도 환영</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '1')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="1" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '1')}">checked</c:if>/>🏃‍♂️러닝에 집중</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '2')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="2" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '2')}">checked</c:if>/>🙋‍♀️ 친목도 중요</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '3')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="3" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '3')}">checked</c:if>/> 남성만 가능</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '4')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="4" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '4')}">checked</c:if>/> 여성만 가능</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '5')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="5" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '5')}">checked</c:if>/> 혼성</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '6')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="6" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '6')}">checked</c:if>/> <b style='color: FD6F22'>E</b> 환영해요</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '7')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="7" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '7')}">checked</c:if>/> <b style='color: 116DCA'>I</b> 환영해요</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '8')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="8" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '8')}">checked</c:if>/>🐂 소규모 크루</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '9')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="9" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '9')}">checked</c:if>/>🏆 대회 목적</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '10')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="10" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '10')}">checked</c:if>/>💦 러닝 고수만</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '11')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="11" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '11')}">checked</c:if>/>🥳 초보도 환영</label>
                         </span> <br>
 
                         <div class="boxheigth">
                             <span class="title2">요일</span>
-                            <input type="checkbox" name="days" value="mon" /><span class="basictex" ${fn:contains(result.days, 'mon') ? 'checked' : ''}>월</span>
-                            <input type="checkbox" name="days" value="tue" /><span class="basictex">화</span>
-                            <input type="checkbox" name="days" value="wen" /><span class="basictex">수</span>
-                            <input type="checkbox" name="days" value="thu" /><span class="basictex" ${fn:contains(result.days, 'thu') ? 'checked' : ''}>목</span>
-                            <input type="checkbox" name="days" value="fri" /><span class="basictex" ${fn:contains(result.days, 'fri') ? 'checked' : ''}>금</span>
-                            <input type="checkbox" name="days" value="sat" /><span class="basictex" ${fn:contains(result.days, 'sat') ? 'checked' : ''}>토</span>
-                            <input type="checkbox" name="days" value="sun" /><span class="basictex">일</span>
+                            <input type="checkbox" name="days" value="mon" 
+                            	<c:if test="${fn:contains(result.days, 'mon')}">checked</c:if>/><span class="basictex" >월</span>
+                            <input type="checkbox" name="days" value="tue" 
+                            	<c:if test="${fn:contains(result.days, 'tue')}">checked</c:if>/><span class="basictex">화</span>
+                            <input type="checkbox" name="days" value="wen" 
+                            	<c:if test="${fn:contains(result.days, 'wen')}">checked</c:if>/><span class="basictex">수</span>
+                            <input type="checkbox" name="days" value="thu" 
+                            	<c:if test="${fn:contains(result.days, 'thu')}">checked</c:if>/><span class="basictex" >목</span>
+                            <input type="checkbox" name="days" value="fri" 
+                            	<c:if test="${fn:contains(result.days, 'fri')}">checked</c:if>/><span class="basictex" >금</span>
+                            <input type="checkbox" name="days" value="sat" 
+                            	<c:if test="${fn:contains(result.days, 'sat')}">checked</c:if>/><span class="basictex" >토</span>
+                            <input type="checkbox" name="days" value="sun" 
+                            	<c:if test="${fn:contains(result.days, 'sun')}">checked</c:if>/><span class="basictex">일</span>
                         </div> <br>
 
                         <div class="boxheigth">
@@ -157,8 +186,14 @@
 
 <script>
 
-	// 크루 정보 수정
-
+$(document).ready(function() {
+    // 서버에서 가져온 content 값을 에디터에 삽입
+    var content = '<c:out value="${result.content}" escapeXml="false" />';
+    if (content) {
+        // summernote가 초기화된 후에만 내용을 설정
+        $('#summernote').summernote('code', content);
+    }
+});
 
 
 	// 크루 대표 이미지 미리보기
@@ -208,30 +243,23 @@
     });
 
     function submitPost() {
-        // formData 생성
         var formData = new FormData($('form')[0]);
-
-        var content = $('#summernote').summernote('code');
+        var content = $('#summernote').summernote('code'); // summernote 코드
 
         var fileInput = $('input[type="file"]')[0]; // 파일 input에서 파일 가져오기
         if (fileInput.files.length > 0) {
             formData.append('crew_img', fileInput.files[0]); // 파일 데이터 추가
-            console.log(fileInput);
+            console.log(formData.crew_img);
         }
 
         formData.append('id', 'test'); // 세션값 체크해서 넣어줘야 함!
+        
         formData.append('content', content);  // summernote의 HTML 내용 추가 (이미지 포함)
 
         formData.append('address', roadAddr); // 화면에 출력
         formData.append('sigungu', sigungu);
         formData.append('sido', sido);
         formData.append('shortsido', shortsido);
-
-        console.log('tagCheckboxes=>', tagCheckboxes);
-        console.log('roadAddr =>', roadAddr);
-        console.log('sigungu =>', sigungu);
-        console.log('sido =>', sido);
-        console.log('shotssido =>', shortsido);
 
         var selectedTags = "";
         $('input[name="tag_idx_list"]:checked').each(function () {
@@ -274,10 +302,15 @@
             processData: false,  // formData 사용 시 false로 설정
             enctype: 'multipart/form-data',  // multipart/form-data 사용
             success: function (response) {
-                console.log('글 전송 성공:', response);
+                console.log('글 수정 성공:', response);
+                if(response.success){
+	                alert('수정 성공');
+                }
+        
+                
             },
             error: function (e) {
-                console.log('글 전송 에러:', e);
+                console.log('글 수정 에러:', e);
             }
         });
     }

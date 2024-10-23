@@ -43,7 +43,10 @@
     </style>
 </head>
 <body>
+    <a href="/crewUpdateView">크루 업데이트 페이지로 이동</a>
     <jsp:include page="../header.jsp" />
+    
+    
     <div class="crewWriteView"> <!-- 체크박스 순위 올리기 위함 -->
 
         <div class="inner">
@@ -251,7 +254,8 @@
             success: function (response) {
                 console.log('글 전송 성공:', response);
                 if(response.success){
-                	location.href=response.page;
+                	console.log(response.page);
+                 	/* location.href=response.page;  */
                 }
             },
             error: function (e) {
