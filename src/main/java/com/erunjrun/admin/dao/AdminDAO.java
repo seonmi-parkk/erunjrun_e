@@ -13,6 +13,8 @@ public interface AdminDAO {
 	 
 	int count(int cnt);
 
+
 	List<AdminDTO> adminlist(int limit, int offset);
 
 }
+
