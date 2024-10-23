@@ -56,6 +56,7 @@ public class CrewController {
 	@PostMapping(value="/write")
 	public Map<String, Object> submitPost(@RequestParam("crew_img") MultipartFile crew_img, @ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
 		
+		Map<String, Object> resultMap = new HashMap<>();
 		
 		logger.info("ori_name =>" + crew_img.getOriginalFilename());
 		

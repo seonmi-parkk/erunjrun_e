@@ -250,6 +250,9 @@
             enctype: 'multipart/form-data',  // multipart/form-data 사용
             success: function (response) {
                 console.log('글 전송 성공:', response);
+                if(response.success){
+                	location.href=response.page;
+                }
             },
             error: function (e) {
                 console.log('글 전송 에러:', e);
