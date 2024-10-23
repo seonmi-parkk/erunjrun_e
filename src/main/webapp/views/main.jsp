@@ -118,6 +118,10 @@
 <script src="resources/js/layerPopup.js"></script>
 
 <script>
+var msg = '${msg}';
+if (msg != '') {
+   alert(msg);
+}
 
 /* 레이어팝업 */
 function btn1Act() {
