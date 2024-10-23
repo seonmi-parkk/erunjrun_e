@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +55,8 @@ public class CrewController {
 	}
 	
 	@PostMapping(value="/write")
-	public Map<String, Object> submitPost(@RequestParam("crew_img") MultipartFile crew_img, @ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
+	public Map<String, Object> submitPost(@RequestParam("crew_img") MultipartFile crew_img, 
+			@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		
@@ -109,6 +111,50 @@ public class CrewController {
 		}
 		
 		return resultMap;
+	}
+	
+	@PutMapping(value="/update")
+	public Map<String, Object> crewUpdate(@RequestParam("crew_img") MultipartFile crew_img, 
+			@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson){
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		logger.info("ori_name =>" + crew_img.getOriginalFilename());
+		
+		// JSON -> List<FileDto> 변환
+		ObjectMapper objectMapper = new ObjectMapper();
+		List<ImageDTO> imgs = null;
+		try {
+			// TypeFactory를 사용하여 제네릭 타입을 처리
+	        imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ImageDTO.class));
+	        crewDto.setImgs(imgs);  // 변환한 리스트를 BoardDTO에 설정
+		} catch (Exception e) {
+			logger.error("파싱 오류 : {}", e.getMessage());
+			return Map.of("error", e.getMessage());
+		}
+		
+		if (imgs != null && !imgs.isEmpty()) {
+		    for (ImageDTO img : imgs) {
+		        logger.info("Original Filename: " + img.getImg_ori());
+		        logger.info("New Filename: " + img.getImg_new());
+		    }
+		}
+		
+		logger.info("DTO : " + crewDto.toString());
+
+		if(crew_service.crewUpdate(crewDto, crew_img)) {
+			// 저장 완료 후 응답 반환
+			// return ResponseEntity.ok("글 저장 성공");
+			
+			logger.info("글 업로드 완료");
+			
+			resultMap.put("success", true);
+			resultMap.put("page", "crewUpdate");
+			
+		}
+
+		return resultMap;
+		
 	}
 	
 	

@@ -15,9 +15,9 @@ public interface CrewDAO {
 
 	void fileWrite(ImageDTO img);
 
-	void memberUpdate(CrewMemberDTO crewMemberDto);
+	void memberUpload(CrewMemberDTO crewMemberDto);
 
-	void tagUpdate(CrewDTO crewDto);
+	void tagUpload(CrewDTO crewDto);
 
 	void fileUpload(ImageDTO imageDto);
 
@@ -27,6 +27,12 @@ public interface CrewDAO {
 
 	int crewTagDelete(int crew_idx);
 
-	Map<String, Object> crewUpdate(int crew_idx);
+	Map<String, Object> crewUpdateView(int crew_idx);
+
+	int crewUpdate(CrewDTO crewDto);
+
+	void tagUpdate(CrewDTO crewDto);
+	
+	
 
 }

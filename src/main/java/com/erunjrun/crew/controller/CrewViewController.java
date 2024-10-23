@@ -24,7 +24,7 @@ public class CrewViewController {
     	
     	int crew_idx = 39;
     	
-    	Map<String, Object> resultMap = crew_service.crewUpdate(crew_idx);
+    	Map<String, Object> resultMap = crew_service.crewUpdateView(crew_idx);
     	
     	model.addAttribute("result", resultMap);
     	

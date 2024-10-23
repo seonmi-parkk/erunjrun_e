@@ -14,6 +14,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="/resources/js/summernote.js"></script>
+	
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 
     <style>
@@ -55,7 +58,7 @@
                         <div id="img_miri"> <!-- 이미지 없을 경우 기본이미지 -->
                         	<c:choose>
 								<c:when test="${not empty result.img}">
-									<img src="${result.img}" width="300" height="200"/>
+									<img src="/photo/${result.img_new}" width="300" height="200"/>
 								</c:when>
 								<c:otherwise>
 									<img src="/resources/img/crew/crewImg300.png" width="300" height="200"/>
@@ -77,37 +80,27 @@
 
                         <span class="title2">태그</span>
                         <span id="tagFilters">
-                        	<c:forEach var="tag" items="${result.tag_idx_list}">
-    <label><input type="checkbox" name="tag_idx_list" value="${tag}" 
-           <c:if test="${tag == 1}">checked</c:if>>🏃‍♂️러닝에 집중</label>
-    <label><input type="checkbox" name="tag_idx_list" value="${tag}" 
-           <c:if test="${tag == 2}">checked</c:if>>🙋‍♀️ 친목도 중요</label>
-    <label><input type="checkbox" name="tag_idx_list" value="${tag}" 
-           <c:if test="${tag == 3}">checked</c:if>> 남성만 가능</label>
-           <label><input type="checkbox" name="tag_idx_list" value="${tag}" 
-           <c:if test="${tag == 4}">checked</c:if>> 44남성만 가능</label>
-</c:forEach>
-                         <%--    <label><input type="checkbox" name="tag_idx_list" value="1" ${result.tag_idx.contains('1') ? 'checked' : ''}>🏃‍♂️러닝에 집중</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="2" ${result.tag_idx.contains('2') ? 'checked' : ''}>🙋‍♀️ 친목도 중요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="3" ${result.tag_idx.contains('3') ? 'checked' : ''}> 남성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="4" ${result.tag_idx.contains('4') ? 'checked' : ''}> 여성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="5" ${result.tag_idx.contains('5') ? 'checked' : ''}> 혼성</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="6" ${result.tag_idx.contains('6') ? 'checked' : ''}> <b style='color: FD6F22'>E</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="7" ${result.tag_idx.contains('7') ? 'checked' : ''}> <b style='color: 116DCA'>I</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="8" ${result.tag_idx.contains('8') ? 'checked' : ''}>🐂 소규모 크루</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="9" ${result.tag_idx.contains('9') ? 'checked' : ''}>🏆 대회 목적</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="10" ${result.tag_idx.contains('10') ? 'checked' : ''}>💦 러닝 고수만</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="11" ${result.tag_idx.contains('11') ? 'checked' : ''}>🥳 초보도 환영</label> --%>
+                            <label><input type="checkbox" name="tag_idx_list" value="1" ${result.tag_idx == 1 ? 'checked' : ''}>🏃‍♂️러닝에 집중</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="2" ${result.tag_idx == 2 ?'checked' : '' }>🙋‍♀️ 친목도 중요</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="3" ${result.tag_idx == 3 ?'checked' : '' }> 남성만 가능</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="4" ${result.tag_idx == 4 ?'checked' : '' }> 여성만 가능</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="5" ${result.tag_idx == 5 ? 'checked' : ''}> 혼성</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="6" ${result.tag_idx == 6 ? 'checked' : ''}> <b style='color: FD6F22'>E</b> 환영해요</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="7" ${result.tag_idx == 7 ? 'checked' : ''}> <b style='color: 116DCA'>I</b> 환영해요</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="8" ${result.tag_idx == 8 ? 'checked' : ''}>🐂 소규모 크루</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="9" ${result.tag_idx == 9 ? 'checked' : ''}>🏆 대회 목적</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="10" ${result.tag_idx == 10 ? 'checked' : ''}>💦 러닝 고수만</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="11" ${result.tag_idx == 11 ? 'checked' : ''}>🥳 초보도 환영</label>
                         </span> <br>
 
                         <div class="boxheigth">
                             <span class="title2">요일</span>
-                            <input type="checkbox" name="days" value="mon" /><span class="basictex">월</span>
+                            <input type="checkbox" name="days" value="mon" /><span class="basictex" ${fn:contains(result.days, 'mon') ? 'checked' : ''}>월</span>
                             <input type="checkbox" name="days" value="tue" /><span class="basictex">화</span>
                             <input type="checkbox" name="days" value="wen" /><span class="basictex">수</span>
-                            <input type="checkbox" name="days" value="thu" /><span class="basictex">목</span>
-                            <input type="checkbox" name="days" value="fri" /><span class="basictex">금</span>
-                            <input type="checkbox" name="days" value="sat" /><span class="basictex">토</span>
+                            <input type="checkbox" name="days" value="thu" /><span class="basictex" ${fn:contains(result.days, 'thu') ? 'checked' : ''}>목</span>
+                            <input type="checkbox" name="days" value="fri" /><span class="basictex" ${fn:contains(result.days, 'fri') ? 'checked' : ''}>금</span>
+                            <input type="checkbox" name="days" value="sat" /><span class="basictex" ${fn:contains(result.days, 'sat') ? 'checked' : ''}>토</span>
                             <input type="checkbox" name="days" value="sun" /><span class="basictex">일</span>
                         </div> <br>
 
@@ -163,6 +156,10 @@
 <script src="/resources/js/daumapi.js"></script>
 
 <script>
+
+	// 크루 정보 수정
+
+
 
 	// 크루 대표 이미지 미리보기
     function readFile(input) {
@@ -270,8 +267,8 @@
         formData.append('imgsJson', JSON.stringify(finalImgs));  // new_filename과 일치하는 값만 전
 
         $.ajax({
-            type: 'POST',
-            url: '/crew/write',  // 서버에 전송할 URL
+            type: 'PUT',
+            url: '/crew/update',  // 서버에 전송할 URL
             data: formData,  // formData 객체 전송
             contentType: false,  // formData 사용 시 false로 설정
             processData: false,  // formData 사용 시 false로 설정

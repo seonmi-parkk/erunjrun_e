@@ -20,11 +20,11 @@
 		INSERT INTO image(code_name, img_ori, img_new, img_no) VALUES(#{code_name}, #{img_ori}, #{img_new}, #{img_no})
 	</insert>
 	
-	<insert id="memberUpdate" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
+	<insert id="memberUpload" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
 		INSERT INTO crew_member(crew_idx, id, is_leader) VALUES(#{crew_idx}, #{id}, #{is_leader})
 	</insert>
 	
-	<insert id="tagUpdate" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
+	<insert id="tagUpload" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
 		INSERT INTO crew_tag VALUES(#{crew_idx}, #{tag_idx})
 	</insert>
 	
@@ -44,7 +44,7 @@
 		DELETE FROM crew_tag WHERE crew_idx = #{crew_idx}
 	</delete>
 	
-	<select id="crewUpdate" resultType="map" parameterType="int">
+	<select id="crewUpdateView" resultType="map" parameterType="int">
 		SELECT c.*, i.img_ori, i.img_new, ct.tag_idx FROM crew c
 			LEFT JOIN image i ON c.crew_idx = i.img_no AND i.code_name = 'I101'
 			LEFT JOIN crew_tag ct ON c.crew_idx = ct.crew_idx

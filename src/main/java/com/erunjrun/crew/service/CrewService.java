@@ -90,12 +90,12 @@ public class CrewService {
 			crewMemberDto.setId(crewDto.getId());
 			crewMemberDto.setIs_leader("Y");
 			
-			crew_dao.memberUpdate(crewMemberDto);
+			crew_dao.memberUpload(crewMemberDto);
 			
 			String[] tag_idx_list = crewDto.getTag_idx_list().split(",");
 			for(String tag_idx : tag_idx_list) {
 				crewDto.setTag_idx(Integer.parseInt(tag_idx));
-				crew_dao.tagUpdate(crewDto);
+				crew_dao.tagUpload(crewDto);
 			}
 			
 			
@@ -128,7 +128,6 @@ public class CrewService {
 			Files.write(path, arr);
 			crew_dao.fileUpload(imageDto);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -175,9 +174,44 @@ public class CrewService {
 		return false;
 	}
 
-	public Map<String, Object> crewUpdate(int crew_idx) {
+	// crewUpdate 페이지 데이터 전달 (select)
+	public Map<String, Object> crewUpdateView(int crew_idx) {
 		
-		return crew_dao.crewUpdate(crew_idx);
+		return crew_dao.crewUpdateView(crew_idx);
+	}
+
+	// 크루 수정 내용 update
+	public boolean crewUpdate(CrewDTO crewDto, MultipartFile crew_img) {
+		
+		boolean success = false;
+		
+		int row = crew_dao.crewUpdate(crewDto); // insert -> update
+		
+		if(row>0) {
+			int img_no = crewDto.getCrew_idx();
+			List<ImageDTO> imgs = crewDto.getImgs();
+			if(imgs.size() > 0) {
+				for (ImageDTO img : imgs) {
+					
+					img.setImg_no(img_no);
+					img.setCode_name("I100");
+					fileWrite(img); // 파일 복사 (임시 -> 저장소)
+				}
+			}
+			
+			success = true;
+			
+			String[] tag_idx_list = crewDto.getTag_idx_list().split(",");
+			for(String tag_idx : tag_idx_list) {
+				crewDto.setTag_idx(Integer.parseInt(tag_idx));
+				crew_dao.tagUpdate(crewDto); 
+			}
+			
+//			fileUpdate(img_no, crew_img);
+			
+		}
+
+		return success;
 	}
     
 }
