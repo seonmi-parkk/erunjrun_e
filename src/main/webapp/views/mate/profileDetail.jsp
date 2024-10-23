@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="com.erunjrun.mate.dto.MateDTO" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
+
+<%
+    Map<String, Object> result = (Map<String, Object>) request.getAttribute("result");
+    MateDTO profileDto = (MateDTO) result.get("profileDto");
+%>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -85,7 +93,8 @@
 <body>
 	
 	<div class="profileDetail">
-		<input type="hidden" name="id" value="kimee01"/>
+		<!-- check!! 프로필 주인 id 정보 나중에 바꿔줘야 함. -->
+		<input type="hidden" name="id" value="moma123"/>
 	    <a class="btn-close">닫기</a>
 	    <div class="user-info">
  	        <div>
@@ -98,20 +107,67 @@
 	           </div>
            </div>
 	       <div class="buttons">
-	           <div class="btn-mate-appl btn01-s">러닝메이트 신청</div>
-	           <div class="btn-chat btn02-s">채팅하기</div>
-	           <div class="btn-like btn02-s"><img src="resources/img/common/ico_heart_no_act.png" alt="좋아요"></div>
-	           <div class="btn-unblock btn01-s">차단해제하기</div>
+	       		<c:choose>
+	       			<c:when test="${result.isBlocked eq false}">
+		       			<c:choose>
+		       				<c:when test="${result.isMate eq false}">
+					           <div class="btn-mate-appl btn01-s">러닝메이트 신청</div>
+							</c:when>
+						</c:choose>
+			           <div class="btn-chat btn02-s">채팅하기</div>
+			           <div class="btn-like btn02-s">
+			           		<c:choose>
+				           		<c:when test="${result.isLiked eq false}">
+				           			<img src="resources/img/common/ico_heart_no_act.png" alt="좋아요비활성">
+			           			</c:when>
+			           			<c:otherwise>
+				           			<img src="resources/img/common/ico_heart_act.png" alt="좋아요활성">				           			
+			           			</c:otherwise>
+		           			</c:choose>
+		           		</div>
+		           </c:when>
+		           <c:otherwise>
+		           		<div class="btn-unblock btn01-s">차단해제하기</div>
+	           		</c:otherwise>
+	           </c:choose>
 	       </div>
        </div>
 
 	   <div class="content">
-	       <div class="line">
+  			<div class="line">
 	           <div class="tag-m-gray">성별</div>
-	           <p>여성</p>
+	           <p>${result.gender}성</p>
 	       </div>
-	       <a class="btn-block" onclick="layerPopup('한수아 님을 차단하시겠습니까?<br/>차단 시 해당 회원과의 대화기능은 이용 불가합니다.','차단하기','취소')">차단하기</a>
+  			<div class="line">
+	           <div class="tag-m-gray">연령대</div>
+	           <p class="age-area"></p>
+	       </div>
+  			<div class="line">
+	           <div class="tag-m-gray">운동강도</div>
+	           <p>${result.exercise_dis}km/${result.exercise_min}분</p>
+	       </div>
+  			<div class="line">
+	           <div class="tag-m-gray">운동성향</div>
+	           <p>${result.exercise}km/${result.exercise_min}분</p>
+	       </div>
+  			<div class="line">
+	           <div class="tag-m-gray">원하는 운동 메이트 운동성향</div>
+	           <p>${result.mate}</p>
+	       </div>
+  			<div class="line">
+	           <div class="tag-m-gray">소개글</div>
+	           <p>${result.content}</p>
+	       </div>
+
+	       
+     	   <c:choose>
+    	   		<c:when test="${result.isBlocked eq false}">
+	       			<a class="btn-block" onclick="layerPopup('한수아 님을 차단하시겠습니까?<br/>차단 시 해당 회원과의 대화기능은 이용 불가합니다.','차단하기','취소')">차단하기</a>
+       			</c:when>
+     		</c:choose>
 	    </div>
+	
+	
 	
 	</div>
 	<jsp:include page="../footer.jsp"/>
@@ -122,9 +178,43 @@
 <script src="resources/js/common.js" type="text/javascript"></script>
 <script src="resources/js/layerPopup.js"></script>
 <script>
-	console.log("test");
+ 	var birth = '${result.birth}';
+ 	var birthYear = parseInt(birth.split('-')[0]);
+ 	var currentDate = new Date();
+ 	var year = currentDate.getFullYear();
+ 	var age = year-birthYear+1;
+ 	var ageArea = '';
+ 	for(numMin=20, numMax=24; numMin<=50; numMin+=5, numMax+=5){
+	 	if(age>=numMin && age<=numMax){
+	 		ageArea = numMin+'~'+numMax;
+	 	}
+ 	}
+ 	$('.age-area').text(ageArea+'세');
+ 	console.log("ageArea"+ageArea);
+ 	
+ 	console.log(year-birthYear+1);
+	/* 현재 메이트 여부에 따라 버튼이 다르게 보여짐 */
+	console.log('${result.isMate}',${result.isMate});
+	console.log('${result.isBlocked}',${result.isBlocked});
+	console.log('${result.isOpened}',${result.isOpened});
+	console.log('${result.isLiked}',${result.isLiked});
+	/* console.log('${result.profileDto}',${result.profileDto}); */
+
+	console.log("result.birth",'${result.birth}');
+	console.log("result.birth",'${result.dong}');
+	
+	 
+/* 	<c:forEach var="item" items="${myMap}">
+	    <p>${item.value}</p>
+	</c:forEach> */
+	
+/* 	if(${result.isMate}== true){
+		$('.btn-mate-appl').css('display','none');
+	} */
+
 	/* 메이트 신청하기 버튼 이벤트 */
 	$('.btn-mate-appl').on('click',function(){
+		
 		layerPopup('ㅇㅇㅇ님께 러닝메이트를 신청하시겠습니까?','신청','취소' ,applBtn1Act, applBtn2Act);
 	});
 	function applBtn1Act() {
@@ -144,6 +234,7 @@
 				console.log(data.success);
 				// 신청완료 팝업
 				if(data.success){
+					loadingComplete();
 					removeAlert(); // 기존 confirmBox 닫기
 			    	layerPopup('운동메이트 신청이 완료되었습니다.', '확인','내 운동메이트로 이동',appl2Btn1Act , appl2Btn2Act);
 				}
@@ -154,6 +245,7 @@
 			}
 	    	
 	    });
+	    loading();
 	    
 	}
 	
