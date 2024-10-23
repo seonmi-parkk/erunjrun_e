@@ -42,5 +42,16 @@ public class RunBoardService {
 
 		return runBoardDAO.getSearchTotalPages(opt, keyword);
 	}
+
+
+//	public void mapWrite(RunBoardDTO boardDTO) {
+//		
+//		int boardIdx = boardDTO.getBoard_idx();
+//        for (RunBoardDTO map : boardDTO.mapWrite()) {
+//        	map.setBoard_idx(boardIdx);
+//
+//        }
+//		
+//	}
 	
 }
