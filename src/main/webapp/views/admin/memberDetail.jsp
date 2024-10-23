@@ -57,7 +57,7 @@ var showPage = 1; // 기본 보여줄 페이지
 pageCall(showPage);
 
    
- function pageCall(page){
+ function pageCall(showPage){
     console.log('pageCall');
     $.ajax({
           type: 'GET',

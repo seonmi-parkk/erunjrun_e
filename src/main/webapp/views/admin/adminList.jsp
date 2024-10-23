@@ -20,19 +20,18 @@
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
 	<div class="inner">
 		
-		<div class="btn02-l" onclick="location.href='adminMember'">일반회원</div>
-	    <div class="btn03-l" onclick="location.href='admin'">관리자</div>
+		<div class="btn02-l" onclick="">일반회원</div>
+	    <div class="btn03-l" onclick="">관리자</div>
 	    
-	    <form action="adminMember" method="get">
 	    <select name="">
 	        <option value="">아이디</option>
 	        <option value="">이름</option>
 	        <option value="">이메일</option>
 	    </select>
 	    
-	    <input class="input-txt-l" type="text" name="keyword" id=""/>
+	    <input class="input-txt-l" type="text" name="keyword" id="keyword"/>
 	    <input class="btn-sch" type="button" value="검색"/>
-		</form>
+	
 	   
 		 <table>
 		 	<colgroup>
@@ -45,11 +44,9 @@
 			<thead>
 			<tr>
 				<th>아이디</th>
-				<th>닉네임</th>
-				<th>이메일</th>
-				<th>권한</th>
-				<th>신고누적수</th>
-				<th>가입일시</th>
+				<th>관리자명</th>
+				<th>가입일자</th>
+				<th>삭제</th>
 			</tr>
 		</thead>
 		 	<tbody id="list">
@@ -116,12 +113,10 @@ pageCall(show);
 		var content ='';
 		 for (var view of list) {
 			content +='<tr>';
-			content +='<td>'+view.id+'</td>';
-			content += '<td><a href="adminMemberDetail/'+view.id+'">'+view.nickname+'<a/></td>';
-			content +='<td>'+view.email+'</td>';
-			content +='<td><a href="board_del?idx='+view.id+'">권한</a></td>';
-			content +='<td>'+view.report_count+'</td>';
+			content +='<td>'+view.admin_id+'</td>';
+			content += '<td>'+view.name+'</td>';
 			content +='<td>'+view.join_date+'</td>';
+			content +='<td><a href="board_del?idx='+view.id+'">삭제</a></td>';
 			content +='</tr>';
 		  }
 	      $('#list').html(content);
