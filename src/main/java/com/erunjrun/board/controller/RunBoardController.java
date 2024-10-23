@@ -1,6 +1,7 @@
 package com.erunjrun.board.controller;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erunjrun.board.dto.RunBoardDTO;
@@ -75,5 +80,23 @@ public class RunBoardController {
 
 	    return result;
 	}
+	
+	@GetMapping(value="/runBoardWrite")
+	public String write() {
+		return "runBoard/runBoardWrite";
+	}
+	
+//	@PostMapping(value="/runBoardWrite")
+//	@ResponseBody
+//    public ResponseEntity<String> mapWrite(@RequestBody RunBoardDTO boardDTO) {
+//        try {
+//            runBoardService.mapWrite(boardDTO);
+//            return new ResponseEntity<>("게시글 등록 성공", HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("게시글 등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+	
+	
 	
 }

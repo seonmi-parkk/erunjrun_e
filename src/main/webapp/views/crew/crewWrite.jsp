@@ -125,7 +125,6 @@
                     <button type="button" class="btn01-l" onclick="submitPost()">크루 등록하기</button>
                 </div>
             </form>
-
         </div>
     </div>
     <jsp:include page="../footer.jsp" />
@@ -256,6 +255,13 @@
             }
         });
     }
+    
+    
+
+    
+    
+    
+    
 </script>
 
 </html>
