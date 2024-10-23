@@ -128,7 +128,25 @@
 	});
 	function applBtn1Act() {
 	    // 1번버튼 클릭시 수행할 내용
-	    console.log('1번 버튼 동작');
+	    console.log('1번버튼');
+	    console.log($('input[name="id"]')[0].defaultValue);
+	    $.ajax({
+	    	type:'POST',
+			url:'/mateAppliaction',
+			data:{
+				fromUserId: ${sessionScope.loginId},
+				toUserId: $('input[name="id"]')[0].defaultValue
+			},
+			dataType:'JSON',
+			success:function(data){
+				console.log(data);
+				
+			},
+			error:function(e){
+				console.log(e);		
+			}
+	    	
+	    });
 	    // 신청완료 팝업
 	    layerPopup('운동메이트 신청이 완료되었습니다.', '확인','내 운동메이트로 이동',appl2Btn1Act , appl2Btn2Act);
 	}
