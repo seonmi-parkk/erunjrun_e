@@ -96,7 +96,7 @@
 	    var keyword = $('#searchKeyword').val();  // 검색어
 	
 	    $.ajax({
-	        type: 'GET',
+	        type: 'POST',
 	        url: 'runBoardList',
 	        data: {
 	            'page': page,
@@ -157,6 +157,7 @@
 	        var dateOnly = view.create_date.split('T')[0];
 	        content += '<td>' + dateOnly + '</td>';
 	        content += '</tr>';
+
 		});
 		$('#list').html(content);
 	}

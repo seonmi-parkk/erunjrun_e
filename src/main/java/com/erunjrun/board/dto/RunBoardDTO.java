@@ -1,6 +1,5 @@
 package com.erunjrun.board.dto;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -23,30 +22,39 @@ public class RunBoardDTO {
 	private String is_map; // 지도 사용 여부
 	
 	// 지도 테이블
-	private BigDecimal latitude;
-	private BigDecimal longtude;
+	private double latitude;
+	private double longtude;
 	private String path;
 	private int order_num;
 	
     // 지도 데이터 (경로 정보)
-    private List<BigDecimal> latitudeList;
-    private List<BigDecimal> longitudeList;
+    private List<Double> latitudeList;
+    private List<Double> longitudeList;
     private List<String> pathList;
-
+    private List<Integer> orderList;
+    
     // 이미지 리스트
     private List<ImageDTO> imageList;
+    
+
+    public List<Integer> getOrderList() {
+		return orderList;
+	}
+	public void setOrderList(List<Integer> orderList) {
+		this.orderList = orderList;
+	}
 	
 	
-	public List<BigDecimal> getLatitudeList() {
+	public List<Double> getLatitudeList() {
 		return latitudeList;
 	}
-	public void setLatitudeList(List<BigDecimal> latitudeList) {
+	public void setLatitudeList(List<Double> latitudeList) {
 		this.latitudeList = latitudeList;
 	}
-	public List<BigDecimal> getLongitudeList() {
+	public List<Double> getLongitudeList() {
 		return longitudeList;
 	}
-	public void setLongitudeList(List<BigDecimal> longitudeList) {
+	public void setLongitudeList(List<Double> longitudeList) {
 		this.longitudeList = longitudeList;
 	}
 	public List<String> getPathList() {
@@ -127,16 +135,16 @@ public class RunBoardDTO {
 	public void setIs_map(String is_map) {
 		this.is_map = is_map;
 	}
-	public BigDecimal getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(BigDecimal latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
-	public BigDecimal getLongtude() {
+	public Double getLongtude() {
 		return longtude;
 	}
-	public void setLongtude(BigDecimal longtude) {
+	public void setLongtude(Double longtude) {
 		this.longtude = longtude;
 	}
 	public String getPath() {

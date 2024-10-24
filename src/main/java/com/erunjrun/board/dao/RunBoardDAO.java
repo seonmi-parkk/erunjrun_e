@@ -1,6 +1,5 @@
 package com.erunjrun.board.dao;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -24,7 +23,7 @@ public interface RunBoardDAO {
 
 	int insertRunBoard(RunBoardDTO runBoard);
 
-	int insertRouteData(int board_idx, BigDecimal latitude, BigDecimal longitude, String path, int order_num);
+	int insertRouteData(int board_idx, Double latitude, Double longitude, String path, int order_num);
 
 	int fileWrite(ImageDTO img);
 
