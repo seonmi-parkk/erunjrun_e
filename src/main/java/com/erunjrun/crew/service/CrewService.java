@@ -277,25 +277,12 @@ public class CrewService {
 			e.printStackTrace();
 		}
 	}
+
+	public CrewDTO crewDetail(int crew_idx) {
+		
+		return crew_dao.crewDetail(crew_idx);
+	}
 	
-//	private void fileTemUpdate(ImageDTO img) {
-//		
-//		File srcFile = new File("C:/uploadTemporary/"+img.getImg_new());
-//		File descDir = new File("C:/upload/"+img.getImg_new());
-//		
-//		logger.info("img dto 에서 => " + img); // img_idx 제외 다 들어옴
-//		
-//		try {
-//			FileUtils.copyFile(srcFile, descDir);
-//			logger.info("파일 업데이트 복사");
-//			
-//			int file_tem_update = crew_dao.fileTemUpdate(img);
-//			logger.info("진짜 파일 업데이트 =>" + file_tem_update);
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//	}
+
     
 }

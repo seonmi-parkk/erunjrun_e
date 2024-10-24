@@ -39,6 +39,8 @@ public interface CrewDAO {
 
 	int fileTemUpdate(ImageDTO img);
 
+	CrewDTO crewDetail(int crew_idx);
+
 	
 	
 

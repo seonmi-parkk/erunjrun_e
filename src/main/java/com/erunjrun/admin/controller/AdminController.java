@@ -126,7 +126,6 @@ public class AdminController {
 	  public String adminList() {
 		  return "admin/adminList";
 	  }
-	  
 	
 	  @GetMapping(value = "/adminList") //post?
 	  @ResponseBody 
@@ -166,11 +165,33 @@ public class AdminController {
 	  }
 	  
 	  @GetMapping(value = "/memberRight")
-	  public String rightwrite(@RequestParam Map<String, String> param, Model model) {
-		  admin_service.right(param);
-		  String id= param.get("id");
-		  
+	  public String right(String nickname,Model model) {
+		  logger.info(nickname);
+		  model.addAttribute("info",nickname);
 		  return "admin/right";
+	  }
+	  
+	  
+	  @GetMapping(value = "/memberRightWrite")
+	  public String rightwrite(@RequestParam Map<String, String> param, Model model,HttpSession session) {
+		  admin_service.rightwrite(param);
+		  session.getAttribute("loginId"); // 관리자 로그인 ID 저장
+		  
+		  return"admin/memberList";
+	  }
+	  
+	  
+	  @GetMapping(value = "/memberRightDetail")
+	  public String rightdetail( Model model) {
+		  
+		  return"admin/memberDetail";
+	  }
+	  
+	  
+	  @GetMapping(value = "/memberRightUpdate")
+	  public String rightupdate( Model model) {
+		 
+		  return"admin/memberDetail";
 	  }
 	  
 

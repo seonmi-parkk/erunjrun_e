@@ -158,5 +158,23 @@ public class CrewController {
 		
 	}
 	
+	@PostMapping(value="/detail")
+	public Map<String, Object> crewDetail(String crew_idx) {
+		
+		logger.info("idx => " + crew_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		int crew_idxs = Integer.parseInt(crew_idx); 
+		
+		CrewDTO crewDto = crew_service.crewDetail(crew_idxs);
+		
+		resultMap.put("result", crewDto);
+		resultMap.put("success", true);
+		
+		
+		return resultMap;
+	}
+	
 	
 }

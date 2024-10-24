@@ -32,7 +32,9 @@ public class CrewDTO {
     
     private List<ImageDTO> imgs;
     
-    private String id;
+    private String img_new;
+    
+	private String id;
     
 	// tag 테이블
     private int tag_idx; // crew_tag
@@ -226,6 +228,12 @@ public class CrewDTO {
 	}
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+	}
+	public String getImg_new() {
+		return img_new;
+	}
+	public void setImg_new(String img_new) {
+		this.img_new = img_new;
 	}
 	@Override
 	public String toString() {
