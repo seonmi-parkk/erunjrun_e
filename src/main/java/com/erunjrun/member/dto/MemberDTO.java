@@ -14,6 +14,21 @@ public class MemberDTO {
 	private int point;
 	private String use_yn;
 	
+	private String image;
+	private String icon_image;
+	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public String getIcon_image() {
+		return icon_image;
+	}
+	public void setIcon_image(String icon_image) {
+		this.icon_image = icon_image;
+	}
 	public String getUse_yn() {
 		return use_yn;
 	}

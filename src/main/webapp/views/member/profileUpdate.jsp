@@ -50,6 +50,12 @@ input[type="text"], input[type="password"] {
 	box-sizing: border-box;
 }
 
+input[type="file"] {
+	width: 100%;
+	padding: 10px;
+	margin-top: 5px;
+}
+
 button {
 	width: 100%;
 	padding: 10px;
@@ -76,7 +82,8 @@ button:hover {
 <body>
 	<div class="container">
 		<h3>회원 정보 수정하기</h3>
-		<form id="profileUpdate" action="profileUpdate.do" method="post">
+		<form id="profileUpdate" action="profileUpdate.do" method="post"
+			enctype="multipart/form-data">
 			<input type="hidden" name="id" value="${member.id}" />
 			<div class="form-group">
 				<label for="nickname">닉네임</label> <input type="text" name="nickname"
@@ -85,8 +92,9 @@ button:hover {
 				<span id="nickNameResult" class="result"></span>
 			</div>
 			<div class="form-group">
-				<label for="image">이미지</label> <img src="" alt="회원 이미지"
-					style="max-width: 100%; border-radius: 4px;" />
+				<label for="image">이미지</label> <img src="/photo/${profile.image}"
+					alt="회원 이미지" style="max-width: 50%; border-radius: 4px;" /> <input
+					type="file" name="imageFile" id="imageFile" />
 			</div>
 			<div class="form-group">
 				<label for="phone">전화번호</label> <input type="text" name="phone"

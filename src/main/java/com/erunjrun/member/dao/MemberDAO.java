@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.member.dto.MemberDTO;
+import com.erunjrun.member.dto.ProfileDTO;
 
 @Mapper
 public interface MemberDAO {
@@ -26,8 +27,12 @@ public interface MemberDAO {
 	void updatePw(String id, String tempPw);
 
 	MemberDTO profileView(String id);
+	
+	ProfileDTO ProfileImage(String id);
 
 	int profileUpdate(Map<String, String> params);
+
+	int updateProfileImage(Map<String, String> params);
 
 	MemberDTO findSessionId(String id);
 
