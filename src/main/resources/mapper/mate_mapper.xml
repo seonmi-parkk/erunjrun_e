@@ -60,5 +60,11 @@
 	<insert id="mateUnblock">
 		DELETE FROM block_member WHERE id = #{toUserId} AND unlike_id = #{fromUserId}
 	</insert>
+	
+	<select id="getPos" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+		SELECT p.id, nickname, gender, shortsido, dong, image, icon_image, exercise_use, 
+		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{fromUserId}) AND unlike_id IN (p.id,#{fromUserId})) AS mate_idx
+		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
+	</select>
 
 </mapper>

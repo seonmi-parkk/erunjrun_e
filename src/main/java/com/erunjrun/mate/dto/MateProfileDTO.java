@@ -15,7 +15,7 @@ public class MateProfileDTO {
 	private String profile_use;
 	private String profile_date;
 	private String use_yn;
-	private String icon_idx;
+	private String icon_image;
 	
 	private String image;
 	private String content;
@@ -32,6 +32,31 @@ public class MateProfileDTO {
 	private String shortsido;
 	private String created_at;
 	private String updated_at;
+	
+	// 운동메이트 테이블
+	private int mate_idx;
+	private String unlike_id;
+	private String mate_date;
+	
+	public int getMate_idx() {
+		return mate_idx;
+	}
+	public void setMate_idx(int mate_idx) {
+		this.mate_idx = mate_idx;
+	}
+	public String getUnlike_id() {
+		return unlike_id;
+	}
+	public void setUnlike_id(String unlike_id) {
+		this.unlike_id = unlike_id;
+	}
+	public String getMate_date() {
+		return mate_date;
+	}
+	public void setMate_date(String mate_date) {
+		this.mate_date = mate_date;
+	}
+	
 	
 	public String getId() {
 		return id;
@@ -117,11 +142,11 @@ public class MateProfileDTO {
 	public void setUse_yn(String use_yn) {
 		this.use_yn = use_yn;
 	}
-	public String getIcon_idx() {
-		return icon_idx;
+	public String getIcon_image() {
+		return icon_image;
 	}
-	public void setIcon_idx(String icon_idx) {
-		this.icon_idx = icon_idx;
+	public void setIcon_image(String icon_image) {
+		this.icon_image = icon_image;
 	}
 	public String getContent() {
 		return content;
