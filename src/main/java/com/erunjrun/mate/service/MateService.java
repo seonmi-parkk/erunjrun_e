@@ -69,7 +69,7 @@ public class MateService {
 		if(mateDAO.profileOpen(toUserId).equals("Y")) {
 			isOpened = true;
 		}
-		logger.info("isOpend:"+isOpened);
+		//logger.info("isOpend:"+isOpened);
 		MateProfileDTO profileDTO = mateDAO.getProfile(toUserId,isOpened);
 		int birthYear = Integer.parseInt(profileDTO.getBirth().split("-")[0]);
 		Calendar c = Calendar.getInstance();
@@ -103,8 +103,13 @@ public class MateService {
 	}
 
 	public String checkMateAppl(String fromUserId, String toUserId) {
-		String MateAppl = "";		
+		String MateAppl = "none";		
 		MateDTO mateDto = mateDAO.checkMateAppl(fromUserId,toUserId);
+		//check!! .getCode_name() null일 경우 추가해야하는데?? => null point exception 잡아야함...
+		//(원래 checkMateAppl mapper의 id들이 고정값으로 들어가있었음. 
+		if(mateDto.getCode_name() == null) {
+			return MateAppl;
+		}
 		if(mateDto.getCode_name().equals("M100")) {
 			if(mateDto.getUnlike_id().equals(fromUserId)) {
 				MateAppl = "apply";
@@ -113,9 +118,18 @@ public class MateService {
 			}
 		}else if(mateDto.getCode_name().equals("M101")){
 			MateAppl = "mate";
-		}else{
-			MateAppl = "none";
 		}
+//		if(mateDto.getCode_name().equals("M100")) {
+//			if(mateDto.getUnlike_id().equals(fromUserId)) {
+//				MateAppl = "apply";
+//			}else if(mateDto.getUnlike_id().equals(toUserId)) {
+//				MateAppl = "recieve";				
+//			}
+//		}else if(mateDto.getCode_name().equals("M101")){
+//			MateAppl = "mate";
+//		}else{
+//			MateAppl = "none";
+//		}
 		logger.info("MateAppl"+MateAppl);
 		return MateAppl;
 	}

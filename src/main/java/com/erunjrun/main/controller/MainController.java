@@ -24,7 +24,6 @@ public class MainController {
 		session.setAttribute("profileImg", "profile_img1.jpg");
 		session.setAttribute("iconImg", "resources/img/icon/icon1.png");
 		session.setAttribute("adminYn", "N");
-		logger.info("dd");
 		return "main";
 	}
 

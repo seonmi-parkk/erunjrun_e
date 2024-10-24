@@ -19,11 +19,13 @@
 
   .mateList {
 	  	display: flex; display: -moz-box; display: -ms-flexbox;
-	  	height: 100vh;
+	  	height: calc(100vh - 80px);
 	  	margin-top: 80px;
   }
   .mateList .list {
 	  	width: 400px;
+  	    height: 100%;
+    	overflow-y: auto;
 	  	padding : 24px 28px 24px 24px;
 	  	background-color: #f8f8f8;
   }
@@ -35,23 +37,98 @@
  		padding: 11px 14px;
    		border: none;
    }
-   .memList .line {
-   		padding : 12px 14px;
-   		margin : 14px 0;
+   .memList .user {
+   		display: -moz-box; display: -ms-flexbox; display : flex; 
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
+   		position: relative;
+		width: 100%;
+ 		padding: 5px 14px 5px 10px;
+   		margin: 14px 0;
    		border-radius: 10px;
    		background-color: #fff;
-   		
+   		cursor: pointer;
+ 		white-space: nowrap;
+	    text-overflow: ellipsis;
+	    word-break: break-all;
+	    overflow: hidden;
    }
-  .memList .line .ico-gender{
+  .memList .user .ico-gender{
   		width: 9px;
   }
-  .memList .line .bar{
+  .memList .user .bar{
   		display: inline-block;
-  		
-  		margin: 0 6px;
-  		transform: translateY(3px);
-  		background-color: #aaa;
+  		margin: 0 4px;
+  		color: #aaa;
   }
+  .memList .user .tag-mate{
+  		position: absolute;
+  		right: 14px; top: 50%;
+  		transform: translateY(-50%);
+  		display: inline-block;
+  		padding: 3px 8px;
+  		font-size: 12px;
+  		font-weight:500;
+  		background-color: var(--main-color);
+  		color: #fff;
+  		border-radius: 10px;
+  }
+  #map {
+  	    width: calc(100% - 400px) !important;
+    	height: 100% !important;
+  }
+  
+  	.mateList .list::-webkit-scrollbar {
+	    width: 10px;
+	}
+	.mateList .list::-webkit-scrollbar-track {
+	    background-color: #eaeaea;
+	}
+	.mateList .list::-webkit-scrollbar-thumb { 
+	    background-color: #d0d0d0;
+	    border-radius: 10px;
+	}
+	.mateList .list::-webkit-scrollbar-button {
+	    display: none;
+	}
+	
+	.mateList .list .profile-box {
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;
+		flex-shrink: 0;  
+		width: 50px; height: 50px;
+		margin-right: 2px;
+	}
+	.mateList .profile-box .profile-img {
+		width: 34px; height: 34px;
+		border-radius: 50%;
+	}
+	.mg-l4{
+	    margin-left: 4px;
+	}
+	#profilePopup .close {
+	    font-size: 40px;
+	    font-weight: 300;
+	    position: absolute;
+	    z-index: 999;
+	    top: 40px;
+	    right: 40px;
+	    display: inline-block;
+	    width: 30px;
+	    height: 30px;
+	    line-height: 27px;
+	    text-align: center;
+	}
+	#profilePopup .modal-content{
+	    padding: 24px 22px;
+	    background: #f8f8f8;
+	    border: none;
+    	border-radius: 0;
+    }
+    #PopupBody {
+    	background: #fff;
+    	border-radius: 10px;
+    }
    
 </style>
 
@@ -67,25 +144,38 @@
 			</div>
 			<div class="memList">
 				<c:forEach items="${profileList}" var="member">
-					<div class="line">
-					  	<div class="profile-box" style="background: url('resources/img/icon/icon1.png') center center / 100% 100% no-repeat;">
-			               <div class="profile-img" style="background: url(/photo/) center center / cover no-repeat;"></div>
+					<a class="user">
+						<input type="hidden" name="toUserId" value="${member.id}"/>
+					  	<div class="profile-box" style="background: url('resources/img/icon/${member.icon_image}') center center / 100% 100% no-repeat;">
+			               <div class="profile-img" style="background: url(/photo/${member.image}) center center / cover no-repeat;"></div>
 			            </div>
-						<span>${member.nickname}</span><span class="bar"></span>
-							<c:if test="${member.gender eq '남'}">
-								<img class="ico-gender" src="resources/img/common/ico_male.png" alt="남성">
-							</c:if>
-							<c:if test="${member.gender eq '여'}">
-								<img class="ico-gender" src="resources/img/common/ico_female.png" alt="여성">
-							</c:if>
+						<span>${member.nickname}</span><span class="bar">/</span>
+						<c:if test="${member.gender eq '남'}">
+							<img class="ico-gender" src="resources/img/common/ico_male.png" alt="남성">
+						</c:if>
+						<c:if test="${member.gender eq '여'}">
+							<img class="ico-gender" src="resources/img/common/ico_female.png" alt="여성">
+						</c:if>
+						<span class="bar">/</span>
 						<span>${member.shortsido}</span>
-						<span>${member.dong}</span>
-						<span>${member.mate_idx}</span>
-					</div>
+						<span class="mg-l4">${member.dong}</span>
+						<span>
+							<c:if test="${member.mate_idx > 0}"><span class="tag-mate">메이트</span></c:if>
+						</span>
+					</a>
 				</c:forEach>
 			</div>
 		</div>
 		<div id="map" style="width:500px;height:400px;"></div>
+		
+		<!-- 모달 -->
+		<div id="profilePopup" class="modal">
+		    <div class="modal-content">
+		        <span class="close">&times;</span>
+		        <div id="PopupBody"></div>
+		    </div>
+		</div>
+		
 		
 	</div>
 </body>
@@ -97,6 +187,34 @@
 <script>
 	console.log('${profileList}');
 	var profileList = '${profileList}';
+/* 	profileList.forEach(function(item){
+		console.log(item);
+	}); */
+	
+	
+	// 클릭시 운동프로필 레이어 팝업
+	$('.user').on('click',function(){
+	    var modal = document.getElementById("profilePopup");
+	    var PopupBody = document.getElementById("PopupBody");
+	    var toUserId = $(this).find('input[name="toUserId"]').val();
+	
+	    // AJAX 요청
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("GET", "/mate/"+toUserId, true);
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState === 4 && xhr.status === 200) {
+	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+	            modal.style.display = "block"; // 모달 열기
+	        }
+	    };
+	    xhr.send();
+	});
+	
+	// 모달 닫기
+	document.getElementsByClassName("close")[0].onclick = function() {
+	    document.getElementById("profilePopup").style.display = "none";
+	};
+
 
 
 
