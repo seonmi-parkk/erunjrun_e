@@ -3,6 +3,7 @@ package com.erunjrun.board.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,14 +90,29 @@ public class RunBoardService {
 
             // 게시글 정보 저장
             runBoard.setCode_name("B100");
+            logger.info("insertRunBoard 호출 전 - 제목: {}", runBoard.getSubject());
             runBoardDAO.insertRunBoard(runBoard);
-
+            logger.info("제목1 : "+runBoard.getSubject()); 
             // 경로 정보 저장 (경로가 있을 경우 반복문 사용)
+            
+            
             if (runBoard.getLatitudeList() != null && runBoard.getLongitudeList() != null) {
                 for (int i = 0; i < runBoard.getLatitudeList().size(); i++) {
-                	runBoardDAO.insertRouteData(runBoard.getBoard_idx(), runBoard.getLatitudeList().get(i), runBoard.getLongitudeList().get(i), runBoard.getPathList().get(i), i + 1);
+                	
+//                    logger.info("게시글 ID: " + runBoard.getBoard_idx());
+//                    logger.info("위도: " + runBoard.getLatitudeList().get(i));
+//                    logger.info("경도: " + runBoard.getLongitudeList().get(i));
+//                    logger.info("경로 구분: " + runBoard.getPathList().get(i));
+//                    logger.info("경로 순서: " + (i + 1));
+                    
+                	runBoardDAO.insertRouteData(
+                			runBoard.getBoard_idx(), 
+                			runBoard.getLatitudeList().get(i),
+                			runBoard.getLongitudeList().get(i),
+                			runBoard.getPathList().get(i), i + 1);
                 }
             }
+
 
             // 이미지 정보 저장 (이미지가 있을 경우 반복문 사용)
             List<ImageDTO> imgs = runBoard.getImageList();
@@ -107,9 +123,9 @@ public class RunBoardService {
                     fileWrite(img); // 게시글 이미지 파일 복사 저장
                 }
             }
-
+       
             success = true;
-
+            
             return success;
         } catch (Exception e) {
             e.printStackTrace();
