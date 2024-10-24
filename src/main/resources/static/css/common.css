@@ -141,7 +141,7 @@
 	}
 	
 	header .profile-box .profile-img{
-		width: 32px;
+		width: 32px; height: 32px;
 		border-radius: 100%;
 	}
 	
@@ -436,6 +436,15 @@
         background: #fff;
         cursor: pointer;
         font-size: 14px;
+    }
+    .btn01-l:hover, .btn01-m:hover, .btn01-s:hover{
+    	color: #fff;
+    }
+    .btn02-l:hover, .btn02-m:hover, .btn02-s:hover{
+    	color: var(--main-color);
+    }
+    .btn03-l:hover, .btn03-m:hover, .btn03-s:hover{
+    	color: var(--btn-bd-g);
     }
 
     /* input */

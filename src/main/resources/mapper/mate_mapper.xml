@@ -12,8 +12,16 @@
 		INSERT INTO mate_history (id,code_name,unlike_id) VALUES (#{fromUserId},'M100',#{toUserId})
 	</insert>
 	
-	<select id="checkMate" resultType="int">
+ 	<select id="checkMate" resultType="int">
 		SELECT count(mate_idx) FROM mate WHERE id IN(#{fromUserId},#{toUserId}) OR unlike_id IN(#{fromUserId},#{toUserId})
+	</select>
+
+	<select id="checkMateAppl" resultType="com.erunjrun.mate.dto.MateDTO">
+		SELECT mate_history_idx, code_name, id, unlike_id 
+			FROM mate_history 
+			WHERE mate_history_idx = 
+			(SELECT max(mate_history_idx) FROM mate_history 
+			WHERE unlike_id IN ('kimee01','moma123') AND id IN ('kimee01','moma123'))
 	</select>
 
 	<select id="checkBlock" resultType="int"> <!-- unlike_id 신청회원 -->
@@ -28,29 +36,29 @@
 		SELECT count(unlike_id) FROM interest_member WHERE unlike_id = #{fromUserId} AND id = #{toUserId}    
 	</select>
 	
-	<select id="getProfile" resultType="com.erunjrun.mate.dto.MateDTO"> 
+	<select id="getProfile" resultType="com.erunjrun.mate.dto.MateProfileDTO"> 
 		SELECT 
-			 image, nickname, dong, shortsido, gender, birth
+			 image, icon_idx, nickname, dong, shortsido, gender, birth
 			<if test="isOpened">
 			,m.id, exercise_min, exercise_dis, exercise, mate, content 
 			</if>
 			FROM member m JOIN profile p ON m.id = p.id WHERE m.id = #{toUserId}
 	</select>
-		<!-- <select id="getProfile" resultType="com.erunjrun.mate.dto.MateDTO"> 
-		SELECT 
-			m.id, gender, birth
-			<if test="isOpened.equals(true)">
-				exercise_min, exercise_dis, exercise, mate, content 
-			</if>
-			FROM member m JOIN profile p ON m.id = p.id WHERE m.id = #{toUserId}
-	</select> -->
-	
-	
-				<!-- gender, birth, exercise_min, exercise_dis, exercise, mate, content -->
 
-
+	<insert id="like">
+		INSERT INTO interest_member (id, unlike_id) VALUES (#{toUserId},#{fromUserId})
+	</insert>
 	
-
+	<delete id="dislike">
+		DELETE FROM interest_member WHERE unlike_id = #{fromUserId} AND id = #{toUserId}
+	</delete>
 	
+	<insert id="mateBlock">
+		INSERT INTO block_member (id,unlike_id) VALUES (#{toUserId},#{fromUserId})
+	</insert>
+
+	<insert id="mateUnblock">
+		DELETE FROM block_member WHERE id = #{toUserId} AND unlike_id = #{fromUserId}
+	</insert>
 
 </mapper>

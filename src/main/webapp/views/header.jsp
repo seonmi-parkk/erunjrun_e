@@ -46,16 +46,16 @@
 				<div class="login-box">
 					<c:choose>
 						<c:when test="${not empty sessionScope.loginId}">
-							<a class="profile-box" href="#">
+							<div class="profile-box" onclick=""><!-- check!! onclick이동 -->
 								<c:choose>
 									<c:when test="${not empty sessionScope.profileImg}">  
-										<!-- 이부분 주소 변경 --><img class="profile-img" src="${sessionScope.profileImg}" alt="프로필 이미지"/>
+										<div class="profile-img" style="background: url(/photo/${sessionScope.profileImg}) center center / cover no-repeat;"></div>
 									</c:when>
 									<c:otherwise>
-										<img class="profile-img" src="resources/img/common/profile.png" alt="프로필 이미지"/>
+										<div class="profile-img"  style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>
 									</c:otherwise>
 								</c:choose>
-							</a>	
+							</div>	
 							<div class="notice">
 								<div class="num-box">
 									<span>3</span>

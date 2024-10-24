@@ -1,13 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="com.erunjrun.mate.dto.MateDTO" %>
+<%@ page import="com.erunjrun.mate.dto.MateProfileDTO" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
 
-<%
-    Map<String, Object> result = (Map<String, Object>) request.getAttribute("result");
-    MateDTO profileDto = (MateDTO) result.get("profileDto");
-%>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -18,6 +14,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <style>
    .profileDetail {
+   	   position: relative;
+   	   width: 770px;
        padding: 50px 60px 110px;
        min-height: 950px;
    }
@@ -41,6 +39,7 @@
    }
    .profileDetail .user-info .profile-img {
    		width: 75px; height: 75px;
+   		border-radius: 50%;
    	}
    .profileDetail .user-info .user-name{
        font-size: 30px;
@@ -67,11 +66,18 @@
    .profileDetail .line p{
        text-indent: 10px;
    }
-   .profileDetail .btn-block {
+   .profileDetail .content .btn-block {
+       display: inline-block;
+	   width: fit-content;
+       padding: 8px 6px;
        margin-top: 80px;
        font-size: 14px;
        color: #999;
        text-decoration: underline;
+       cursor: pointer;
+   }
+   .profileDetail .content .btn-block:hover {
+   		color: #999;
    }
    .profileDetail .btn-close{
    		position: absolute;
@@ -98,24 +104,31 @@
 	    <a class="btn-close">닫기</a>
 	    <div class="user-info">
  	        <div>
-	           <a class="profile-box" href="#" style="background: url('resources/img/icon/icon1.png') center center / 100% 100% no-repeat;">
-	               <img class="profile-img" src="resources/img/common/profile.png" alt="프로필 이미지">
-	           </a>
+ 	        	<!-- check!! 회원테이블에 아이콘no 대신 아이콘 이미지를 넣는게 join을 줄일수 있을 듯하여 의견말해보고 변경할지 체크  -->
+	           <div class="profile-box" style="background: url('resources/img/icon/icon1.png') center center / 100% 100% no-repeat;">
+	               <div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div>
+	           </div>
 	           <div class="name-addr">
-	               <p class="user-name">한수아</p>
-	               <img src="resources/img/common/ico_map.png" alt="위치"/><span>서울 종로3가동</span>
+	               <p class="user-name">${profileDto.nickname}</p>
+	               <img src="resources/img/common/ico_map.png" alt="위치"/><span>${profileDto.shortsido} ${profileDto.dong}</span>
 	           </div>
            </div>
 	       <div class="buttons">
 	       		<c:choose>
 	       			<c:when test="${result.isBlocked eq false}">
 		       			<c:choose>
-		       				<c:when test="${result.isMate eq false}">
+		       				<c:when test="${result.MateAppl eq 'apply'}">
+					           <a class="btn01-s" href="">러닝메이트 신청중</a> <!-- check!! mypage로 이동 -->
+							</c:when>
+		       				<c:when test="${result.MateAppl eq 'recieve'}">
+					           <a class="btn01-s" href="">러닝메이트 신청수락</a> <!-- check!! mypage로 이동 -->
+							</c:when>
+		       				<c:when test="${result.MateAppl eq 'none'}">
 					           <div class="btn-mate-appl btn01-s">러닝메이트 신청</div>
 							</c:when>
 						</c:choose>
 			           <div class="btn-chat btn02-s">채팅하기</div>
-			           <div class="btn-like btn02-s">
+			           <div class="btn-like btn02-s" onclick="like()">
 			           		<c:choose>
 				           		<c:when test="${result.isLiked eq false}">
 				           			<img src="resources/img/common/ico_heart_no_act.png" alt="좋아요비활성">
@@ -127,7 +140,7 @@
 		           		</div>
 		           </c:when>
 		           <c:otherwise>
-		           		<div class="btn-unblock btn01-s">차단해제하기</div>
+		           		<div class="btn-unblock btn01-s"  onclick="layerPopup('${profileDto.nickname} 님을 차단해제 하시겠습니까?','차단해제','취소',unblockBtnAct,cancleBtnAct)">차단해제하기</div>
 	           		</c:otherwise>
 	           </c:choose>
 	       </div>
@@ -136,38 +149,36 @@
 	   <div class="content">
   			<div class="line">
 	           <div class="tag-m-gray">성별</div>
-	           <p>${result.gender}성</p>
+	           <p>${profileDto.gender}성</p>
 	       </div>
   			<div class="line">
 	           <div class="tag-m-gray">연령대</div>
-	           <p class="age-area"></p>
+	           <p>${profileDto.birth}</p>
 	       </div>
   			<div class="line">
 	           <div class="tag-m-gray">운동강도</div>
-	           <p>${result.exercise_dis}km/${result.exercise_min}분</p>
+	           <p>${profileDto.exercise_dis}km/${profileDto.exercise_min}분</p>
 	       </div>
   			<div class="line">
 	           <div class="tag-m-gray">운동성향</div>
-	           <p>${result.exercise}km/${result.exercise_min}분</p>
+	           <p>${profileDto.exercise}</p>
 	       </div>
   			<div class="line">
 	           <div class="tag-m-gray">원하는 운동 메이트 운동성향</div>
-	           <p>${result.mate}</p>
+	           <p>${profileDto.mate}</p>
 	       </div>
   			<div class="line">
 	           <div class="tag-m-gray">소개글</div>
-	           <p>${result.content}</p>
+	           <p>${profileDto.content}</p>
 	       </div>
 
 	       
      	   <c:choose>
     	   		<c:when test="${result.isBlocked eq false}">
-	       			<a class="btn-block" onclick="layerPopup('한수아 님을 차단하시겠습니까?<br/>차단 시 해당 회원과의 대화기능은 이용 불가합니다.','차단하기','취소')">차단하기</a>
+	       			<a class="btn-block" onclick="layerPopup('${profileDto.nickname} 님을 차단하시겠습니까?<br/>차단 시 해당 회원과의 대화기능은 이용 불가합니다.','차단하기','취소',blockBtnAct,cancleBtnAct)">차단하기</a>
        			</c:when>
      		</c:choose>
 	    </div>
-	
-	
 	
 	</div>
 	<jsp:include page="../footer.jsp"/>
@@ -178,50 +189,15 @@
 <script src="resources/js/common.js" type="text/javascript"></script>
 <script src="resources/js/layerPopup.js"></script>
 <script>
- 	var birth = '${result.birth}';
- 	var birthYear = parseInt(birth.split('-')[0]);
- 	var currentDate = new Date();
- 	var year = currentDate.getFullYear();
- 	var age = year-birthYear+1;
- 	var ageArea = '';
- 	for(numMin=20, numMax=24; numMin<=50; numMin+=5, numMax+=5){
-	 	if(age>=numMin && age<=numMax){
-	 		ageArea = numMin+'~'+numMax;
-	 	}
- 	}
- 	$('.age-area').text(ageArea+'세');
- 	console.log("ageArea"+ageArea);
- 	
- 	console.log(year-birthYear+1);
-	/* 현재 메이트 여부에 따라 버튼이 다르게 보여짐 */
-	console.log('${result.isMate}',${result.isMate});
-	console.log('${result.isBlocked}',${result.isBlocked});
-	console.log('${result.isOpened}',${result.isOpened});
-	console.log('${result.isLiked}',${result.isLiked});
-	/* console.log('${result.profileDto}',${result.profileDto}); */
-
-	console.log("result.birth",'${result.birth}');
-	console.log("result.birth",'${result.dong}');
-	
-	 
-/* 	<c:forEach var="item" items="${myMap}">
-	    <p>${item.value}</p>
-	</c:forEach> */
-	
-/* 	if(${result.isMate}== true){
-		$('.btn-mate-appl').css('display','none');
-	} */
 
 	/* 메이트 신청하기 버튼 이벤트 */
 	$('.btn-mate-appl').on('click',function(){
-		
-		layerPopup('ㅇㅇㅇ님께 러닝메이트를 신청하시겠습니까?','신청','취소' ,applBtn1Act, applBtn2Act);
+		layerPopup('${profileDto.nickname}님께 러닝메이트를 신청하시겠습니까?','신청','취소' ,applBtn1Act, applBtn2Act);
 	});
+	
 	function applBtn1Act() {
 	    // 1번버튼 클릭시 수행할 내용
-	    //confirm-box
-		//var confirmBox = $('.confirm-box')[0];
-	    console.log($('input[name="id"]')[0].defaultValue);
+
 	    $.ajax({
 	    	type:'POST',
 			url:'/mateAppliaction',
@@ -265,6 +241,89 @@
 	    console.log('2번 버튼 동작');
 	}
 	
-	//btn-mate-appl
+	// 차단하기 버튼 클릭시
+	function blockBtnAct(){
+		$.ajax({
+			type:'POST',
+			url:'/mateBlock',
+			data:{
+				fromUserId: '${sessionScope.loginId}',
+				toUserId: $('input[name="id"]')[0].defaultValue
+			},
+			dataType:'JSON',
+			success:function(data){
+				console.log(data.success);
+				if(data.success){				
+					removeAlert();
+					layerPopup('차단 하였습니다.', '확인',false,cancleBtnAct,cancleBtnAct);
+					location.href='/mate';
+				}else{
+					removeAlert();
+					layerPopup('차단 실패하였습니다.', '차단 재시도','취소',blockBtnAct,cancleBtnAct);
+				}
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	// 차단하기 취소 버튼 클릭시
+	function cancleBtnAct(){
+		 removeAlert();
+	}
+	
+	// 차단 해제하기 버튼 클릭시
+	function unblockBtnAct(){
+		$.ajax({
+			type:'POST',
+			url:'/mateUnblock',
+			data:{
+				fromUserId: '${sessionScope.loginId}',
+				toUserId: $('input[name="id"]')[0].defaultValue
+			},
+			dataType:'JSON',
+			success:function(data){
+				console.log(data.success);
+				if(data.success){		
+					removeAlert();
+					layerPopup('차단이 해제되었습니다.', '확인',false,cancleBtnAct,cancleBtnAct);
+					location.href='/mate';
+				}else{
+					removeAlert();
+					layerPopup('차단해제 실패하였습니다.', '해제 재시도','취소',unblockBtnAct,cancleBtnAct);
+				}
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	// 좋아요 기능
+	function like(){
+		$.ajax({
+			type:'POST',
+			url:'/toggleLike',
+			data:{
+				fromUserId: '${sessionScope.loginId}',
+				toUserId: $('input[name="id"]')[0].defaultValue
+			},
+			dataType:'JSON',
+			success:function(data){
+				console.log(data.isLiked);
+				if(data.isLiked){					
+					$('.btn-like img').attr('src','resources/img/common/ico_heart_act.png');
+				}else{
+					$('.btn-like img').attr('src','resources/img/common/ico_heart_no_act.png');					
+				}
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	
 </script>
 </html>
