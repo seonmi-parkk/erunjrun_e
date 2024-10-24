@@ -21,9 +21,29 @@ public class AdminDTO {
 	private String gender;
 	private Date birth;
 	private String unlike_id;
+	private String content;
+	private String ban_content;
+	
+	
+
 	
 	
 	
+	
+	
+	public String getBan_content() {
+		return ban_content;
+	}
+	public void setBan_content(String ban_content) {
+		this.ban_content = ban_content;
+	}
+	
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
 	public String getUnlike_id() {
 		return unlike_id;
 	}

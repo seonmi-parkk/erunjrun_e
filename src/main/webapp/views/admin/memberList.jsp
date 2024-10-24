@@ -11,10 +11,10 @@
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 	.inner{
-    margin-left: 300px;
+    margin-left: 400px;
 	}
 	#searchForm{
-	margin-left: 300px;
+	margin-left: 0px;
 	
 	}
 	.
@@ -35,8 +35,9 @@
     position: fixed;
     top: 80; /* 화면 상단에 고정 */
     left: 50; /* 화면 왼쪽에 고정 */
-    width: 200px; /* 원하는 너비 설정 */
+    width: 300px; /* 원하는 너비 설정 */
     padding: 10px;
+    z-index: 5;
    /* background-color: #f0f0f0;  배경색 설정 */
     border-right: 1px solid #ccc; /* 오른쪽에 구분선 */
     height: 100%; /* 전체 높이 설정 */
@@ -163,6 +164,7 @@
 				startPage:1, 
            		totalPages:data.totalPages, 
            		visiblePages:10,
+           
            		onPageClick:function(evt,page){
            			console.log('evt',evt); 
            			console.log('page',page); 
@@ -180,14 +182,14 @@
 		var content ='';
 		 for (var view of list) {
 			content +='<tr>';
-			if (view.report_count < 1 || view.report_count == null || view.report_count == '') {
+			if (view.report_status == 'N') {
                 content += '<td style="color: black;">'+view.id+'</td>';
             } else {
                 content += '<td style="color: blue;">'+view.id+'</td>';
             }
 			content += '<td><a href="adminMemberDetail?id='+view.id+'">'+view.nickname+'<a/></td>';
 			content +='<td>'+view.email+'</td>';
-			content +='<td style="color: orange;" ><a  href="right?id='+view.id+'">권한</a></td>';
+			content +='<td><a  href="memberRight?nickname='+view.nickname+'" style="color: orange;">권한</a></td>';
 			content +='<td>'+view.report_count+'</td>';
 			content +='<td>'+view.join_date+'</td>';
 			content +='</tr>';
@@ -196,7 +198,7 @@
 	   }
  
     
-
+	/* if (view.report_count < 1 || view.report_count == null || view.report_count == '') { */
     
 </script>
 <script src="resources/js/common.js" type="text/javascript"></script>

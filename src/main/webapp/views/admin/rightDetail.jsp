@@ -17,39 +17,12 @@
 	margin-left: 300px;
 	
 	}
-	.table-container{
-	 display: block; 
-	justify-content: space-between;  /* 테이블 사이에 공간 배분 */
-    gap: 20px;  
-	}
-	
-	table {
-    margin-bottom: 100px;
-    margin-top: 100px;    /* 테이블 사이 간격을 20px로 설정 */
-    padding: 10px;          /* 테이블 내부 여백 */
-	}
-	
-	
-	
-	.title2 {
+	.
+	.title2#admin_name {
         color: var(--font-color);
         font-family: "Pretendard Variable", sans-serif;
         font-size: 20px;
         font-weight: 700;
-    }
-    #nick{
-    	color: var(--font-color);
-        font-family: "GmarketSans", sans-serif;
-        font-size: 25px;
-        font-weight: 700;
-    
-    }
-    
-	.title3 {
-        color: var(--font-color);
-        font-family: "Pretendard Variable", sans-serif;
-        font-size: 20px;
-        font-weight: 500;
     }
 
 	 #catagory {
@@ -86,7 +59,7 @@
 	<div class="inner">
 	
 	<p class="title1" >회원정보</p>
-	<p class="title1" id="nick" >${info.nickname}님</p>
+	<p class="title1" >${info.nickname}님</p>
 	
 	
 		 <div class="fixed-left">
@@ -114,68 +87,28 @@
 	    
 	    </div>
 		
-	 	<p class="title2">아이디      ${info.id}</p>
-	 	<p class="title2">닉네임      ${info.nickname}</p>
-	 	<p class="title2">이메일      ${info.email}</p>
-	 	<p class="title2">주소      ${info.address}</p>
-	 	<p class="title2">성별      ${info.gender}</p>
-	 	<p class="title2">생년월일      ${info.birth}</p>
-	 	<p class="title2">전화번호     ${info.phone}</p>
+	 
+	  	
+				<p class="title2" id="admin_name">카테고리${info.content}</p>
+					
+			
+						
+			
+				<p class="title2" id="admin_name">정지기간${info.start_date} ~ ${info.end_date}</p>
+			
+					
+			
+				
+			
+				<p class="title2" id="admin_name">정지내용 ${info.ban_content}</p>
+			
+				
+				
+			
+   	
+	<div class="btn01-l" onclick="location.href='memberRightUpdate?id=${info.id}'">수정</div> <!-- 클릭시 색깔변경 -->
+	<div class="btn02-l" onclick="location.href='adminMemberDetail?id=${info.id}'">취소</div> <!-- 클릭시 색깔변경 -->
 	
-		
-		<div class="table-container">
-	 	<table>
-		<thead class="reportlist">
-
-				<tr>
-					<th>카테고리</th>
-					<th>신고자</th>
-					<th>처리여부</th>
-					<th>신청일자</th>
-				</tr>
-			</thead>
-		 	<tbody>
-		 	
-		 	<c:forEach items="${list}" var="report">
-				<tr>
-					<td>${report.code_name}</td>
-					<td><a href="reportDetail/=${report.id}">${report.unlike_id}</a></td>
-					<td>${report.use_yn}</td>
-					<td>${report.create_date}</td>
-				</tr>
-			</c:forEach>
-		 	</tbody>
-   </table>
-   
-   <table>
-		<thead>
-		
-		</thead>
-			<colgroup>
-		 		<col width="30%"/>
-		 		<col width="40%"/>
-		 		<col width="30%"/>
-		 	</colgroup>
-			
-			<tr>
-				<th>카테고리</th>
-				<th>정지기간</th>
-				<th>신청일자</th>
-			</tr>
-		
-		
-	 	<tbody>
-	 		<c:forEach items="${result}" var="ban">
-			<tr>
-				<td><a href="memberRightDetail?id=${ban.id}">${ban.content}</a></td>
-				<td>${ban.start_date} ~ ${ban.end_date}</td>
-				<td>${ban.process_date}</td>
-			</tr>
-		</c:forEach>
-	 	</tbody>
-   </table>
-			
-	</div>
 	</div>
 	
 	<!-- 푸터 -->

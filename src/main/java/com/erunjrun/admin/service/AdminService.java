@@ -79,11 +79,36 @@ public class AdminService {
 	}
 
 	
+	public String right(String nickname) {
+		
+		return admin_dao.right(nickname);
+	}
 
-	public String right(Map<String, String> param) {
-		return admin_dao.rightwrite(param);
+	public void rightwrite(Map<String, String> param) {
+		String code_name =param.get("code_name");
+		 String admin_id_ =param.get("admin_id");
+		 String id =param.get("id");
+		 String start_date =param.get("start_date");
+		 String end_date =param.get("end_date");
+		 String content =param.get("content");
+		 admin_dao.rightwrite(param);
+		 
+		 logger.info(code_name+admin_id_+id+start_date+end_date+content);
 		
 	}
+
+	public AdminDTO rightdetail(String id) {
+		
+		return admin_dao.rightdetail(id);
+	}
+
+	public void rightupdate(Map<String, String> param) {
+		admin_dao.rightupdate(param);
+		
+	}
+
+
+	
 
 
 	

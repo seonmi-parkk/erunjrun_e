@@ -41,8 +41,15 @@ public interface AdminDAO {
 	public List<AdminDTO> ban(String id);
 
 	
+	public String right(String nickname);
 	
-	public String rightwrite(Map<String, String> param);
+	public int rightwrite(Map<String, String> param);
+	
+
+	public AdminDTO rightdetail(String id);
+
+	public void rightupdate(Map<String, String> param);
+
 
 	
 

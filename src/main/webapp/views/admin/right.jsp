@@ -59,7 +59,7 @@
 	<div class="inner">
 	
 	<p class="title1" >회원정보</p>
-	<p class="title1" >id님</p>
+	<p class="title1" >${info}님</p>
 	
 	
 		 <div class="fixed-left">
@@ -88,18 +88,24 @@
 	    </div>
 		
 	 
-	  	<form action="memberRight" method="get">
+	  	<form action="memberRightWrite" method="get">
 		<table>
 
 		<thead>
+			
+			<tr hidden="hidden">
+				<td>
+					<input type="text" name="id" id="id"  value="${id}"/>
+				</td>
+			</tr>
 			<tr>
 					<th>카테고리</th>
 					<td>
-						<input type="radio" name="catagory" value="게시글"/>게시글
+						<input type="radio" name="code_name" value="A100"/>게시글
 						&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="radio" name="catagory" value="댓글"/>댓글
+						<input type="radio" name="code_name" value="A101"/>댓글
 						&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="radio" name="catagory" value="회원"/> 회원
+						<input type="radio" name="code_name" value="A102"/> 회원
 					</td>
 			</tr>
 			</thead>
@@ -117,11 +123,13 @@
 			<tr>
 				<th>정지내용</th>
 				<td>
-					<input type="text" name="start_date" id="start_date"/>
+					<input type="text" name="ban_content" id="content"/>
 				</td>
 			</tr>
 		 	</tbody>
    		</table>
+   	<button class="btn01-l" type="submit">정지</button>
+	<div class="btn02-l" onclick="location.href='adminMember'">취소</div> <!-- 클릭시 색깔변경 -->
 	</form>
 	</div>
 	

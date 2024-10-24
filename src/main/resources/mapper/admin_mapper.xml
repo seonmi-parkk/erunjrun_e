@@ -40,10 +40,7 @@
 	    m.nickname,
 	    m.email,
 	    m.join_date,
-	    CASE 
-	        WHEN b.id IS NOT NULL THEN 'Y'
-	        ELSE 'N'
-	    END AS report_status,
+	    COALESCE(b.is_right, 'N') AS report_status,
 	    (SELECT COUNT(*) 
 	    FROM report_write rw
 	   		 WHERE rw.id = m.id) AS report_count
@@ -62,6 +59,7 @@
             m.email LIKE CONCAT('%', #{keyword}, '%')
         </if>      
     </where>
+    GROUP BY m.id, m.nickname, m.email, m.join_date, report_status
   	</select>
   	
   	<select id="count" resultType="int">
@@ -86,13 +84,50 @@
   	</select>
   
   	<select id="ban" resultType="com.erunjrun.admin.dto.AdminDTO">
-  	 	select  id,start_date,end_date,process_date from ban where id = #{param1}
+  	 	SELECT b.id,b.start_date,b.end_date,b.process_date,c.content FROM ban b
+		JOIN code c ON b.code_name = c.code_name  WHERE id = #{param1}
   	</select>
+  	
+  	<select id="right" resultType="String">
+  	  	SELECT id from member where nickname = #{param1}
+  	</select>
+  	
   
   	<insert id="rightwrite" parameterType="Map">
-  		INSERT INTO ban(code_name,start_date,end_date,content)
-  						VALUES(#{code_name},#{start_date},#{end_date},#{content})
+  		INSERT INTO ban(id, admin_id, code_name, start_date, end_date, ban_content)
+  						VALUES(#{id},#{admin_id},#{code_name},#{start_date},#{end_date},#{ban_content})
   	</insert>
   <!-- id,admin_id,is_ban 추가해야됌 -->
+  
+  <select id="rightdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
+  		SELECT b.id,m.nickname,b.start_date,b.end_date,b.ban_content,b.code_name,c.content FROM ban b
+		LEFT JOIN  code c ON b.code_name = c.code_name  
+		LEFT JOIN  member m ON b.id = m.id WHERE b.id = #{param1}
+  </select>
+  
+  <update id="rightupdate" parameterType="Map">
+  	UPDATE ban <set>
+  		 <if test= "id != null">
+			id = #{id},
+		</if>
+		<if test="admin_id != null">
+			admin_id = #{admin_id},
+		</if>
+		<if test="code_name != null">
+			code_name = #{code_name},
+		</if>
+		<if test="start_date != null">
+			start_date = #{start_date},
+		</if>
+		<if test="end_date != null">
+			end_date = #{end_date} ,
+		</if>
+		<if test="ban_content != null">
+			ban_content = #{ban_content} 
+		</if>
+  	</set>
+			  WHERE id = #{id}
+  </update>
+  
   
   </mapper>

@@ -126,7 +126,6 @@ public class AdminController {
 	  public String adminList() {
 		  return "admin/adminList";
 	  }
-	  
 	
 	  @GetMapping(value = "/adminList") //post?
 	  @ResponseBody 
@@ -166,11 +165,53 @@ public class AdminController {
 	  }
 	  
 	  @GetMapping(value = "/memberRight")
-	  public String rightwrite(@RequestParam Map<String, String> param, Model model) {
-		  admin_service.right(param);
-		  String id= param.get("id");
-		  
+	  public String right(String nickname,Model model) {
+		  logger.info(nickname);
+		
+		  String id = admin_service.right(nickname);
+		  model.addAttribute("info",nickname);
+		  model.addAttribute("id",id);
 		  return "admin/right";
+	  }
+	  
+	  
+	  @GetMapping(value = "/memberRightWrite")
+	  public String rightwrite(@RequestParam Map<String, String> param, Model model,HttpSession session) {
+		 String admin_id = (String)session.getAttribute("loginId");
+		 logger.info(admin_id);
+		 param.put("admin_id", admin_id);// 관리자 로그인 ID 저장
+		 admin_service.rightwrite(param);
+		 
+		  return"redirect:/adminMember";
+	  }
+	  
+	  
+	  @GetMapping(value = "/memberRightDetail")
+	  public String rightdetail(String id,Model model) {
+		  AdminDTO dto = admin_service.rightdetail(id);
+		  model.addAttribute("info",dto);
+		  
+		  return"admin/rightDetail";
+	  }
+	  
+	  
+	  @GetMapping(value = "/memberRightUpdate")
+	  public String rightupdate(String id, Model model) {
+		  
+		  AdminDTO dto = admin_service.rightdetail(id);
+		  model.addAttribute("info",dto);
+		  
+		  
+		  return"admin/rightUpdate";
+	  }
+	  
+	  @PostMapping(value = "/memberRightUpdate")
+	  public String rightupdate( @RequestParam Map<String, String> param
+			  ,Model model) {
+		
+		  admin_service.rightupdate(param);
+		  
+		  return"redirect:/memberRightDetail?="+param.get("id");
 	  }
 	  
 
