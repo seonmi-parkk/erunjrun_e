@@ -72,6 +72,17 @@
 		id = #{id}
 	</select>
 
+	<select id="ProfileImage" parameterType="String"
+		resultType="com.erunjrun.member.dto.ProfileDTO">
+		SELECT
+		id,
+		image
+		FROM
+		profile
+		WHERE
+		id = #{id}
+	</select>
+
 	<update id="profileUpdate" parameterType="map">
 		UPDATE member
 		<set>
@@ -83,13 +94,32 @@
 		WHERE id = #{id}
 	</update>
 
+	<update id="updateProfileImage" parameterType="map">
+		UPDATE profile
+		SET image = #{image}, content = content  <!-- 기존 값을 유지 -->
+		WHERE id = (SELECT id FROM member WHERE id = #{id});
+	</update>
+
+	<!-- <select id="findSessionId" parameterType="String" resultType="com.erunjrun.member.dto.MemberDTO"> 
+		SELECT * FROM member WHERE id = #{id} </select> -->
+
 	<select id="findSessionId" parameterType="String"
 		resultType="com.erunjrun.member.dto.MemberDTO">
-		SELECT * FROM member WHERE id = #{id}
+		SELECT
+		member.id,
+		profile.image AS image, 
+		member.icon_image 
+		FROM
+		member
+		LEFT JOIN
+		profile ON member.id = profile.id 
+		WHERE
+		member.id = #{id}
 	</select>
 
 	<update id="setUseY" parameterType="String">
-		UPDATE member SET use_yn = 'Y' WHERE id = #{id}
+		UPDATE member SET use_yn =
+		'Y' WHERE id = #{id}
 	</update>
 
 </mapper>   

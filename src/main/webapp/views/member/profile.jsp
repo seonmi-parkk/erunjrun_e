@@ -76,11 +76,14 @@ button:hover {
 <body>
 	<div class="container">
 		<h3>회원 상세 보기</h3>
-		<form id="profile" action="profileUpdate" method="get">
+		<form id="profile" action="profileUpdate" method="get"
+			enctype="multipart/form-data">
 			<input type="hidden" name="id" value="${member.id}" />
 			<div class="form-group">
-				<label for="image">이미지</label> <img src="" alt="회원 이미지"
-					style="max-width: 100%; border-radius: 4px;" />
+				<label for="image">이미지</label> <img src="/photo/${profile.image}"
+					alt="회원 이미지" style="max-width: 100%; border-radius: 4px;" /> <input
+					type="file" name="imageFile" id="imageFile" disabled />
+				<!-- 사용자가 선택할 수 없도록 비활성화 -->
 			</div>
 			<div class="form-group">
 				<label for="nickname">닉네임</label> <input type="text" name="nickname"
