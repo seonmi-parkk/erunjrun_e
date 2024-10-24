@@ -80,10 +80,12 @@ public class AdminService {
 
 	
 
-	public String right(Map<String, String> param) {
+	public String rightwrite(Map<String, String> param) {
 		return admin_dao.rightwrite(param);
 		
 	}
+
+	
 
 
 	

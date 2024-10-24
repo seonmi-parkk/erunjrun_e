@@ -22,7 +22,7 @@ public class CrewViewController {
     @GetMapping(value="/crewUpdateView")
     public String crewUpdateView(Model model) {
     	
-    	int crew_idx = 42;
+    	int crew_idx = 52;
     	
     	Map<String, Object> resultMap = crew_service.crewUpdateView(crew_idx);
     	
