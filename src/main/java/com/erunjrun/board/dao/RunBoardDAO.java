@@ -1,10 +1,12 @@
 package com.erunjrun.board.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.board.dto.RunBoardDTO;
+import com.erunjrun.image.dto.ImageDTO;
 
 
 @Mapper
@@ -19,5 +21,11 @@ public interface RunBoardDAO {
 	List<RunBoardDTO> search(String opt, String keyword, int limit, int offset);
 
 	int getSearchTotalPages(String opt, String keyword);
+
+	int insertRunBoard(RunBoardDTO runBoard);
+
+	int insertRouteData(int board_idx, BigDecimal latitude, BigDecimal longitude, String path, int order_num);
+
+	int fileWrite(ImageDTO img);
 
 }

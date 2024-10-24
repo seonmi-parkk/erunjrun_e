@@ -111,4 +111,27 @@
 	        </if>
 	</select>
 	
+	<!-- 게시글 삽입 쿼리 -->
+    <insert id="insertRunBoard" 
+    			useGeneratedKeys="true"
+				keyColumn="board_idx"
+				keyProperty="board_idx"
+    			parameterType="com.erunjrun.board.dto.RunBoardDTO">
+        INSERT INTO board (id, code_name, subject, content, use_yn, is_map)
+        	VALUES (#{id}, #{code_name}, #{subject}, #{content}, 'Y', 'Y')
+    </insert>
+    
+    <!-- 경로 데이터 삽입 쿼리 -->
+    <insert id="insertRouteData" parameterType="com.erunjrun.board.dto.RunBoardDTO">
+        INSERT INTO board_map (board_idx, latitude, longitude, path, order_num)
+        	VALUES (#{board_idx}, #{latitude}, #{longitude}, #{path}, #{order_num})
+    </insert>
+    
+        <!-- 파일 정보 저장 쿼리 -->
+    <insert id="fileWrite" parameterType="com.erunjrun.image.dto.ImageDTO">
+        INSERT INTO image (code_name, img_ori, img_new, img_no)
+        	VALUES (#{code_name}, #{img_ori}, #{img_new}, #{img_no})
+    </insert>
+    
+    
 </mapper>
