@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.crew.dto.CrewDTO;
+import com.erunjrun.crew.dto.CrewMemberDTO;
 import com.erunjrun.crew.service.CrewService;
 import com.erunjrun.image.dto.ImageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -154,6 +155,40 @@ public class CrewController {
 			
 		}
 
+		return resultMap;
+		
+	}
+	
+	@PostMapping(value="/detail")
+	public Map<String, Object> crewDetail(String crew_idx) {
+		
+		logger.info("idx => " + crew_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		int crew_idxs = Integer.parseInt(crew_idx); 
+		
+		CrewDTO crewDto = crew_service.crewDetail(crew_idxs);
+		
+		resultMap.put("result", crewDto);
+		resultMap.put("success", true);
+		
+		
+		return resultMap;
+	}
+	
+	@PostMapping(value="/memberList")
+	public Map<String, Object> crewMemberList(String crew_idx){
+		logger.info("memver crew_idx =>" + crew_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		int crew_idxs = Integer.parseInt(crew_idx); 
+		
+		List<CrewMemberDTO> crewMemberList = crew_service.crewMemberList(crew_idxs);
+		resultMap.put("result", crewMemberList);
+		resultMap.put("success", true);
+		
 		return resultMap;
 		
 	}

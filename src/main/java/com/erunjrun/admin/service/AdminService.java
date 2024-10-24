@@ -84,6 +84,7 @@ public class AdminService {
 		return admin_dao.right(nickname);
 	}
 
+
 	public void rightwrite(Map<String, String> param) {
 		String code_name =param.get("code_name");
 		 String admin_id_ =param.get("admin_id");
@@ -108,7 +109,7 @@ public class AdminService {
 	}
 
 
-	
+
 
 
 	
