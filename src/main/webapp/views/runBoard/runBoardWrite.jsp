@@ -378,7 +378,7 @@
 	        }),
 	        success: function(data) {
 	            alert("게시글이 성공적으로 등록되었습니다.");
-	            location.href = "runBoardLlist";
+	            location.href = "runBoardList";
 	        },
 	        error: function(xhr, status, error) {
 	            alert("게시글 등록 중 오류가 발생했습니다: " + error);

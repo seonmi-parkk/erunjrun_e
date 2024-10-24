@@ -2,11 +2,16 @@ package com.erunjrun.board.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
+import com.erunjrun.image.dto.ImageDTO;
 
 public class RunBoardDTO {
 	
+	// 러닝코스 게시판 테이블
 	private int board_idx;
-	private String id;
+	private String id; // 회원 테이블 fk
+	private String nickname; // 회원테이블의 닉네임
 	private String code_name;
 	private String subject;
 	private String content;
@@ -14,14 +19,48 @@ public class RunBoardDTO {
 	private Date update_date;
 	private int bHit;
 	private int likes;
-	private String use_yn;
-	private String is_map;
+	private String use_yn; // 활성여부
+	private String is_map; // 지도 사용 여부
+	
+	// 지도 테이블
 	private BigDecimal latitude;
 	private BigDecimal longtude;
 	private String path;
 	private int order_num;
-	private String nickname;
 	
+    // 지도 데이터 (경로 정보)
+    private List<BigDecimal> latitudeList;
+    private List<BigDecimal> longitudeList;
+    private List<String> pathList;
+
+    // 이미지 리스트
+    private List<ImageDTO> imageList;
+	
+	
+	public List<BigDecimal> getLatitudeList() {
+		return latitudeList;
+	}
+	public void setLatitudeList(List<BigDecimal> latitudeList) {
+		this.latitudeList = latitudeList;
+	}
+	public List<BigDecimal> getLongitudeList() {
+		return longitudeList;
+	}
+	public void setLongitudeList(List<BigDecimal> longitudeList) {
+		this.longitudeList = longitudeList;
+	}
+	public List<String> getPathList() {
+		return pathList;
+	}
+	public void setPathList(List<String> pathList) {
+		this.pathList = pathList;
+	}
+	public List<ImageDTO> getImageList() {
+		return imageList;
+	}
+	public void setImageList(List<ImageDTO> imageList) {
+		this.imageList = imageList;
+	}
 	public int getBoard_idx() {
 		return board_idx;
 	}

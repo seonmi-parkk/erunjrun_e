@@ -13,12 +13,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.board.service.RunBoardService;
+import com.erunjrun.image.dto.ImageDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @Controller
@@ -81,21 +86,70 @@ public class RunBoardController {
 	    return result;
 	}
 	
-	@GetMapping(value="/runBoardWrite")
+	
+	@GetMapping(value="/testWrite")
 	public String write() {
-		return "runBoard/runBoardWrite";
+		return "runBoard/testWrite";
 	}
 	
-//	@PostMapping(value="/runBoardWrite")
-//	@ResponseBody
-//    public ResponseEntity<String> mapWrite(@RequestBody RunBoardDTO boardDTO) {
-//        try {
-//            runBoardService.mapWrite(boardDTO);
-//            return new ResponseEntity<>("게시글 등록 성공", HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("게시글 등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    // 이미지 업로드 엔드포인트
+    @PostMapping(value = "/image-upload")
+    @ResponseBody
+    public ResponseEntity<?> imageUpload(@RequestParam("file") MultipartFile file) {
+        logger.info("file : " + file.getOriginalFilename());
+
+        try {
+            // 파일을 저장하고 결과를 반환
+            Map<String, Object> resultFileMap = runBoardService.saveFile(file);
+            return ResponseEntity.ok(resultFileMap);
+        } catch (Exception e) {
+            // 오류 발생 시 500 에러 응답
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 실패");
+        }
+    }
+
+    // 게시글 등록 엔드포인트
+    @PostMapping(value = "/runBoardWrite")
+    @ResponseBody
+    public Map<String, Object> submitPost(@RequestParam("imgsJson") String imgsJson,
+                                          @ModelAttribute RunBoardDTO runBoardDto) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        // JSON 문자열을 ImageDTO 리스트로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<ImageDTO> imgs = null;
+        try {
+            // TypeFactory를 사용하여 제네릭 타입을 처리하여 변환
+            imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ImageDTO.class));
+            runBoardDto.setImageList(imgs);  // 변환한 이미지 리스트를 RunBoardDTO에 설정
+        } catch (Exception e) {
+            logger.error("파싱 오류 : {}", e.getMessage());
+            return Map.of("error", e.getMessage());
+        }
+
+        // 변환된 이미지 리스트 확인
+        if (imgs != null && !imgs.isEmpty()) {
+            for (ImageDTO img : imgs) {
+                logger.info("Original Filename: " + img.getImg_ori());
+                logger.info("New Filename: " + img.getImg_new());
+            }
+        }
+
+        logger.info("DTO : " + runBoardDto.toString());
+
+        // 게시글 등록 서비스 호출
+        if (runBoardService.submitPost(runBoardDto)) {
+            logger.info("글 업로드 완료");
+            resultMap.put("success", true);
+            resultMap.put("page", "runBoardUpdate");
+        }
+
+        return resultMap;
+    }
+	
+	
+	
+
 	
 	
 	

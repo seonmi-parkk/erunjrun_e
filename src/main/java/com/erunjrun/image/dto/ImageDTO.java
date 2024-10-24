@@ -3,10 +3,10 @@ package com.erunjrun.image.dto;
 public class ImageDTO {
 	
 	private int img_idx;
-	private String code_name;
+	private String code_name; // 어떤 게시글의 이미지인지의 코드
 	private String img_ori;
 	private String img_new;
-	private int img_no;
+	private int img_no; // 생성한 글의 넘버
 	
 	public int getImg_idx() {
 		return img_idx;
