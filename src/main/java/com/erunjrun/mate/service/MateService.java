@@ -1,6 +1,7 @@
 package com.erunjrun.mate.service;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -134,6 +135,15 @@ public class MateService {
 		}
 		return success;
 	}
+
+	public List<MateProfileDTO> getPos(String fromUserId) {
+		logger.info("fromUserId"+fromUserId);
+		return mateDAO.getPos(fromUserId);
+	}
+	
+//	public void getPos(String fromUserId) {
+//		logger.info("fromUserId"+fromUserId);
+//	}
 	
 
 }
