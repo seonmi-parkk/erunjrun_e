@@ -162,8 +162,6 @@
                         <span class="title2">크루 설명</span> <br><br>
                         <div class="post-form">
                             <textarea name="postContent" id="summernote" maxlength="10000" > </textarea>
-                            
-                            <!-- value="${result.content}" -->
                         </div>
                     </div>
 
