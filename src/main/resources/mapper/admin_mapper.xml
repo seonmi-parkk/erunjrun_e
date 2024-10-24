@@ -82,8 +82,17 @@
 	
   
   	<select id="reportlist" resultType="com.erunjrun.admin.dto.AdminDTO" >
-  	  	SElECT code_name,unlike_id,use_yn,create_Date From report_write where id = #{param1}
+  	  	SElECT id,code_name,unlike_id,use_yn,create_Date From report_write where id = #{param1}
   	</select>
   
+  	<select id="ban" resultType="com.erunjrun.admin.dto.AdminDTO">
+  	 	select  id,start_date,end_date,process_date from ban where id = #{param1}
+  	</select>
+  
+  	<insert id="rightwrite" parameterType="Map">
+  		INSERT INTO ban(code_name,start_date,end_date,content)
+  						VALUES(#{code_name},#{start_date},#{end_date},#{content})
+  	</insert>
+  <!-- id,admin_id,is_ban 추가해야됌 -->
   
   </mapper>

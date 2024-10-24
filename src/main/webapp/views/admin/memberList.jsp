@@ -33,7 +33,7 @@
     }
     .fixed-left {
     position: fixed;
-    top: 120; /* 화면 상단에 고정 */
+    top: 80; /* 화면 상단에 고정 */
     left: 50; /* 화면 왼쪽에 고정 */
     width: 200px; /* 원하는 너비 설정 */
     padding: 10px;
@@ -57,6 +57,9 @@
 	<div class="inner">
 	
 		<p class="title1" >회원정보</p>
+	
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
 		
 	    <div class="fixed-left">
 	    <div class="image">
@@ -182,9 +185,9 @@
             } else {
                 content += '<td style="color: blue;">'+view.id+'</td>';
             }
-			content += '<td><a href="adminMemberDetail/'+view.id+'">'+view.nickname+'<a/></td>';
+			content += '<td><a href="adminMemberDetail?id='+view.id+'">'+view.nickname+'<a/></td>';
 			content +='<td>'+view.email+'</td>';
-			content +='<td style="color: orange;" ><a  href="adminRight/='+view.id+'">권한</a></td>';
+			content +='<td style="color: orange;" ><a  href="right?id='+view.id+'">권한</a></td>';
 			content +='<td>'+view.report_count+'</td>';
 			content +='<td>'+view.join_date+'</td>';
 			content +='</tr>';

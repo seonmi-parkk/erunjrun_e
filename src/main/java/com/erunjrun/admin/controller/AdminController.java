@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erunjrun.admin.dto.AdminDTO;
@@ -148,21 +149,29 @@ public class AdminController {
 	  
 	  }
 	  
-	  @GetMapping(value = "/adminMemberDetail/{id}") //post? path 설정??
-	  public String memberdetail(
-			  @PathVariable("id") String id, Model model) {
+	  @GetMapping(value = "/adminMemberDetail") 
+	  public String memberdetail(String id, Model model) {
+		  logger.info(id);
 		  
 		  AdminDTO dto = admin_service.memberdetail(id);
 		  model.addAttribute("info",dto);
 		  
-		  
+		  List<AdminDTO> result = admin_service.ban(id);
+		  model.addAttribute("result",result);
 		  
 		  List<AdminDTO> list = admin_service.reportlist(id);
 		  model.addAttribute("list",list);
 		  
-		  return "admin/memberdetail/"+id;
+		  return "admin/memberDetail";
 	  }
 	  
+	  @GetMapping(value = "/memberRight")
+	  public String rightwrite(@RequestParam Map<String, String> param, Model model) {
+		  admin_service.right(param);
+		  String id= param.get("id");
+		  
+		  return "admin/right";
+	  }
 	  
 
 }

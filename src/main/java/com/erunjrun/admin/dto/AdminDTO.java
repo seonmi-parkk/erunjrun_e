@@ -14,8 +14,67 @@ public class AdminDTO {
 	private String code_name;
 	private String use_yn;
 	private Date create_date;
+	private Date start_date;
+	private Date end_date;
+	private Date process_date;
+	private String address;
+	private String gender;
+	private Date birth;
+	private String unlike_id;
 	
 	
+	
+	public String getUnlike_id() {
+		return unlike_id;
+	}
+	public void setUnlike_id(String unlike_id) {
+		this.unlike_id = unlike_id;
+	}
+	public Date getBirth() {
+		return birth;
+	}
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+	private String phone;
+	
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public Date getProcess_date() {
+		return process_date;
+	}
+	public void setProcess_date(Date process_date) {
+		this.process_date = process_date;
+	}
+	public Date getStart_date() {
+		return start_date;
+	}
+	public void setStart_date(Date start_date) {
+		this.start_date = start_date;
+	}
+	public Date getEnd_date() {
+		return end_date;
+	}
+	public void setEnd_date(Date end_date) {
+		this.end_date = end_date;
+	}
 	public String getCode_name() {
 		return code_name;
 	}

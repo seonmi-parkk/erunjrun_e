@@ -1,6 +1,7 @@
 package com.erunjrun.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,18 @@ public class AdminService {
 	public AdminDTO memberdetail(String id) {
 		
 		return admin_dao.memberdetail(id);
+	}
+
+	public List<AdminDTO> ban(String id) {
+		
+		return admin_dao.ban(id);
+	}
+
+	
+
+	public String right(Map<String, String> param) {
+		return admin_dao.rightwrite(param);
+		
 	}
 
 

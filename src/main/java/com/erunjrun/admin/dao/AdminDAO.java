@@ -1,6 +1,7 @@
 package com.erunjrun.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,17 +20,29 @@ public interface AdminDAO {
 
 	String SgetAllowedIp(String superAdminId);
 	
+	
+	
 	public List<AdminDTO> memberlist(String opt, String keyword, int limit, int offset);
 	
 	int count(int cnt);
 
+	
+	
 	public List<AdminDTO> adminlist(String opt, String keyword, int limit, int offset);
 
 	int admincount(int cnt_);
 
+	
+	
 	public AdminDTO memberdetail(String id);
 
 	public List<AdminDTO> reportlist(String id);
+
+	public List<AdminDTO> ban(String id);
+
+	
+	
+	public String rightwrite(Map<String, String> param);
 
 	
 
