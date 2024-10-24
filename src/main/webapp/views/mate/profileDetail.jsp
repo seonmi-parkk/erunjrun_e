@@ -10,13 +10,13 @@
 <title>이런저런</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="resources/css/common.css">
+<link rel="stylesheet" href="/resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <style>
    .profileDetail {
    	   position: relative;
    	   width: 770px;
-       padding: 50px 60px 110px;
+       padding: 54px 60px 110px;
        min-height: 950px;
    }
    .profileDetail .user-info{
@@ -64,7 +64,7 @@
        margin-bottom: 10px;
    }
    .profileDetail .line p{
-       text-indent: 10px;
+      	margin-left: 10px;
    }
    .profileDetail .content .btn-block {
        display: inline-block;
@@ -79,18 +79,9 @@
    .profileDetail .content .btn-block:hover {
    		color: #999;
    }
-   .profileDetail .btn-close{
-   		position: absolute;
-	    top: 18px;
-	    right: 18px;
-	    display: inline-block;
-	    width: 24px;
-	    height: 24px;
-	    cursor: pointer;
-	    text-indent: -1000px;
-	    overflow: hidden;
-	    background: url(resources/img/common/ico_close.png) center no-repeat;
-	    background-size: 17px;
+   .modal-content {
+ 		width: fit-content;
+ 		border-radius: 10px;
    }
    
 </style>
@@ -101,16 +92,15 @@
 	<div class="profileDetail">
 		<!-- check!! 프로필 주인 id 정보 나중에 바꿔줘야 함. -->
 		<input type="hidden" name="id" value="moma123"/>
-	    <a class="btn-close">닫기</a>
 	    <div class="user-info">
  	        <div>
  	        	<!-- check!! 회원테이블에 아이콘no 대신 아이콘 이미지를 넣는게 join을 줄일수 있을 듯하여 의견말해보고 변경할지 체크  -->
-	           <div class="profile-box" style="background: url('resources/img/icon/icon1.png') center center / 100% 100% no-repeat;">
+	           <div class="profile-box" style="background: url('/resources/img/icon/${profileDto.icon_image}') center center / 100% 100% no-repeat;">
 	               <div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div>
 	           </div>
 	           <div class="name-addr">
 	               <p class="user-name">${profileDto.nickname}</p>
-	               <img src="resources/img/common/ico_map.png" alt="위치"/><span>${profileDto.shortsido} ${profileDto.dong}</span>
+	               <img src="/resources/img/common/ico_map.png" alt="위치"/><span>${profileDto.shortsido} ${profileDto.dong}</span>
 	           </div>
            </div>
 	       <div class="buttons">
@@ -131,10 +121,10 @@
 			           <div class="btn-like btn02-s" onclick="like()">
 			           		<c:choose>
 				           		<c:when test="${result.isLiked eq false}">
-				           			<img src="resources/img/common/ico_heart_no_act.png" alt="좋아요비활성">
+				           			<img src="/resources/img/common/ico_heart_no_act.png" alt="좋아요비활성">
 			           			</c:when>
 			           			<c:otherwise>
-				           			<img src="resources/img/common/ico_heart_act.png" alt="좋아요활성">				           			
+				           			<img src="/resources/img/common/ico_heart_act.png" alt="좋아요활성">				           			
 			           			</c:otherwise>
 		           			</c:choose>
 		           		</div>
@@ -185,8 +175,8 @@
 
 
 
-<script src="resources/js/common.js" type="text/javascript"></script>
-<script src="resources/js/layerPopup.js"></script>
+<script src="/resources/js/common.js" type="text/javascript"></script>
+<script src="/resources/js/layerPopup.js"></script>
 <script>
 
 	/* 메이트 신청하기 버튼 이벤트 */
@@ -199,7 +189,7 @@
 
 	    $.ajax({
 	    	type:'POST',
-			url:'/mateAppliaction',
+			url:'/mateAppliaction/',
 			data:{
 				fromUserId: '${sessionScope.loginId}',
 				toUserId: $('input[name="id"]')[0].defaultValue
@@ -312,9 +302,9 @@
 			success:function(data){
 				console.log(data.isLiked);
 				if(data.isLiked){					
-					$('.btn-like img').attr('src','resources/img/common/ico_heart_act.png');
+					$('.btn-like img').attr('src','/resources/img/common/ico_heart_act.png');
 				}else{
-					$('.btn-like img').attr('src','resources/img/common/ico_heart_no_act.png');					
+					$('.btn-like img').attr('src','/resources/img/common/ico_heart_no_act.png');					
 				}
 			},
 			error:function(e){
