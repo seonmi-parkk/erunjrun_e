@@ -282,6 +282,13 @@ public class CrewService {
 		
 		return crew_dao.crewDetail(crew_idx);
 	}
+
+	public List<CrewMemberDTO> crewMemberList(int crew_idxs) {
+		
+		List<CrewMemberDTO> crewMemberList = crew_dao.crewMemberList(crew_idxs);
+		
+		return crewMemberList;
+	}
 	
 
     

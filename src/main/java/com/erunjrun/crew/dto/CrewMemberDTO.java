@@ -21,6 +21,12 @@ public class CrewMemberDTO {
     
     // crew_application
     private int application_idx;
+    
+    
+    // 회원 리스트를 위해 추가
+    private String nickname;
+    private String gender;
+    private String image;
 
 	public int getCrew_idx() {
 		return crew_idx;
@@ -102,13 +108,41 @@ public class CrewMemberDTO {
 		this.application_idx = application_idx;
 	}
 
+	
+	
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	@Override
 	public String toString() {
 		return "CrewMemberDTO [crew_idx=" + crew_idx + ", id=" + id + ", create_date=" + create_date + ", is_leader="
 				+ is_leader + ", history_idx=" + history_idx + ", code_name=" + code_name + ", leader=" + leader
 				+ ", is_agree=" + is_agree + ", update_date=" + update_date + ", application_idx=" + application_idx
-				+ "]";
+				+ ", nickname=" + nickname + ", gender=" + gender + ", image=" + image + "]";
 	}
+
+	
     
     
 

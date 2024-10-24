@@ -93,5 +93,12 @@
 	<select id="crewDetail" resultType="com.erunjrun.crew.dto.CrewDTO" parameterType="int">
 		SELECT *, (SELECT img_new FROM image WHERE img_no=#{crew_idx} AND code_name = 'I101') as img_new FROM crew WHERE crew_idx = #{crew_idx}
 	</select>
+	
+	<!-- 크루 멤버 리스트 (프로필 이미지 포함) -->
+	<select id="crewMemberList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="int">
+		SELECT m.id, m.nickname, m.gender, COALESCE(p.image, '') as image, cm.is_leader
+			FROM crew_member cm JOIN member m ON cm.id = m.id
+			LEFT JOIN profile p ON m.id = p.id WHERE cm.crew_idx = #{crew_idx};
+	</select>
 
 </mapper>

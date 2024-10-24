@@ -143,6 +143,18 @@
 	    max-height: 300px;               /* 스크롤할 영역의 최대 높이 설정 */
 	    overflow-y: auto;                /* 이 부분만 스크롤 가능하게 설정 */
 	    margin-top: 20px;                /* 위쪽 고정 영역과의 간격 */
+	    
+	    margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 16px;
+        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+        vertical-align: baseline;
+        box-sizing: border-box;
+        color: var(--font-color);
+	    
+	    
+	    
 	}
 
     .btn-box {
@@ -160,10 +172,14 @@
     	align-items: center;
     	justify-content: space-between;
     	background: #fff;
+    	display: flex; /*수직 정렬 flex, center*/
+    	align-items: center; 
     }
     
-    .frofile-text{
+    .profile-text{
     	margin-left: 10px; 
+    	/* display: flex; */ /*수직 정렬 flex, center*/
+    	/* align-items: center;  */
     }
     
 	.crew-box {
@@ -220,7 +236,48 @@
          cursor: pointer;
          font-size: 14px;
 	}
- 
+	
+	.profile-text img {
+ 	   margin-right: 13px; /* 이미지 오른쪽에 간격 */
+	}
+	
+	.profile-text{
+		writing-mode: horizontal-tb;
+		flex-direction: column; /*세로로 이상하게 되면 가로로 다시 돌림*/
+	}
+	
+	.profile-text {
+    
+    flex-wrap: nowrap; /* 아이템을 한 줄로 배치하고 줄바꿈 방지 */
+    overflow-x: auto;  /* 아이템이 너무 많으면 가로 스크롤 추가 */
+    
+    justify-content: flex-start; /* 아이템을 가로로 시작점에 정렬 */
+}
+
+
+	.profile-text > div {
+	    margin-right: 30px; /* 각 크루원 정보 블록 사이 간격 추가 */
+	}
+	
+	.testeee{
+		margin-left: 10px;
+		display: flex;  /*수직 정렬 flex, center*/
+    	align-items: center;  
+    	padding: 9px 0px 0px 0px;
+	}
+	
+	.leaderjb{
+		display: flex;  /*수직 정렬 flex, center*/
+    	align-items: center;  
+	}
+	
+	.leaderjb > img{
+		
+	}
+	
+ 	.testeee > img{
+ 		
+ 	}
   
 </style>
 </head>
@@ -284,27 +341,13 @@
 				<div class="title1-1" id="crew-name"></div>
 				
 				<div class="profilebox">
-					<span class="frofile-text">[프로필] 닉네임 / 성별 / 크루장</span>
+					<span class="profile-text" id="leaderprofile"></span> <!-- 크루장 정보 -->
 					<button class="btn03-s2">크루관리</button>
 				</div>
 			</div>
 			
-		    <div class="scrollable-content">
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
-		        <p>크루원 정보 들어가는 곳</p>
+		    <div class="scrollable-content" id="crew-member">
+				<span class="profile-text" id="crew-member-profile"></span> <!-- 크루원 정보 -->
 		    </div>
 		    
 		    <div class="btn-box">
@@ -335,62 +378,113 @@
 </body>
 <script>
 
-$(document).ready(function () {
-    var crew_idx = $('input[name="crew_idx"]').val();
-    
-    console.log('crew_idx =>', crew_idx);
-    
-    crewDetail();
-
-    function crewDetail() {
-        console.log('크루 데이터 요청');
-        
-        $.ajax({
-            type: 'POST',
-            url: '/crew/detail',
-            data: { 'crew_idx': crew_idx },
-            dataType: 'JSON',
-            success: function (response) {
-                console.log('데이터 받아옴 => ', response);
-                if (response.success) {
-                    // 받아온 데이터를 HTML에 반영
-                    var result = response.result;
-
-                    // 이미지 업데이트
-                    if (result.img_new) {
-                        $('#crew-img').attr('src', '/photo/' + result.img_new);
-                        console.log(result.img_new);
-                    }
-                    var day = result.days; // 예: "mon"
-
-	                // replace를 사용해서 변환
-	                day = day.replace('mon', '월')
-	                         .replace('tue', '화')
-	                         .replace('wen', '수')
-	                         .replace('thu', '목')
-	                         .replace('fri', '금')
-	                         .replace('sat', '토')
-	                         .replace('sun', '일');
-
-                    // 크루명, 소개, 안내사항 등 업데이트
-                    $('#crew-name').text(result.crew_name);
-                    $('#crew-content').html(result.content);
-                    $('#crew-address').text(result.address);
-                    $('#crew-member').text(result.member);
-                    $('#crew-days').text(day);
-                    $('#crew-minute').text(result.minute);
-                    $('#crew-distance').text(result.distance);
-                    $('#crew-location').text(result.shortsido + ' ' + result.sigungu);
-                    
-                    
-                }
-            },
-            error: function (e) {
-                console.log('에러 발생 => ', e);
-            }
-        });
-    }
-});
+	$(document).ready(function () {
+	    var crew_idx = $('input[name="crew_idx"]').val();
+	    
+	    console.log('crew_idx =>', crew_idx);
+	    
+	    crewDetail();
+	    
+	    crewMemberList();
+	
+	    function crewDetail() {
+	        console.log('크루 데이터 요청');
+	        
+	        $.ajax({
+	            type: 'POST',
+	            url: '/crew/detail',
+	            data: { 'crew_idx': crew_idx },
+	            dataType: 'JSON',
+	            success: function (response) {
+	                console.log('데이터 받아옴 => ', response);
+	                if (response.success) {
+	                    // 받아온 데이터를 HTML에 반영
+	                    var result = response.result;
+	
+	                    // 이미지 업데이트
+	                    if (result.img_new) {
+	                        $('#crew-img').attr('src', '/photo/' + result.img_new);
+	                    }
+	                    var day = result.days; // 예: "mon"
+	
+		                // replace를 사용해서 변환
+		                day = day.replace('mon', '월')
+		                         .replace('tue', '화')
+		                         .replace('wen', '수')
+		                         .replace('thu', '목')
+		                         .replace('fri', '금')
+		                         .replace('sat', '토')
+		                         .replace('sun', '일');
+	
+	                    // 크루명, 소개, 안내사항 등 업데이트
+	                    $('#crew-name').text(result.crew_name);
+	                    $('#crew-content').html(result.content);
+	                    $('#crew-address').text(result.address);
+	                    $('#crew-member').text(result.member);
+	                    $('#crew-days').text(day);
+	                    $('#crew-minute').text(result.minute);
+	                    $('#crew-distance').text(result.distance);
+	                    $('#crew-location').text(result.shortsido + ' ' + result.sigungu);
+	                    
+	                    
+	                }
+	            },
+	            error: function (e) {
+	                console.log('에러 발생 => ', e);
+	            }
+	        });
+	    }
+	    
+	    function crewMemberList(){
+			console.log('크루 회원 리스트 요청');
+	        
+	        $.ajax({
+	            type: 'POST',
+	            url: '/crew/memberList',
+	            data: { 'crew_idx': crew_idx },
+	            dataType: 'JSON',
+	            success: function (response) {
+	                console.log('회원 데이터 받아옴 => ', response);
+	                if (response.success) {
+	                	
+	                    var result = response.result;
+	                    
+	                    var leader = '';
+	                    
+	                    var content = '';
+	                    var profileImg = '<img src="resources/img/common/profile.png" width="32px"/>';
+	                    
+	                    var genderImg = '';
+	                    
+	                    result.forEach(function(item, idx){
+	                    	
+	                    	if(item.gender === '남'){
+	                    		genderImg = '<img src="resources/img/common/ico_male.png" width="9px"/>';
+	                    	}else{
+	                    		genderImg = '<img src="resources/img/common/ico_female.png" width="9px"/>';
+	                    	}
+	                    	
+		                    if(item.is_leader === 'Y'){
+		                    	$('#leaderprofile').html('<div class="leaderjb">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루장' + '</div>');
+		                    }else{
+		                    	content += '<div class="testeee">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루원'  + '</div>';
+		                    }
+		                    
+		                    $('#crew-member-profile').html(content);
+		                  	console.log(item);
+	                    });
+	                    
+	                   /*  var profileImg = '<img src="/photo/' + result.image + '"/>';  */
+	                }
+	            },
+	            error: function (e) {
+	                console.log('에러 발생 => ', e);
+	            }
+	        });
+	    }
+	    
+	    
+	});
 
 </script>
 </html>
