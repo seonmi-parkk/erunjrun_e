@@ -1,7 +1,6 @@
 package com.erunjrun.board.controller;
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.board.service.RunBoardService;
 import com.erunjrun.image.dto.ImageDTO;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -38,7 +37,7 @@ public class RunBoardController {
 	}
 	
 	
-	@GetMapping("/runBoardList")
+	@PostMapping("/runBoardList")
 	@ResponseBody
 	public Map<String, Object> list(String page, String cnt, String opt, String keyword, String code_name,String use_yn,String is_map) {
 
@@ -87,9 +86,9 @@ public class RunBoardController {
 	}
 	
 	
-	@GetMapping(value="/testWrite")
+	@GetMapping(value="/runBoardWrite")
 	public String write() {
-		return "runBoard/testWrite";
+		return "runBoard/runBoardWrite";
 	}
 	
     // 이미지 업로드 엔드포인트
@@ -111,9 +110,10 @@ public class RunBoardController {
     // 게시글 등록 엔드포인트
     @PostMapping(value = "/runBoardWrite")
     @ResponseBody
-    public Map<String, Object> submitPost(@RequestParam("imgsJson") String imgsJson,
+    public Map<String, Object> submitPost(@RequestParam("imgsJson") String imgsJson,@RequestParam("routeData") String routeData,
                                           @ModelAttribute RunBoardDTO runBoardDto) {
         Map<String, Object> resultMap = new HashMap<>();
+        
 
         // JSON 문자열을 ImageDTO 리스트로 변환
         ObjectMapper objectMapper = new ObjectMapper();
@@ -134,17 +134,52 @@ public class RunBoardController {
                 logger.info("New Filename: " + img.getImg_new());
             }
         }
+        
+        logger.info("imgDTO : " + runBoardDto.toString());
+        
+        // 경로 데이터 파싱
+        try {
+            // routeData를 Map 형태의 리스트로 파싱
+            List<Map<String, Object>> routeList = objectMapper.readValue(routeData, new TypeReference<List<Map<String, Object>>>() {});
 
-        logger.info("DTO : " + runBoardDto.toString());
+            List<Double> latitudeList = new ArrayList<>();
+            List<Double> longitudeList = new ArrayList<>();
+            List<String> pathList = new ArrayList<>();
+            List<Integer> orderNumList = new ArrayList<>();
 
+            // 각 맵에서 데이터 추출하여 리스트에 추가
+            for (Map<String, Object> route : routeList) {
+                latitudeList.add((Double) route.get("latitude"));
+                longitudeList.add((Double) route.get("longitude"));
+                pathList.add((String) route.get("path"));
+                orderNumList.add((Integer) route.get("order_num"));
+            }
+
+            // DTO에 리스트 설정
+            runBoardDto.setLatitudeList(latitudeList);
+            runBoardDto.setLongitudeList(longitudeList);
+            runBoardDto.setPathList(pathList);
+            runBoardDto.setOrderList(orderNumList);
+
+        } catch (Exception e) {
+            logger.error("경로 데이터 파싱 오류 : {}", e.getMessage());
+            return Map.of("error", e.getMessage());
+        }
+        
         // 게시글 등록 서비스 호출
         if (runBoardService.submitPost(runBoardDto)) {
             logger.info("글 업로드 완료");
             resultMap.put("success", true);
             resultMap.put("page", "runBoardUpdate");
+            logger.info("제목3 : "+runBoardDto.getSubject());
         }
 
         return resultMap;
+    }
+    
+    @GetMapping(value="/runBoardDetail")
+    public String detail() {
+    	return "runBoard/runBoardDetail";
     }
 	
 	
