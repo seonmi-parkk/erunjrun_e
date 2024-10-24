@@ -30,5 +30,10 @@ public class CrewViewController {
     	
         return "/crew/crewUpdate";
     }
+    
+    @GetMapping(value="/crewDetailView")
+    public String crewDetailView() {
+    	return "/crew/crewDetail";
+    }
 
 }
