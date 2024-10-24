@@ -21,7 +21,7 @@
 			FROM mate_history 
 			WHERE mate_history_idx = 
 			(SELECT max(mate_history_idx) FROM mate_history 
-			WHERE unlike_id IN ('kimee01','moma123') AND id IN ('kimee01','moma123'))
+			WHERE unlike_id IN (#{fromUserId},#{toUserId}) AND id IN (#{fromUserId},#{toUserId}))
 	</select>
 
 	<select id="checkBlock" resultType="int"> <!-- unlike_id 신청회원 -->
@@ -38,7 +38,7 @@
 	
 	<select id="getProfile" resultType="com.erunjrun.mate.dto.MateProfileDTO"> 
 		SELECT 
-			 image, icon_idx, nickname, dong, shortsido, gender, birth
+			 image, icon_image, nickname, dong, shortsido, gender, birth
 			<if test="isOpened">
 			,m.id, exercise_min, exercise_dis, exercise, mate, content 
 			</if>

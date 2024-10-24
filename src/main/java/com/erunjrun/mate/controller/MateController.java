@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,9 +25,9 @@ public class MateController {
 	@Autowired MateService mateService;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@RequestMapping(value="/mate")
+	@RequestMapping(value="/mate/{toUserId}")
 
-	public String mate(HttpSession session, Model model) {
+	public String mate(@PathVariable String toUserId, HttpSession session, Model model) {
 		//check!!임시 세션(나중에 빼기)
 		session.setAttribute("loginId", "kimee01");
 		session.setAttribute("profileImg", "profile_img1.jpg");
@@ -38,7 +39,7 @@ public class MateController {
 		// 운동메이트 여부 체크
 		// check!!(나중에 찐으로 넣어줘야 함)
 		String fromUserId = (String) session.getAttribute("loginId");
-		String toUserId = "moma123";
+		//String toUserId = "moma123";
 		//result.put("isMate", mateService.checkMate(fromUserId,toUserId));
 		
 		// 운동메이트 신청 여부 체크
