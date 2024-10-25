@@ -16,7 +16,7 @@
 <!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer"></script> -->
 
 <style>
-  .mateList {
+   .mateList {
 	  	display: flex; display: -moz-box; display: -ms-flexbox;
 	  	height: calc(100vh - 80px);
 	  	margin-top: 80px;
@@ -90,7 +90,7 @@
 	    display: none;
 	}
 	
-	.mateList .list .profile-box {
+	.mateList .profile-box {
 		display : flex; display: -moz-box; display: -ms-flexbox;
 		-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
 		-webkit-box-align: center; -ms-flex-align: center; align-items: center;
@@ -106,8 +106,58 @@
 	    margin-left: 4px;
 	}
 	#profilePopup {
-	    left: 400px;
-	    transform: none;
+	    left: 400px !important;
+	    transform: none !important;
+	}
+/* 	.info-title {
+	    width: fit-content;
+        padding: 2px 10px;
+	    display: block;
+	    background-color: rgba(255,255,255,0.9);
+	    text-align: center;
+	    border-radius:10px;
+	    font-weight: 500;
+	}
+	.info-title .gender{
+		width: 9px;
+		margin-left: 4px;
+    	transform: translateY(3px);
+	} */
+	.profile-area {
+	    position: relative;
+	    width: 48px;
+	    height: 70px;
+	    background: url(/resources/img/common/ico_marker.png) center / 100% no-repeat;
+	}
+	.profile-area .profile-box{
+	    position: absolute;
+	    left: 50%;
+	    transform: translateX(-50%);
+	    top: 4px;
+	}
+	.mateList .marker-img {
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;
+		-webkit-box-orient: vertical; -ms-flex-direction: column; flex-direction: column;
+	}
+	.mateList .marker-img .profile-box{
+		width: 46px;
+    	height: 46px;
+	}
+	.mateList .marker-img .profile-img{
+	    width: 30px;
+	    height: 30px;
+	}
+	.marker-img .text{
+	    background: #fff;
+	    padding: 2px 10px;
+	    border-radius: 10px;
+	    font-weight: 500;
+	}
+	.marker-img .gender{
+		width: 9px;
+		margin-left: 4px;
+    	transform: translateY(3px);
 	}
 	
 </style>
@@ -203,7 +253,7 @@
 	
 	
 	
-	
+	  //카카오맵 API
 	  var container = document.getElementById('map'); 
 	    var options = { 
 	        center: new kakao.maps.LatLng(37.402707, 126.922044), 
@@ -219,7 +269,12 @@
 			positions.push({
 				'title' :'${user.nickname}',
 				'lat' : '${user.latitude}',
-				'lng': '${user.longitude}'
+				'lng': '${user.longitude}',
+				'gender' : '${user.gender}',
+				'profile' : '${user.image}',
+				'icon' : '${user.icon_image}',
+				
+				'latlng' : new kakao.maps.LatLng('${user.latitude}', '${user.longitude}')
 			});
 		</c:forEach>
 		console.log(positions);
@@ -248,40 +303,65 @@
 	            "lng": 126.925044
 	        }
 	    ]; */
-    	var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-		for (var i = 0; i < positions.length; i ++) {
+    	//var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+/* 		for (var i = 0; i < positions.length; i ++) {
 		    // 마커 이미지의 이미지 크기 입니다
 		    var imageSize = new kakao.maps.Size(24, 35); 
 			 // 마커 이미지를 생성합니다 
 		    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+		} */
+	   var overlays = [];	
+		for (let i = 0; i < positions.length; i ++) {
+		    let wrap = document.createElement('div'); //overlay content를 생성합니다.
+		    wrap.className = 'marker-img';
+		    wrap.onclick = () => { //클릭 이벤트를 등록합니다.
+		        console.log(positions[i].title);
+		    }
+		    
+		    let profileArea = document.createElement('div'); //overlay content를 생성합니다.
+		    profileArea.className = 'profile-area';
+		    //$(wrap).append('<div class="profile-area"><</div>');
+		    //<span>'+positions[i].mate_idx+'</span>
+			profileArea.innerHTML = '<div class="profile-box" onclick="" style="background: url(resources/img/icon/'+positions[i].icon_image+') center center / 100% no-repeat;"><div class="profile-img" style="background: url(/photo/profile_img1.jpg) center center / cover no-repeat;"></div></div>';
+			console.log('positions[i].icon_image',positions[i].icon_image);			
+
+			 wrap.appendChild(profileArea);
+		    
+		    let text = document.createElement('div');
+		    text.className = 'text';
+		    
+		    if(positions[i].gender == '남'){
+		    	genderImage = 'ico_male.png'
+	    	}else{
+	    		genderImage = 'ico_female.png'
+    		}
+		    text.innerHTML = positions[i].title + '<img class="gender" src="/resources/img/common/'+genderImage+'"/>';
+		    wrap.appendChild(text);
+		     
+		    let overlay = new kakao.maps.CustomOverlay({ 
+		        map: map,
+		        position: positions[i].latlng,
+		        content: wrap
+		    });
+		    
+		    overlays.push(overlay);
 		}
-			
-	   var markers = positions.map(function(position) {  // 마커를 배열 단위로 묶음
-	        return new kakao.maps.Marker({
-	            position : new kakao.maps.LatLng(position.lat, position.lng),
-	            image : markerImage 
-	        });
-	    });
+	   
+	   
 			
 	    var clusterer = new kakao.maps.MarkerClusterer({
 	            map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
 	            averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
 	            minLevel: 8, // 클러스터 할 최소 지도 레벨 
-	            markers: markers // 클러스터에 마커 추가
+	           // markers: markers // 클러스터에 마커 추가
 	    });
+	    
+	    clusterer.addMarkers(overlays);
+	    
+	    
+
 
 	    
-	for (var i = 0; i < positions.length; i ++) {
-			 // 인포윈도우를 생성합니다
-	/* 	    var infowindow = new kakao.maps.InfoWindow({
-		        position : markers[i].position, 
-		        content : positions[i].title
-		    }); */
-		var infowindow = new kakao.maps.InfoWindow({
-	        content: positions[i].title // 인포윈도우에 표시할 내용
-	    });
-	}
-	infowindow.open(map, markers); 
 	
 
  
