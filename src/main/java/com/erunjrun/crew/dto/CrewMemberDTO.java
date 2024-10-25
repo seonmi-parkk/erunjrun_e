@@ -27,6 +27,8 @@ public class CrewMemberDTO {
     private String nickname;
     private String gender;
     private String image;
+    
+    private String like;
 
 	public int getCrew_idx() {
 		return crew_idx;
@@ -134,13 +136,26 @@ public class CrewMemberDTO {
 		this.image = image;
 	}
 
+	
+	
+	
+	public String getLike() {
+		return like;
+	}
+
+	public void setLike(String like) {
+		this.like = like;
+	}
+
 	@Override
 	public String toString() {
 		return "CrewMemberDTO [crew_idx=" + crew_idx + ", id=" + id + ", create_date=" + create_date + ", is_leader="
 				+ is_leader + ", history_idx=" + history_idx + ", code_name=" + code_name + ", leader=" + leader
 				+ ", is_agree=" + is_agree + ", update_date=" + update_date + ", application_idx=" + application_idx
-				+ ", nickname=" + nickname + ", gender=" + gender + ", image=" + image + "]";
+				+ ", nickname=" + nickname + ", gender=" + gender + ", image=" + image + ", like=" + like + "]";
 	}
+
+	
 
 	
     

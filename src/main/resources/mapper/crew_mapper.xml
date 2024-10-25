@@ -104,5 +104,38 @@
 	<select id="crewApplicationList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="int">
 		SELECT id, application_idx FROM crew_application WHERE crew_idx = #{crew_idx}
 	</select>
+	
+	<!-- 크루 신청 -->
+	<insert id="crewApplicationWrite" parameterType="map">
+		INSERT INTO crew_application(id, crew_idx) VALUES(#{id}, #{crew_idx})
+	</insert>
+	
+	<!-- 크루 신청 취소 -->
+	<delete id="crewApplicationCancel" parameterType="map">
+		DELETE FROM crew_application WHERE id = #{id} AND crew_idx = #{crew_idx}
+	</delete>
+	
+	<!-- 크루 탈퇴 -->
+	<delete id="crewMemberCencel" parameterType="map">
+		DELETE FROM crew_member WHERE id = #{id} AND crew_idx = #{crew_idx}
+	</delete>
+	
+	<!-- 크루 멤버 히스토리 테이블 데이터 추가 -->
+	<insert id="crewHistoryWrite" parameterType="map">
+		INSERT INTO crew_history(id, crew_idx, code_name) VALUES(#{id}, #{crew_idx}, #{code_name})
+	</insert>
+	
+	<!-- 좋아요 회원인지 체크 -->
+	<select id="likeIs" parameterType="map" resultType="int">
+		SELECT COUNT(id) FROM crew_like WHERE crew_idx = #{crew_idx} AND id = #{id}
+	</select>
+	
+	<insert id="likeRequest" parameterType="map">
+		INSERT INTO crew_like(id, crew_idx) VALUES(#{id}, #{crew_idx})
+	</insert>
+	
+	<delete id="likeCencel" parameterType="map">
+		DELETE FROM crew_like WHERE id = #{id} AND crew_idx = #{crew_idx}
+	</delete>
 
 </mapper>
