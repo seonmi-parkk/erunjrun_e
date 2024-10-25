@@ -160,8 +160,6 @@
 	var show = 1;
 	pageCall(show);
 
-
-
 	function pageCall(page) {
 		var keyword = $('#searchKeyword').val(); // 검색어 여기 추가부터 리스트 안옴
         var opt = $('#searchOption').val(); // 검색옵션

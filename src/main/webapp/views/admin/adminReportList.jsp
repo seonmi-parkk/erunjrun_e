@@ -116,6 +116,14 @@
 	   	
 		 <table>
 			<thead>
+			<colgroup>
+		 		<col width="20%"/>
+		 		<col width="20%"/>
+		 		<col width="20%"/>
+		 		<col width="20%"/>
+		 		<col width="20%"/>
+		 	</colgroup>
+			
 			<tr>
 				<th>카테고리</th>
 				<th>작성자</th>
@@ -123,7 +131,7 @@
 				<th>처리여부</th>
 				<th>작성일자</th>
 			</tr>
-		</thead>
+		
 		 	<tbody id="list">
 		 		
 
@@ -154,16 +162,12 @@
 
 
 	function pageCall(page) {
-		var keyword = $('#searchKeyword').val(); // 검색어 여기 추가부터 리스트 안옴
-        var opt = $('#searchOption').val(); // 검색옵션
 		$.ajax({
 			type:'GET',
-			url:'memberList',
+			url:'adminReportList',
 			data:{
 				'page':page,
 				'cnt':15,
-				'opt': opt,
-	            'keyword': keyword
 			},
 			datatype:'JSON',
 			success:function(data){
@@ -191,23 +195,20 @@
 		var content ='';
 		 for (var view of list) {
 			content +='<tr>';
-			if (view.report_status == 'N') {
-                content += '<td style="color: black;">'+view.content+'</td>';
-            } else {
-                content += '<td style="color: blue;">'+view.id+'</td>';
-            }
-			content += '<td><a href="adminMemberDetail?id='+view.id+'">'+view.nickname+'<a/></td>';
-			content +='<td>'+view.email+'</td>';
-			content +='<td><a  href="memberRight?nickname='+view.nickname+'" style="color: orange;">권한</a></td>';
-			content +='<td>'+view.report_count+'</td>';
-			content +='<td>'+view.join_date+'</td>';
+            content += '<td>'+view.category+'</td>';
+			content += '<td><a href="adminReportDetail?id='+view.id+'">'+view.unlike_id+'<a/></td>';
+			 var admin_name = view.name ? view.name : '관리자';
+			content +='<td>'+admin_name+'</td>';
+			var processValue = view.process ? view.process : '미확인';
+			content +='<td>'+processValue+'</td>';
+			content +='<td>'+view.create_date+'</td>';
 			content +='</tr>';
 		  }
 	      $('#list').html(content);
 	   }
  
     
-	/* if (view.report_count < 1 || view.report_count == null || view.report_count == '') { */
+	
     
 </script>
 <script src="resources/js/common.js" type="text/javascript"></script>

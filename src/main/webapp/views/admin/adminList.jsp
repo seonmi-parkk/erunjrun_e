@@ -108,16 +108,9 @@
 	<div class="inner" id="">
 	
 		<p class="title1" >회원정보</p>
-		
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-		
-		
-		
+
 			<div class="btn03-l" onclick="location.href='adminMember'">일반회원</div>
 	    	<div class="btn02-l" onclick="location.href='admin'">관리자</div>
-		
-		
 	     
 		    <form id="searchForm">
 			    <select id="searchOption">
@@ -165,7 +158,7 @@
 	
 	<!-- 푸터 -->
 	<div class="fixed_footer">
-		<jsp:include page="footer.jsp"/>
+		<jsp:include page="../footer.jsp"/>
 	</div>
 </body>
 
@@ -175,8 +168,6 @@
 
 var show = 1;
 pageCall(show);
-
-
 
 
 function pageCall(page) {

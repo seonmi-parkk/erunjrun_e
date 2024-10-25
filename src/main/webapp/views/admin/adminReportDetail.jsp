@@ -107,8 +107,8 @@
 		
 	<div class="inner">
 	
-	<p class="title1" >신고</p>
-	
+	<p class="title1" >회원정보</p>
+	<p class="title1" id="teid">${info.nickname}님</p>
 	
 	
 		<div class="fixed-left">
@@ -165,7 +165,7 @@
 	</div>
 	
 	<!-- 푸터 -->
-	<jsp:include page="../footer.jsp"/>
+	<jsp:include page="footer.jsp"/>
 </body>
 
 

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.admin.dto.AdminDTO;
+import com.erunjrun.image.dto.ImageDTO;
 
 @Mapper
 public interface AdminDAO {
@@ -37,7 +38,7 @@ public interface AdminDAO {
 //	회원상세페이지
 	public AdminDTO memberdetail(String id);
 
-	public List<AdminDTO> reportlist(String id);
+	public List<AdminDTO> memberreportlist(String id);
 	
 	public List<AdminDTO> ban(String id);
 
@@ -55,6 +56,10 @@ public interface AdminDAO {
 	public List<AdminDTO> reportlist(int limit, int offset);
 
 	public int reportcount(int cnt_);
+
+	public AdminDTO reportdetail(int idx);
+
+	public ImageDTO image(int idx);
 
 
 	

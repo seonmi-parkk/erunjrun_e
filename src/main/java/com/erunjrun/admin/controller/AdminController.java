@@ -158,7 +158,7 @@ public class AdminController {
 		  List<AdminDTO> result = admin_service.ban(id);
 		  model.addAttribute("result",result);
 		  
-		  List<AdminDTO> list = admin_service.reportlist(id);
+		  List<AdminDTO> list = admin_service.memberreportlist(id);
 		  model.addAttribute("list",list);
 		  
 		  return "admin/memberDetail";
@@ -174,7 +174,7 @@ public class AdminController {
 		  model.addAttribute("info",nickname);
 		  model.addAttribute("id",id);
 
-		  return "admin/right";
+		  return "admin/adminright";
 	  }
 	  
 	  @GetMapping(value = "/memberRightWrite")
@@ -216,10 +216,11 @@ public class AdminController {
 	  
 	  @GetMapping(value = "/adminReport")
 	  public String report() {
-		  return "admin/reportList";
+		  return "admin/adminReportList";
 	  }
 	  
 	  @GetMapping(value = "/adminReportList")
+	  @ResponseBody 
 	  public Map<String,Object> reportlist(String page, String cnt) {
 	  	int page_ = Integer.parseInt(page);
 		int cnt_ = Integer.parseInt(cnt);
@@ -238,8 +239,10 @@ public class AdminController {
 	  }
 	  
 	  @GetMapping(value = "/adminReportDetail")
-	  public String reportdetail() {
-		  return "admin/reportList";
+	  public String reportdetail(int idx,Model model) {
+		  admin_service.reportdetail(idx,model);
+		  
+		  return "admin/adminReportDetail";
 	  }
 
 	  @GetMapping(value = "/adminReportUpdate")

@@ -1,6 +1,7 @@
 package com.erunjrun.admin.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class AdminDTO {
 	private String id;
@@ -23,7 +24,8 @@ public class AdminDTO {
 	private String unlike_id;
 	private String content;
 	private String ban_content;
-	
+	private String category;
+	private String process;
 	
 
 	
@@ -31,6 +33,18 @@ public class AdminDTO {
 	
 	
 	
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public String getProcess() {
+		return process;
+	}
+	public void setProcess(String process) {
+		this.process = process;
+	}
 	public String getBan_content() {
 		return ban_content;
 	}
@@ -107,6 +121,8 @@ public class AdminDTO {
 	public void setUse_yn(String use_yn) {
 		this.use_yn = use_yn;
 	}
+
+	
 	public Date getCreate_date() {
 		return create_date;
 	}

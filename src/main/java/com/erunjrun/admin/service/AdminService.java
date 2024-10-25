@@ -7,9 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.erunjrun.admin.dao.AdminDAO;
 import com.erunjrun.admin.dto.AdminDTO;
+import com.erunjrun.image.dto.ImageDTO;
 
 @Service
 public class AdminService {
@@ -63,9 +65,9 @@ public class AdminService {
 	}
 
 
-	public List<AdminDTO> reportlist(String id) {
+	public List<AdminDTO> memberreportlist(String id) {
 		
-		return admin_dao.reportlist(id);
+		return admin_dao.memberreportlist(id);
 	}
 
 	public AdminDTO memberdetail(String id) {
@@ -103,7 +105,7 @@ public class AdminService {
 	
 	
 	
-
+//	신고
 	public List<AdminDTO> reportlist(int limit, int offset) {
 		
 		return admin_dao.reportlist(limit,offset);
@@ -112,6 +114,14 @@ public class AdminService {
 	public int reportcount(int cnt_) {
 		
 		return admin_dao.reportcount(cnt_);
+	}
+
+	public void reportdetail(int idx, Model model) {
+		AdminDTO dto = admin_dao.reportdetail(idx);
+		ImageDTO file = admin_dao.image(idx);
+		model.addAttribute("info",dto);
+		model.addAttribute("file",file);
+		
 	}
 
 

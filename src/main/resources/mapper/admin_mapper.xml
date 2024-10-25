@@ -90,7 +90,7 @@
 	</select>
 	
   
-  	<select id="reportlist" resultType="com.erunjrun.admin.dto.AdminDTO" >
+  	<select id="memberreportlist" resultType="com.erunjrun.admin.dto.AdminDTO" >
   	  	SElECT id,code_name,unlike_id,use_yn,create_Date From report_write where id = #{param1}
   	</select>
   
@@ -98,6 +98,9 @@
   	 	SELECT b.id,b.start_date,b.end_date,b.process_date,c.content FROM ban b
 		JOIN code c ON b.code_name = c.code_name  WHERE id = #{param1}
   	</select>
+  	
+  	
+  	
   	
   	<select id="right" resultType="String">
   	  	SELECT id from member where nickname = #{param1}
@@ -140,5 +143,51 @@
 			  WHERE id = #{id}
   </update>
   
+  
+  
+  
+	<select id="reportlist">
+		SELECT 
+	    rw.code_name, c1.content AS category, 
+	    rw.unlike_id,            
+		rw.create_date,
+	    a.name,
+	    rp.code_name,      
+	    c2.content AS process
+		FROM 
+		    report_write rw
+		LEFT JOIN 
+		    code c1 ON rw.code_name = c1.code_name
+		LEFT JOIN 
+		    report_process rp ON rw.report_idx = rp.report_idx
+		LEFT JOIN 
+		     code c2 ON rp.code_name = c2.code_name
+		LEFT JOIN 
+			admin a ON rp.admin_id = a.admin_id      
+		ORDER BY rw.report_idx DESC LIMIT #{limit} OFFSET #{offset}
+	</select>  
+  
+  	<select id="reportcount" resultType="int">
+		SELECT CEIL(count(report_idx)/#{param1}) AS pages FROM report_write
+	</select>
+  
+   <select id="reportdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
+   		SELECT 
+   		c.content,rw.report_idx,rw.create_date,rw.unlike_id,rw.content,rp.content
+		FROM report_write rw
+		LEFT JOIN
+		 code c on rw.code_name = c.code_name
+		LEFT JOIN 
+		 report_process rp on rw.report_idx = rp.report_idx 
+		 where report_idx = #{param1}
+   </select>
+	  
+	  <select id="image" resultType="com.erunjrun.image.dto.ImageDTO">
+	  	select * from image i 
+	  	Left join 
+	  	 report_write on rw.image_no = i. image_no
+	  	 where rw.report_idx = #{param1}
+	  </select>
+	  
   
   </mapper>
