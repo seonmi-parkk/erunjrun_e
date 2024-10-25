@@ -12,8 +12,8 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=26c56d5b3e89329f848d1188b85f2e3d"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=26c56d5b3e89329f848d1188b85f2e3d&libraries=services,clusterer"></script>
+<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer"></script> -->
 
 <style>
   .mateList {
@@ -117,11 +117,11 @@
 	<div class="mateList">
 		<div class="list">
 			<div class="sch-box">
-				<input class="input-txt-l" type="text" name="sch-addr"/> 
+				<input class="input-txt-l" type="text" name="sch-addr" value="${userShortsido} ${userDong}"/> 
 				<input class="btn-sch" type="button" value="검색">
 			</div>
 			<div class="memList">
-				<c:forEach items="${profileList}" var="member">
+				<c:forEach items="${closeList}" var="member">
 					<a class="user">
 						<input type="hidden" name="toUserId" value="${member.id}"/>
 					  	<div class="profile-box" style="background: url('/resources/img/icon/${member.icon_image}') center center / 100% 100% no-repeat;">
@@ -167,7 +167,7 @@
 <script src="resources/js/common.js" type="text/javascript"></script>
 <script src="resources/js/layerPopup.js"></script>
 <script>
-	var profileList = '${profileList}';
+	var closeList = '${closeList}';
 
 	// 클릭시 운동프로필 레이어 팝업
 	$('.user').on('click',function(){
@@ -201,136 +201,90 @@
 	
 	
 	
+	
+	
+	
+	  var container = document.getElementById('map'); 
+	    var options = { 
+	        center: new kakao.maps.LatLng(37.402707, 126.922044), 
+	        level: 12
+	    };
 
-	/* 카카오맵 지도 */
-	/* var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-	var options = { //지도를 생성할 때 필요한 기본 옵션
-		center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-		level: 3 //지도의 레벨(확대, 축소 정도)
-	};
-	
-	var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴 */
-		
-	
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-    mapOption = { 
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };
-
-	/* 지도 위치이동 */
-	var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-	
-	function setCenter() {            
-	    // 이동할 위도 경도 위치를 생성합니다 
-	    var moveLatLon = new kakao.maps.LatLng(33.452613, 126.570888);
+	    var map = new kakao.maps.Map(container, options); 
+	    // </맵 생성>
 	    
-	    // 지도 중심을 이동 시킵니다
-	    map.setCenter(moveLatLon);
-	}
-	
-	function panTo() {
-	    // 이동할 위도 경도 위치를 생성합니다 
-	    var moveLatLon = new kakao.maps.LatLng(33.450580, 126.574942);
-	    
-	    // 지도 중심을 부드럽게 이동시킵니다
-	    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-	    map.panTo(moveLatLon);            
-	}        
-	
-	
-	
-	
-	/* 마커 */
+	    var positions = [];
+		<c:forEach items="${posList}" var="user">
+			console.log('${user.longitude}');
+			positions.push({
+				'title' :'${user.nickname}',
+				'lat' : '${user.latitude}',
+				'lng': '${user.longitude}'
+			});
+		</c:forEach>
+		console.log(positions);
 
-// 지도에 표시된 마커 객체를 가지고 있을 배열입니다
-var markers = [];
+			
+			
+	    /* var positions = [
+	        {
+	            title: '안양역', 
+	            "lat": 37.402707,
+	            "lng": 126.922044
+	        },
+	        {
+	            title: '안양역 주위 1', 
+	            "lat": 37.400707,
+	            "lng": 126.920044
+	        },
+	        {
+	            title: '안양역 주위 2', 
+	            "lat": 37.403007,
+	            "lng": 126.925044
+	        },
+	        {
+	            title: '안양역 주위 3',
+	            "lat": 37.405707,
+	            "lng": 126.925044
+	        }
+	    ]; */
+    	var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+		for (var i = 0; i < positions.length; i ++) {
+		    // 마커 이미지의 이미지 크기 입니다
+		    var imageSize = new kakao.maps.Size(24, 35); 
+			 // 마커 이미지를 생성합니다 
+		    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+		}
+			
+	   var markers = positions.map(function(position) {  // 마커를 배열 단위로 묶음
+	        return new kakao.maps.Marker({
+	            position : new kakao.maps.LatLng(position.lat, position.lng),
+	            image : markerImage 
+	        });
+	    });
+			
+	    var clusterer = new kakao.maps.MarkerClusterer({
+	            map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+	            averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+	            minLevel: 8, // 클러스터 할 최소 지도 레벨 
+	            markers: markers // 클러스터에 마커 추가
+	    });
 
-// 마커 하나를 지도위에 표시합니다 
-//addMarker(new kakao.maps.LatLng(33.450701, 126.570667));
-
-// 마커를 생성하고 지도위에 표시하는 함수입니다
-function addMarker(position) {
-    
-    // 마커를 생성합니다
-    var marker = new kakao.maps.Marker({
-        position: position
-    });
-
-    // 마커가 지도 위에 표시되도록 설정합니다
-    marker.setMap(map);
-    
-    // 생성된 마커를 배열에 추가합니다
-    markers.push(marker);
-}
-
-// 배열에 추가된 마커들을 지도에 표시하거나 삭제하는 함수입니다
-function setMarkers(map) {
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(map);
-    }            
-}
-
-// "마커 보이기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에 표시하는 함수입니다
-function showMarkers() {
-    setMarkers(map)    
-}
-
-// "마커 감추기" 버튼을 클릭하면 호출되어 배열에 추가된 마커를 지도에서 삭제하는 함수입니다
-function hideMarkers() {
-    setMarkers(null);    
-}
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	// 마커를 표시할 위치와 title 객체 배열입니다 
-	var positions = [
-	    {
-	        title: '카카오', 
-	        latlng: new kakao.maps.LatLng(33.450705, 126.570677)
-	    },
-	    {
-	        title: '생태연못', 
-	        latlng: new kakao.maps.LatLng(33.450936, 126.569477)
-	    },
-	    {
-	        title: '텃밭', 
-	        latlng: new kakao.maps.LatLng(33.450879, 126.569940)
-	    },
-	    {
-	        title: '근린공원',
-	        latlng: new kakao.maps.LatLng(33.451393, 126.570738)
-	    }
-	];
-
-	// 마커 이미지의 이미지 주소입니다
-	var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
 	    
 	for (var i = 0; i < positions.length; i ++) {
-	    
-	    // 마커 이미지의 이미지 크기 입니다
-	    var imageSize = new kakao.maps.Size(24, 35); 
-	    
-	    // 마커 이미지를 생성합니다    
-	    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-	    
-	    // 마커를 생성합니다
-	    var marker = new kakao.maps.Marker({
-	        map: map, // 마커를 표시할 지도
-	        position: positions[i].latlng, // 마커를 표시할 위치
-	        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-	        image : markerImage // 마커 이미지 
+			 // 인포윈도우를 생성합니다
+	/* 	    var infowindow = new kakao.maps.InfoWindow({
+		        position : markers[i].position, 
+		        content : positions[i].title
+		    }); */
+		var infowindow = new kakao.maps.InfoWindow({
+	        content: positions[i].title // 인포윈도우에 표시할 내용
 	    });
 	}
+	infowindow.open(map, markers); 
 	
-	
+
+ 
 	
 /* 	setTimeout(function(){
 	    panTo();

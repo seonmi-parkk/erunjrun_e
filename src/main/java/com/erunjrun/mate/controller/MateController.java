@@ -132,9 +132,20 @@ public class MateController {
 		// check!! 임시세션 나중에 지우기
 		session.setAttribute("loginId", "kimee01");
 		String fromUserId = (String) session.getAttribute("loginId");
-		mateService.getPos(fromUserId);
-		List<MateProfileDTO> profileList = mateService.getPos(fromUserId); // 아이디, 닉네임, 성별, 짧은시도, 동, 운동메이트 여부, 프로필, 아이콘
-		model.addAttribute("profileList", profileList);
+		//mateService.getPos(fromUserId);
+		// 로그인 유저의 동을 가져오기 ( check!! 로그인 안한경우 ?? 해당 위치 가져오기??)
+		MateProfileDTO userPos = mateService.getUserPos(fromUserId); 
+		userPos.setId(fromUserId);
+		model.addAttribute("userShortsido", userPos.getShortsido());
+		model.addAttribute("userDong", userPos.getDong());
+		
+		// 유저와 같은 지역 유저들의 리스트
+		List<MateProfileDTO> closeList = mateService.getCloseList(userPos); // 아이디, 닉네임, 성별, 짧은시도, 동, 운동메이트 여부, 프로필, 아이콘
+		model.addAttribute("closeList", closeList);
+		
+		// 전체 유저 위치
+		List<MateProfileDTO> posList = mateService.getPosList(fromUserId);
+		model.addAttribute("posList", posList);
 		
 		return "mate/mateList";
 	}

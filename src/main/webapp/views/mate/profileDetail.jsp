@@ -99,7 +99,6 @@
 	<div class="profileDetail">
 		<!-- check!! 프로필 주인 id 정보 나중에 바꿔줘야 함. -->
 		<input type="hidden" name="id" value="${profileDto.id}"/>
-	    <div class="user-info">
  	        <div>
  	        	<!-- check!!  -->
 	           <div class="profile-box" style="background: url('/resources/img/icon/${profileDto.icon_image}') center center / 100% 100% no-repeat;">

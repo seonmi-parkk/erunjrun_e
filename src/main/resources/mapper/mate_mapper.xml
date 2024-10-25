@@ -59,8 +59,22 @@
 		DELETE FROM block_member WHERE id = #{toUserId} AND unlike_id = #{fromUserId}
 	</insert>
 	
-	<select id="getPos" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+	<select id="getUserPos" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+		SELECT shortsido, dong FROM profile WHERE id = #{fromUserId} 
+	</select>
+	
+	<select id="getCloseList" parameterType="com.erunjrun.mate.dto.MateProfileDTO" resultType="com.erunjrun.mate.dto.MateProfileDTO">
 		SELECT p.id, nickname, gender, shortsido, dong, image, icon_image, exercise_use, 
+		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{id}) AND unlike_id IN (p.id,#{id})) AS mate_idx
+		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
+		AND shortsido = #{shortsido}
+		AND dong = #{dong}
+		AND p.id != #{id}
+		<!-- check!! 어차피 처음에 input에 동을 적어서 보여줘야 하기 때문에 동을 먼저가져오고 그변수를 이용하기 -->
+	</select>
+	
+	<select id="getPosList" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+		SELECT nickname, image, icon_image, gender, latitude, longitude,
 		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{fromUserId}) AND unlike_id IN (p.id,#{fromUserId})) AS mate_idx
 		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
 	</select>
