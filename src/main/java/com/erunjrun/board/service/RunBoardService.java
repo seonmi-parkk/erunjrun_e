@@ -172,6 +172,13 @@ public class RunBoardService {
             runBoardDAO.point(point);
         }
     }
+
+
+	public RunBoardDTO detail(int board_idx) {
+		
+		return runBoardDAO.detail(board_idx);
+		
+	}
 	
 	
 	

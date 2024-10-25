@@ -140,5 +140,11 @@
     		VALUES (#{code_name}, #{id},#{point})
     </insert>
     
+    <select id="detail" resultType="com.erunjrun.board.dto.RunBoardDTO">
+    	SELECT rb.board_idx, rb.subject, rb.content, m.nickname, rb.create_date , rb.bHit 
+			FROM board rb
+		LEFT JOIN member m ON rb.id = m.id WHERE rb.board_idx = 50
+    </select>
+    
     
 </mapper>
