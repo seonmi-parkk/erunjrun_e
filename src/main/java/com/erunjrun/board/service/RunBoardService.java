@@ -152,5 +152,33 @@ public class RunBoardService {
         }
     }
 
+
+	public void point() {
+        // 이번 주 최다 추천 게시글 목록을 가져옴
+        List<RunBoardDTO> likes = runBoardDAO.bHitList();
+        logger.info("목록"+likes);
+        for (RunBoardDTO post : likes) {
+
+        	RunBoardDTO point = new RunBoardDTO();
+            point.setCode_name("P101"); // 포인트 코드명
+            point.setId(post.getId()); // 포인트 받을 회원
+            point.setPoint(100); // 지급할 포인트 
+            
+            logger.info("코드 네임: " + point.getCode_name());
+            logger.info("회원 ID: " + point.getId());
+            
+            
+            // 포인트 테이블에 삽입
+            runBoardDAO.point(point);
+        }
+    }
 	
+	
+	
+	
+	
+		
 }
+
+	
+
