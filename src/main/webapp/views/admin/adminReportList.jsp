@@ -149,7 +149,7 @@
 	</div>
 	
 	<!-- 푸터 -->
-	<jsp:include page="footer.jsp" />
+	<jsp:include page="../footer.jsp" />
 </body>
 
 
@@ -196,7 +196,7 @@
 		 for (var view of list) {
 			content +='<tr>';
             content += '<td>'+view.category+'</td>';
-			content += '<td><a href="adminReportDetail?id='+view.id+'">'+view.unlike_id+'<a/></td>';
+			content += '<td><a href="adminReportDetail?report_idx='+view.report_idx+'">'+view.unlike_id+'<a/></td>';
 			 var admin_name = view.name ? view.name : '관리자';
 			content +='<td>'+admin_name+'</td>';
 			var processValue = view.process ? view.process : '미확인';

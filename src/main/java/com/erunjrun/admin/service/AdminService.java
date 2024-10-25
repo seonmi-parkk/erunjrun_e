@@ -116,11 +116,16 @@ public class AdminService {
 		return admin_dao.reportcount(cnt_);
 	}
 
-	public void reportdetail(int idx, Model model) {
-		AdminDTO dto = admin_dao.reportdetail(idx);
-		ImageDTO file = admin_dao.image(idx);
+	public void reportdetail(String report_idx, Model model) {
+		AdminDTO dto = admin_dao.reportdetail(report_idx);
+		ImageDTO file = admin_dao.image(report_idx);
 		model.addAttribute("info",dto);
 		model.addAttribute("file",file);
+		
+	}
+
+	public void reportupdate(Map<String, String> param) {
+		admin_dao.reportupdate(param);
 		
 	}
 

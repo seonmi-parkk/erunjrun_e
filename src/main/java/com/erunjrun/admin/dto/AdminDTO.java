@@ -26,6 +26,7 @@ public class AdminDTO {
 	private String ban_content;
 	private String category;
 	private String process;
+	private String report_idx;
 	
 
 	
@@ -33,6 +34,13 @@ public class AdminDTO {
 	
 	
 	
+	
+	public String getReport_idx() {
+		return report_idx;
+	}
+	public void setReport_idx(String report_idx) {
+		this.report_idx = report_idx;
+	}
 	public String getCategory() {
 		return category;
 	}

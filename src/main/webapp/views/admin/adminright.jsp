@@ -180,7 +180,7 @@
 	</div>
 	
 	<!-- 푸터 -->
-	<jsp:include page="footer.jsp"/>
+	<jsp:include page="../footer.jsp"/>
 </body>
 
 

@@ -7,7 +7,14 @@ public class ImageDTO {
 	private String img_ori;
 	private String img_new;
 	private int img_no; // 생성한 글의 넘버
+	private String report_idx;
 	
+	public String getReport_idx() {
+		return report_idx;
+	}
+	public void setReport_idx(String report_idx) {
+		this.report_idx = report_idx;
+	}
 	public int getImg_idx() {
 		return img_idx;
 	}

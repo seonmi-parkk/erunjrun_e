@@ -10,7 +10,18 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-#searchForm{
+	.table-container{
+	 display: block; 
+	justify-content: space-between;  /* 테이블 사이에 공간 배분 */
+    gap: 20px;  
+	}
+	
+	table {
+    margin-bottom: 100px;
+    margin-top: 100px;    /* 테이블 사이 간격을 20px로 설정 */
+    padding: 10px;          /* 테이블 내부 여백 */
+	}
+	#searchForm{
 	margin-left: 300px;
 	
 	}
@@ -84,7 +95,7 @@
 	
 	.inner{
     margin-left: 550px;
-    height: 890px;
+    
 	}
 	
 	.image img {
@@ -96,6 +107,7 @@
 	font-size: 34px;
 	color: #FB7E3A;
 	}
+	
 </style>
 </head>
 <body>
@@ -107,10 +119,12 @@
 	<div class="inner">
 	
 	<p class="title1" >회원정보</p>
-	<p class="title1"  id="teid">${info.nickname}님</p>
 	
 	
-		<div class="fixed-left">
+	<p class="title1" id="nick" >${info.nickname}님</p>
+	
+	
+		 <div class="fixed-left">
 	    <div class="image">
 		    <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
 	    </div>
@@ -134,46 +148,103 @@
 	    <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
 	    
 	    </div>
+	    
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">아이디</p>
+			<p class="title2" id="admin_name"> ${info.id}</p>
+		</div>	
+
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">닉네임</p>
+			<p class="title2" id="admin_name">${info.nickname}</p>
+		</div>	
 		
-	 
-	  	<form action="memberRightUpdate" method="get">
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">이메일</p>
+			<p class="title2" id="admin_name"> ${info.id}</p>
+		</div>	
 		
-   		
-   		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="subject">카테고리</p>
-			<input type="radio" name="code_name" value="A100"
-						<c:if test="${info.code_name eq 'A100'}">checked</c:if>						
-						/>게시글
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="radio" name="code_name" value="A101"
-						<c:if test="${info.code_name eq 'A101'}">checked</c:if>						
-						/>댓글
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="radio" name="code_name" value="A102"
-						<c:if test="${info.code_name eq 'A102'}">checked</c:if>						
-						/> 회원
-		</div>
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">주소</p>
+			<p class="title2" id="admin_name"> ${info.address}</p>
+		</div>	
 		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="subject">정지기간</p>
-			<input type="text" name="start_date" id="start_date" value="${info.start_date}"/>
-			<p class="title2" id=""> ~ </p>
-			<input type="text" name="end_date" id="end_date" value="${info.end_date}"/>
-		</div>
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">성별</p>
+			<p class="title2" id="admin_name">${info.gender}</p>
+		</div>	
 		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="subject">정지내용</p>
-			<input type="text" name="ban_content" id="content" value="${info.ban_content}"/>
-		</div>
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">생년월일</p>
+			<p class="title2" id="admin_name">${info.birth}</p>
+		</div>	
 		
-   		
-   	<button class="btn01-l" type="submit">수정</button>
-	<div class="btn02-l" onclick="location.href='adminMemberDetail?id=${info.id}'">취소</div> <!-- 클릭시 색깔변경 -->
-	</form>
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">전화번호</p>
+			<p class="title2" id="admin_name">${info.phone}</p>
+		</div>	
+		
+		
+		<div class="table-container">
+	 	<table>
+		<thead class="reportlist">
+
+				<tr>
+					<th>카테고리</th>
+					<th>신고자</th>
+					<th>처리여부</th>
+					<th>신청일자</th>
+				</tr>
+			</thead>
+		 	<tbody>
+		 	
+		 	<c:forEach items="${list}" var="report">
+				<tr>
+					<td>${report.code_name}</td>
+					<td><a href="adminReportDetail?id=${report.id}">${report.unlike_id}</a></td>
+					<td>${report.use_yn}</td>
+					<td>${report.create_date}</td>
+				</tr>
+			</c:forEach>
+		 	</tbody>
+   </table>
+   
+   <table>
+		<thead>
+		
+		</thead>
+			<colgroup>
+		 		<col width="30%"/>
+		 		<col width="40%"/>
+		 		<col width="30%"/>
+		 	</colgroup>
+			
+			<tr>
+				<th>카테고리</th>
+				<th>정지기간</th>
+				<th>신청일자</th>
+			</tr>
+		
+		
+	 	<tbody>
+	 		<c:forEach items="${result}" var="ban">
+			<tr>
+				<td><a href="memberRightDetail?id=${ban.id}">${ban.content}</a></td>
+				<td>${ban.start_date} ~ ${ban.end_date}</td>
+				<td>${ban.process_date}</td>
+			</tr>
+		</c:forEach>
+	 	</tbody>
+   </table>
+			
+	</div>
 	</div>
 	
 	<!-- 푸터 -->

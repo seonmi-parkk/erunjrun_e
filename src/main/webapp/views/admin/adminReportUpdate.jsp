@@ -10,17 +10,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-	.table-container{
-	 display: block; 
-	justify-content: space-between;  /* 테이블 사이에 공간 배분 */
-    gap: 20px;  
-	}
-	
-	table {
-    margin-bottom: 100px;
-    margin-top: 100px;    /* 테이블 사이 간격을 20px로 설정 */
-    padding: 10px;          /* 테이블 내부 여백 */
-	}
 	#searchForm{
 	margin-left: 300px;
 	
@@ -38,13 +27,14 @@
 	
 	.btn01-l{
 	margin-top: 50px;
+	margin-bottom: 50px;
 	margin-left: 680px;
 	}
 	.
 	.title2 {
         color: var(--font-color);
         font-family: "Pretendard Variable", sans-serif;
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 900;
     }
 
@@ -121,10 +111,8 @@
 	<p class="title1" >회원정보</p>
 	
 	
-	<p class="title1" id="nick" >${info.nickname}님</p>
 	
-	
-		 <div class="fixed-left">
+		<div class="fixed-left">
 	    <div class="image">
 		    <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
 	    </div>
@@ -148,107 +136,77 @@
 	    <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
 	    
 	    </div>
-	    
-	    <div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="admin_name">아이디</p>
-			<p class="title2" id="admin_name"> ${info.id}</p>
-		</div>	
-
-	    <div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="admin_name">닉네임</p>
-			<p class="title2" id="admin_name">${info.nickname}</p>
-		</div>	
+		<form action="adminReportUpdate" method="post">
 		
-	    <div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="admin_name">이메일</p>
-			<p class="title2" id="admin_name"> ${info.id}</p>
-		</div>	
-		
-	    <div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="admin_name">주소</p>
-			<p class="title2" id="admin_name"> ${info.address}</p>
-		</div>	
-		
-	    <div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="admin_name">성별</p>
-			<p class="title2" id="admin_name">${info.gender}</p>
-		</div>	
-		
-	    <div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="admin_name">생년월일</p>
-			<p class="title2" id="admin_name">${info.birth}</p>
-		</div>	
-		
-	    <div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="admin_name">전화번호</p>
-			<p class="title2" id="admin_name">${info.phone}</p>
-		</div>	
-		
-		
-		<div class="table-container">
-	 	<table>
-		<thead class="reportlist">
-
-				<tr>
-					<th>카테고리</th>
-					<th>신고자</th>
-					<th>처리여부</th>
-					<th>신청일자</th>
-				</tr>
-			</thead>
-		 	<tbody>
-		 	
-		 	<c:forEach items="${list}" var="report">
-				<tr>
-					<td>${report.code_name}</td>
-					<td><a href="reportDetail/=${report.id}">${report.unlike_id}</a></td>
-					<td>${report.use_yn}</td>
-					<td>${report.create_date}</td>
-				</tr>
-			</c:forEach>
-		 	</tbody>
-   </table>
-   
-   <table>
-		<thead>
-		
-		</thead>
-			<colgroup>
-		 		<col width="30%"/>
-		 		<col width="40%"/>
-		 		<col width="30%"/>
-		 	</colgroup>
+	 		<div class="input-container">
+	  			<p class="title2" id="dot">•</p>
+				<p class="title2" id="admin_name">카테고리</p>
+				<p class="title2" id="admin_name">${info.category}</p>
+			</div>	
 			
-			<tr>
-				<th>카테고리</th>
-				<th>정지기간</th>
-				<th>신청일자</th>
-			</tr>
-		
-		
-	 	<tbody>
-	 		<c:forEach items="${result}" var="ban">
-			<tr>
-				<td><a href="memberRightDetail?id=${ban.id}">${ban.content}</a></td>
-				<td>${ban.start_date} ~ ${ban.end_date}</td>
-				<td>${ban.process_date}</td>
-			</tr>
-		</c:forEach>
-	 	</tbody>
-   </table>
+	 		<div class="input-container">
+	  			<p class="title2" id="dot">•</p>
+				<p class="title2" id="admin_name">신고등록번호</p>
+				<p class="title2" id="admin_name" >${info.report_idx}</p>
+			</div>	
 			
-	</div>
+	 		<div class="input-container">
+	  			<p class="title2" id="dot">•</p>
+				<p class="title2" id="admin_name">작성일시</p>
+				<p class="title2" id="admin_name">${info.create_date}</p>
+			</div>	
+	
+	 		<div class="input-container">
+	  			<p class="title2" id="dot">•</p>
+				<p class="title2" id="admin_name">신고자</p>
+				<p class="title2" id="admin_name">${info.unlike_id}</p>
+			</div>	
+			
+			<div class="input-container">
+			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">이미지</p>
+		 		<c:if test="${file.size()>0}">
+				<tr>
+					<td>
+					<!-- /photo 라는 컨텍스트 요청이 있으면 C:/upload 로 연결하도록 설정 되어야 한다.(server.xml) -->
+					<!-- server 파일에서 server.xml - >   <Context docBase="C:/upload" path="/photo" /> -->
+						<c:forEach items = "${file}" var ="imgfile">
+							<a href="download?new_filename = ${imgfile.img_new}&ori_fileName=${imgfile.img_ori}">
+								<img alt="${imgfile.img_ori}" src="/photo/${imgfile.img_new}">
+							</a>
+						</c:forEach>
+					</td>
+				</tr>
+				</c:if>
+			</div>
+			
+	 		<div class="input-container">
+	  			<p class="title2" id="dot">•</p>
+				<p class="title2" id="admin_name">내용</p>
+				<p class="title2" id="admin_name">${info.content}</p>
+			</div>	
+			
+						
+	 		<div class="input-container">
+	  			<p class="title2" id="dot">•</p>
+				<p class="title2" id="admin_name">처리내용</p>
+				<input type="text" name="process" value="${info.process}"/>
+			</div>	
+			
+			<input type="text" name="report_idx" value="${info.report_idx}" hidden="hidden"/>
+			
+			<button class="btn01-l" type="submit" name="code_name" value="D103">처리완료</button>
+			<button class="btn02-l" type="submit" name="code_name" value="D102">처리중</button>
+			<button class="btn02-l" type="submit" name="code_name" value="D100">취소</button>
+		</form>
+						
+   	
+	
+	
 	</div>
 	
 	<!-- 푸터 -->
-	<jsp:include page="footer.jsp"/>
+	<jsp:include page="../footer.jsp"/>
 </body>
 
 

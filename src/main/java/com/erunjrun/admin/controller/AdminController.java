@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -95,11 +94,11 @@ public class AdminController {
 	   
 	@GetMapping(value = "/adminMember")
 	public String memberList() {
-		return "admin/memberList";
+		return "admin/adminMemberList";
 	}
 		
 	
-	  @GetMapping(value = "/memberList") //post?
+	  @GetMapping(value = "/adminMemberList") //post?
 	  @ResponseBody 
 	  public Map<String,Object> memberlist(String page, String cnt,String opt, String keyword){
 		  
@@ -161,11 +160,11 @@ public class AdminController {
 		  List<AdminDTO> list = admin_service.memberreportlist(id);
 		  model.addAttribute("list",list);
 		  
-		  return "admin/memberDetail";
+		  return "admin/adminMemberDetail";
 	  }
 	  
 	  
-//		권한처리	  
+//		권한처리	  -- 권한 세션체크 스케줄링 사용해서 만들어야 함.
 	  
 	  @GetMapping(value = "/memberRight")
 	  public String right(String nickname,Model model) {
@@ -174,7 +173,7 @@ public class AdminController {
 		  model.addAttribute("info",nickname);
 		  model.addAttribute("id",id);
 
-		  return "admin/adminright";
+		  return "admin/adminRight";
 	  }
 	  
 	  @GetMapping(value = "/memberRightWrite")
@@ -213,7 +212,6 @@ public class AdminController {
 	  
 //		신고처리		  
 	  
-	  
 	  @GetMapping(value = "/adminReport")
 	  public String report() {
 		  return "admin/adminReportList";
@@ -239,17 +237,34 @@ public class AdminController {
 	  }
 	  
 	  @GetMapping(value = "/adminReportDetail")
-	  public String reportdetail(int idx,Model model) {
-		  admin_service.reportdetail(idx,model);
+	  public String reportdetail(String report_idx,Model model) {
+		  admin_service.reportdetail(report_idx,model);
 		  
 		  return "admin/adminReportDetail";
 	  }
 
 	  @GetMapping(value = "/adminReportUpdate")
-	  public String reportupdate() {
-		  return "";
+	  public String reportupdate(String report_idx,Model model) {
+		  admin_service.reportdetail(report_idx,model);
+		  
+		  return "admin/adminReportUpdate";
 	  }
 	  
+	  @PostMapping(value = "/adminReportUpdate")
+	  public String reportupdate(@RequestParam Map<String, String> param,HttpSession session,
+			  Model model) {
+		  String admin_id = (String)session.getAttribute("loginId");
+		  logger.info(admin_id);
+		  param.put("admin_id", admin_id);// 관리자 로그인 ID 저장
+		  admin_service.reportupdate(param);
+		  logger.info(param.get("report_id"));
+		 return "redirect:/adminReportDetail?report_idx="+param.get("report_idx");
+	  }
+	  
+	  @GetMapping(value = "adminAsk")
+	  public String ask() {
+		  return "admin/adminAskList";
+	  }
 	  
 	  
 }

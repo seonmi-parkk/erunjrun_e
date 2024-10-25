@@ -57,9 +57,11 @@ public interface AdminDAO {
 
 	public int reportcount(int cnt_);
 
-	public AdminDTO reportdetail(int idx);
+	public AdminDTO reportdetail(String report_idx);
 
-	public ImageDTO image(int idx);
+	public ImageDTO image(String report_idx);
+
+	public void reportupdate(Map<String, String> param);
 
 
 	

@@ -148,7 +148,9 @@
   
 	<select id="reportlist">
 		SELECT 
-	    rw.code_name, c1.content AS category, 
+		rw.report_idx,
+	    rw.code_name, 
+	    c1.content AS category, 
 	    rw.unlike_id,            
 		rw.create_date,
 	    a.name,
@@ -173,21 +175,42 @@
   
    <select id="reportdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
    		SELECT 
-   		c.content,rw.report_idx,rw.create_date,rw.unlike_id,rw.content,rp.content
+   		c.content as category,
+   		rw.report_idx,
+   		rw.id,
+   		rw.create_date,
+   		rw.unlike_id,
+   		rw.content,
+   		rp.content AS process
 		FROM report_write rw
 		LEFT JOIN
 		 code c on rw.code_name = c.code_name
 		LEFT JOIN 
 		 report_process rp on rw.report_idx = rp.report_idx 
-		 where report_idx = #{param1}
+		 WHERE rw.report_idx = #{param1}
    </select>
 	  
 	  <select id="image" resultType="com.erunjrun.image.dto.ImageDTO">
-	  	select * from image i 
+	  	select 
+	  	i.img_ori,
+	  	i.img_new,
+	  	i.img_idx,
+	  	rw.report_idx
+	  	from image i 
 	  	Left join 
-	  	 report_write on rw.image_no = i. image_no
+	  	 report_write rw on rw.img_idx = i.img_idx
 	  	 where rw.report_idx = #{param1}
 	  </select>
+	  
+	 	<insert id="reportupdate" parameterType="Map">
+		 	INSERT INTO report_process (report_idx, admin_id, code_name, content) 
+		 	VALUES (#{report_idx},#{admin_id},#{code_name},#{process})
+			ON DUPLICATE KEY UPDATE 
+			    report_idx = #{report_idx},
+			    admin_id = #{admin_id},
+	 			code_name = #{code_name},
+	 			content = #{process}
+	 	</insert>
 	  
   
   </mapper>

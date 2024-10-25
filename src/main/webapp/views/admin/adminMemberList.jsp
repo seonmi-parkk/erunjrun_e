@@ -150,7 +150,7 @@
 	</div>
 	
 	<!-- 푸터 -->
-	<jsp:include page="footer.jsp" />
+	<jsp:include page="../footer.jsp" />
 </body>
 
 
@@ -165,7 +165,7 @@
         var opt = $('#searchOption').val(); // 검색옵션
 		$.ajax({
 			type:'GET',
-			url:'memberList',
+			url:'adminMemberList',
 			data:{
 				'page':page,
 				'cnt':15,
@@ -213,8 +213,7 @@
 	      $('#list').html(content);
 	   }
  
-    
-	/* if (view.report_count < 1 || view.report_count == null || view.report_count == '') { */
+
     
 </script>
 <script src="resources/js/common.js" type="text/javascript"></script>
