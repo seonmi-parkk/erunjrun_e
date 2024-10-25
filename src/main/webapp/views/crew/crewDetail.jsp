@@ -354,17 +354,11 @@
 		    <div class="btn-box">
 		    
 		    	<div class="crew-box">
-			    	<button class="btn01-l2" id="crew-btn-01" onclick="crewRequest()">러닝크루 신청하기</button>
+			    	<button class="btn01-l2" id="crew-btn-01">러닝크루 신청하기</button>
 			    	
+			    	<!-- 크루 페이지 로딩 시 가져오기 -->
 			    	<div class="btn-like btn02-s1" onclick="like()">
-			           	<c:choose>
-				           	<c:when test="${result.isLiked eq false}">
-				           		<img src="resources/img/common/ico_heart_no_act.png" alt="좋아요비활성">
-			           		</c:when>
-			           		<c:otherwise>
-				          		<img src="resources/img/common/ico_heart_act.png" alt="좋아요활성">				           			
-			        		</c:otherwise>
-		           		</c:choose>
+			    		<img src="resources/img/common/ico_heart_no_act.png" id="likeImg" alt="좋아요비활성">
 		           	</div>
 		    	</div>
 		    </div>
@@ -382,6 +376,8 @@
 	var loginId = '${sessionScope.loginId}';
 	console.log('loginId => ', loginId);
 	
+	var code_name = '';
+	
 	var crewLeader = '';
 	
 	var application = '';
@@ -390,15 +386,21 @@
 	
 	var is_recruit = '';
 	
+	var likeCrew = 'N';
+	
+	
+    var crew_idx = $('input[name="crew_idx"]').val();
+	
 
 	$(document).ready(function () {
-	    var crew_idx = $('input[name="crew_idx"]').val();
 	    
 	    console.log('crew_idx =>', crew_idx);
 	    
 	    crewDetail();
 	    
 	    crewMemberList();
+	    
+	    likeList();
 	
 	    function crewDetail() {
 	        console.log('크루 데이터 요청');
@@ -459,7 +461,6 @@
 	    
 	    function crewMemberList(){
 			console.log('크루 회원 리스트 요청');
-	        
 	        $.ajax({
 	            type: 'POST',
 	            url: '/crew/memberList',
@@ -476,10 +477,10 @@
 	                    var application = response.application;
 	                    
 	                    // 프로필 이미지 '' 여부 확인해서 이미지 설정 if문 추가 필요
+   	                   /*  var profileImg = '<img src="/photo/' + result.image + '"/>';  */
 	                    var profileImg = '<img src="resources/img/common/profile.png" width="32px"/>';
 	                    
 	                    var genderImg = '';
-	                    
 	                    var content = '';
 
 	                    result.forEach(function(item, idx){
@@ -501,7 +502,7 @@
 		                    }
 		                    
 		                    $('#crew-member-profile').html(content);
-		                  	console.log(item);
+							console.log(item);
 	                    });
 	                    
 	                    // 크루장 체크 => 보여지는 내용 변환
@@ -516,8 +517,6 @@
 					    
 					    // 신청 버튼 체크 함수
 					    crewApplication(application, result);
-					    
-	                   
 	                    
 					    // 로그인 안했거나 크루원이 아니면
 					    $('.crewAccess').click(function(){
@@ -528,7 +527,6 @@
 						    }
 					    });
 					    
-	                   /*  var profileImg = '<img src="/photo/' + result.image + '"/>';  */
 	                }
 	            },
 	            error: function (e) {
@@ -537,13 +535,31 @@
 	        });
 	    }
 	    
+	    function likeList(){
+	    	$.ajax({
+	    		type: 'POST',
+	    		url: '/crew/likeIs',
+	    		data: {'loginId': loginId,
+						'crew_idx' : crew_idx},
+	    		dateType: 'JSON',
+	    		success: function(response){
+	    			
+	    			if(response.success){
+	    				likeCrew = 'Y';
+		    			console.log('좋아요 리스트에서 회원 있음');
+		    			$('#likeImg').attr('src', 'resources/img/common/ico_heart_act.png');
+	    			}
+	    			// DB에서 찾아온 count가 1이면 하트로 0이면 빈 하트로
+	    		},error: function(e){
+	    			console.log('좋아요 찾다가 =>', e);
+	    		}
+	    	});
+	    }
+	    
 	    
 	});
 
 	function crewApplication(application, result){
-		console.log('실행됨?=>', application);		
-		
-		console.log('크루장임 =>', result);
 		
 		 // 신청 리스트에서 로그인 ID와 일치하는 신청 내역이 있는지 확인
         var isApplied = application.some(app => app.id === loginId);
@@ -560,16 +576,31 @@
 	        	$('#crew-btn-01').html('러닝크루 신청하기');
 	        	$('#crew-btn-01').attr('disabled', true); // 버튼 비활성화
 	        	
+	        	
 	        } else if (crewone.includes(loginId)) { // 로그인 o + 크루원 => 완료
 	            $('#crew-btn-01').html('크루 탈퇴하기');
 	            $('#crew-btn-01').css({'border' : '1px solid var(--main-color)', 'color' : 'var(--main-color)', 'background' : '#fff'});
+	            $('#crew-btn-01').click(function(){
+		        	code_name = 'C105';
+		        	crewMemberUpdate();
+	        	});
+	            
 	            
 	        } else if (isApplied) { // 로그인 o, 신청자 => 완료
 	            $('#crew-btn-01').html('신청 취소하기');
 	        	$('#crew-btn-01').css({'border' : '1px solid var(--main-color)', 'color' : 'var(--main-color)', 'background' : '#fff'});
+	        	$('#crew-btn-01').click(function(){
+		        	code_name = 'C104';
+		        	crewMemberUpdate();
+	        	});
+	        	
 	        	
 	        } else { // 로그인 o, 크루원 x => 완료
 	            $('#crew-btn-01').html('러닝크루 신청하기');
+	        	$('#crew-btn-01').click(function(){
+		        	code_name = 'C100';
+		        	crewMemberUpdate();
+	        	});
 	        }
 			 
 		 }
@@ -579,22 +610,58 @@
 	}
 	
 	// 크루 버튼 클릭 시 신청, 취소, 탈퇴 요청 함수
-	function crewRequest(){
+	function crewMemberUpdate(){
+		
+		console.log('버튼 눌렸을 때 =>', likeCrew);
 		
 		$.ajax({
 			type: 'POST',
-			url: '/crew/write',
-			data: {},
+			url: '/crew/applicationWrite',
+			data: {'loginId' : loginId,
+					'crew_idx' : crew_idx,
+					'code_name' : code_name},
 			dataType: 'JSON',
-			success: function(data){
-				console.log('성공');
+			success: function(response){
+				console.log('성공?????');
+				
+				if(response.success){
+					/* crewMemberList(); */
+					alert(response.msg);
+				}
+				
 			},error: function(e){
 				console.log('버튼 요청 시 에러남 =>', e);
 			}
 		});
 		
 	}
-	
+
+	function like(){
+		console.log('좋아요 버튼');
+		
+		if(loginId != null && loginId != ''){
+			$.ajax({
+				type: 'POST',
+				url: '/crew/likeRequest',
+				data: {'loginId': loginId,
+						'crew_idx' : crew_idx,
+						'likeCrew' : likeCrew},
+				dataType: 'JSON',
+				success: function(response){
+					console.log('좋아요 눌림');
+					console.log(response.like);
+					alert(response.msg);
+				},error: function(e){
+					console.log('좋아요 에러 => ', e);
+				}
+			});
+			
+		}else{
+			alert('로그인하세요');
+		}
+		
+		
+	}
 	
 
 </script>

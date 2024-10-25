@@ -293,7 +293,80 @@ public class CrewService {
 	public List<CrewMemberDTO> crewApplicationList(int crew_idxs) {
 		return crew_dao.crewApplicationList(crew_idxs);
 	}
+
+	public boolean crewApplicationWrite(Map<String, Object> parmeterMap) {
+		
+		int row = crew_dao.crewApplicationWrite(parmeterMap);
+		
+		if(row > 0) {
+			logger.info("크루 신청 =>" + row);
+			crewHistoryWrite(parmeterMap);
+			
+			return true;
+		}
+		
+		return false;
+	}
+
+	public boolean crewApplicationCancel(Map<String, Object> parmeterMap) {
+		
+		int row = crew_dao.crewApplicationCancel(parmeterMap);
+		
+		if(row > 0) {
+			logger.info("크루 신청 취소 => " + row);
+			crewHistoryWrite(parmeterMap);
+			return true;
+		}
+		
+		return false;
+	}
+
+
+	public boolean crewMemberCencel(Map<String, Object> parmeterMap) {
+		
+		int row = crew_dao.crewMemberCencel(parmeterMap);
+		
+		if(row>0) {
+			logger.info("크루 탈퇴 =>" + row);
+			crewHistoryWrite(parmeterMap);
+			return true;
+		}
+		
+		return false;
+	}
+
 	
+	// 크루 멤버 히스토리
+	private void crewHistoryWrite(Map<String, Object> parmeterMap) {
+		int row = crew_dao.crewHistoryWrite(parmeterMap);
+		logger.info("크루 히스토리 => " + row);
+		
+		
+	}
+
+	public int likeIs(Map<String, Object> parmeterMap) {
+		return crew_dao.likeIs(parmeterMap);
+	}
+
+	public boolean likeRequest(Map<String, Object> parmeterMap) {
+		
+		int row = crew_dao.likeRequest(parmeterMap);
+		if(row>0) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	public boolean likeCencel(Map<String, Object> parmeterMap) {
+		
+		int row = crew_dao.likeCencel(parmeterMap);
+		if(row>0) {
+			return true;
+		}
+		
+		return false;
+	}
 
     
 }

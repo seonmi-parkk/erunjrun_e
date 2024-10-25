@@ -195,5 +195,147 @@ public class CrewController {
 		
 	}
 	
+	@PostMapping(value="/applicationWrite")
+	public Map<String, Object> crewApplicationWrite(String loginId, String crew_idx, String code_name){
+		
+		logger.info("loginId =>" + loginId);
+		logger.info("crew_idx =>" + crew_idx);
+		logger.info("code_name =>" + code_name);
+
+		Map<String, Object> resultMap = new HashMap<>();
+		int crew_idxs = Integer.parseInt(crew_idx);
+		
+		Map<String, Object> parmeterMap = new HashMap<>();
+		parmeterMap.put("id", loginId);
+		parmeterMap.put("crew_idx", crew_idxs);
+		parmeterMap.put("code_name", code_name);
+
+		boolean success = false;
+		String msg = "";
+		
+		// 크루 신청
+		if(code_name.equals("C100")) {
+			success = crew_service.crewApplicationWrite(parmeterMap);
+			msg = "크루 신청";
+			logger.info("크루신청");
+		// 크루 신청 취소
+		}else if(code_name.equals("C104")) {
+			success = crew_service.crewApplicationCancel(parmeterMap);
+			msg = "신청 취소";
+			logger.info("크루신청 취소");
+		// 크루 탈퇴
+		}else if(code_name.equals("C105")) {
+			success = crew_service.crewMemberCencel(parmeterMap);
+			msg = "크루 탈퇴";
+			logger.info("크루탈퇴");
+			
+		// 크루 승인
+		}else if(code_name.equals("C101")) {
+			logger.info("크루승인");
+		// 크루 미승인
+		}else if(code_name.equals("C102")) {
+			logger.info("크루 미승인");
+		// 크루 퇴출
+		}else{
+			logger.info("크루퇴출");
+		}
+		
+//		switch (code_name) {
+//		case "C100": // 크루 신청
+//			success = crew_service.crewApplicationWrite(parmeterMap);
+//			break;
+//		
+//		case "C104": // 크루 신청 취소
+//			break;
+//
+//		case "C105": // 크루 탈퇴
+//			break;
+//			
+//		case "C101": // 크루 승인
+//			break;
+//			
+//		case "C102": // 크루 미승인
+//			break;
+//			
+//		case "C103": // 크루 퇴출
+//			break;
+//		}
+		
+		resultMap.put("success", success);
+		resultMap.put("msg", msg);
+		
+		return resultMap;
+	}
+	
+	@PostMapping(value="/likeIs")
+	public Map<String, Object> likeIs(String loginId, String crew_idx){
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		logger.info("crew_idx =>"+crew_idx);
+		logger.info("loginId =>"+loginId);
+		
+		if(loginId != null && loginId != "") {
+			int crew_idxs = Integer.parseInt(crew_idx);
+			
+			Map<String, Object> parmeterMap = new HashMap<>();
+			
+			parmeterMap.put("id", loginId);
+			parmeterMap.put("crew_idx", crew_idxs);
+			
+			int count = crew_service.likeIs(parmeterMap);
+			
+			if(count > 0) {
+				resultMap.put("like", count);
+				resultMap.put("success", true);
+			}
+			
+			
+			return resultMap;
+		}else{
+			resultMap.put("seccess", false);
+		}
+		
+		
+		return resultMap;
+	}
+	
+	@PostMapping(value="/likeRequest")
+	public Map<String, Object> likeRequest(String loginId, String crew_idx, String likeCrew){
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		logger.info("crew_idx =>"+crew_idx);
+		logger.info("loginId =>"+loginId);
+		logger.info("likeCrew =>"+likeCrew);
+
+		String msg = "";
+		boolean success = false;
+		
+		int crew_idxs = Integer.parseInt(crew_idx);
+		
+		Map<String, Object> parmeterMap = new HashMap<>();
+		
+		parmeterMap.put("id", loginId);
+		parmeterMap.put("crew_idx", crew_idxs);
+		
+		if(likeCrew.equals("N")) {
+			success = crew_service.likeRequest(parmeterMap);
+			
+		}else {
+			success = crew_service.likeCencel(parmeterMap);
+		}
+		
+		if(success) {
+			msg = "좋아요 성공";
+		}else {
+			msg="좋아요 실패";
+		}
+		
+		resultMap.put("success", success);
+		resultMap.put("msg", msg);
+		
+		return resultMap;
+	}
+	
 	
 }
