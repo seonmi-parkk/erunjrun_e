@@ -13,7 +13,14 @@ public class MemberDTO {
 	private String phone;
 	private int point;
 	private String use_yn;
+	private String profile_use;
 	
+	public String getProfile_use() {
+		return profile_use;
+	}
+	public void setProfile_use(String profile_use) {
+		this.profile_use = profile_use;
+	}
 	private String image;
 	private String icon_image;
 	

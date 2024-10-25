@@ -11,16 +11,17 @@
 		member.id,
 		member.email,
 		member.pw,
-		profile.image AS image,
+		profile.image AS
+		image,
 		member.icon_image
 		FROM
 		member
 		LEFT JOIN
-		profile ON member.id = profile.id
+		profile ON member.id =
+		profile.id
 		WHERE
 		member.id = #{id}
 	</select>
-
 
 	<select id="profileDetail"
 		resultType="com.erunjrun.member.dto.MemberDTO">
@@ -70,4 +71,28 @@
 		'Y' WHERE id = #{id}
 	</update>
 
+	<update id="updateProfile_use" parameterType="map">
+		UPDATE member
+		SET
+		profile_use = #{profile_use}
+		WHERE id = #{id}
+	</update>
+
+	<insert id="firstExerciseProfile" parameterType="map">
+		INSERT INTO profile (
+        id,
+        content,
+        exercise_min,
+        exercise_dis,
+        exercise,
+        mate
+    ) VALUES (
+        #{id},
+        #{content},
+        #{exercise_min},
+        #{exercise_dis},
+        #{exercise},
+        #{mate}
+    )
+	</insert>
 </mapper>   	

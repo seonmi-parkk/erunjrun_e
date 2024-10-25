@@ -27,7 +27,7 @@ public class MypageService {
 		return member;
 	}
 	
-	public ProfileDTO profileViewImage(String id) {
+	public ProfileDTO ProfileImage(String id) {
 		ProfileDTO profile = mypageDAO.ProfileImage(id); // 프로필 이미지 정보 조회
 		return profile;
 	}
@@ -46,6 +46,16 @@ public class MypageService {
 
 	public void setUseY(String id) {
 		mypageDAO.setUseY(id);
+	}
+
+	public void updateProfile_use(String id, String Profile_use) {
+		mypageDAO.updateProfile_use(id, Profile_use);
+		
+	}
+
+	public void firstExerciseProfile(Map<String, String> params) {
+		mypageDAO.firstExerciseProfile(params);
+		
 	}
 	
 }

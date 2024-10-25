@@ -69,11 +69,10 @@ body {
 </style>
 </head>
 <body>
-
 	<div class="container">
 		<div class="profile-header">
 			<img src="/photo/${sessionScope.profileImage}" alt="Profile Image">
-			<h2>${member.nickname}</h2>
+			<h2>${sessionScope.loginId}</h2>
 		</div>
 
 		<div class="message">
@@ -82,13 +81,12 @@ body {
 		</div>
 
 		<div class="button-container">
-			<button class="btn" onclick="location.href='firstExerciseProfile'">최초
+			<button class="btn" onclick="location.href='firstExerciseProfileView'">최초
 				작성하기</button>
 		</div>
 	</div>
 
 	<script>
-		// 추가적인 JavaScript 코드가 필요할 경우 여기에 작성
 	</script>
 </body>
 </html>
