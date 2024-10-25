@@ -134,6 +134,11 @@ button:hover {
 	</div>
 
 	<script>
+	var msg = '${msg}';
+	if (msg != '') {
+		alert(msg);
+	}
+	
         // ID 중복 체크
         $('#idCheck').click(function() {
             var id = $('input[name="id"]').val();
@@ -270,11 +275,6 @@ button:hover {
 				event.preventDefault();
 			}
 		});
-		
-		var msg = '${msg}';
-		if (msg != '') {
-			alert(msg);
-		}
 		
     </script>
 </body>

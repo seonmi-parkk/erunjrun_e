@@ -105,12 +105,16 @@ button:hover {
 			</div>
 			<button type="submit">LOGIN</button>
 			<div class="links">
-				<a href="join">회원가입</a> | <a href="findId">아이디/비밀번호 찾기</a><a href="adminLogin">관리자전용</a>
+				<a href="joinView">회원가입</a> | <a href="findIdView">아이디/비밀번호 찾기</a><a href="adminLogin">관리자전용</a>
 			</div>
 		</form>
 	</div>
 
 	<script>
+	var msg = '${msg}';
+	if (msg != '') {
+		alert(msg);
+	}
 		
 		// 폼 제출 시 쿠키에 ID 저장
 		$('form').on('submit', function() {
@@ -155,11 +159,6 @@ button:hover {
 			}
 		});
 
-		// 경고 메시지 처리
-		var msg = '${msg}';
-		if (msg != '') {
-			alert(msg);
-		}
 	</script>
 </body>
 </html>

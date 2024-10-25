@@ -82,7 +82,7 @@ body {
 		</div>
 
 		<div class="button-container">
-			<button class="btn" onclick="location.href='profileWrite.do'">최초
+			<button class="btn" onclick="location.href='firstExerciseProfile'">최초
 				작성하기</button>
 		</div>
 	</div>

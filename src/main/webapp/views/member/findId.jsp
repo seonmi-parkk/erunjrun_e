@@ -64,7 +64,7 @@
 <body>
     <div class="container">
         <h3>아이디 찾기</h3>
-        <form id="findForm" action="findIdCheck" method="post">
+        <form id="findIdForm" action="findId" method="post">
             <div class="form-group">
                 <label for="name">이름</label>
                 <input type="text" name="name" id="name" placeholder="이름" required>
