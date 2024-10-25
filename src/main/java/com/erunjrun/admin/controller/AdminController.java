@@ -110,13 +110,13 @@ public class AdminController {
 		int offset = (page_ - 1) * cnt_;
 		int totalPages = admin_service.count(cnt_);
 		
-		List<AdminDTO> list =  admin_service.memberlist(opt, keyword, limit, offset);
-		logger.info("페이지"+list);
+		
+	
 		 
 		Map<String,Object> result = new HashMap<String, Object>();
 		result.put("totalPages", totalPages);
 		result.put("currpage", page);
-		result.put("list", list);
+		result.put("list", admin_service.memberlist(opt, keyword, limit, offset));
 		
 		return result;
 	  
@@ -164,11 +164,12 @@ public class AdminController {
 		  return "admin/memberDetail";
 	  }
 	  
+	  
+//		권한처리	  
+	  
 	  @GetMapping(value = "/memberRight")
 	  public String right(String nickname,Model model) {
 		  logger.info(nickname);
-
-		
 		  String id = admin_service.right(nickname);
 		  model.addAttribute("info",nickname);
 		  model.addAttribute("id",id);
@@ -176,51 +177,76 @@ public class AdminController {
 		  return "admin/right";
 	  }
 	  
-	  
 	  @GetMapping(value = "/memberRightWrite")
 	  public String rightwrite(@RequestParam Map<String, String> param, Model model,HttpSession session) {
-
 		 String admin_id = (String)session.getAttribute("loginId");
 		 logger.info(admin_id);
 		 param.put("admin_id", admin_id);// 관리자 로그인 ID 저장
 		 admin_service.rightwrite(param);
 		 
 		  return"redirect:/adminMember";
-
-		 
 	  }
-	
-	  
 	  
 	  @GetMapping(value = "/memberRightDetail")
-
 	  public String rightdetail(String id,Model model) {
 		  AdminDTO dto = admin_service.rightdetail(id);
 		  model.addAttribute("info",dto);
 		  
 		  return"admin/rightDetail";
-
 	  }
 	  
 	  @GetMapping(value = "/memberRightUpdate")
 	  public String rightupdate(String id, Model model) {
-		  
 		  AdminDTO dto = admin_service.rightdetail(id);
 		  model.addAttribute("info",dto);
-		  
-		  
+	
 		  return"admin/rightUpdate";
 	  }
 	  
 	  @PostMapping(value = "/memberRightUpdate")
-	  public String rightupdate( @RequestParam Map<String, String> param
-			  ,Model model) {
-		
+	  public String rightupdate( @RequestParam Map<String, String> param,Model model) {
 		  admin_service.rightupdate(param);
 		  
-		  return"redirect:/memberRightDetail?="+param.get("id");
-
-	
+		  return"redirect:/memberRightDetail?id="+param.get("id");
+	  }
+	  
+	  
+//		신고처리		  
+	  
+	  
+	  @GetMapping(value = "/adminReport")
+	  public String report() {
+		  return "admin/reportList";
+	  }
+	  
+	  @GetMapping(value = "/adminReportList")
+	  public Map<String,Object> reportlist(String page, String cnt) {
+	  	int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+		int limit = cnt_;
+		int offset = (page_ - 1) * cnt_;
+		int totalPages = admin_service.reportcount(cnt_);
+		
+		Map<String,Object> result = new HashMap<String, Object>();
+		List<AdminDTO> list =  admin_service.reportlist(limit, offset);
+		logger.info("페이지"+list);
+		result.put("totalPages", totalPages);
+		result.put("currpage", page);
+		result.put("list", list);
+		  
+		  return result;
+	  }
+	  
+	  @GetMapping(value = "/adminReportDetail")
+	  public String reportdetail() {
+		  return "admin/reportList";
 	  }
 
+	  @GetMapping(value = "/adminReportUpdate")
+	  public String reportupdate() {
+		  return "";
+	  }
+	  
+	  
+	  
 }

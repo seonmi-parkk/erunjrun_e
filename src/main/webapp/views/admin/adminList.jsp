@@ -10,19 +10,36 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-	.inner{
-    margin-left: 300px;
+	fixed_footer {
+    position: fixed; /* 또는 fixed */
+    bottom: 0;
+    z-index: 0;
+    width: 100%;
+    margin-top: 20px;
+    
 	}
-	#searchForm{
-	margin-left: 300px;
+	
+
+	.inner{
+    margin-left: 550px;
+    margin
+	}
+	.title1{
+	margin-top: 100px;
 	
 	}
+	
+	#searchForm{
+	margin-left: 0px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	}
 	.
-	.title2#admin_name {
+	.title2{
         color: var(--font-color);
         font-family: "Pretendard Variable", sans-serif;
         font-size: 20px;
-        font-weight: 700;
+        font-weight: 800;
     }
 
 	 #catagory {
@@ -35,32 +52,30 @@
     position: fixed;
     top: 80; /* 화면 상단에 고정 */
     left: 50; /* 화면 왼쪽에 고정 */
-    width: 200px; /* 원하는 너비 설정 */
+    width: 400px; /* 원하는 너비 설정 */
     padding: 10px;
+    z-index: 999;
    /* background-color: #f0f0f0;  배경색 설정 */
     border-right: 1px solid #ccc; /* 오른쪽에 구분선 */
     height: 100%; /* 전체 높이 설정 */
     overflow-y: auto; /* 글이 길면 스크롤 가능하도록 설정 */
-	}
-
-	.fixed-footer {
-	    position: fixed;  /* 고정 위치 */
-	    bottom: 0;       /* 하단에 고정 */
-	    left: 0;         /* 왼쪽에 고정 */
-	    z-index: 1;   /* 다른 요소 위에 보이도록 설정 */
+    
 	}
 	.image img {
-    width: 50%;  /* 또는 원하는 픽셀 값 */
-    height: auto; /* 비율을 유지 */
+    width: 30%;  /* 또는 원하는 픽셀 값 */
+    height: auto;
+    margin-bottom: 20px; /* 비율을 유지 */
 	}
-    
-  
+	.btn02-l{
+	margin-top: 0px;
+	margin-bottom: 50px;
+	}
   
     
     
 </style>
 </head>
-<body>
+<body class="all">
 	<!-- 헤더 -->
 	<jsp:include page="../header.jsp"/> 
 	

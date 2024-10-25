@@ -10,13 +10,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-.inner{
-    margin-left: 300px;
-	}
-	#searchForm{
-	margin-left: 300px;
-	
-	}
 	.table-container{
 	 display: block; 
 	justify-content: space-between;  /* 테이블 사이에 공간 배분 */
@@ -28,52 +21,92 @@
     margin-top: 100px;    /* 테이블 사이 간격을 20px로 설정 */
     padding: 10px;          /* 테이블 내부 여백 */
 	}
+	#searchForm{
+	margin-left: 300px;
 	
+	}
+	#teid{
+	margin-top: 50px;
+	}
+	.title1{
+	margin-top: 120;
+	}
+	#form{
+	margin-top: 50px;
+	margin-bottom: 50px;
+	}
 	
-	
+	.btn01-l{
+	margin-top: 50px;
+	margin-left: 680px;
+	}
+	.
 	.title2 {
         color: var(--font-color);
         font-family: "Pretendard Variable", sans-serif;
         font-size: 20px;
-        font-weight: 700;
-    }
-    #nick{
-    	color: var(--font-color);
-        font-family: "GmarketSans", sans-serif;
-        font-size: 25px;
-        font-weight: 700;
-    
-    }
-    
-	.title3 {
-        color: var(--font-color);
-        font-family: "Pretendard Variable", sans-serif;
-        font-size: 20px;
-        font-weight: 500;
+        font-weight: 900;
     }
 
-	 #catagory {
-        color: var(--font-color);
-        font-family: "Pretendard Variable", sans-serif;
-        font-size: 16px;
-        font-weight: 500;
+	.input-container {
+    display: flex;        /* Flexbox 사용 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-bottom: 20px;
+    margin-top: 20px;
+	}
+	
+	.input-container p {
+	    margin-right: 20px;  /* 입력창과의 간격 조정 */
+	}
+    .radio{
+    	 transform: scale(1.5);
     }
+    
+    #content{
+    	width: 750px; /* 너비를 250픽셀로 설정 */
+        height: 350px;
+        resize: vertical; /* 높이를 50픽셀로 설정 */
+        font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
+        padding: 10px; /* 내부 여백을 10픽셀로 설정 */
+    
+    }
+    
+    #start_date{
+    	width: 200px;
+    }
+    #end_date{
+    	width: 200px;
+    }
+    
+    
     .fixed-left {
     position: fixed;
     top: 80; /* 화면 상단에 고정 */
     left: 50; /* 화면 왼쪽에 고정 */
-    width: 200px; /* 원하는 너비 설정 */
+    width: 400px; /* 원하는 너비 설정 */
     padding: 10px;
+    z-index: 999;
    /* background-color: #f0f0f0;  배경색 설정 */
     border-right: 1px solid #ccc; /* 오른쪽에 구분선 */
     height: 100%; /* 전체 높이 설정 */
     overflow-y: auto; /* 글이 길면 스크롤 가능하도록 설정 */
+    
 	}
+	
+	.inner{
+    margin-left: 550px;
+    
+	}
+	
 	.image img {
-    width: 50%;  /* 또는 원하는 픽셀 값 */
-    height: auto; /* 비율을 유지 */
+    width: 30%;  /* 또는 원하는 픽셀 값 */
+    height: auto;
+    margin-bottom: 20px; /* 비율을 유지 */
 	}
-
+	#dot{
+	font-size: 34px;
+	color: #FB7E3A;
+	}
 	
 </style>
 </head>
@@ -86,6 +119,8 @@
 	<div class="inner">
 	
 	<p class="title1" >회원정보</p>
+	
+	
 	<p class="title1" id="nick" >${info.nickname}님</p>
 	
 	
@@ -113,15 +148,49 @@
 	    <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
 	    
 	    </div>
+	    
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">아이디</p>
+			<p class="title2" id="admin_name"> ${info.id}</p>
+		</div>	
+
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">닉네임</p>
+			<p class="title2" id="admin_name">${info.nickname}</p>
+		</div>	
 		
-	 	<p class="title2">아이디      ${info.id}</p>
-	 	<p class="title2">닉네임      ${info.nickname}</p>
-	 	<p class="title2">이메일      ${info.email}</p>
-	 	<p class="title2">주소      ${info.address}</p>
-	 	<p class="title2">성별      ${info.gender}</p>
-	 	<p class="title2">생년월일      ${info.birth}</p>
-	 	<p class="title2">전화번호     ${info.phone}</p>
-	
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">이메일</p>
+			<p class="title2" id="admin_name"> ${info.id}</p>
+		</div>	
+		
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">주소</p>
+			<p class="title2" id="admin_name"> ${info.address}</p>
+		</div>	
+		
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">성별</p>
+			<p class="title2" id="admin_name">${info.gender}</p>
+		</div>	
+		
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">생년월일</p>
+			<p class="title2" id="admin_name">${info.birth}</p>
+		</div>	
+		
+	    <div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="admin_name">전화번호</p>
+			<p class="title2" id="admin_name">${info.phone}</p>
+		</div>	
+		
 		
 		<div class="table-container">
 	 	<table>

@@ -10,43 +10,92 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-.inner{
-    margin-left: 300px;
-	}
 	#searchForm{
 	margin-left: 300px;
 	
 	}
+	#teid{
+	margin-top: 50px;
+	}
+	.title1{
+	margin-top: 120;
+	}
+	#form{
+	margin-top: 50px;
+	margin-bottom: 50px;
+	}
+	
+	.btn01-l{
+	margin-top: 50px;
+	margin-left: 680px;
+	}
 	.
-	.title2#admin_name {
+	.title2 {
         color: var(--font-color);
         font-family: "Pretendard Variable", sans-serif;
-        font-size: 20px;
-        font-weight: 700;
+        font-size: 24px;
+        font-weight: 900;
     }
 
-	 #catagory {
-        color: var(--font-color);
-        font-family: "Pretendard Variable", sans-serif;
-        font-size: 16px;
-        font-weight: 500;
+	.input-container {
+    display: flex;        /* Flexbox 사용 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-bottom: 20px;
+    margin-top: 20px;
+	}
+	
+	.input-container p {
+	    margin-right: 20px;  /* 입력창과의 간격 조정 */
+	}
+    .radio{
+    	 transform: scale(1.5);
     }
+    
+    #content{
+    	width: 750px; /* 너비를 250픽셀로 설정 */
+        height: 350px;
+        resize: vertical; /* 높이를 50픽셀로 설정 */
+        font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
+        padding: 10px; /* 내부 여백을 10픽셀로 설정 */
+    
+    }
+    
+    #start_date{
+    	width: 200px;
+    }
+    #end_date{
+    	width: 200px;
+    }
+    
+    
     .fixed-left {
     position: fixed;
     top: 80; /* 화면 상단에 고정 */
     left: 50; /* 화면 왼쪽에 고정 */
-    width: 200px; /* 원하는 너비 설정 */
+    width: 400px; /* 원하는 너비 설정 */
     padding: 10px;
+    z-index: 999;
    /* background-color: #f0f0f0;  배경색 설정 */
     border-right: 1px solid #ccc; /* 오른쪽에 구분선 */
     height: 100%; /* 전체 높이 설정 */
     overflow-y: auto; /* 글이 길면 스크롤 가능하도록 설정 */
+    
 	}
+	
+	.inner{
+    margin-left: 550px;
+    height: 890px;
+	}
+	
 	.image img {
-    width: 50%;  /* 또는 원하는 픽셀 값 */
-    height: auto; /* 비율을 유지 */
+    width: 30%;  /* 또는 원하는 픽셀 값 */
+    height: auto;
+    margin-bottom: 20px; /* 비율을 유지 */
 	}
-
+	#dot{
+	font-size: 34px;
+	color: #FB7E3A;
+	}
 	
 </style>
 </head>
@@ -59,10 +108,10 @@
 	<div class="inner">
 	
 	<p class="title1" >회원정보</p>
-	<p class="title1" >${info.nickname}님</p>
+	<p class="title1" id="teid">${info.nickname}님</p>
 	
 	
-		 <div class="fixed-left">
+		<div class="fixed-left">
 	    <div class="image">
 		    <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
 	    </div>
@@ -87,21 +136,25 @@
 	    
 	    </div>
 		
-	 
-	  	
-				<p class="title2" id="admin_name">카테고리${info.content}</p>
-					
+	 		<div class="input-container">
+	  			<p class="title2" id="dot">•</p>
+				<p class="title2" id="admin_name">카테고리</p>
+				<p class="title2" id="admin_name">${info.content}</p>
+			</div>	
+			
+	 		<div class="input-container">
+	  			<p class="title2" id="dot">•</p>
+				<p class="title2" id="admin_name">정지기간</p>
+				<p class="title2" id="admin_name">${info.start_date} ~ ${info.end_date}</p>
+			</div>	
+			
+	 		<div class="input-container">
+	  			<p class="title2" id="dot">•</p>
+				<p class="title2" id="admin_name">정지내용</p>
+				<p class="title2" id="admin_name">${info.ban_content}</p>
+			</div>	
 			
 						
-			
-				<p class="title2" id="admin_name">정지기간${info.start_date} ~ ${info.end_date}</p>
-			
-					
-			
-				
-			
-				<p class="title2" id="admin_name">정지내용 ${info.ban_content}</p>
-			
 				
 				
 			

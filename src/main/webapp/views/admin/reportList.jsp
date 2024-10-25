@@ -109,28 +109,19 @@
 	    
 	    </div>
 		
-		<div class="btn02-l" onclick="location.href='adminMember'">일반회원</div> <!-- 클릭시 색깔변경 -->
-	    <div class="btn03-l" onclick="location.href='admin'">관리자</div>
+		<div class="btn02-l" onclick="location.href='adminMember'">전체</div> <!-- 클릭시 색깔변경 -->
+	    <div class="btn03-l" onclick="location.href='admin'">게시글</div>
+	    <div class="btn03-l" onclick="location.href='admin'">댓글</div>
 	    
-	    <form id="searchForm" onsubmit="return false;">
-		    <select id="searchOption">
-		        <option value="id">아이디</option>
-		        <option value="nickname">닉네임</option>
-		        <option value="email">이메일</option>
-		    </select>
-		    <input class="input-txt-l" type="text"  id="searchKeyword" placeholder="검색어를 입력하세요"/>
-		    <input class="btn-sch" type="button" onclick="pageCall(1)" value="검색"/>
-	   	</form>
 	   	
 		 <table>
 			<thead>
 			<tr>
-				<th>아이디</th>
-				<th>닉네임</th>
-				<th>이메일</th>
-				<th>권한</th>
-				<th>신고누적수</th>
-				<th>가입일시</th>
+				<th>카테고리</th>
+				<th>작성자</th>
+				<th>처리자</th>
+				<th>처리여부</th>
+				<th>작성일자</th>
 			</tr>
 		</thead>
 		 	<tbody id="list">
@@ -201,7 +192,7 @@
 		 for (var view of list) {
 			content +='<tr>';
 			if (view.report_status == 'N') {
-                content += '<td style="color: black;">'+view.id+'</td>';
+                content += '<td style="color: black;">'+view.content+'</td>';
             } else {
                 content += '<td style="color: blue;">'+view.id+'</td>';
             }

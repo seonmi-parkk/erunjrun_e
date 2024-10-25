@@ -72,29 +72,21 @@ public class AdminService {
 		
 		return admin_dao.memberdetail(id);
 	}
+	
+	
+//	권한처리
 
 	public List<AdminDTO> ban(String id) {
 		
 		return admin_dao.ban(id);
 	}
-
 	
 	public String right(String nickname) {
 		
 		return admin_dao.right(nickname);
 	}
 
-
 	public void rightwrite(Map<String, String> param) {
-		String code_name =param.get("code_name");
-		 String admin_id_ =param.get("admin_id");
-		 String id =param.get("id");
-		 String start_date =param.get("start_date");
-		 String end_date =param.get("end_date");
-		 String content =param.get("content");
-		 admin_dao.rightwrite(param);
-		 
-		 logger.info(code_name+admin_id_+id+start_date+end_date+content);
 		
 	}
 
@@ -106,6 +98,20 @@ public class AdminService {
 	public void rightupdate(Map<String, String> param) {
 		admin_dao.rightupdate(param);
 		
+	}
+	
+	
+	
+	
+
+	public List<AdminDTO> reportlist(int limit, int offset) {
+		
+		return admin_dao.reportlist(limit,offset);
+	}
+
+	public int reportcount(int cnt_) {
+		
+		return admin_dao.reportcount(cnt_);
 	}
 
 
