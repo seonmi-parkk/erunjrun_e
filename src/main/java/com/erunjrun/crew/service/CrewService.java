@@ -289,6 +289,10 @@ public class CrewService {
 		
 		return crewMemberList;
 	}
+
+	public List<CrewMemberDTO> crewApplicationList(int crew_idxs) {
+		return crew_dao.crewApplicationList(crew_idxs);
+	}
 	
 
     

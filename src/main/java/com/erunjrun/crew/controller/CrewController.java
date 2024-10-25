@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -186,7 +184,11 @@ public class CrewController {
 		int crew_idxs = Integer.parseInt(crew_idx); 
 		
 		List<CrewMemberDTO> crewMemberList = crew_service.crewMemberList(crew_idxs);
+		
+		List<CrewMemberDTO> crewApplicationList = crew_service.crewApplicationList(crew_idxs);
+		
 		resultMap.put("result", crewMemberList);
+		resultMap.put("application", crewApplicationList);
 		resultMap.put("success", true);
 		
 		return resultMap;
