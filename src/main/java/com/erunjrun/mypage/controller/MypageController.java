@@ -27,16 +27,17 @@ import com.erunjrun.mypage.service.MypageService;
 public class MypageController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
-	
-	@Autowired MypageService mypageService;
-	
+
+	@Autowired
+	MypageService mypageService;
+
 	@GetMapping(value = "/profileDetail")
+
 	public String profileDetail(Model model, HttpSession session) {
-		
 		String id = (String) session.getAttribute("loginId");
 		if (id != null) {
 			MemberDTO member = mypageService.profileDetail(id);
-			ProfileDTO profile = mypageService.profileViewImage(id);
+			ProfileDTO profile = mypageService.ProfileImage(id);
 			model.addAttribute("member", member);
 			model.addAttribute("profile", profile);
 
@@ -49,14 +50,13 @@ public class MypageController {
 
 	@GetMapping(value = "/profileUpdateView")
 	public String profileUpdateView(HttpSession session, Model model) {
+
 		String id = (String) session.getAttribute("loginId");
 		if (id != null) {
 			MemberDTO member = mypageService.profileDetail(id);
-			ProfileDTO profile = mypageService.profileViewImage(id);
-			logger.info("Profile image for user {}: {}", id, profile.getImage());
+			ProfileDTO profile = mypageService.ProfileImage(id);
 			model.addAttribute("member", member);
 			model.addAttribute("profile", profile);
-			logger.info("profile image?" + profile.getImage());
 			return "mypage/profileUpdate"; // 수정 페이지로 이동
 		} else {
 			return "main"; // 로그인 페이지로 리다이렉트
@@ -66,18 +66,17 @@ public class MypageController {
 	@PostMapping(value = "/profileUpdate")
 	public String profileUpdate(Model model, @RequestParam Map<String, String> params,
 			@RequestParam("imageFile") MultipartFile imageFile, HttpSession session) {
-		String id = (String) session.getAttribute("loginId");
 
+		String id = (String) session.getAttribute("loginId");
 		if (id != null) {
 			params.put("id", id); // 세션에서 가져온 ID를 params에 추가
-
 			// 이미지 파일 처리
 			if (!imageFile.isEmpty()) {
 				String originalFileName = imageFile.getOriginalFilename();
 				String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
 
 				// 파일 저장 경로
-				String uploadDir = "C:/upload/"; // 실제 경로로 변경해야 함
+				String uploadDir = "C:/upload/"; // 실제 경로
 				Path path = Paths.get(uploadDir + newFileName);
 
 				try {
@@ -89,18 +88,15 @@ public class MypageController {
 					return "member/profileUpdate"; // 에러 페이지로 리다이렉트
 				}
 			}
-
-			logger.info("params : {}", params);
 			mypageService.profileUpdate(params); // 업데이트 호출
-
 			MemberDTO member = mypageService.profileDetail(id);
-			ProfileDTO profile = mypageService.profileViewImage(id);
+			ProfileDTO profile = mypageService.ProfileImage(id);
 			model.addAttribute("profile", profile);
 			model.addAttribute("member", member);
-			return "mypage/profile"; // 프로필 페이지로 리다이렉트
+			return "mypage/profile"; // 프로필 페이지로
 		} else {
-			// 세션에 ID가 없으면 로그인 페이지로 리다이렉트
-			return "main";
+			// 세션에 ID가 없으면 로그인 페이지로
+			return "member/login";
 		}
 	}
 
@@ -109,10 +105,11 @@ public class MypageController {
 		return "mypage/delete";
 	}
 
-	@PostMapping("/memberDelete") // 실제로 delete하는 것이 아니니, 혼동 방지를 위해 post로 작성했습니다!
-	public String memberDelete(@RequestParam String id, @RequestParam String email, @RequestParam String pw, HttpSession session, Model model) {
-		
-		String sessionId = (String) session.getAttribute("loginId");	
+	@PostMapping("/memberDelete") // 실제로 delete하는 것이 아니니, 혼동 방지를 위해 @post로 작성했습니다!
+	public String memberDelete(@RequestParam String id, @RequestParam String email, @RequestParam String pw,
+			HttpSession session, Model model) {
+
+		String sessionId = (String) session.getAttribute("loginId");
 		if (sessionId.equals(id)) {
 			// ID가 세션에 있는지 확인
 			MemberDTO member = mypageService.findSessionId(id);
@@ -131,19 +128,48 @@ public class MypageController {
 		return "main"; // 탈퇴 페이지로 다시 리다이렉트
 	}
 
-	@GetMapping(value = "/firstExerciseProfile")
-	public String firstExerciseProfile(HttpSession session, Model model) {
-		String id = (String) session.getAttribute("loginId"); // 세션에서 로그인 ID 가져오기
+	@GetMapping(value = "/createExerciseProfile")
+	public String createExerciseProfile(HttpSession session, Model model) {
+		String id = (String) session.getAttribute("loginId");
 
 		if (id != null) {
-			model.addAttribute("loginId", id); // 모델에 로그인 ID 추가 (필요시)
-			String profileImage = (String) session.getAttribute("profileImage"); // 세션에서 프로필 이미지 가져오기
-	        model.addAttribute("profileImage", profileImage);
+			// 회원 정보 조회
+			MemberDTO member = mypageService.findSessionId(id);
+			if ("Y".equals(member.getProfile_use())) {
+				// 운동 프로필이 이미 작성된 경우
+				return "mypage/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
+			}
+			model.addAttribute("loginId", id);
+			String profileImage = (String) session.getAttribute("profileImage");
+			model.addAttribute("profileImage", profileImage);
 		} else {
-			model.addAttribute("msg", "로그인이 필요합니다."); // 로그인 필요 메시지
-			return "redirect:/login"; // 로그인 페이지로 리다이렉트
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 
-		return "mypage/firstExerciseProfile"; // 프로필 페이지로 이동
+		return "mypage/createExerciseProfile"; // 최초 프로필 작성 안내 페이지로 이동
+	}
+	
+	@GetMapping(value = "/firstExerciseProfileView")
+	public String firstExerciseProfileView() {
+		return "mypage/firstExerciseProfile";
+	}
+
+	@PostMapping(value = "/firstExerciseProfile")
+	public String firstExerciseProfile(@RequestParam Map<String, String> params, HttpSession session) {
+		String id = (String) session.getAttribute("loginId");
+		if (id != null) {
+			// 운동 프로필 생성 로직 (params를 이용해서 프로필 정보를 DB에 저장)
+			mypageService.firstExerciseProfile(params);
+			mypageService.updateProfile_use(id, "Y"); // 프로필 작성 상태 업데이트
+
+			// 프로필 정보를 DB에 저장하는 로직을 여기에 추가
+		}
+		return "mypage/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
+	}
+	
+	@GetMapping(value = "/ExerciseProfile")
+	public String ExerciseProfile() {
+		return "mypage/ExerciseProfile";
 	}
 }

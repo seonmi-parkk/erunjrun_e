@@ -22,4 +22,8 @@ public interface MypageDAO {
 
 	void setUseY(String id);
 
+	void updateProfile_use(String id, String Profile_use);
+
+	void firstExerciseProfile(Map<String, String> params);
+
 }
