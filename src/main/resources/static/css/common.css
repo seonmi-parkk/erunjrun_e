@@ -64,7 +64,7 @@
 	    width: 100%;
 	    height: 80px;
 	    position: fixed;
-	    z-index: 999;
+	    z-index: 997;
 	    top: 0;
 	    left: 50%;
 	    transform: translateX(-50%);
@@ -803,3 +803,37 @@
 	    opacity: 0;
 	  }
 	}
+	
+	
+	/*운동프로필 레이어팝업*/
+	#profilePopup {
+	    width: fit-content;
+	    top: 80px;
+	    left: 50%;
+	    transform: translateX(-50%);
+		z-index: 996;
+	}
+	#profilePopup .close {
+	    font-size: 40px;
+	    font-weight: 300;
+	    position: absolute;
+	    z-index: 996;
+	    top: 30px;
+	    right: 30px;
+	    display: inline-block;
+	    width: 30px;
+	    height: 30px;
+	    line-height: 27px;
+	    text-align: center;
+	}
+	#profilePopup .modal-content{
+	    padding: 20px 20px;
+	    background: #f8f8f8;
+	    border: none;
+    	border-radius: 0;
+    }
+    #PopupBody {
+    	background: #fff;
+    	border-radius: 10px;
+    }
+    

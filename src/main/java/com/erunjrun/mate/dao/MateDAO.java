@@ -23,7 +23,7 @@ public interface MateDAO {
 
 	int checkLike(String fromUserId, String toUserId);
 
-	MateProfileDTO getProfile(String toUserId, boolean isOpened);
+	MateProfileDTO getProfile(String toUserId);
 
 	int dislike(String fromUserId, String toUserId);
 
