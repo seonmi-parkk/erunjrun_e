@@ -145,6 +145,8 @@ public class MateController {
 		
 		// 전체 유저 위치
 		List<MateProfileDTO> posList = mateService.getPosList(fromUserId);
+		logger.info("posList0 image : "+posList.get(0).getImage());
+		
 		model.addAttribute("posList", posList);
 		
 		return "mate/mateList";

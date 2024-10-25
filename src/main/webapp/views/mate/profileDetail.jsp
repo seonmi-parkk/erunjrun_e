@@ -93,12 +93,20 @@
 	.profileDetail::-webkit-scrollbar-button {
 	    display: none;
 	}
+	.profileDetail .buttons .btn01-s {
+		color: #fff;
+	}
+	.profileDetail .buttons .btn01-s:hover{
+		color: #fff;
+	} 
+	
 </style>
 </head>
 <body>
 	<div class="profileDetail">
 		<!-- check!! 프로필 주인 id 정보 나중에 바꿔줘야 함. -->
 		<input type="hidden" name="id" value="${profileDto.id}"/>
+	    <div class="user-info">
  	        <div>
  	        	<!-- check!!  -->
 	           <div class="profile-box" style="background: url('/resources/img/icon/${profileDto.icon_image}') center center / 100% 100% no-repeat;">
@@ -121,10 +129,10 @@
 	       			<c:when test="${result.isBlocked eq false}">
 		       			<c:choose>
 		       				<c:when test="${result.MateAppl eq 'apply'}">
-					           <a class="btn01-s" href="">러닝메이트 신청중</a> <!-- check!! mypage로 이동 -->
+					           <a class="btn01-s" >러닝메이트 신청중</a> <!-- check!! mypage로 이동 -->
 							</c:when>
 		       				<c:when test="${result.MateAppl eq 'recieve'}">
-					           <a class="btn01-s" href="">러닝메이트 신청수락</a> <!-- check!! mypage로 이동 -->
+					           <a class="btn01-s">러닝메이트 신청수락</a> <!-- check!! mypage로 이동 -->
 							</c:when>
 		       				<c:when test="${result.MateAppl eq 'none'}">
 					           <div class="btn-mate-appl btn01-s">러닝메이트 신청</div>
