@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>러닝코스 게시글 등록</title>
+    <title>러닝코스 게시글 상세보기</title>
     <link rel="stylesheet" href="/resources/css/common.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -58,7 +58,7 @@
 			  position: relative;
 			  margin: 40px;
     	}
-    	.btn03-s{
+    	#butt{
     		transform: translateY(-35px);
     	}
     	.repo{
@@ -85,8 +85,9 @@
 			  position: relative;
 			  margin: 40px;
 			  display: flex;
-			  padding: 100px;
+			  padding: 20px;
 			  border-radius: 15px;
+			  justify-content: space-between;
     	}
     	#title2-1{
     		margin-left: 0px;
@@ -109,38 +110,70 @@
 			  margin: 40px;
 			  display: flex;
 			  justify-content: space-between;
-			  height: 120px;
+			  min-height: 120px;
 			  
 		}
 		#con{
 			width: 1200px;
-			height: 400px;
+			height: 250px;
 			font-size: 16;
 		}
 		.dat {
 			display: flex;
 			justify-content: space-between;
 		}
-		/*
+		
 		.detail{
-			transform: translate(700px, 20px);
+			    margin-left: 35px;
 		}
 		#bih{
-			transform: translate(740px, -25px);
+			margin-top: -50px;
 		}
+		
 		.nick{
-			transform: translate(-174px, 19px);
+			margin-left: 18;
+   		 	margin-bottom: 7px;
 		}
-		.coco{
-			transform: translate(-217px, 57px);
-		}
+
 		.date{
-			transform: translate(-273px, 92px);
+			margin-left: 50;
+			margin-top: 10px;
 		}
-		*/
+		
 		.supa{
 			margin-left: 60px;
    		 	margin-top: -20px;
+		}
+		.coco{
+			width: 1000;
+   		 	margin-left: 50px;
+		}
+		#ins{
+			margin-left: -28px;
+			margin-top: 34px;
+		}
+		input[type="text"].tex{
+    		margin-left: 30px;
+    		width: 1000px;
+		}
+		.bubu{
+			display: flex;
+			justify-content: space-between;
+			margin: 17px;
+		}
+		.suj1{
+			  background: #eeeeee;
+			  border: solid 1px;
+			  border-color: AEAEAE;
+			  text-align: center;
+			  margin-top: 5px;
+		}
+		.suj2{
+			  background: #eeeeee;
+			  border: solid 1px;
+			  border-color: AEAEAE;
+			  text-align: center;
+			  
 		}
 		
     </style>
@@ -154,24 +187,24 @@
 		<div id="dori">
 			<div class="rectangle-250">
 				<div class="dari">
-					<p class="title2">러닝코스 게시글 입니다.</p>
-					<p class="title3-1"><img style="height: 30;" src="resources/img/run/running_8421565.png" alt="아이콘">  감유자나무</p>
+					<p class="title2">${info.subject}</p>
+					<p class="title3-1"><img style="height: 30;" src="resources/img/run/running_8421565.png" alt="아이콘">  ${info.nickname}</p>
 				</div>
 				<div style="text-align: right;" class="duri">
-					<div class=btn03-s>비활성화</div>					
-					<p class="title3-2">2024. 10. 25</p>
-					<span class="title3-3">조회수 100</span>
+					<div id="butt"class=btn03-s>비활성화</div>					
+					<p class="title3-2">${info.create_date}</p>
+					<span class="title3-3">조회수 ${info.bHit}</span>
 					<span class="title3-4"><img src="resources/img/run/image 14.png" alt="댓글"> 댓글 2</span>
 				</div>
 			</div>
 			<div class="ori">
 				<div id="map" style="width:1200px; height:400px;"></div>
 				<br>
-				<div id="con">아~~~~~~~~~집에 가고싶다~~</div>
+				<div id="con">${info.content}</div>
 			</div>
 	    	<div class="repo">
-				<div id="pre" class="btn-like btn02-s"><img src="resources/img/common/ico_heart_act.png" alt="좋아요"></div>
-		    	<div id="reo" class="btn-like btn02-s" ><img src="resources/img/run/신고.png" alt="신고"></div>	    	
+				<div id="pre" class="btn-like btn02-s" style="padding: 20px;"><img src="resources/img/common/ico_heart_act.png" alt="좋아요" style="height: 17px;"></div>
+		    	<div id="reo" class="btn-like btn02-s" style="padding: 20px;"><img src="resources/img/run/신고.png" alt="신고"></div>	    	
 	    	</div>
 	    	<div class="supa">
 		    	<span id="title2-1" class="title2">등록순</span>
@@ -179,25 +212,34 @@
 	    	</div>
 	    	<div class="sort">
  				<div>
-		    		<div class="nick"><img style="height: 30;" src="resources/img/run/running_8421565.png" alt="아이콘">     작성자</div>
+		    		<div class="nick"><img style="height: 30;" src="resources/img/run/running_8421565.png" alt="아이콘">     김진형</div>
 		    		<p class="coco">댓글내용</p>
-		    		<div class="date">날짜</div>
+		    		<div class="date">2024-10-25</div>
 	    		</div>
-	    		<div>
-		    		<div class="detail"><img style="height: 5;" src="resources/img/run/Group 308.png" alt="상세"></div>
+	    		<div class="ard">
+		    		<div class="detail"><img style="height: 5; margin-top: 25px;" src="resources/img/run/Group 308.png" alt="상세"></div>
 		    		<div id ="bih" class=btn03-s>비활성화</div>
+		    		<div class="suj1">수정</div>
+		    		<div class="suj2">삭제</div>
 	    		</div>
     		</div>
-    	
-    
-
 	    	<div class="com">
-	    			<div class=btn03-s>등록</div>
+	    		<div>
+	    			<div class="nick"><img style="height: 30;" src="resources/img/run/running_8421565.png" alt="아이콘">     김진형</div>
+		    		<input type="text" class="tex">
+	    		</div>
+	    		<div>
+	    			<div id="ins" class=btn03-s>등록</div>	    		
+	    		</div>
 	    	</div>
 	    </div>
-	    <button type="button" class="btn03-l" onclick="#">목록</button>
-	    <button type="button" class="btn03-l" onclick="#">삭제</button>
-        <button type="button" class="btn01-l" onclick="#">수정</button>
+	    <div class="bubu">
+	    	<div class="bbs">
+		        <button type="button" class="btn01-l" onclick="#">수정</button>
+			    <button type="button" class="btn03-l" onclick="#">삭제</button>	    	    	
+	    	</div>
+		    <button type="button" class="btn02-l" onclick="#">목록</button>
+	    </div>
 	
 	</div>
     <jsp:include page="../footer.jsp" />

@@ -29,4 +29,6 @@ public interface RunBoardDAO {
 
 	int point(RunBoardDTO point);
 
+	RunBoardDTO detail(int board_idx);
+
 }

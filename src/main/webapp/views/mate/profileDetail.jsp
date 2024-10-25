@@ -192,6 +192,5 @@
        			</c:when>
      		</c:choose>
 	    </div>
-	</div>
 </body>
 </html>
