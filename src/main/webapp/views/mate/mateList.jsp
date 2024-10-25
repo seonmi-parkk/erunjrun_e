@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>이런저런</title>
+<title>운동프로필</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/common.css">
@@ -16,7 +16,6 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer"></script>
 
 <style>
-
   .mateList {
 	  	display: flex; display: -moz-box; display: -ms-flexbox;
 	  	height: calc(100vh - 80px);
@@ -26,7 +25,7 @@
 	  	width: 400px;
   	    height: 100%;
     	overflow-y: auto;
-	  	padding : 24px 28px 24px 24px;
+	  	padding : 20px 24px;
 	  	background-color: #f8f8f8;
   }
   .mateList .list .sch-box{
@@ -106,32 +105,12 @@
 	.mg-l4{
 	    margin-left: 4px;
 	}
-	#profilePopup .close {
-	    font-size: 40px;
-	    font-weight: 300;
-	    position: absolute;
-	    z-index: 999;
-	    top: 40px;
-	    right: 40px;
-	    display: inline-block;
-	    width: 30px;
-	    height: 30px;
-	    line-height: 27px;
-	    text-align: center;
+	#profilePopup {
+	    left: 400px;
+	    transform: none;
 	}
-	#profilePopup .modal-content{
-	    padding: 24px 22px;
-	    background: #f8f8f8;
-	    border: none;
-    	border-radius: 0;
-    }
-    #PopupBody {
-    	background: #fff;
-    	border-radius: 10px;
-    }
-   
+	
 </style>
-
 </head>
 <body>
 	<jsp:include page="../header.jsp"/>
@@ -140,14 +119,20 @@
 			<div class="sch-box">
 				<input class="input-txt-l" type="text" name="sch-addr"/> 
 				<input class="btn-sch" type="button" value="검색">
-				
 			</div>
 			<div class="memList">
 				<c:forEach items="${profileList}" var="member">
 					<a class="user">
 						<input type="hidden" name="toUserId" value="${member.id}"/>
-					  	<div class="profile-box" style="background: url('resources/img/icon/${member.icon_image}') center center / 100% 100% no-repeat;">
-			               <div class="profile-img" style="background: url(/photo/${member.image}) center center / cover no-repeat;"></div>
+					  	<div class="profile-box" style="background: url('/resources/img/icon/${member.icon_image}') center center / 100% 100% no-repeat;">
+		               		<c:choose>
+								<c:when test="${not empty member.image}">  
+									<div class="profile-img" style="background: url(/photo/${member.image}) center center / cover no-repeat;"></div>
+								</c:when>
+								<c:otherwise>
+									<div class="profile-img"  style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>
+								</c:otherwise>
+							</c:choose>
 			            </div>
 						<span>${member.nickname}</span><span class="bar">/</span>
 						<c:if test="${member.gender eq '남'}">
@@ -175,28 +160,21 @@
 		        <div id="PopupBody"></div>
 		    </div>
 		</div>
-		
-		
+
 	</div>
 </body>
-
-
 
 <script src="resources/js/common.js" type="text/javascript"></script>
 <script src="resources/js/layerPopup.js"></script>
 <script>
-	console.log('${profileList}');
 	var profileList = '${profileList}';
-/* 	profileList.forEach(function(item){
-		console.log(item);
-	}); */
-	
-	
+
 	// 클릭시 운동프로필 레이어 팝업
 	$('.user').on('click',function(){
 	    var modal = document.getElementById("profilePopup");
 	    var PopupBody = document.getElementById("PopupBody");
 	    var toUserId = $(this).find('input[name="toUserId"]').val();
+	    console.log('toUserId',toUserId);
 	
 	    // AJAX 요청
 	    var xhr = new XMLHttpRequest();
@@ -205,6 +183,11 @@
 	        if (xhr.readyState === 4 && xhr.status === 200) {
 	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
 	            modal.style.display = "block"; // 모달 열기
+	            
+	         	// JS 파일을 동적으로 로드
+	            var script = document.createElement('script');
+	            script.src = '/resources/js/profileDetail.js'; 
+	            document.body.appendChild(script);
 	        }
 	    };
 	    xhr.send();
@@ -215,10 +198,9 @@
 	    document.getElementById("profilePopup").style.display = "none";
 	};
 
-
-
-
-
+	
+	
+	
 
 	/* 카카오맵 지도 */
 	/* var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
