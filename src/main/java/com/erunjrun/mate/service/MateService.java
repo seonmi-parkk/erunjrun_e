@@ -26,7 +26,7 @@ public class MateService {
 		int appRst = mateDAO.mateApplication(fromUserId, toUserId);
 		int historyRst = mateDAO.mateHistory(fromUserId, toUserId);
 
-		logger.info("appRst: {}, historyRst: {}", appRst, historyRst); 
+		logger.info("[mateApplication s]appRst: {}, historyRst: {}", appRst, historyRst); 
 		if(appRst > 0 && historyRst > 0) { result = true; }
 		
 		return result;
@@ -65,12 +65,12 @@ public class MateService {
 	}
 
 	public MateProfileDTO getProfile(String toUserId) {
-		boolean isOpened = false;
-		if(mateDAO.profileOpen(toUserId).equals("Y")) {
-			isOpened = true;
-		}
+//		boolean isOpened = false;
+//		if(mateDAO.profileOpen(toUserId).equals("Y")) {
+//			isOpened = true;
+//		}
 		//logger.info("isOpend:"+isOpened);
-		MateProfileDTO profileDTO = mateDAO.getProfile(toUserId,isOpened);
+		MateProfileDTO profileDTO = mateDAO.getProfile(toUserId);
 		int birthYear = Integer.parseInt(profileDTO.getBirth().split("-")[0]);
 		Calendar c = Calendar.getInstance();
 		int year = c.get(Calendar.YEAR);
@@ -107,7 +107,8 @@ public class MateService {
 		MateDTO mateDto = mateDAO.checkMateAppl(fromUserId,toUserId);
 		//check!! .getCode_name() null일 경우 추가해야하는데?? => null point exception 잡아야함...
 		//(원래 checkMateAppl mapper의 id들이 고정값으로 들어가있었음. 
-		if(mateDto.getCode_name() == null) {
+		
+		if(mateDto == null) {
 			return MateAppl;
 		}
 		if(mateDto.getCode_name().equals("M100")) {
@@ -119,6 +120,10 @@ public class MateService {
 		}else if(mateDto.getCode_name().equals("M101")){
 			MateAppl = "mate";
 		}
+		
+		
+		
+		
 //		if(mateDto.getCode_name().equals("M100")) {
 //			if(mateDto.getUnlike_id().equals(fromUserId)) {
 //				MateAppl = "apply";
@@ -130,7 +135,7 @@ public class MateService {
 //		}else{
 //			MateAppl = "none";
 //		}
-		logger.info("MateAppl"+MateAppl);
+		logger.info("[checkMateAppl s]MateAppl"+MateAppl);
 		return MateAppl;
 	}
 
@@ -151,7 +156,7 @@ public class MateService {
 	}
 
 	public List<MateProfileDTO> getPos(String fromUserId) {
-		logger.info("fromUserId"+fromUserId);
+		logger.info("[getPos s]fromUserId"+fromUserId);
 		return mateDAO.getPos(fromUserId);
 	}
 	

@@ -33,6 +33,7 @@ public class MateController {
 		session.setAttribute("profileImg", "profile_img1.jpg");
 		session.setAttribute("iconImg", "resources/img/icon/icon1.png");
 		session.setAttribute("adminYn", "N");
+		logger.info("[mate]toUserId"+toUserId);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 
@@ -64,11 +65,11 @@ public class MateController {
 	//메이트 신청
 	@RequestMapping(value="/mateAppliaction")
 	@ResponseBody
-	public Map<String, Object> mateApplication(String fromUserId, String toUserId, Model model) {
-		logger.info("[controller] mateApplication");
-		logger.info("fromUserId : {}, toUserId : {}", fromUserId, toUserId);
+	public Map<String, Object> mateApplication(String toUserId, Model model, HttpSession session) {
+		String fromUserId = (String) session.getAttribute("loginId");
+		logger.info("[mateAppliaction c]fromUserId : {}, toUserId : {}", fromUserId, toUserId);
 		boolean success = mateService.mateApplication(fromUserId, toUserId);
-		logger.info("success : "+success);
+		logger.info("[mateAppliaction c]success : "+success);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("success", success);
 		return result;
@@ -78,8 +79,9 @@ public class MateController {
 	//좋아요
 	@PostMapping(value="/toggleLike")
 	@ResponseBody
-	public Map<String, Object> toggleLike(String fromUserId, String toUserId) {
-		logger.info("fromUserId : {}, toUserId : {}", fromUserId, toUserId);
+	public Map<String, Object> toggleLike(String toUserId, HttpSession session) {
+		String fromUserId = (String) session.getAttribute("loginId");
+		logger.info("[toggleLike c]fromUserId : {}, toUserId : {}", fromUserId, toUserId);
 		Map<String, Object> result = new HashMap<String, Object>();
 		if(mateService.checkLike(fromUserId,toUserId)) {
 			if(mateService.dislike(fromUserId, toUserId)) {				
@@ -96,22 +98,25 @@ public class MateController {
 	// 차단하기
 	@PostMapping(value="/mateBlock")
 	@ResponseBody
-	public Map<String, Object> mateBlock(String fromUserId, String toUserId) {
-		logger.info("fromUserId : {}, toUserId : {}", fromUserId, toUserId);
+	public Map<String, Object> mateBlock(String toUserId, HttpSession session) {
+		String fromUserId = (String) session.getAttribute("loginId");
+		logger.info("[mateBlock c]fromUserId : {}, toUserId : {}", fromUserId, toUserId);
 		Map<String, Object> result = new HashMap<String, Object>();
 		boolean success = false;
 		if(mateService.mateBlock(fromUserId,toUserId)) {
 			success = true;
 		}
 		result.put("success", success);
+		logger.info("[mateBlock c]success"+success);
 		return result;
 	}
 
 	// 차단해제하기
 	@PostMapping(value="/mateUnblock")
 	@ResponseBody
-	public Map<String, Object> mateUnblock(String fromUserId, String toUserId) {
-		logger.info("fromUserId : {}, toUserId : {}", fromUserId, toUserId);
+	public Map<String, Object> mateUnblock(String toUserId, HttpSession session) {
+		String fromUserId = (String) session.getAttribute("loginId");
+		logger.info("[mateUnblock c]fromUserId : {}, toUserId : {}", fromUserId, toUserId);
 		Map<String, Object> result = new HashMap<String, Object>();
 		boolean success = false;
 		if(mateService.mateUnblock(fromUserId,toUserId)) {

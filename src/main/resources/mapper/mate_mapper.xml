@@ -5,11 +5,11 @@
   
 <mapper namespace="com.erunjrun.mate.dao.MateDAO">
 	<insert id="mateApplication">
-		INSERT INTO mate_application (id,unlike_id) VALUES (#{fromUserId},#{toUserId})
+		INSERT INTO mate_application (id,unlike_id) VALUES (#{toUserId},#{fromUserId})
 	</insert>
 
 	<insert id="mateHistory">
-		INSERT INTO mate_history (id,code_name,unlike_id) VALUES (#{fromUserId},'M100',#{toUserId})
+		INSERT INTO mate_history (id,code_name,unlike_id) VALUES (#{toUserId},'M100',#{fromUserId})
 	</insert>
 	
  	<select id="checkMate" resultType="int">
@@ -28,9 +28,9 @@
 		SELECT count(unlike_id) FROM block_member WHERE unlike_id = #{fromUserId} AND id = #{toUserId}
 	</select>
 
-	<select id="profileOpen" resultType="String">
+<!-- 	<select id="profileOpen" resultType="String">
 		SELECT profile_use FROM profile WHERE id = #{toUserId}
-	</select>
+	</select> -->
 
 	<select id="checkLike" resultType="int">
 		SELECT count(unlike_id) FROM interest_member WHERE unlike_id = #{fromUserId} AND id = #{toUserId}    
@@ -38,10 +38,8 @@
 	
 	<select id="getProfile" resultType="com.erunjrun.mate.dto.MateProfileDTO"> 
 		SELECT 
-			 image, icon_image, nickname, dong, shortsido, gender, birth
-			<if test="isOpened">
-			,m.id, exercise_min, exercise_dis, exercise, mate, content 
-			</if>
+			image, icon_image, nickname, dong, shortsido, gender, birth, p.profile_use,
+			m.id, exercise_min, exercise_dis, exercise, mate, content 
 			FROM member m JOIN profile p ON m.id = p.id WHERE m.id = #{toUserId}
 	</select>
 
