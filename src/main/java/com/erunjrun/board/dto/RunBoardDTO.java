@@ -36,8 +36,25 @@ public class RunBoardDTO {
     // 이미지 리스트
     private List<ImageDTO> imageList;
     
+    // 포인트 테이블
+    private int point_idx;
+    private int point;
+    
+    
 
-    public List<Integer> getOrderList() {
+    public int getPoint_idx() {
+		return point_idx;
+	}
+	public void setPoint_idx(int point_idx) {
+		this.point_idx = point_idx;
+	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
+	}
+	public List<Integer> getOrderList() {
 		return orderList;
 	}
 	public void setOrderList(List<Integer> orderList) {

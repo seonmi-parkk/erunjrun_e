@@ -27,4 +27,6 @@ public interface RunBoardDAO {
 
 	int fileWrite(ImageDTO img);
 
+	int point(RunBoardDTO point);
+
 }

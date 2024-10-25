@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,7 +26,7 @@ import com.erunjrun.image.dto.ImageDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
+@EnableScheduling
 @Controller
 public class RunBoardController {
 	
@@ -177,12 +179,19 @@ public class RunBoardController {
         return resultMap;
     }
     
+    // 주간 포인트 지급
+    @Scheduled(cron = "0 0 0 * * MON") // 매주 월요일에 실행
+    public void point() {
+    	logger.info("월요일마다 실행되는 작업입니다.");
+        runBoardService.point();
+    }
+	
     @GetMapping(value="/runBoardDetail")
     public String detail() {
     	return "runBoard/runBoardDetail";
     }
-	
-	
+    
+
 	
 
 	
