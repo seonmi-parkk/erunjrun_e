@@ -44,6 +44,8 @@ public interface CrewDAO {
 
 	List<CrewMemberDTO> crewMemberList(int crew_idxs);
 
+	List<CrewMemberDTO> crewApplicationList(int crew_idxs);
+
 	
 	
 

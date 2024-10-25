@@ -33,7 +33,7 @@
         width: 30%;
         padding: 20px;
         box-sizing: border-box;
-/*         background-color: #FFD9EC; */
+        background-color: #FBFBFB;
         position: relative;
         max-height: 500px;
         overflow-y: hidden;
@@ -77,8 +77,8 @@
 	    padding: 0px 11px;
 	    margin: 0px 4px;
 	    border-radius: 10px;
-	    border: 1px solid var(--btn-bd-g);
-	    color: var(--btn-bd-g);
+	    border: 1px solid var(--main-color);
+	    color: var(--main-color);
 	    background: #fff;
 	    cursor: pointer;
 	    font-size: 14px;
@@ -94,6 +94,7 @@
         display: inline-block;
    		width: 200px;
    		padding: 16px 11px 6px 3px;
+   	 	font-weight: 700;
     }
     
     .title2-2{
@@ -164,16 +165,16 @@
     }
     
     .profilebox{
-    	border: 1px solid var(--btn-bd-g);
-    	border-radius: 7px;
-    	height: 55px;
-    	width: 98%;
-    	display: flex;   
-    	align-items: center;
-    	justify-content: space-between;
-    	background: #fff;
-    	display: flex; /*수직 정렬 flex, center*/
-    	align-items: center; 
+	    border: 1px solid #fff;
+	    border-radius: 10px;
+	    height: 55px;
+	    width: 98%;
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	    background: #fff;
+	    display: flex;
+	    align-items: center;
     }
     
     .profile-text{
@@ -237,8 +238,8 @@
          font-size: 14px;
 	}
 	
-	.profile-text img {
- 	   margin-right: 13px; /* 이미지 오른쪽에 간격 */
+	.profile-text img:first-child {
+   		 margin-right: 13px; /* 첫 번째 이미지 오른쪽에 간격 */
 	}
 	
 	.profile-text{
@@ -271,12 +272,12 @@
     	align-items: center;  
 	}
 	
-	.leaderjb > img{
-		
+	.leaderjb img:last-child{
+		margin: 2px 6px 2px 6px;
 	}
 	
- 	.testeee > img{
- 		
+ 	.testeee img:last-child{
+ 	   margin: 2px 6px 2px 6px;
  	}
   
 </style>
@@ -294,8 +295,8 @@
 				<img id="crew-img" src="/resources/img/crew/crewImg800.png" width="100%" height="100%"/>
 			</div>
 	
-			<button class="btn03-s1">수정하기</button>
-			<button class="btn03-s1">크루삭제</button>
+			<button class="btn03-s1" style='visibility : hidden'>수정하기</button>
+			<button class="btn03-s1" style='visibility : hidden'>크루삭제</button>
 	
 			<div class="title2-1">크루소개</div>
 	
@@ -315,7 +316,7 @@
 			<div class="title2-1">크루 공지사항</div>
 			<div class="right-x">
 				<img src="/resources/img/crew/img07.png" width="40px"/> 
-				<span class="right-x1"><a href="#">바로가기</a></span>
+				<span class="right-x1"><a href="#" class="crewAccess">바로가기</a></span>
 			</div>
 			<div class="contentbox">
 				<img src="/resources/img/crew/img05.png" width="17px" class="imglayout"/> 최근 공지사항 yyyy.mm.dd
@@ -324,7 +325,7 @@
 			<div class="title2-1">크루 채팅방</div>
 			<div class="right-x">
 				<img src="/resources/img/crew/img07.png" width="40px" /> 
-				<span class="right-x1"><a href="#">바로가기</a></span>
+				<span class="right-x1"><a href="#" class="crewAccess">바로가기</a></span>
 			</div>
 			<div class="contentbox">
 				<span><img src="/resources/img/crew/img06.png" width="17px" class="imglayout"/> 마지막 대화 n 분 전</span>
@@ -353,7 +354,7 @@
 		    <div class="btn-box">
 		    
 		    	<div class="crew-box">
-			    	<button class="btn01-l2">러닝크루 신청하기</button>
+			    	<button class="btn01-l2" id="crew-btn-01" onclick="crewRequest()">러닝크루 신청하기</button>
 			    	
 			    	<div class="btn-like btn02-s1" onclick="like()">
 			           	<c:choose>
@@ -378,6 +379,18 @@
 </body>
 <script>
 
+	var loginId = '${sessionScope.loginId}';
+	console.log('loginId => ', loginId);
+	
+	var crewLeader = '';
+	
+	var application = '';
+
+	var crewone = [];
+	
+	var is_recruit = '';
+	
+
 	$(document).ready(function () {
 	    var crew_idx = $('input[name="crew_idx"]').val();
 	    
@@ -400,6 +413,15 @@
 	                if (response.success) {
 	                    // 받아온 데이터를 HTML에 반영
 	                    var result = response.result;
+	                    
+	                    
+	                    if(result.is_recruit === 'N'){
+	                    	is_recruit = result.is_recruit;
+	                    	$('#crew-btn-01').html('크루 모집완료');
+	                    	$('#crew-btn-01').css({'border' : '1px solid var(--btn-bd-g)', 'color' : 'var(--btn-bd-g)', 'background' : '#fff'});
+	                    }
+	                    
+	                    
 	
 	                    // 이미지 업데이트
 	                    if (result.img_new) {
@@ -445,35 +467,67 @@
 	            dataType: 'JSON',
 	            success: function (response) {
 	                console.log('회원 데이터 받아옴 => ', response);
+	                
+	                console.log('신청 회원 리스트 =>', response.application);
+	                
 	                if (response.success) {
 	                	
 	                    var result = response.result;
+	                    var application = response.application;
 	                    
-	                    var leader = '';
-	                    
-	                    var content = '';
+	                    // 프로필 이미지 '' 여부 확인해서 이미지 설정 if문 추가 필요
 	                    var profileImg = '<img src="resources/img/common/profile.png" width="32px"/>';
 	                    
 	                    var genderImg = '';
 	                    
+	                    var content = '';
+
 	                    result.forEach(function(item, idx){
-	                    	
+	                    	// 성별 체크 -> 이미지 변환
 	                    	if(item.gender === '남'){
-	                    		genderImg = '<img src="resources/img/common/ico_male.png" width="9px"/>';
+	                    		genderImg = '<img src="resources/img/common/ico_male.png" width="9px" class="genderImg"/>';
 	                    	}else{
-	                    		genderImg = '<img src="resources/img/common/ico_female.png" width="9px"/>';
+	                    		genderImg = '<img src="resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
 	                    	}
 	                    	
+	                    	// 크루장 체크 -> 회원 리스트 노출 내용
 		                    if(item.is_leader === 'Y'){
-		                    	$('#leaderprofile').html('<div class="leaderjb">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루장' + '</div>');
+		                    	crewLeader = item.id;
+		                    	console.log('반복문 안에서 =>',crewLeader);
+		                    	$('#leaderprofile').html('<a href="#"><div class="leaderjb">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루장' + '</div></a>');
 		                    }else{
-		                    	content += '<div class="testeee">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루원'  + '</div>';
+		                    	crewone.push(item.id); // 배열에 크루원 id 넣기
+		                    	content += '<a href="#"><div class="testeee">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루원'  + '</div></a>';
 		                    }
 		                    
 		                    $('#crew-member-profile').html(content);
 		                  	console.log(item);
 	                    });
 	                    
+	                    // 크루장 체크 => 보여지는 내용 변환
+					    if(loginId === crewLeader){
+					    	console.log('크루장임');
+					    	$('.btn03-s1').css('visibility', 'visible');
+					    	console.log('loginId : crewLeader', loginId, ':', crewLeader);
+					    }else{
+					    	console.log('크루원 또는 일반 회원임');
+					    	console.log('loginId : crewLeader', loginId, ':', crewLeader);
+					    }
+					    
+					    // 신청 버튼 체크 함수
+					    crewApplication(application, result);
+					    
+	                   
+	                    
+					    // 로그인 안했거나 크루원이 아니면
+					    $('.crewAccess').click(function(){
+						    if(loginId == null || loginId != result.id){
+						    	$('.crewAccess').attr('href', 'javascript:void(0);');
+						    	console.log('로그인 안했거나 크루원 아님');
+						    	alert('크루원만 접근 가능합니다.');
+						    }
+					    });
+					    
 	                   /*  var profileImg = '<img src="/photo/' + result.image + '"/>';  */
 	                }
 	            },
@@ -485,6 +539,63 @@
 	    
 	    
 	});
+
+	function crewApplication(application, result){
+		console.log('실행됨?=>', application);		
+		
+		console.log('크루장임 =>', result);
+		
+		 // 신청 리스트에서 로그인 ID와 일치하는 신청 내역이 있는지 확인
+        var isApplied = application.some(app => app.id === loginId);
+
+		 if(is_recruit != 'N'){
+	        // 로그인 여부에 따라 버튼 텍스트 변경
+	        if (loginId == null || loginId === '') { // 로그인 x  => 완료
+	            $('#crew-btn-01').html('러닝크루 신청하기');
+	        	$('#crew-btn-01').click(function(){
+	        		alert('로그인 하세여!');
+	        	});
+	        
+	        } else if(loginId != null && loginId === crewLeader){ // 크루장 => 완료
+	        	$('#crew-btn-01').html('러닝크루 신청하기');
+	        	$('#crew-btn-01').attr('disabled', true); // 버튼 비활성화
+	        	
+	        } else if (crewone.includes(loginId)) { // 로그인 o + 크루원 => 완료
+	            $('#crew-btn-01').html('크루 탈퇴하기');
+	            $('#crew-btn-01').css({'border' : '1px solid var(--main-color)', 'color' : 'var(--main-color)', 'background' : '#fff'});
+	            
+	        } else if (isApplied) { // 로그인 o, 신청자 => 완료
+	            $('#crew-btn-01').html('신청 취소하기');
+	        	$('#crew-btn-01').css({'border' : '1px solid var(--main-color)', 'color' : 'var(--main-color)', 'background' : '#fff'});
+	        	
+	        } else { // 로그인 o, 크루원 x => 완료
+	            $('#crew-btn-01').html('러닝크루 신청하기');
+	        }
+			 
+		 }
+		 
+		
+		
+	}
+	
+	// 크루 버튼 클릭 시 신청, 취소, 탈퇴 요청 함수
+	function crewRequest(){
+		
+		$.ajax({
+			type: 'POST',
+			url: '/crew/write',
+			data: {},
+			dataType: 'JSON',
+			success: function(data){
+				console.log('성공');
+			},error: function(e){
+				console.log('버튼 요청 시 에러남 =>', e);
+			}
+		});
+		
+	}
+	
+	
 
 </script>
 </html>

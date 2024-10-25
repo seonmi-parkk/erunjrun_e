@@ -100,5 +100,9 @@
 			FROM crew_member cm JOIN member m ON cm.id = m.id
 			LEFT JOIN profile p ON m.id = p.id WHERE cm.crew_idx = #{crew_idx};
 	</select>
+	
+	<select id="crewApplicationList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="int">
+		SELECT id, application_idx FROM crew_application WHERE crew_idx = #{crew_idx}
+	</select>
 
 </mapper>
