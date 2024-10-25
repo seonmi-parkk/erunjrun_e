@@ -73,7 +73,7 @@ button:hover {
 <body>
 	<div class="container">
 		<h3>회원탈퇴</h3>
-		<form id="withdrawalForm" action="deleteMember" method="post">
+		<form id="withdrawalForm" action="memberDelete" method="post">
 			<div class="form-group">
 				<label for="id">아이디</label> 
 				<input type="text" name="id" required placeholder="아이디" />

@@ -54,7 +54,7 @@
         <c:if test="${not empty tempPw}">
             <p class="temp-password">임시 비밀번호: ${tempPw}</p>
         </c:if>
-        <form action="login" method="get"> <!-- 로그인 페이지로 이동하는 폼 -->
+        <form action="loginView" method="get"> <!-- 로그인 페이지로 이동하는 폼 -->
             <button type="submit" class="login-button">로그인</button>
         </form>
     </div>
