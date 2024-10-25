@@ -35,7 +35,11 @@ public interface MateDAO {
 
 	int mateUnblock(String fromUserId, String toUserId);
 
-	List<MateProfileDTO> getPos(String fromUserId);
+	List<MateProfileDTO> getCloseList(MateProfileDTO userPos);
+
+	MateProfileDTO getUserPos(String fromUserId);
+
+	List<MateProfileDTO> getPosList(String fromUserId);
 
 
 

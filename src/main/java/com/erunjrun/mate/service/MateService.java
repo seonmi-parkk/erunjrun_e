@@ -155,9 +155,17 @@ public class MateService {
 		return success;
 	}
 
-	public List<MateProfileDTO> getPos(String fromUserId) {
-		logger.info("[getPos s]fromUserId"+fromUserId);
-		return mateDAO.getPos(fromUserId);
+	public List<MateProfileDTO> getCloseList(MateProfileDTO userPos) {
+		logger.info("[getPos s]fromUserId"+userPos);
+		return mateDAO.getCloseList(userPos);
+	}
+
+	public MateProfileDTO getUserPos(String fromUserId) {
+		return mateDAO.getUserPos(fromUserId);
+	}
+
+	public List<MateProfileDTO> getPosList(String fromUserId) {
+		return mateDAO.getPosList(fromUserId);
 	}
 	
 //	public void getPos(String fromUserId) {

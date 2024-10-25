@@ -168,11 +168,6 @@ $('#pagination').twbsPagination({
 		pageCall(page);
 	} */
 });
-
-var msg = '${msg}';
-if (msg != '') {
-   alert(msg);
-}
     
 </script>
 </html>
