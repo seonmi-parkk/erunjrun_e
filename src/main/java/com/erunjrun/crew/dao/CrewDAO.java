@@ -46,6 +46,19 @@ public interface CrewDAO {
 
 	List<CrewMemberDTO> crewApplicationList(int crew_idxs);
 
+	int crewApplicationWrite(Map<String, Object> parmeterMap);
+
+	int crewApplicationCancel(Map<String, Object> parmeterMap);
+
+	int crewMemberCencel(Map<String, Object> parmeterMap);
+
+	int crewHistoryWrite(Map<String, Object> parmeterMap);
+
+	int likeIs(Map<String, Object> parmeterMap);
+
+	int likeRequest(Map<String, Object> parmeterMap);
+
+	int likeCencel(Map<String, Object> parmeterMap);
 	
 	
 
