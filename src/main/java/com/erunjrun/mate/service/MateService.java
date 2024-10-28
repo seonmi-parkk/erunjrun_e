@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,9 +157,9 @@ public class MateService {
 		return success;
 	}
 
-	public List<MateProfileDTO> getCloseList(MateProfileDTO userPos) {
+	public List<MateProfileDTO> searchMateList(MateProfileDTO userPos) {
 		logger.info("[getPos s]fromUserId"+userPos);
-		return mateDAO.getCloseList(userPos);
+		return mateDAO.searchMateList(userPos);
 	}
 
 	public MateProfileDTO getUserPos(String fromUserId) {
@@ -166,6 +168,10 @@ public class MateService {
 
 	public List<MateProfileDTO> getPosList(String fromUserId) {
 		return mateDAO.getPosList(fromUserId);
+	}
+
+	public List<MateProfileDTO> moveMateList(List<String> users, String fromUserId) {
+		return mateDAO.moveMateList(users, fromUserId);
 	}
 	
 //	public void getPos(String fromUserId) {

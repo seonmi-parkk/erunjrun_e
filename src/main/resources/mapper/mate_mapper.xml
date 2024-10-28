@@ -60,11 +60,11 @@
 	</insert>
 	
 	<select id="getUserPos" resultType="com.erunjrun.mate.dto.MateProfileDTO">
-		SELECT shortsido, dong FROM profile WHERE id = #{fromUserId} 
+		SELECT shortsido, dong, latitude, longitude FROM profile WHERE id = #{fromUserId} 
 	</select>
 	
-	<select id="getCloseList" parameterType="com.erunjrun.mate.dto.MateProfileDTO" resultType="com.erunjrun.mate.dto.MateProfileDTO">
-		SELECT p.id, nickname, gender, shortsido, dong, image, icon_image, exercise_use, 
+	<select id="searchMateList" parameterType="com.erunjrun.mate.dto.MateProfileDTO" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+		SELECT p.id, nickname, gender, shortsido, dong, image, icon_image, exercise_use, latitude, longitude,
 		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{id}) AND unlike_id IN (p.id,#{id})) AS mate_idx
 		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
 		AND shortsido = #{shortsido}
@@ -74,9 +74,20 @@
 	</select>
 	
 	<select id="getPosList" resultType="com.erunjrun.mate.dto.MateProfileDTO">
-		SELECT nickname, image, icon_image, gender, latitude, longitude,
+		SELECT p.id, nickname, image, icon_image, gender, latitude, longitude,
 		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{fromUserId}) AND unlike_id IN (p.id,#{fromUserId})) AS mate_idx
 		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
+	</select>
+	
+	<select id="moveMateList" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+		SELECT p.id, nickname, gender, shortsido, dong, image, icon_image, exercise_use, latitude, longitude,
+		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{fromUserId}) AND unlike_id IN (p.id,#{fromUserId})) AS mate_idx
+		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
+		AND p.id != #{fromUserId}
+		AND nickname IN
+        <foreach item="nickname" collection="users" open="(" separator="," close=")">
+            #{nickname}
+        </foreach>
 	</select>
 
 </mapper>
