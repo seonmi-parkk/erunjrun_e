@@ -368,5 +368,10 @@ public class CrewService {
 		return false;
 	}
 
+	public List<Map<String, Object>> crewList(List<String> filtering, int page, int pageSize) {
+		int offset = (page - 1) * pageSize; // 0 -> 10 -> 20 .. 10씩 증가
+	    return crew_dao.crewList(filtering, offset, pageSize);
+	}
+
     
 }
