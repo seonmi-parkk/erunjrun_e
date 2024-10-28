@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.member.dto.MemberDTO;
 import com.erunjrun.member.dto.ProfileDTO;
+import com.erunjrun.mypage.dto.MypageDTO;
 import com.erunjrun.mypage.service.MypageService;
 
 @Controller
@@ -32,7 +33,6 @@ public class MypageController {
 	MypageService mypageService;
 
 	@GetMapping(value = "/profileDetail")
-
 	public String profileDetail(Model model, HttpSession session) {
 		String id = (String) session.getAttribute("loginId");
 		if (id != null) {
@@ -40,7 +40,6 @@ public class MypageController {
 			ProfileDTO profile = mypageService.ProfileImage(id);
 			model.addAttribute("member", member);
 			model.addAttribute("profile", profile);
-
 		} else {
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			return "member/login"; // 로그인 페이지로 이동
@@ -136,10 +135,13 @@ public class MypageController {
 			// 회원 정보 조회
 			MemberDTO member = mypageService.findSessionId(id);
 			if ("Y".equals(member.getProfile_use())) {
+				MypageDTO mypage = mypageService.mypageDetail(id);
+				model.addAttribute("mypage", mypage); // 모델에 MypageDTO 추가
 				// 운동 프로필이 이미 작성된 경우
 				return "mypage/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
 			}
 			model.addAttribute("loginId", id);
+
 			String profileImage = (String) session.getAttribute("profileImage");
 			model.addAttribute("profileImage", profileImage);
 		} else {
@@ -149,27 +151,117 @@ public class MypageController {
 
 		return "mypage/createExerciseProfile"; // 최초 프로필 작성 안내 페이지로 이동
 	}
-	
+
 	@GetMapping(value = "/firstExerciseProfileView")
-	public String firstExerciseProfileView() {
-		return "mypage/firstExerciseProfile";
+	public String firstExerciseProfileView(HttpSession session, Model model) {
+		String id = (String) session.getAttribute("loginId");
+
+		if (id != null) {
+			// 회원 정보 조회
+			MemberDTO member = mypageService.profileDetail(id); // 여기서 회원 정보를 가져옴
+			if ("Y".equals(member.getProfile_use())) {
+				// 운동 프로필이 이미 작성된 경우
+				return "mypage/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
+			}
+			model.addAttribute("loginId", id);
+			model.addAttribute("member", member); // member를 모델에 추가
+			String profileImage = (String) session.getAttribute("profileImage");
+			model.addAttribute("profileImage", profileImage);
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+
+		return "mypage/firstExerciseProfile"; // 최초 프로필 작성 안내 페이지로 이동
 	}
 
 	@PostMapping(value = "/firstExerciseProfile")
-	public String firstExerciseProfile(@RequestParam Map<String, String> params, HttpSession session) {
+	public String firstExerciseProfile(@RequestParam Map<String, String> params, HttpSession session, Model model) {
 		String id = (String) session.getAttribute("loginId");
 		if (id != null) {
-			// 운동 프로필 생성 로직 (params를 이용해서 프로필 정보를 DB에 저장)
+			// 운동 프로필 생성
 			mypageService.firstExerciseProfile(params);
-			mypageService.updateProfile_use(id, "Y"); // 프로필 작성 상태 업데이트
 
-			// 프로필 정보를 DB에 저장하는 로직을 여기에 추가
+			// 프로필 작성 상태 업데이트
+			mypageService.updateProfile_use(id, "Y");
+
+			// 프로필 공개 여부 및 운동 메이트 찾기 여부 업데이트
+			String profileVisibility = params.get("profileVisibility");
+			String mateSearch = params.get("mateSearch");
+
+			// 프로필 공개 여부 업데이트
+			mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
+
+			// 운동 메이트 찾기 여부 업데이트
+			mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
+
+			// 업데이트된 회원 정보 가져오기
+			MemberDTO member = mypageService.profileDetail(id);
+			String birthString = member.getFormattedBirth();
+			model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
+			model.addAttribute("member", member);
 		}
 		return "mypage/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
 	}
-	
+
 	@GetMapping(value = "/ExerciseProfile")
-	public String ExerciseProfile() {
+	public String ExerciseProfile(Model model, HttpSession session) {
+		String id = (String) session.getAttribute("loginId");
+		if (id != null) {
+			MemberDTO member = mypageService.profileDetail(id);
+			ProfileDTO profile = mypageService.ProfileImage(id);
+			MypageDTO mypage = mypageService.mypageDetail(id);
+
+			// 생년월일을 가져와 로그에 출력
+			logger.info("Member Birth: {}", member.getBirth());
+
+			// 포맷된 생년월일 추가
+			String birthString = member.getFormattedBirth();
+			model.addAttribute("member", member);
+			model.addAttribute("profile", profile);
+			model.addAttribute("mypage", mypage); // 모델에 MypageDTO 추가
+			model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
+
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return "member/login"; // 로그인 페이지로 이동
+		}
+		return "mypage/ExerciseProfile";
+	}
+
+	@GetMapping(value = "/ExerciseProfileUpdateView")
+	public String ExerciseProfileUpdateView(Model model, HttpSession session) {
+		String id = (String) session.getAttribute("loginId");
+		if (id != null) {
+			MemberDTO member = mypageService.profileDetail(id);
+			MypageDTO mypage = mypageService.mypageDetail(id);
+			String birthString = member.getFormattedBirth();
+			model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
+			model.addAttribute("member", member);
+			model.addAttribute("mypage", mypage); // 모델에 MypageDTO 추가
+			model.addAttribute("profileVisibility", mypage.getProfile_use());
+			model.addAttribute("mateSearch", mypage.getExercise_use());
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return "member/login";
+		}
+		return "mypage/ExerciseProfileUpdate";
+	}
+
+	@PostMapping(value = "/ExerciseProfileUpdate")
+	public String ExerciseProfileUpdate(Model model, HttpSession session, @RequestParam Map<String, String> params) {
+	    logger.info("Received params: {}", params);
+		String id = (String) session.getAttribute("loginId");
+		if (id != null) {
+			mypageService.ExerciseProfileUpdate(params);
+			String profileVisibility = params.get("profileVisibility");
+			String mateSearch = params.get("mateSearch");
+			mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
+			mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
 		return "mypage/ExerciseProfile";
 	}
 }

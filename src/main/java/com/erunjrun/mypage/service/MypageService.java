@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.erunjrun.member.dto.MemberDTO;
 import com.erunjrun.member.dto.ProfileDTO;
 import com.erunjrun.mypage.dao.MypageDAO;
+import com.erunjrun.mypage.dto.MypageDTO;
 
 @Service
 public class MypageService {
@@ -57,5 +58,23 @@ public class MypageService {
 		mypageDAO.firstExerciseProfile(params);
 		
 	}
+
+	public MypageDTO mypageDetail(String id) {
+	    return mypageDAO.mypageDetail(id);
+	}
 	
+	public void updateProfileVisibility(String id, String profileVisibility) {
+	    // DB에서 프로필 공개 여부 업데이트
+	    mypageDAO.updateProfileVisibility(id, profileVisibility);
+	}
+
+	public void updateMateSearch(String id, String mateSearch) {
+	    // DB에서 운동 메이트 찾기 여부 업데이트
+	    mypageDAO.updateMateSearch(id, mateSearch);
+	}
+
+	public void ExerciseProfileUpdate(Map<String, String> params) {
+		mypageDAO.ExerciseProfileUpdate(params);
+		
+	}
 }

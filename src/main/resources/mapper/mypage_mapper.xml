@@ -11,16 +11,19 @@
 		member.id,
 		member.email,
 		member.pw,
+		member.profile_use,
 		profile.image AS
 		image,
 		member.icon_image
 		FROM
 		member
 		LEFT JOIN
-		profile ON member.id =
+		profile ON
+		member.id =
 		profile.id
 		WHERE
-		member.id = #{id}
+		member.id = #{id} LIMIT 1;
+
 	</select>
 
 	<select id="profileDetail"
@@ -31,7 +34,9 @@
 		phone,
 		address,
 		pw,
-		email
+		email,
+		birth,
+		gender
 		FROM
 		member
 		WHERE
@@ -46,7 +51,7 @@
 		FROM
 		profile
 		WHERE
-		id = #{id}
+		id = #{id} LIMIT 1;
 	</select>
 
 	<update id="profileUpdate" parameterType="map">
@@ -74,25 +79,115 @@
 	<update id="updateProfile_use" parameterType="map">
 		UPDATE member
 		SET
-		profile_use = #{profile_use}
-		WHERE id = #{id}
+		profile_use = 'Y' WHERE id = #{id}
 	</update>
 
 	<insert id="firstExerciseProfile" parameterType="map">
-		INSERT INTO profile (
-        id,
-        content,
-        exercise_min,
-        exercise_dis,
-        exercise,
-        mate
-    ) VALUES (
-        #{id},
-        #{content},
-        #{exercise_min},
-        #{exercise_dis},
-        #{exercise},
-        #{mate}
-    )
+		INSERT INTO
+		profile (
+		id,
+		content,
+		exercise_min,
+		exercise_dis,
+		exercise,
+		mate,
+		latitude,
+		longitude,
+		sido,
+		dong,
+		detail_address,
+		shortsido
+		) VALUES (
+		#{id},
+		#{content},
+		#{exercise_min},
+		#{exercise_dis},
+		#{exercise},
+		#{mate},
+		#{latitude},
+		#{longitude},
+		#{sido},
+		#{dong},
+		#{detail_address},
+		#{shortsido}
+		)
 	</insert>
+
+	<select id="mypageDetail" parameterType="String"
+		resultType="com.erunjrun.mypage.dto.MypageDTO">
+		SELECT
+		id,
+		content,
+		exercise_min,
+		exercise_dis,
+		exercise,
+		mate,
+		latitude,
+		longitude,
+		sido,
+		dong,
+		detail_address,
+		shortsido,
+		profile_use,
+		exercise_use
+		FROM profile
+		WHERE id = #{id} LIMIT 1;
+	</select>
+
+	<update id="updateProfileVisibility" parameterType="map">
+		UPDATE profile
+		SET 
+		profile_use = #{profileVisibility}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateMateSearch" parameterType="map">
+		UPDATE profile
+		SET
+		exercise_use = #{mateSearch}
+		WHERE id = #{id}
+	</update>
+
+	<update id="ExerciseProfileUpdate" parameterType="map">
+    UPDATE profile
+    JOIN member ON member.id = profile.id
+    SET
+    <if test="nickname != null">
+        member.nickname = #{nickname},
+    </if>
+    <if test="content != null">
+        profile.content = #{content},
+    </if>
+    <if test="exercise_min != null">
+        profile.exercise_min = #{exercise_min},
+    </if>
+    <if test="exercise_dis != null">
+        profile.exercise_dis = #{exercise_dis},
+    </if>
+    <if test="exercise != null">
+        profile.exercise = #{exercise},
+    </if>
+    <if test="mate != null">
+        profile.mate = #{mate},
+    </if>
+    <if test="latitude != null">
+        profile.latitude = #{latitude},
+    </if>
+    <if test="longitude != null">
+        profile.longitude = #{longitude},
+    </if>
+    <if test="sido != null">
+        profile.sido = #{sido},
+    </if>
+    <if test="dong != null">
+        profile.dong = #{dong},
+    </if>
+    <if test="detail_address != null">
+        profile.detail_address = #{detail_address},
+    </if>
+    <if test="shortsido != null">
+        profile.shortsido = #{shortsido}
+    </if>
+    WHERE profile.id = #{id}
+</update>
 </mapper>   	

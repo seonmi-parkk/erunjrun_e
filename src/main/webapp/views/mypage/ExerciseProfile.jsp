@@ -10,26 +10,38 @@
 body {
 	font-family: Arial, sans-serif;
 	margin: 0;
-	padding: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
-	background-color: #f9f9f9; /* 연한 배경색 */
+	padding: 20px;
+	background-color: #f4f4f4;
 }
 
 .container {
 	background: white;
 	padding: 20px;
 	border-radius: 8px;
-	width: 400px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	max-width: 600px;
+	margin: 0 auto;
 }
 
-h3 {
-	text-align: center;
+.profile-header {
+	display: flex;
+	align-items: center;
 	margin-bottom: 20px;
-	color: #ff7f50; /* 주황색 */
+	text-align: left;
+}
+
+.profile-header img {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-right: 15px;
+}
+
+.profile-header h2 {
+	margin: 0;
+	font-size: 24px;
+	color: #333;
 }
 
 .form-group {
@@ -37,85 +49,137 @@ h3 {
 }
 
 label {
-	display: block;
+	display: inline-block;
 	margin-bottom: 5px;
-	font-weight: bold;
-}
-
-input[type="text"], input[type="password"] {
-	width: 100%;
-	padding: 10px;
-	border: 1px solid #ccc;
+	color: #555;
+	background-color: #f9f9f9;
+	padding: 4px 10px;
 	border-radius: 4px;
-	box-sizing: border-box;
+	font-size: 14px;
 }
 
-button {
-	width: 100%;
+input[type="text"], input[type="email"], input[type="number"] {
+	width: calc(100% - 20px);
 	padding: 10px;
-	background-color: #ff7f50; /* 주황색 */
-	color: white;
 	border: none;
 	border-radius: 4px;
-	cursor: pointer;
+	box-sizing: border-box;
+	background-color: transparent;
+	display: block;
+}
+
+.submit-group a {
+	display: inline-block;
+	padding: 10px;
+	background-color: #ff7f50;
+	color: white;
+	text-decoration: none;
+	border-radius: 4px;
+	text-align: center;
+	width: 100%;
 	margin-top: 10px;
-}
-
-button:hover {
-	background-color: #ff6347; /* 버튼 hover 색상 */
-}
-
-.result {
-	margin-top: 5px;
-	font-weight: bold;
-	display: inline-block; /* 수평 정렬 */
-	margin-left: 10px; /* 버튼과 결과 사이의 간격 */
 }
 </style>
 </head>
 <body>
 	<div class="container">
-		<h3>회원 상세 보기</h3>
-		<form id="profile" action="profileUpdate" method="get"
-			enctype="multipart/form-data">
-			<input type="hidden" name="id" value="${member.id}" />
+		<div class="profile-header">
+			<img src="/photo/${profile.image}" alt="회원 이미지">
+			<div>
+				<h2>${member.nickname}</h2>
+				<div class="form-group">
+					<label for="address"></label> <input type="text" name="address"
+						id="address" value="${mypage.detail_address}" readonly />
+				</div>
+			</div>
+		</div>
+		<hr>
+		<form id="profile" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="id" value="${sessionScope.loginId}" />
 			<div class="form-group">
-				<label for="image">이미지</label> <img src="/photo/${profile.image}"
-					alt="회원 이미지" style="max-width: 100%; border-radius: 4px;" /> <input
-					type="file" name="imageFile" id="imageFile" disabled />
-				<!-- 사용자가 선택할 수 없도록 비활성화 -->
+				<label>성별</label> <input type="text" value="${member.gender}"
+					readonly />
 			</div>
 			<div class="form-group">
-				<label for="nickname">닉네임</label> <input type="text" name="nickname"
-					id="nickname" value="${member.nickname}" readonly />
+				<label>연령대</label> <input type="text" id="ageGroup" readonly />
 			</div>
 			<div class="form-group">
-				<label for="point">보유 포인트</label> <input type="text" name="point"
-					id="point" value="${member.point}" />
+				<label>운동 시간 (분)</label> <input type="number" name="exercise_min"
+					id="exercise_min" value="${mypage.exercise_min}" placeholder="분"
+					readonly />
 			</div>
 			<div class="form-group">
-				<label for="phone">전화번호</label> <input type="text" name="phone"
-					id="phone" value="${member.phone}" />
+				<label>운동 거리 (km)</label> <input type="number" name="exercise_dis"
+					id="exercise_dis" value="${mypage.exercise_dis}" placeholder="km"
+					readonly />
 			</div>
 			<div class="form-group">
-				<label for="address">주소</label> <input type="text" name="address"
-					id="address" value="${member.address}" />
+				<label>나의 성향</label> <input type="text" value="${mypage.exercise}"
+					readonly />
 			</div>
 			<div class="form-group">
-				<label for="email">이메일</label> <input type="email" name="email"
-					id="email" value="${member.email}" />
+				<label>원하는 운동 메이트 성향</label> <input type="text"
+					value="${mypage.mate}" readonly />
 			</div>
+			<div class="form-group">
+				<label>소개글</label> <input type="text" value="${mypage.content}"
+					readonly />
+			</div>
+
 			<div class="submit-group">
-				<button type="submit">수정하기</button>
-			</div>
-			<div class="submit-group">
-				<a href="delete" class="button">탈퇴하기</a>
+				<a href="ExerciseProfileUpdateView">수정하기</a>
 			</div>
 		</form>
 	</div>
-
 	<script>
-		
+		$(document)
+				.ready(
+						function() {
+							var birthString = "${birthString}"; // JSP에서 JavaScript로 변수 전달
+							console.log("생년월일:", birthString); // 값 확인
+
+							// 나이 계산 로직
+							if (birthString.length === 8 && !isNaN(birthString)) {
+								const birthYear = parseInt(birthString
+										.substring(0, 4), 10);
+								const birthMonth = parseInt(birthString.substring(4,
+										6), 10);
+								const birthDay = parseInt(
+										birthString.substring(6, 8), 10);
+
+								const currentDate = new Date();
+								const currentYear = currentDate.getFullYear();
+								const currentMonth = currentDate.getMonth() + 1; // 0부터 시작하므로 +1
+								const currentDay = currentDate.getDate();
+
+								let age = currentYear - birthYear;
+
+								// 생일이 지나지 않았다면 나이 하나 감소
+								if (currentMonth < birthMonth
+										|| (currentMonth === birthMonth && currentDay < birthDay)) {
+									age--;
+								}
+
+								let ageGroup;
+								if (age < 20) {
+									ageGroup = "10대";
+								} else if (age < 25) {
+									ageGroup = "20~25대";
+								} else if (age < 30) {
+									ageGroup = "26~30대";
+								} else if (age < 35) {
+									ageGroup = "31~35대";
+								} else if (age < 40) {
+									ageGroup = "36~40대";
+								} else {
+									ageGroup = "41대 이상";
+								}
+
+								$('#ageGroup').val(ageGroup);
+							} else {
+								$('#ageGroup').val("정보 없음");
+							}
+						});
 	</script>
 </body>
 </html>

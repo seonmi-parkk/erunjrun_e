@@ -32,7 +32,7 @@
 		LEFT JOIN
 		profile ON member.id = profile.id 
 		WHERE
-		member.id = #{id}
+		member.id = #{id} LIMIT 1;
 	</select>
 
 	<select id="idOverlay" resultType="int">

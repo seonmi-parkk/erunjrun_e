@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.member.dto.MemberDTO;
 import com.erunjrun.member.dto.ProfileDTO;
+import com.erunjrun.mypage.dto.MypageDTO;
 
 @Mapper
 public interface MypageDAO {
@@ -26,4 +27,12 @@ public interface MypageDAO {
 
 	void firstExerciseProfile(Map<String, String> params);
 
+	MypageDTO mypageDetail(String id);
+
+	void updateProfileVisibility(String id, String profileVisibility);
+	
+	void updateMateSearch(String id, String mateSearch);
+
+	void ExerciseProfileUpdate(Map<String, String> params);
+	
 }

@@ -6,6 +6,12 @@
 <meta charset="UTF-8">
 <title>로그인</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="resources/css/common.css">
+
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -22,29 +28,32 @@ body {
 	background: white;
 	padding: 20px;
 	border-radius: 8px;
-	width: 300px;
+	width: 330px; /* 너비 유지 */
+	/* 그림자 및 테두리 제거 */
 }
 
 h3 {
 	text-align: center;
+	margin-bottom: 20px; /* 아래쪽 마진 추가 */
+}
+
+h2 {
+	text-align: center;
+	margin-bottom: 20px; /* 아래쪽 마진 조정 */
 }
 
 .form-group {
-	margin-bottom: 15px;
-}
-
-label {
-	display: block;
-	margin-bottom: 5px;
-	font-weight: bold;
+	margin-bottom: 15px; /* 아래쪽 마진 조정 */
 }
 
 input[type="text"], input[type="password"] {
-	width: 100%;
+	width: calc(100% + 100px); /* 기존 너비 유지 */
 	padding: 10px;
-	border: 1px solid #ccc;
+	border: 1px solid #ccc; /* 1픽셀 회색 테두리 */
 	border-radius: 4px;
 	box-sizing: border-box;
+	margin-left: -50px; /* 왼쪽으로 이동 */
+	background-color: #ffffff; /* 배경색을 하얀색으로 변경 */
 }
 
 input::placeholder {
@@ -53,24 +62,21 @@ input::placeholder {
 
 .checkbox-group {
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.checkbox-group {
-    display: flex;
-    justify-content: flex-end; /* 오른쪽 정렬 */
-    align-items: center;
+	align-items: center; /* 체크박스와 레이블을 수직으로 정렬 */
+	justify-content: flex-end; /* 체크박스 왼쪽 정렬 */
+	margin-left: auto; /* 왼쪽 마진 자동으로 설정하여 오른쪽으로 이동 */
+	margin-right: -52px; /* 오른쪽 마진 추가 */
 }
 
 button {
-	width: 100%;
+	width: calc(100% + 100px); /* 입력 필드와 동일한 너비 */
 	padding: 10px;
 	background-color: #ff7f50; /* 주황색으로 변경 */
 	color: white;
-	border: none;
+	border: none; /* 테두리 제거 */
 	border-radius: 4px;
 	cursor: pointer;
+	margin-left: -50px; /* 왼쪽으로 이동 */
 }
 
 button:hover {
@@ -78,44 +84,56 @@ button:hover {
 }
 
 .links {
-	text-align: center;
-	margin-top: 10px;
+    display: flex; /* 플렉스박스를 사용하여 정렬 */
+    align-items: center; /* 수직 정렬 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    margin-top: 10px; /* 위쪽 여백 추가 */
+    /* 아래 여백이나 다른 속성들을 추가해 자유롭게 조정 가능 */
 }
 
-.links a:last-child {
-    margin-top: 10px; /* 관리자 전용 링크에만 적용 */
-    display: block; /* 블록 요소로 설정하여 줄 바꿈 */
+.links a {
+	margin: 0 3px; /* 양쪽에 여백 추가 */
 }
 </style>
+
+
 </head>
 <body>
+	<jsp:include page="../header.jsp" />
 	<div class="container">
-		<h3>로그인</h3>
+		<h3>
+			<img src="resources/img/common/logo.png" alt="이런저런"
+				style="width: 80%; height: auto;" />
+		</h3>
+		<h2>이런저런에 오신 것을 환영합니다!</h2>
 		<form action="login" method="post">
 			<div class="form-group">
 				<label for="userId"></label> <input type="text" name="id"
-					id="userId" placeholder="아이디" required />
+					id="userId" placeholder="ID" required />
 			</div>
 			<div class="form-group">
 				<label for="password"></label> <input type="password" name="pw"
-					placeholder="비밀번호" required />
+					placeholder="PASSWORD" required />
 			</div>
-			<div class="form-group checkbox-group">
-			<input type="checkbox" id="saveId" name="saveId" /> <label for="saveId">아이디 저장</label>
+			<div class="form-group checkbox-group"
+				style="justify-content: flex-end;">
+				<label for="saveId" style="margin-right: 5px;">아이디 저장</label> <input
+					type="checkbox" id="saveId" name="saveId" />
 			</div>
 			<button type="submit">LOGIN</button>
 			<div class="links">
-				<a href="joinView">회원가입</a> | <a href="findIdView">아이디/비밀번호 찾기</a><a href="adminLogin">관리자전용</a>
+				<a href="joinView">회원가입</a> <span>|</span> <a href="findIdView">아이디/비밀번호
+					찾기</a> <span>|</span> <a href="adminLogin">관리자전용</a>
 			</div>
 		</form>
 	</div>
 
 	<script>
-	var msg = '${msg}';
-	if (msg != '') {
-		alert(msg);
-	}
-		
+		var msg = '${msg}';
+		if (msg != '') {
+			alert(msg);
+		}
+
 		// 폼 제출 시 쿠키에 ID 저장
 		$('form').on('submit', function() {
 			if ($('#saveId').is(':checked')) {
@@ -158,7 +176,6 @@ button:hover {
 				$('#saveId').prop('checked', true); // 체크박스도 체크
 			}
 		});
-
 	</script>
 </body>
 </html>
