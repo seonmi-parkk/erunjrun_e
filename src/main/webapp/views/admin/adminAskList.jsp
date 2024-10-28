@@ -56,15 +56,6 @@
     overflow-y: auto; /* 글이 길면 스크롤 가능하도록 설정 */
     
 	}
-	.triangle-up {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;  /* 왼쪽 경계선 */
-    border-right: 5px solid transparent; /* 오른쪽 경계선 */
-    border-bottom: 10px solid black;
-    transform: rotate(180deg);     /* 아래쪽 경계선 - 세모의 색상 */
-	}
-	
 	.inner{
     margin-left: 550px;
     
@@ -127,10 +118,7 @@
 		        <option value="nickname">닉네임</option>
 		        <option value="email">이메일</option>
 		    </select>
-				<div class="triangle-up"></div>
 		    <input class="input-txt-l" type="text"  id="searchKeyword" placeholder="검색어를 입력하세요"/>
-		
-		
 		    <input class="btn-sch" type="button" onclick="pageCall(1)" value="검색"/>
 	   	</form>
 	   	
@@ -141,7 +129,7 @@
 				<th>닉네임</th>
 				<th>이메일</th>
 				<th>권한</th>
-				<th onclick="listAlignment">신고누적수</th>
+				<th>신고누적수</th>
 				<th>가입일시</th>
 			</tr>
 		</thead>

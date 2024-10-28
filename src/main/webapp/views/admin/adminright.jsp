@@ -163,9 +163,9 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="subject">정지기간</p>
-			<input type="text" name="start_date" id="start_date"/>
+			<input type="date" name="start_date" id="start_date"/>
 			<p class="title2" id=""> ~ </p>
-			<input type="text" name="end_date" id="end_date"/>
+			<input type="date" name="end_date" id="end_date"/>
 		</div>
 		
 		<div class="input-container">

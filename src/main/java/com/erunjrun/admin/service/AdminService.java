@@ -89,7 +89,7 @@ public class AdminService {
 	}
 
 	public void rightwrite(Map<String, String> param) {
-		
+		admin_dao.rightwrite(param);
 	}
 
 	public AdminDTO rightdetail(String id) {
