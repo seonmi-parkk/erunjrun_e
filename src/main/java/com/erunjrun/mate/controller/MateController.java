@@ -1,5 +1,6 @@
-package com.erunjrun.mate.controller;
+package com.erunjrun.chat.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,7 +22,7 @@ import com.erunjrun.mate.dto.MateProfileDTO;
 import com.erunjrun.mate.service.MateService;
 
 @Controller
-public class MateController {
+public class ChatPersonalController {
 
 	@Autowired MateService mateService;
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -136,12 +138,14 @@ public class MateController {
 		// 로그인 유저의 동을 가져오기 ( check!! 로그인 안한경우 ?? 해당 위치 가져오기??)
 		MateProfileDTO userPos = mateService.getUserPos(fromUserId); 
 		userPos.setId(fromUserId);
-		model.addAttribute("userShortsido", userPos.getShortsido());
-		model.addAttribute("userDong", userPos.getDong());
+		model.addAttribute("userPos", userPos);
+		//model.addAttribute("userShortsido", userPos.getShortsido());
+		//model.addAttribute("userDong", userPos.getDong());
 		
-		// 유저와 같은 지역 유저들의 리스트
-		List<MateProfileDTO> closeList = mateService.getCloseList(userPos); // 아이디, 닉네임, 성별, 짧은시도, 동, 운동메이트 여부, 프로필, 아이콘
-		model.addAttribute("closeList", closeList);
+		
+		// 유저와 같은 지역 유저들의 리스트 //check!! 이거 두줄 빼도됨??
+		//List<MateProfileDTO> closeList = mateService.getCloseList(userPos); // 아이디, 닉네임, 성별, 짧은시도, 동, 운동메이트 여부, 프로필, 아이콘
+		//model.addAttribute("closeList", closeList);
 		
 		// 전체 유저 위치
 		List<MateProfileDTO> posList = mateService.getPosList(fromUserId);
@@ -151,6 +155,32 @@ public class MateController {
 		
 		return "mate/mateList";
 	}
+	
+	@RequestMapping(value="/searchMateList")
+	@ResponseBody
+	public List<MateProfileDTO> searchMateList(MateProfileDTO userPos) {
+		// 유저와 같은 지역 유저들의 리스트
+		List<MateProfileDTO> closeList = mateService.searchMateList(userPos); // 아이디, 닉네임, 성별, 짧은시도, 동, 운동메이트 여부, 프로필, 아이콘
+		//model.addAttribute("closeList", closeList);
+		return closeList;
+	}
+	
+
+	@RequestMapping(value="/moveMateList")
+	@ResponseBody
+	public List<MateProfileDTO> moveMateList(@RequestBody List<String> users, HttpSession session) {
+		String fromUserId = (String) session.getAttribute("loginId");
+		//logger.info("users.get(0)"+users.get(0));
+		//List<MateProfileDTO> moveMateList = mateService.moveMateList(username); // 아이디, 닉네임, 성별, 짧은시도, 동, 운동메이트 여부, 프로필, 아이콘
+		//model.addAttribute("closeList", closeList);
+		List<MateProfileDTO> list = null;
+		if(users.size()>0) {			
+			list = mateService.moveMateList(users,fromUserId);
+		}
+		return list;
+	}
+	
+	
 	
 	
 }
