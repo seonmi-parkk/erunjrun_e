@@ -121,7 +121,7 @@
 	           </div>
 	           <div class="name-addr">
 	               <p class="user-name">${profileDto.nickname}</p>
-	               <img src="/resources/img/common/ico_map.png" alt="위치"/><span>${profileDto.shortsido} ${profileDto.dong}</span>
+	               <img src="/resources/img/common/ico_map.png" alt="위치"/><span class="addr">${profileDto.shortsido} ${profileDto.dong}</span>
 	           </div>
            </div>
 	       <div class="buttons">
@@ -192,5 +192,6 @@
        			</c:when>
      		</c:choose>
 	    </div>
+	 </div>   
 </body>
 </html>

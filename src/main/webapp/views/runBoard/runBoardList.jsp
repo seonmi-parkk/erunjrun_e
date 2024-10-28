@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
     <script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+    <script src="/resources/js/layerPopup.js"></script>
 <style>
 	a{
 		color: #333;
@@ -36,6 +37,55 @@
     .title1{
     	margin-top: 160px;
     }
+    
+    /*운동프로필 레이어팝업*/
+	#profilePopup {
+	    width: fit-content;
+	    top: 185px;
+	    left: 50%;
+	    transform: translateX(-50%);
+		z-index: 996;
+	}
+	#profilePopup .close {
+	    font-size: 40px;
+	    font-weight: 300;
+	    position: absolute;
+	    z-index: 996;
+	    top: 30px;
+	    right: 30px;
+	    display: inline-block;
+	    width: 30px;
+	    height: 30px;
+	    line-height: 27px;
+	    text-align: center;
+	}
+	#profilePopup .modal-content{
+	    padding: 20px 20px;
+	    background: #f8f8f8;
+	    border: none;
+    	border-radius: 0;
+    }
+    #PopupBody {
+    	background: #fff;
+    	border-radius: 10px;
+    }
+	   .profileDetail {
+   	   position: relative;
+   	   width: 760px;
+       padding: 34px 50px 10px;
+       height: fit-content !important;
+   	   overflow-y: auto;
+   }
+    .profileDetail .user-info .user-name{
+       font-size: 30px;
+       margin-bottom: 0px;
+   }
+   .addr{
+   	    transform: translateY(5px);
+    	display: inline-block;
+   }
+    
+    
 </style>
 </head>
 <body>
@@ -70,12 +120,20 @@
 				<div class="container">
 		    		<nav aria-label="Page navigation">
 		        		<ul class="pagination" id="pagination"></ul>
-						<div class="btn01-l" onclick="location.href='runBoardWrite'">게시글 등록</div>
+		        		<!-- onclick="location.href='runBoardWrite'" -->
+						<div class="btn01-l" id="loginPop">게시글 등록</div>
 		    		</nav>
 				</div>
 			</th>
 		</tr>
 	</table>
+	<!-- 모달 -->
+		<div id="profilePopup" class="modal">
+		    <div class="modal-content">
+		        <span class="close">&times;</span>
+		        <div id="PopupBody"></div>
+		    </div>
+		</div>
 	</div>
 	<jsp:include page="../footer.jsp"/>
 </body>
@@ -138,7 +196,7 @@
 	        }
 	    });
 	}
-
+	// 게시글 리스트
 	function drawList(resultList,page,keyword) {
 		var content ='';
 		resultList.forEach(function(view,idx){
@@ -151,7 +209,7 @@
                 content +='<td>'+view.board_idx+'</td>';
             }
 			
-			content +='<td>'+view.nickname+'</td>';
+			content +='<td ><a class="user" data-id="' + view.id + '">'+view.nickname+'</a></td>';
 			content +='<td><a href="/runBoardDetail/'+view.board_idx+'">'+view.subject+'<a/></td>';
 			content +='<td>'+view.bHit+'</td>';
 			content +='<td>'+view.likes+'</td>';
@@ -164,6 +222,74 @@
 		});
 		$('#list').html(content);
 	}
+	
+	// 체크
+	function secondBtn1Act() {
+		// 두번째팝업 2번버튼 클릭시 수행할 내용
+	 	console.log('두번째팝업 1번 버튼 동작');
+		// 로그인 페이지로 이동하기 넣어주기!!!!!!!!
+	 	removeAlert();
+	 	}
+	function secondBtn2Act() {
+ 	    // 두번째팝업 2번버튼 클릭시 수행할 내용
+ 	    console.log('두번째팝업 2번 버튼 동작');
+ 	    removeAlert();
+ 	}
+		
+	
+	 	$('#loginPop').on('click',function(){
+	 		
+	 		var userId = "${sessionScope.loginId}";
+	 		
+	 		if(!userId){
+	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn1Act,secondBtn1Act);	
+	 		}else{
+	 			location.href='runBoardWrite';
+	 		}
+	 		
+	 	});
+	 	
+	 	
+	 // 클릭시 운동프로필 레이어 팝업
+		$(document).on('click','.user',function(){
+		    var toUserId = $(this).data('id');
+		   // console.log('toUserId',toUserId);
+		    openProfile(toUserId);
+		});
+		
+		
+		// 운동프로필 레이어 팝업 열기
+		function openProfile(toUserId){
+			var modal = document.getElementById("profilePopup");
+		    var PopupBody = document.getElementById("PopupBody");
+			
+		    // AJAX 요청
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("GET", "/mate/"+toUserId, true);
+		    xhr.onreadystatechange = function() {
+		        if (xhr.readyState === 4 && xhr.status === 200) {
+		            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+		            modal.style.display = "block"; // 모달 열기
+		            
+		         	// JS 파일을 동적으로 로드
+		            var script = document.createElement('script');
+		            script.src = '/resources/js/profileDetail.js'; 
+		            document.body.appendChild(script);
+		        }
+		    };
+		    xhr.send();
+		}
+		
+		// 팝업 닫기
+		document.getElementsByClassName("close")[0].onclick = function() {
+		    document.getElementById("profilePopup").style.display = "none";
+		};
+	 	
+	 	
+	
+	
+	
+	
 	
 
 </script>

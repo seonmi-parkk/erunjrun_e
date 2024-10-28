@@ -202,7 +202,7 @@ public class RunBoardController {
     	logger.info("조아요 여부 : "+isLike);
     	
     	RunBoardDTO run = runBoardService.detail(board_idx);
-    	logger.info("내용 : "+run);
+    	logger.info("내용 : "+run.toString());
     	List<RunBoardDTO> mapData = runBoardService.mapData(board_idx);
     	logger.info("맵 : "+mapData);
     	

@@ -7,6 +7,7 @@
 	
 	<select id="list" resultType="com.erunjrun.board.dto.RunBoardDTO">
         SELECT 
+        	b.id,
             b.board_idx,
             m.nickname,
             b.subject,
@@ -140,9 +141,9 @@
     		VALUES (#{code_name}, #{id},#{point})
     </insert>
     
-    
+    <!-- 게시글 상세보기 -->
     <select id="detail" resultType="com.erunjrun.board.dto.RunBoardDTO">
-    	SELECT b.board_idx, b.subject, b.content, m.nickname, b.create_date , b.bHit ,b.likes
+    	SELECT m.id, b.board_idx, b.subject, b.content, m.nickname, b.create_date , b.bHit ,b.likes
 			FROM board b
 		LEFT JOIN member m ON b.id = m.id WHERE b.board_idx = #{param1}
     </select>

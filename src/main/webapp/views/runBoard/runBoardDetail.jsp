@@ -10,6 +10,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=26c56d5b3e89329f848d1188b85f2e3d&libraries=services"></script>
 	<script src="/resources/js/common.js"></script>
+	<script src="/resources/js/layerPopup.js"></script>
 	
     <style>
     	.dot {overflow:hidden;float:left;width:12px;height:12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}    
@@ -260,8 +261,8 @@
 	    		<div class="ard">
 		    		<div class="detail"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>
 		    		<div id ="bih" class=btn03-s>비활성화</div>
-		    		<div class="suj1">수정</div>
-		    		<div class="suj2">삭제</div>
+		    		<div class="suj1 btn-popup">수정</div>
+		    		<div class="suj2 btn-popup">삭제</div>
 	    		</div>
     		</div>
 	    	<div class="com">
@@ -276,8 +277,10 @@
 	    </div>
 	    <div class="bubu">
 	    	<div class="bbs">
-		        <button type="button" class="btn01-l" onclick="location.href='/runBoardUpdate/${info.board_idx}'">수정</button>
-			    <button type="button" class="btn03-l" onclick="runDelete(${info.board_idx})">삭제</button>	    	    	
+	    		<c:if test="${sessionScope.loginId == info.id}">
+			        <button type="button" class="btn01-l" onclick="location.href='/runBoardUpdate/${info.board_idx}'">수정</button>
+				    <button type="button" class="btn03-l btn-popup" >삭제</button>	    	    	
+	    		</c:if>
 	    	</div>
 		    <button type="button" class="btn02-l" onclick="location.href='/runBoard'">목록</button>
 	    </div>
@@ -388,6 +391,15 @@ function initializeMap() {
 	
 	 // 추천 업데이트
 	 function boardLike(board_idx) {
+		 	 
+		 var userId = "${sessionScope.loginId}";
+         console.log(userId);
+         if(!userId){
+         	alert("로그인이 필요한 서비스 입니다.");
+         	return;
+         }
+		 
+		 
 	        $.ajax({
 	            type: 'POST',
 	            url: '/boardLike',
@@ -402,6 +414,8 @@ function initializeMap() {
 	                	icon.attr('src', '/resources/img/common/ico_heart_no_act.png');
 	                	console.log("안좋아요?:", data.like);
 	                }
+	                 
+	                
 	            },
 	            error: function() {
 	                alert('추천에 실패 했습니다.');
@@ -409,7 +423,7 @@ function initializeMap() {
 	        });
 	    }
 	 
-	 	
+	 	/*
 	 	function runDelete(board_idx) {
 	        if (confirm("정말 삭제하시겠습니까?")) {
 	            $.ajax({
@@ -430,6 +444,63 @@ function initializeMap() {
 	            });
 	        }
 	    }
+	 	*/
+	 	
+	 	/* 레이어팝업 */
+
+	 	function secondBtn1Act() {
+	 	    // 두번째팝업 1번버튼 클릭시 수행할 내용
+	 	    
+	 	    var board_idx = "${info.board_idx}";
+	 	    
+	 	    console.log('두번째팝업 1번 버튼 동작');
+	 	   $.ajax({
+               type: "POST",
+               url: "/runBoardDelete/" + board_idx ,
+               data: { board_idx: board_idx },
+               success: function(response) {
+                   if (response.success) {
+                       location.href = "/runBoard";
+                   } else {
+                       alert("삭제에 실패했습니다.");
+                   }
+               },
+               error: function(error) {
+                   alert("오류가 발생했습니다.");
+               }
+           });
+	 	}
+
+	 	function secondBtn2Act() {
+	 	    // 두번째팝업 2번버튼 클릭시 수행할 내용
+	 	    console.log('두번째팝업 2번 버튼 동작');
+	 	    removeAlert();
+	 	}
+
+	 	$('.btn-popup').on('click',function(board_idx){
+	 		layerPopup('정말 삭제 하시겠습니까?','삭제','취소' ,secondBtn1Act , secondBtn2Act);
+	 	});
+	 	
+	 	$('#reo').on('click',function(board_idx){
+	 		layerPopup('정말 신고 하시겠습니까?','신고','취소' ,secondBtn3Act , secondBtn2Act);
+	 	});
+	 	
+	 	function secondBtn3Act() {
+	 	    // 두번째팝업 3번버튼 클릭시 수행할 내용
+	 	    console.log('두번째팝업 2번 버튼 동작');
+	 	   location.href = "/reportForm";
+	 	  
+	 	}
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
 
 
 </script>
