@@ -112,12 +112,12 @@
 	}
 	
 	.crewBox {
-	    margin: 20px 50px 0px 50px; /* 상단 20px, 좌우 50px의 여백 */
+	    margin: 40px 50px 0px 50px; /* 상단 20px, 좌우 50px의 여백 */
 	    background-color: #fff; /* 크루 박스 배경을 흰색으로 설정 */
 	    border-radius: 12px; /* 모서리를 둥글게 설정 */
 	    width: 40%; /* 박스 너비를 40%로 설정 */
 	    padding: 20px; /* 내부 여백을 20px로 설정 */
-	    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); /* 그림자 효과 추가 */
+	    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); /* 그림자 효과 추가 */
 	    display: flex; /* 내부 요소를 수평으로 배치 */
 	    gap: 22px; /* 내부 요소 간의 간격을 22px로 설정 */
 	}
@@ -167,6 +167,12 @@
 	    font-size: 14px; /* 태그의 글자 크기를 14px로 설정 */
 	    font-weight: 600; /* 태그의 글자를 두껍게 설정 */
 	}
+	
+	.highlight-tag {
+    background-color: #FFDDC1; /* 두 번째 태그 배경색 */
+}
+	
+	
 	
 	.crewName {
 	    font-weight: bold; /* 크루 이름을 굵게 설정 */
@@ -257,7 +263,7 @@
 		
 		<div class="tagBox">
 			<span id="tagFilter">
-				<label><input type="checkbox" name="" value=""/>🔔 모집중</label>
+				<label><input type="checkbox" name="tag_idx_list" value="is_recruit"/>🔔 모집중</label>
                 <label><input type="checkbox" name="tag_idx_list" value="1">🏃‍♂️러닝에 집중</label>
                 <label><input type="checkbox" name="tag_idx_list" value="2">🙋‍♀️ 친목도 중요</label>
                 <label><input type="checkbox" name="tag_idx_list" value="3"><img src="resources/img/common/ico_male.png" width="9px" class="tagImg-01"/> 남성만 가능</label>
@@ -269,100 +275,202 @@
                 <label><input type="checkbox" name="tag_idx_list" value="9">🏆 대회 목적</label>
                 <label><input type="checkbox" name="tag_idx_list" value="10">💦 러닝 고수만</label>
                 <label><input type="checkbox" name="tag_idx_list" value="11">🥳 초보도 환영</label>
-                <label><input type="checkbox" name="" value=""/>🗽 수도권(서울,경기,인천)</label>
-                <label><input type="checkbox" name="" value=""/><b style='color: gray' class="tagImg-01">#</b>수도권 외</label>
-                <label><input type="checkbox" name="" value=""/><b style='color: #116DCA' class="tagImg-01">W</b>평일 포함</label>
-                <label><input type="checkbox" name="" value=""/><b style='color: #FD6F22' class="tagImg-01">S</b>주말 포함</label>
+                <label><input type="checkbox" name="tag_idx_list" value="shortsido_area"/>🗽 수도권(서울,경기,인천)</label>
+                <label><input type="checkbox" name="tag_idx_list" value="shortsido_etc"/><b style='color: gray' class="tagImg-01">#</b>수도권 외</label>
+                <label><input type="checkbox" name="tag_idx_list" value="weekdays"/><b style='color: #116DCA' class="tagImg-01">W</b>평일 포함</label>
+                <label><input type="checkbox" name="tag_idx_list" value="weekend"/><b style='color: #FD6F22' class="tagImg-01">S</b>주말 포함</label>
                 
             </span> <br>
 		</div> <!-- tagBox -->
 		
-		<div class="crewListBox">
-		    <div class="crewBox">
-		        <div class="crewImg">
-		            <img class="crew-img" id="crew-image" src="/resources/img/crew/crewImg300.png" />
-		            <img class="crew-like" src="resources/img/common/ico_heart_no_act.png" />
-		        </div>
-		        
-		        <div class="crewContentBox">
-		            <div class="tagBox2">
-		                <span class="tag">러닝에 집중</span>
-		                <span class="tag">혼성</span>
-		                <span class="tag">E 환영해요</span>
-		            </div>
-		            <div class="crewName" id="crew-name">서울러닝크루 | 7979_SRC</div>
-		            <div class="crewInfo-01">
-		            	<img src="/resources/img/crew/img01.png" width="10px" class="imglayout" id="crew-location" />
-		            	서울 마포구  &nbsp; &nbsp; &nbsp;
-		            	<img src="/resources/img/crew/img03.png" width="14px" class="imglayout"/>
-		            	매주 <span id="crew-days"></span>
-		            </div>
-		            <div class="crewInfo-02">
-		            	<div class="inone">
-		            		<img src="/resources/img/crew/img02.png" width="13px" class="imglayout"/>
-			            	<span class="current_member" id="current_member">19</span> / <span class="member" id="member">30</span>
-			            </div>
-		            	<div class="crewStatus01"><span id="is_recruit">모집중</span></div>
-		            </div>
-		        </div>
-		    </div>	<!-- crewBox -->
-		</div> <!-- crewListBox -->
+		<div class="crewListBox"> </div> <!-- crewListBox -->
 		
 		<div class="layoutbox-bt"></div>
 		
 	</div> <!-- inner -->
 	
+	<div id="loading" style="text-align: center; padding: 20px;">Loading...</div>
+	
 	<jsp:include page="../footer.jsp"/>
 </body>
 <script src="/resources/js/common.js"></script>
 <script>
+
+	var currentPage = 1;
+	var isLoading = false;
+	var hasMoreData = true;
+	var filtering = [];
 	// 크루가 홀수일 때 마지막 crowBox 왼쪽 정렬
 	$(document).ready(function() {
-	    var crewBoxes = $('.crewListBox .crewBox');
-	    var crewListBox = $('.crewListBox');
-	    
-	    // crewBox가 홀수일 때 마지막 요소에 left-align-last 클래스를 추가하고, 전체 왼쪽 정렬
-	    if (crewBoxes.length % 2 !== 0) {
-	        crewBoxes.last().addClass('left-align-last');
-	        crewListBox.css('justify-content', 'flex-start'); // 전체를 왼쪽 정렬
-	    } else {
-	        crewListBox.css('justify-content', 'center'); // 짝수일 때는 중앙 정렬 유지
-	    }
-	    
-	    
-	    $('.tagBox2').each(function() {
-	        var tags = $(this).children('.tag'); // .tag 요소들을 가져오기
+		
+		
 
-	        // 태그가 3개 이상일 때만 적용
-	        if (tags.length >= 3) {
-	            tags.eq(1).css({ // 두 번째 태그에 배경색 변경
-	                'background-color': '#FFDDC1' 
-	            });
-	        }
-	    });
+		
+		crewList(currentPage); // 1 전달 (현재 페이지)
+		
+        // IntersectionObserver 설정
+        var observer = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting && !isLoading) {
+            	console.log('loading 에 도착');
+                currentPage++; // 다음 페이지 요청
+                crewList(currentPage); // 페이지 호출
+            }
+        });
+		
+        observer.observe(document.getElementById('loading')); // 감시할 요소 지정
+		
+
+	    
+	    
+	    $('input[name="tag_idx_list"]').on('click', function() {
+            currentPage = 1; // 페이지 초기화
+            hasMoreData = true;
+            $('.crewListBox').empty(); // 기존 목록 초기화
+            updateFiltering(); // 필터링 배열 업데이트
+            crewList(currentPage); // 필터링된 리스트 요청
+        });
+
 	});
+
+	// 필터 배열
+	function updateFiltering() {
+	    filtering = $('input[name="tag_idx_list"]:checked').map(function() {
+	        return $(this).val();
+	    }).get(); // 체크된 값만 배열로 가져옴
+	    console.log('필터 =>', filtering);
+	}
 	
- 	$.ajax({
-		type: 'GET',
-		url: '/crew/list'
-		data: {},
-		dataType: 'JSON',
-		success: function(response){
-			var result = response.result;
-			
-			var content = '';
-			
-			result.forEach(function(itme, idx){
-				$('#crew-image').attr('src', item.image);
-				$('.tagBox2').html('<span class="tag">'+item.crew_tag+'</span>'); // 반복해서 들어가야 함
-				$('#crew-name').html(itme.crew_name)
-			});
-			
-		},error: function(e){
-			console.log('에러 => ', e);
-		}
-	}); 
 	
+	function crewList(page){
+		$('#loading').css('opacity', '1');
+	    isLoading = true;
+		// 필터링된 값을 배열로 업데이트하는 함수
+		 updateFiltering();
+	
+	  	$.ajax({
+			type: 'GET',
+			url: '/crew/list',
+			data: $.param({'filtering': filtering, 'page': page, 'pageSize': 10 }, true),
+			dataType: 'JSON',
+			success: function(response){
+				var result = response.result;
+				console.log('오는값 => ',result);
+				
+				var content = '';
+				var btn_style = '';
+				
+				if(result.length > 0){
+					result.forEach(function(item, idx){
+						
+						var day = item.days.replace(/mon|tue|wen|thu|fri|sat|sun/gi, function(match) {
+	                        return { mon: '월', tue: '화', wen: '수', thu: '목', fri: '금', sat: '토', sun: '일' }[match.toLowerCase()];
+	                    });
+							
+						var is_recruit = '';
+						
+						if(item.is_recruit === 'Y'){
+							is_recruit = '모집중';
+							btn_style = '<div class="crewStatus01"><span id="is_recruit">'+is_recruit+'</span></div>';
+						}else{
+							is_recruit = '모집완료';
+							btn_style = '<div class="crewStatus02"><span id="is_recruit">'+is_recruit+'</span></div>';
+						}
+						
+						var imgElem = '';
+						if(item.img_new === null || item.img_new === ''){
+							imgElem = '/resources/img/crew/crewImg300.png';
+						}else{
+							imgElem = '/photo/'+item.img_new;
+						}
+						
+		                // 태그 처리
+		                var tagNamesArray = item.tag_names ? item.tag_names.split(',') : [];
+		                var displayedTags = '';
+		                
+		                tagNamesArray.slice(0, 3).forEach(function(tag, index) {
+		                    var styleClass = index === 1 ? 'highlight-tag' : 'normal-tag';
+		                    displayedTags += '<span class="tag ' + styleClass + '">' + tag + '</span>';
+		                });
+	
+						content += '<div class="crewBox" onclick="crewDetail()">';
+						content += '<div class="crewImg"><img class="crew-img" id="crew-image" src="' + imgElem + '" onerror="this.src=\'/resources/img/crew/crewImg300.png\'"/>';
+	 					// 좋아요 이미지
+						content += '<div onclick="crew_like()"><img class="crew-like" src="resources/img/common/ico_heart_no_act.png"/></div></div>';
+						// 크루 tag
+						content += '<div class="crewContentBox"><div class="tagBox2">' + displayedTags + '</div>';
+						
+						content += '<div class="crewName" id="crew-name">'+item.crew_name+'</div>';
+						content += '<div class="crewInfo-01">';
+						content += '<img src="/resources/img/crew/img01.png" width="10px" class="imglayout"/>';
+						content += '<span id="crew-location">'+ item.shortsido + '&nbsp;' +item.sigungu +'</span>  &nbsp; &nbsp; &nbsp;';
+						content += '<img src="/resources/img/crew/img03.png" width="14px" class="imglayout"/>';
+						content += '<span id="crew-days">'+day+'</span>';
+						content += '</div>';
+						content += '<div class="crewInfo-02">';
+						content += '<div class="inone">';
+						content += '<img src="/resources/img/crew/img02.png" width="13px" class="imglayout"/>';
+						content += '<span class="current_member" id="current_member">'+ item.current_member +'</span> / <span class="member" id="member">'+ item.member +'</span></div>';
+						content += btn_style;
+						content += '</div>';
+						content += '</div>';
+						content += '</div>';
+						
+						var is_recruit = item.is_recruit;
+					});
+					
+					$('.crewListBox').append(content);
+					$('#loading').css('opacity', '0'); // loading 요소를 투명하게 설정
+		            isLoading = false; // 로딩 상태 해제
+		            
+		            
+		    	    var crewBoxes = $('.crewListBox .crewBox');
+		    	    var crewListBox = $('.crewListBox');
+		    	    // crewBox가 홀수일 때 마지막 요소에 left-align-last 클래스를 추가하고, 전체 왼쪽 정렬
+		    	    if (crewBoxes.length % 2 !== 0) {
+		    	        crewBoxes.last().addClass('left-align-last');
+		    	        crewListBox.css('justify-content', 'flex-start'); // 전체를 왼쪽 정렬
+		    	    } else {
+		    	        crewListBox.css('justify-content', 'center'); // 짝수일 때는 중앙 정렬 유지
+		    	    }
+					
+				}else{
+					hasMoreData = false;
+					$('#loading').text('모든 크루 정보를 불러왔습니다.').css('opacity', '1');
+				}
+				
+				
+			},error: function(e){
+				console.log('에러 => ', e);
+				$('#loading').hide();
+                isLoading = false;
+			}
+		}); 
+		
+	}
+	
+	function crew_like(){
+		console.log('크루좋아요 누름');
+	}
+	
+	function crewDetail(){
+		console.log('크루 이동');
+		location.href='#'; // 해당 크루의 idx 를 통해 이동
+			
+	}
+	
+	var checkboxes = document.querySelectorAll('#tagFilter input[type="checkbox"]');
+
+	checkboxes.forEach(function(checkbox){
+	  checkbox.addEventListener('click', function() {
+	    if (this.checked) {
+	      this.parentElement.classList.add('checked');
+	    } else {
+	      this.parentElement.classList.remove('checked');
+	    }
+	  });
+	});
+
+	 
 	
 </script>
 </html>
