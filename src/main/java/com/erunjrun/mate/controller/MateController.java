@@ -1,4 +1,4 @@
-package com.erunjrun.chat.controller;
+package com.erunjrun.mate.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import com.erunjrun.mate.dto.MateProfileDTO;
 import com.erunjrun.mate.service.MateService;
 
 @Controller
-public class ChatPersonalController {
+public class MateController {
 
 	@Autowired MateService mateService;
 	Logger logger = LoggerFactory.getLogger(getClass());
