@@ -112,7 +112,7 @@
 	        </if>
 	</select>
 	
-	<!-- 게시글 삽입 쿼리 -->
+	<!-- 게시글 삽입 -->
     <insert id="insertRunBoard" 
     			useGeneratedKeys="true"
 				keyColumn="board_idx"
@@ -122,13 +122,13 @@
         	VALUES (#{id}, #{code_name}, #{subject}, #{content}, 'Y', 'Y')
     </insert>
     
-    <!-- 경로 데이터 삽입 쿼리 -->
+    <!-- 경로 데이터 삽입 -->
     <insert id="insertRouteData" parameterType="com.erunjrun.board.dto.RunBoardDTO">
         INSERT INTO board_map (board_idx, latitude, longitude, path, order_num)
         	VALUES (#{board_idx}, #{latitude}, #{longitude}, #{path}, #{order_num})
     </insert>
     
-        <!-- 파일 정보 저장 쿼리 -->
+        <!-- 파일 정보 저장 -->
     <insert id="fileWrite" parameterType="com.erunjrun.image.dto.ImageDTO">
         INSERT INTO image (code_name, img_ori, img_new, img_no)
         	VALUES (#{code_name}, #{img_ori}, #{img_new}, #{img_no})
@@ -140,11 +140,77 @@
     		VALUES (#{code_name}, #{id},#{point})
     </insert>
     
+    
     <select id="detail" resultType="com.erunjrun.board.dto.RunBoardDTO">
-    	SELECT rb.board_idx, rb.subject, rb.content, m.nickname, rb.create_date , rb.bHit 
-			FROM board rb
-		LEFT JOIN member m ON rb.id = m.id WHERE rb.board_idx = 50
+    	SELECT b.board_idx, b.subject, b.content, m.nickname, b.create_date , b.bHit ,b.likes
+			FROM board b
+		LEFT JOIN member m ON b.id = m.id WHERE b.board_idx = #{param1}
     </select>
+    
+    <!-- 지도 데이터 -->
+    <select id="mapData" resultType="com.erunjrun.board.dto.RunBoardDTO">
+    	SELECT board_idx,
+           latitude,
+           longitude,
+           path,
+           order_num
+	    FROM board_map
+	    WHERE board_idx = #{param1} 
+    </select>
+    
+    <!-- 조회수 -->
+    <update id="bHit">
+		UPDATE board SET bHit = bHit + 1 WHERE board_idx = #{param1}
+	</update>
+	
+	<select id="like" resultType="int">
+        SELECT COUNT(*) > 0 FROM likes 
+        WHERE id = #{loginId} AND code_name = 'B100' AND board_idx = #{board_idx}
+    </select>
+    
+    <insert id="addLike">
+        INSERT INTO likes (id, code_name, board_idx) 
+        	VALUES (#{loginId}, 'B100', #{board_idx})
+    </insert>
+    
+    <delete id="disLike">
+        DELETE FROM likes 
+        	WHERE id = #{loginId} AND code_name = 'B100' AND board_idx = #{board_idx}
+    </delete>
+    
+    <update id="updateDelLike">
+    	UPDATE board SET likes = likes - 1 WHERE board_idx = #{board_idx}
+    </update>
+    
+    <update id="updateLike">
+    	UPDATE board SET likes = likes + 1 WHERE board_idx = #{board_idx}
+    </update>
+    
+	<!-- 게시글 정보 업데이트 -->
+	<update id="runUpdate" parameterType="com.erunjrun.board.dto.RunBoardDTO">
+	    UPDATE board
+	    SET subject = #{subject},
+	        content = #{content}
+	    WHERE board_idx = #{board_idx} AND id = #{id}
+	</update>
+	
+	<!-- 기존 경로 데이터 삭제 -->
+	<delete id="deleteRouteData" parameterType="int">
+	    DELETE FROM board_map
+	    WHERE board_idx = #{board_idx}
+	</delete>
+	
+	<!-- 기존 이미지 데이터 삭제 -->
+	<delete id="deleteImg" parameterType="int">
+	    DELETE FROM image
+	    WHERE img_no = #{board_idx}
+	</delete>
+	
+	<update id="runBoardDelete">
+		UPDATE board SET use_yn = 'N' WHERE board_idx = #{param1}
+	</update>
+    
+    
     
     
 </mapper>

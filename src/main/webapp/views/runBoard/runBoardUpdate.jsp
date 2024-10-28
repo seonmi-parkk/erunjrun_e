@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>러닝코스 게시글 등록</title>
+    <title>러닝코스 게시글 수정</title>
     <link rel="stylesheet" href="/resources/css/common.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
@@ -87,12 +87,12 @@
     <jsp:include page="../header.jsp" />
     <div class="inner">
         <form enctype="multipart/form-data">
-            <p class="title1">러닝코스 게시글 등록</p>
+            <p class="title1">러닝코스 게시글 수정</p>
             <div id="dori">
                 <div class="firstbox">
                     <div class="boxheigth">
                         <span id="span1" class="title2">제목 </span>
-                        <input type="text" class="sub" name="subject" placeholder="제목을 입력해 주세요." required />
+                        <input type="text" class="sub" name="subject" placeholder="제목을 입력해 주세요." required value="${post.subject}" />
                     </div> <br>
                         <span id="span2" class="title2">경로</span> <p id="info">지도를 좌클릭해 경로를 생성하고 우클릭해서 끝내주세요.</p>
                     <div class="boxheigth">
@@ -102,13 +102,13 @@
                 <div class="content_layout">
                     <p id="span3" class="title2">내용</p> <br><br>
                     <div class="post-form">
-                        <textarea name="postContent" id="summernote" maxlength="10000"></textarea>
+                        <textarea name="postContent" id="summernote" maxlength="10000" >${post.content}</textarea>
                     </div>
                 </div>
             </div>
             <div class="btn-parent">
-                <button type="button" class="btn03-l" onclick="cancelWrite()">등록 취소하기</button>
-                <button type="button" class="btn01-l" onclick="writeRun()">게시글 등록하기</button>
+                <button type="button" class="btn03-l" onclick="cancelUpdate()">수정 취소하기</button>
+                <button type="button" class="btn01-l" onclick="updateRun()">게시글 수정하기</button>
             </div>
         </form>
     </div>
@@ -116,7 +116,8 @@
 
     <script src="/resources/js/common.js"></script>
     <script>
-        var routeData = [];
+    
+    	var routeData = JSON.parse('<c:out value="${mapData}" escapeXml="false" />');
         var mapContainer = document.getElementById('map');
         var mapOption = { 
             center: new kakao.maps.LatLng(37.566641, 126.978202), 
@@ -128,6 +129,39 @@
         var clickLine;
         var distanceOverlay;
         var dots = [];
+        
+        // 기존 경로 그리기
+        function drawExistingPath(routeData) {
+            var path = routeData.map(data => new kakao.maps.LatLng(data.latitude, data.longitude));
+            
+            if (clickLine) clickLine.setMap(null); // 기존에 그려진 경로 초기화
+            clickLine = new kakao.maps.Polyline({
+                map: map,
+                path: path,
+                strokeWeight: 3,
+                strokeColor: '#FB7E3A',
+                strokeOpacity: 1,
+                strokeStyle: 'solid'
+            });
+
+            // 경로 지점 표시
+            routeData.forEach(function(data) {
+                var position = new kakao.maps.LatLng(data.latitude, data.longitude);
+                var dotContent = '<span class="dot"></span>';
+                var customOverlay = new kakao.maps.CustomOverlay({
+                    position: position,
+                    content: dotContent,
+                    zIndex: 1
+                });
+                customOverlay.setMap(map);
+                dots.push({ circle: customOverlay, distance: null });
+            });
+        }
+
+        // 처음 로드 시 기존 경로를 지도에 표시
+        drawExistingPath(routeData);
+        
+        
 
         // 지도 클릭 이벤트 - 경로 그리기 시작 및 좌표 추가
         kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
@@ -135,12 +169,12 @@
             console.log('클릭 위치:', clickPosition);
 
             if (!drawingFlag) {
+            	
+            	resetDrawing();
                 // 경로 그리기 시작
                 console.log('경로 그리기 시작');
                 drawingFlag = true;
-                deleteClickLine();
-                deleteDistnce();
-                deleteCircleDot();
+
 
                 // 클릭한 위치를 기준으로 선을 생성하고 지도 위에 표시
                 clickLine = new kakao.maps.Polyline({
@@ -279,19 +313,38 @@
             console.log('클릭 지점 표시:', position);
         }
 
-        // 클릭 지점에 대한 정보 삭제
+     	// 클릭 지점에 대한 정보 삭제 함수
         function deleteCircleDot() {
-            for (var i = 0; i < dots.length; i++) {
-                if (dots[i].circle) { 
-                    dots[i].circle.setMap(null);
+            // dots 배열의 각 dot 객체를 순회하며 지도에서 제거
+            dots.forEach(function(dot) {
+                if (dot.circle) {
+                    dot.circle.setMap(null);  // 지도에서 제거
+                    dot.circle = null;        // dot.circle을 null로 설정하여 메모리에서 해제
                 }
-                if (dots[i].distance) {
-                    dots[i].distance.setMap(null);
+                if (dot.distance) {
+                    dot.distance.setMap(null);  // 지도에서 제거
+                    dot.distance = null;        // dot.distance를 null로 설정하여 메모리에서 해제
                 }
-            }
-            dots = [];
+            });
+            dots = []; // dots 배열을 비워 초기화
             console.log('모든 클릭 지점 정보 삭제');
         }
+        
+        function resetDrawing() {
+            deleteClickLine();    // 클릭된 경로 삭제
+            deleteDistnce();      // 거리 오버레이 삭제
+            deleteCircleDot();    // 지도에 표시된 모든 dot 삭제
+
+            drawingFlag = false;
+            routeData = [];       // 기존 경로 데이터 초기화
+            if (moveLine) {
+                moveLine.setMap(null); // moveLine 초기화
+                moveLine = null;
+            }
+        }
+        
+        
+        
 
         // 총 거리 정보 HTML 생성
         function getTimeHTML(distance) {
@@ -306,7 +359,7 @@
         
         
         // 게시글 등록
-        function writeRun() {
+        function updateRun() {
             // formData 생성
             var formData = new FormData($('form')[0]);
             
@@ -349,7 +402,7 @@
             formData.append('content', content);
             formData.append('routeData', JSON.stringify(routeData));
             formData.append('id', userId);
-
+			formData.append('board_idx',"${post.board_idx}");
             
             console.log('게시글 등록 데이터:', {
                 subject: subject,
@@ -361,15 +414,15 @@
             // 서버에 데이터 전송
             $.ajax({
                 type: "POST",
-                url: "/runBoardWrite",
+                url: "/runBoardUpdate",
                 contentType: false,
                 processData: false,
                 enctype: 'multipart/form-data',  // multipart/form-data 사용
                 data: formData,
                 success: function (data) {
-                    alert("게시글이 성공적으로 등록되었습니다.");
+                    alert("게시글이 성공적으로 수정되었습니다.");
                     console.log(data);
-                    location.href = "/runBoard";
+                    location.href = "/runBoardDetail/" + "${post.board_idx}";
                 },
                 error: function (xhr, status, error) {
                     alert("게시글 등록 중 오류가 발생했습니다: " + error);
@@ -378,10 +431,10 @@
         }
 
         // 등록 취소 버튼 - 작성 취소
-        function cancelWrite() {
-            if (confirm("작성을 취소하시겠습니까?")) {
+        function cancelUpdate() {
+            if (confirm("수정을 취소하시겠습니까?")) {
                 history.back();
-                location.href = "runBoard";
+                location.href = "/runBoardDetail/" + "${post.board_idx}";
             }
         }
     </script>

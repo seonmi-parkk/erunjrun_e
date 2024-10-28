@@ -23,7 +23,7 @@ public class RunBoardDTO {
 	
 	// 지도 테이블
 	private double latitude;
-	private double longtude;
+	private double longitude;
 	private String path;
 	private int order_num;
 	
@@ -158,11 +158,11 @@ public class RunBoardDTO {
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
-	public Double getLongtude() {
-		return longtude;
+	public Double getLongitude() {
+		return longitude;
 	}
-	public void setLongtude(Double longtude) {
-		this.longtude = longtude;
+	public void setLongitude(Double longtude) {
+		this.longitude = longtude;
 	}
 	public String getPath() {
 		return path;

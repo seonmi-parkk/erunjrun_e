@@ -4,7 +4,7 @@
 <header>
 	<div class="header-inner">
 		<a href="/">
-			<img src="resources/img/common/logo.png" alt="이런저런"/>
+			<img src="/resources/img/common/logo.png" alt="이런저런"/>
 		</a>
 		
 		<c:choose>
@@ -52,7 +52,7 @@
 										<div class="profile-img" style="background: url(/photo/${sessionScope.profileImg}) center center / cover no-repeat;"></div>
 									</c:when>
 									<c:otherwise>
-										<div class="profile-img"  style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>
+										<div class="profile-img"  style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>
 									</c:otherwise>
 								</c:choose>
 							</div>	
@@ -60,7 +60,7 @@
 								<div class="num-box">
 									<span>3</span>
 								</div>
-								<img class="profile-img" src="resources/img/common/ico_notice.png" alt="알림"/>
+								<img class="profile-img" src="/resources/img/common/ico_notice.png" alt="알림"/>
 							</div>
 						</c:when>
 						<c:otherwise>
@@ -72,7 +72,7 @@
 			</c:when>
 		<c:otherwise>
 			<div class="admin-menu"> <!-- 관리자일 경우에만 display: block -->
-				<img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+				<img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
 				<div class="admin-mod on">
 					<div class="toggle-slider"></div>
 					<span>관리자</span>
@@ -87,7 +87,7 @@
 <script>
 	// 아이콘 체크 
 	if('${sessionScope.iconImg}' != ''){
-		$('header .profile-box').css('background','url(${sessionScope.iconImg}) center center/100% no-repeat ');
+		$('header .profile-box').css('background','url(/${sessionScope.iconImg}) center center/100% no-repeat ');
 	}
 	
 	console.log('${sessionScope.adminYn}');

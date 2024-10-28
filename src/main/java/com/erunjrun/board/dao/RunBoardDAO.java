@@ -31,4 +31,29 @@ public interface RunBoardDAO {
 
 	RunBoardDTO detail(int board_idx);
 
+	List<RunBoardDTO> mapData(int board_idx);
+
+	int bHit(int board_idx);
+
+	int like(int board_idx, String loginId);
+
+	int disLike(int board_idx, String loginId);
+
+	int addLike(int board_idx, String loginId);
+
+	int updateDelLike(int board_idx);
+
+	int updateLike(int board_idx);
+
+	int runUpdate(RunBoardDTO runBoardDto);
+
+	int deleteRouteData(int board_idx);
+
+	int deleteImg(int board_idx);
+
+	int runBoardDelete(int board_idx);
+
+
+
+
 }
