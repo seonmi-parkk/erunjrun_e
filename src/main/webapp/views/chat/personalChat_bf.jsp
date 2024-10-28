@@ -133,7 +133,6 @@
 </head>
 <body>
 	<div class="chat">
-		<input type="hidden" name="chatIdx" value="1"/>
         <div class="top-bar">
             <div class="title-box">
                 <span class="title">김현아, 김지성</span><img src="/resources/img/common/ico_user.png" alt="인원수"/><span class="num">2</span>
@@ -190,7 +189,9 @@
 
 
 
-
+	<textarea id="chatArea" readonly></textarea>
+	<input type="text" id="messageInput" value="테스트데이터 전송합니다"/>
+	<button onclick="sendMessage()">Send</button>
 
 
 </body>
@@ -201,33 +202,56 @@
 
 
 <script>
-	var chatIdx = $('input[name="chatIdx"]').val();
-	$.ajax({
-		type: 'GET',
-		url: '/personalChatList/'+chatIdx,
-		//contentType: 'application/json', // JSON 형식으로 보낼 경우 필요
-	    //data: JSON.stringify(users),  // 배열을 JSON 문자열로 변환
-		dataType: 'JSON',
-		success: function(list){
-			console.log(list);
-			drawContent(list);
-		},
-		error: function(e){
-			console.log(e);
-		}
-	});
 
+	const socket = new WebSocket('ws://localhost:8080/chat');
 	
-	function drawContent(list){
-		list.forEach(function(line){
-			console.log("line.content",line.content);
-			
-		});
-		
-		
-					
+	socket.onopen = function() {
+	    const userId = 'kimee01'; // 사용자 ID 설정
+	    socket.send(JSON.stringify({ action: 'register', userId: userId }));
+	};
+	
+	socket.onmessage = function(event) {
+        var chatArea = document.getElementById("chatArea");
+        chatArea.value += event.data + "\n";
+    };
+	
+    function sendMessage() {
+        var messageInput = document.getElementById("messageInput").value;
+        $.ajax({
+            url: '/sendMessage',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                sender: 'kimee01',
+                receiver: 'moma123',
+                message: messageInput
+            }),
+            success: function() {
+                document.getElementById("messageInput").value = "";
+            }
+        });
+    }
 
-	}
+/*     // 이전 메시지 불러오기
+    function fetchMessages() {
+        $.ajax({
+            url: '/getMessages',
+            method: 'GET',
+            data: { userId: 'user2' },
+            success: function(response) {
+                var chatArea = document.getElementById("chatArea");
+                response.forEach(function(msg) {
+                    chatArea.value += msg.message + "\n";
+                });
+            }
+        });
+    }
+
+    // 페이지 로드 시 이전 메시지 불러오기
+    window.onload = function() {
+        fetchMessages();
+    } */
+
     
 </script>
 </html>

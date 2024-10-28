@@ -1,8 +1,9 @@
+/*
 package com.erunjrun.chat.dto;
 
 import java.sql.Date;
 
-public class ChatPersonalDTO {
+public class ChatPersonalDTO_bf {
 	private String content_idx;
 	private String chat_idx;
 	private String content;
@@ -64,3 +65,4 @@ public class ChatPersonalDTO {
 	
 	
 }
+*/

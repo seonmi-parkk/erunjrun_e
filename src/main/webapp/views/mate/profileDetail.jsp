@@ -63,6 +63,12 @@
    .profileDetail .line p{
       	margin-left: 10px;
    }
+   .profileDetail .content .use-n {
+   		margin-top: 10px;
+   		padding: 20px 10px;
+   		color: #666;
+   		border-top: 1px dashed #ddd;
+   }
    .profileDetail .content .btn-block {
        display: inline-block;
 	   width: fit-content;
@@ -166,6 +172,9 @@
 	           <div class="tag-m-gray">연령대</div>
 	           <p>${profileDto.birth}</p>
 	       </div>
+	       <c:if test="${profileDto.profile_use eq 'N'}">
+	       		<p class="use-n">* 운동 프로필이 비공개된 회원입니다.</p>
+	       </c:if>
       		<c:if test="${profileDto.profile_use eq 'Y'}">
 	  			<div class="line">
 		           <div class="tag-m-gray">운동강도</div>
