@@ -279,6 +279,10 @@
  	.testeee img:last-child{
  	   margin: 2px 6px 2px 6px;
  	}
+ 	
+ 	#crewLeaderCheck{
+ 		color: var(--main-color);
+ 	}
   
 </style>
 </head>
@@ -343,7 +347,7 @@
 				
 				<div class="profilebox">
 					<span class="profile-text" id="leaderprofile"></span> <!-- 크루장 정보 -->
-					<button class="btn03-s2">크루관리</button>
+					<button class="btn03-s2" onclick="crewChat_Admin()"><span id="crewLeaderCheck"></span></button>
 				</div>
 			</div>
 			
@@ -387,6 +391,8 @@
 	var is_recruit = '';
 	
 	var likeCrew = 'N';
+	
+	var loginCheckLeader = '';
 	
 	
     var crew_idx = $('input[name="crew_idx"]').val();
@@ -506,14 +512,23 @@
 	                    });
 	                    
 	                    // 크루장 체크 => 보여지는 내용 변환
-					    if(loginId === crewLeader){
-					    	console.log('크루장임');
-					    	$('.btn03-s1').css('visibility', 'visible');
-					    	console.log('loginId : crewLeader', loginId, ':', crewLeader);
-					    }else{
-					    	console.log('크루원 또는 일반 회원임');
-					    	console.log('loginId : crewLeader', loginId, ':', crewLeader);
-					    }
+	                    if(loginId === null || loginId === ''){
+	                    	$('#crewLeaderCheck').html('1:1채팅');
+	                    	loginCheckLeader = 'N';
+	                    	
+	                    }else{
+	                    	if(loginId === crewLeader){
+	                    		console.log('크루장임');
+						    	$('.btn03-s1').css('visibility', 'visible');
+	                    		$('#crewLeaderCheck').html('크루관리');
+	                    		loginCheckLeader = 'L';
+	                    	}else{
+	                    		console.log('크루원 또는 일반 회원임');
+						    	console.log('loginId : crewLeader', loginId, ':', crewLeader);
+	                    		$('#crewLeaderCheck').html('1:1채팅');
+	                    		loginCheckLeader = 'C';
+	                    	}
+	                    }
 					    
 					    // 신청 버튼 체크 함수
 					    crewApplication(application, result);
@@ -534,6 +549,7 @@
 	            }
 	        });
 	    }
+	    
 	    
 	    function likeList(){
 	    	$.ajax({
@@ -661,6 +677,18 @@
 		}
 		
 		
+	}
+	
+	function crewChat_Admin(){
+		if(loginCheckLeader === 'N'){
+			alert('로그인 하세요');
+		}else if(loginCheckLeader === 'C'){
+			location.href='#';
+			console.log('크루 1:1 채팅');
+		}else{
+			location.href='#';
+			console.log('크루장 관리 페이지 이동');
+		}
 	}
 	
 
