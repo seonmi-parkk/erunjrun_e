@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -240,27 +241,6 @@ public class CrewController {
 			logger.info("크루퇴출");
 		}
 		
-//		switch (code_name) {
-//		case "C100": // 크루 신청
-//			success = crew_service.crewApplicationWrite(parmeterMap);
-//			break;
-//		
-//		case "C104": // 크루 신청 취소
-//			break;
-//
-//		case "C105": // 크루 탈퇴
-//			break;
-//			
-//		case "C101": // 크루 승인
-//			break;
-//			
-//		case "C102": // 크루 미승인
-//			break;
-//			
-//		case "C103": // 크루 퇴출
-//			break;
-//		}
-		
 		resultMap.put("success", success);
 		resultMap.put("msg", msg);
 		
@@ -333,6 +313,27 @@ public class CrewController {
 		
 		resultMap.put("success", success);
 		resultMap.put("msg", msg);
+		
+		return resultMap;
+	}
+	
+	@GetMapping(value="/list")
+	public Map<String, Object> crewList(@RequestParam(value = "filtering", required = false) List<String> filtering,
+	        @RequestParam(value = "page", defaultValue = "1") int page,
+	        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+		
+	    if (filtering == null) {
+	        logger.info("필터 없음");
+	    }else {
+	    	logger.info("필터 => " +filtering);
+	    	
+	    }
+	    
+	    logger.info("page : pageSize" + page + ":" + pageSize);
+	    
+		Map<String, Object> resultMap = new HashMap<>();
+		List<Map<String, Object>> crewList = crew_service.crewList(filtering, page, pageSize);
+	    resultMap.put("result", crewList);
 		
 		return resultMap;
 	}

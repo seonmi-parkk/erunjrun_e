@@ -59,6 +59,8 @@ public interface CrewDAO {
 	int likeRequest(Map<String, Object> parmeterMap);
 
 	int likeCencel(Map<String, Object> parmeterMap);
+
+	List<Map<String, Object>> crewList(List<String> filtering, int offset, int pageSize);
 	
 	
 
