@@ -60,7 +60,7 @@
         
         $.ajax({
             type: 'POST',
-            url: 'image-upload',
+            url: '/image-upload',
             data: formData,
             contentType: false,
             processData: false,

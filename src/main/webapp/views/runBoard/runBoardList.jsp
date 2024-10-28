@@ -3,13 +3,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>runBoardList</title>
+<title>러닝코스 게시판</title>
 <link rel="stylesheet" href="/resources/css/common.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
     <script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
+	a{
+		color: #333;
+	}
 	#searchForm {
         float: right;
         margin: 10px;
@@ -149,7 +152,7 @@
             }
 			
 			content +='<td>'+view.nickname+'</td>';
-			content +='<td><a href="runBoardDetail/'+view.board_idx+'">'+view.subject+'<a/></td>';
+			content +='<td><a href="/runBoardDetail/'+view.board_idx+'">'+view.subject+'<a/></td>';
 			content +='<td>'+view.bHit+'</td>';
 			content +='<td>'+view.likes+'</td>';
 

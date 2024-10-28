@@ -173,13 +173,121 @@ public class RunBoardService {
         }
     }
 
-
+	@Transactional
 	public RunBoardDTO detail(int board_idx) {
+		
+		runBoardDAO.bHit(board_idx);
 		
 		return runBoardDAO.detail(board_idx);
 		
 	}
-	
+
+
+	public List<RunBoardDTO> mapData(int board_idx) {
+		
+		return runBoardDAO.mapData(board_idx);
+	}
+
+
+	public boolean like(int board_idx, String loginId) {
+		boolean isLiked = false;
+		int result = runBoardDAO.like(board_idx,loginId);
+		if(result>0) {
+			logger.info("조아용 카운트 : "+result);
+			isLiked = true;
+		}
+		return isLiked;
+	}
+
+
+	public boolean disLike(int board_idx, String loginId) {
+		boolean success = false;
+		int result = runBoardDAO.disLike(board_idx,loginId);
+		if(result>0) {
+			logger.info("안조아용 : "+result);
+			runBoardDAO.updateDelLike(board_idx);
+			success = true;
+		}
+		return success;
+	}
+
+
+	public boolean addLike(int board_idx, String loginId) {
+		boolean success = false;
+		int result = runBoardDAO.addLike(board_idx,loginId);
+		if(result>0) {
+			logger.info("조아용 : "+result);
+			runBoardDAO.updateLike(board_idx);
+			success = true;
+		}
+		return success;
+	}
+
+
+	public boolean runUpdate(RunBoardDTO runBoardDto) {
+		
+		logger.info("수정 서비스 => " + runBoardDto.toString());
+		
+		 try {
+	            boolean success = false;
+
+	            // 게시글 정보 저장
+	            runBoardDto.setCode_name("B100");
+	            logger.info("runUpdate 호출 전 - 제목: {}", runBoardDto.getSubject());
+	            runBoardDAO.runUpdate(runBoardDto);
+	            logger.info("제목1 : "+runBoardDto.getSubject()); 
+	            // 경로 정보 저장 (경로가 있을 경우 반복문 사용)
+	            
+	            runBoardDAO.deleteRouteData(runBoardDto.getBoard_idx());
+	            if (runBoardDto.getLatitudeList() != null && runBoardDto.getLongitudeList() != null) {
+	                for (int i = 0; i < runBoardDto.getLatitudeList().size(); i++) {
+	                	
+//	                    logger.info("게시글 ID: " + runBoard.getBoard_idx());
+//	                    logger.info("위도: " + runBoard.getLatitudeList().get(i));
+//	                    logger.info("경도: " + runBoard.getLongitudeList().get(i));
+//	                    logger.info("경로 구분: " + runBoard.getPathList().get(i));
+//	                    logger.info("경로 순서: " + (i + 1));
+	                    
+	                	runBoardDAO.insertRouteData(
+	                			runBoardDto.getBoard_idx(), 
+	                			runBoardDto.getLatitudeList().get(i),
+	                			runBoardDto.getLongitudeList().get(i),
+	                			runBoardDto.getPathList().get(i), i + 1);
+	                }
+	            }
+
+	            // 이미지 정보 저장 (이미지가 있을 경우 반복문 사용)
+	            runBoardDAO.deleteImg(runBoardDto.getBoard_idx());
+	            List<ImageDTO> imgs = runBoardDto.getImageList();
+	            if (imgs != null && !imgs.isEmpty()) {
+	                for (ImageDTO img : imgs) {
+	                    img.setImg_no(runBoardDto.getBoard_idx());
+	                    img.setCode_name("B100");
+	                    fileWrite(img); // 게시글 이미지 파일 복사 저장
+	                }
+	            }
+	       
+	            success = true;
+	            
+	            return success;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+	    }
+
+
+	public boolean runBoardDelete(int board_idx) {
+		
+		int row = runBoardDAO.runBoardDelete(board_idx);
+		logger.info("비활 : "+row);
+		
+		return row > 0;
+	}
+
+
+
+
 	
 	
 	
