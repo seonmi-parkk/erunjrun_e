@@ -10,6 +10,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
+
 	.input-container {
     display: flex;        /* Flexbox 사용 */
     align-items: center; /* 수직 중앙 정렬 */
@@ -83,15 +84,15 @@
         padding: 10px; /* 내부 여백을 10픽셀로 설정 */
     
     }
-   
-	.btn01-l{
-	margin-top: 50px;
-	margin-bottom: 50px;
-	margin-left: 680px;
-	}
     #radio{
     margin-left: 10px;
     }
+   
+    
+	.btn01-l{
+	margin-top: 50px;
+	margin-left: 650px;
+	}
 	#dot{
 	font-size: 34px;
 	color: #FB7E3A;
@@ -104,7 +105,8 @@
 	<jsp:include page="../header.jsp"/> 
 	
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
-	<div class="content-wrapper">
+		
+	 <div class="content-wrapper">	
 		<aside class="fixed-left">
             <div class="image">
                 <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
@@ -119,70 +121,32 @@
             <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
-        
-        <main class="main-content">
-		<p class="title1" >회원정보</p>
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">카테고리</p>
-			<p class="title2" id="text">${info.category}</p>
-		</div>	
+	 	<main class="main-content">
+	 	
+		<p class="title1" >태그</p>
 		
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">게시글번호</p>
-			<p class="title2" id="text" onclick="location.href='adminIcon'">${info.report_idx}</p> <!-- -- 특정 게시글로 이동 -->
-		</div>	
 		
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">작성일시</p>
-			<p class="title2" id="text">${info.create_date}</p>
-		</div>	
-
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">신고자</p>
-			<p class="title2" id="text">${info.unlike_id}</p>
-		</div>	
+	  	<form action="adminTagWrite" method="post" id="form">
 		
 		<div class="input-container">
-		<p class="title2" id="dot">•</p>
-		<p class="title2" id="text">이미지</p>
-	 		<c:if test="${file.size()>0}">
-			<tr>
-				<td>
-					<!-- /photo 라는 컨텍스트 요청이 있으면 C:/upload 로 연결하도록 설정 되어야 한다.(server.xml) -->
-					<!-- server 파일에서 server.xml - >   <Context docBase="C:/upload" path="/photo" /> -->
-						<c:forEach items = "${file}" var ="imgfile">
-							<a href="download?new_filename = ${imgfile.img_new}&ori_fileName=${imgfile.img_ori}">
-								<img alt="${imgfile.img_ori}" src="/photo/${imgfile.img_new}">
-							</a>
-						</c:forEach>
-				</td>
-			</tr>
-			</c:if>
+			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">태그 이름</p>
+			<input type="text" name="end_date" id="end_date"/>
 		</div>
 		
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">내용</p>
-			<p class="title2" id="text">${info.content}</p>
-		</div>	
+		<div class="input-container">
+			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">사용여부</p>
+			<input type="radio" name="code_name" value="A100" class="raido" id="radio"/>사용
 		
-					
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">처리내용</p>
-			<p class="title2" id="text">${info.process}</p>
-		</div>	
+			<input type="radio" name="code_name" value="A101" class="raido" id="radio"/>미사용
+		</div>
 		
-   	
-	<div class="btn01-l" onclick="location.href='adminReportUpdate?report_idx=${info.report_idx}'">처리하기</div> <!-- 클릭시 색깔변경 -->
-	<div class="btn02-l" onclick="location.href='adminReport'">취소</div> <!-- 클릭시 색깔변경 -->
 	
-        
-        </main>
+   	<button class="btn01-l" type="submit" id="text">등록</button>
+	<div class="btn02-l" onclick="location.href='adminMember'">취소</div> <!-- 클릭시 색깔변경 -->
+	</form>
+	 </main>
 	</div>
 	
 	<!-- 푸터 -->

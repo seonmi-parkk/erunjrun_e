@@ -10,68 +10,62 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-	fixed_footer {
-    position: fixed; /* 또는 fixed */
-    bottom: 0;
-    z-index: 0;
+	body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* 헤더 스타일 */
+
+
+/* 콘텐츠와 사이드바 감싸는 래퍼 */
+.content-wrapper {
+    display: flex;
     width: 100%;
-    margin-top: 20px;
-    
-	}
-	
+    margin-top: 80px; /* 헤더 높이만큼 여백 */
+    flex-grow: 1; /* 남은 공간 채우기 */
+}
 
-	.inner{
-    margin-left: 550px;
-    margin
-	}
-	.title1{
-	margin-top: 100px;
-	
-	}
-	
-	#searchForm{
-	margin-left: 0px;
-	margin-bottom: 10px;
-	margin-top: 10px;
-	}
-	.
-	.title2{
-        color: var(--font-color);
-        font-family: "Pretendard Variable", sans-serif;
-        font-size: 20px;
-        font-weight: 800;
-    }
+/* 사이드바 스타일 */
+.fixed-left {
+    width: 300px;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    position: sticky;
+    top: 80px; /* 헤더 아래에 고정 */
+    height: calc(100vh - 80px); /* 화면 높이에 맞추기 */
+    overflow-y: auto;
+}
+.fixed-left p{
+    margin: 15px 0;
+    line-height: 1.5;
+    font-size: 20px;
+}
 
-	 #catagory {
-        color: var(--font-color);
-        font-family: "Pretendard Variable", sans-serif;
-        font-size: 16px;
-        font-weight: 500;
-    }
-    .fixed-left {
-    position: fixed;
-    top: 80; /* 화면 상단에 고정 */
-    left: 50; /* 화면 왼쪽에 고정 */
-    width: 400px; /* 원하는 너비 설정 */
-    padding: 10px;
-    z-index: 999;
-   /* background-color: #f0f0f0;  배경색 설정 */
-    border-right: 1px solid #ccc; /* 오른쪽에 구분선 */
-    height: 100%; /* 전체 높이 설정 */
-    overflow-y: auto; /* 글이 길면 스크롤 가능하도록 설정 */
-    
-	}
-	.image img {
-    width: 30%;  /* 또는 원하는 픽셀 값 */
+#admin_name{
+font-weight: 800;
+font-size: 23px;
+}
+
+.image img {
+    width: 35%;  /* 또는 원하는 픽셀 값 */
     height: auto;
     margin-bottom: 20px; /* 비율을 유지 */
 	}
+/* 메인 콘텐츠 */
+.main-content {
+    flex: 1; /* 남은 공간 채우기 */
+    padding: 20px;
+    overflow: auto;
+}
+
+
 	.btn02-l{
 	margin-top: 0px;
 	margin-bottom: 50px;
 	}
-  
-    
     
 </style>
 </head>
@@ -79,36 +73,26 @@
 	<!-- 헤더 -->
 	<jsp:include page="../header.jsp"/> 
 	
+	<!-- 콘텐츠 영역 (사이드바와 메인 콘텐츠를 감싸는 래퍼) -->
+    <div class="content-wrapper">	
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
-	    <div class="fixed-left">
-	    <div class="image">
-		    <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
-	    </div>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title2" id="admin_name">관리자</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminMember'"> 회원정보</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminReport'">신고</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminTag'">태그</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
-	    
-	    </div>
+	   <aside class="fixed-left">
+            <div class="image">
+                <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+            </div>
+            <p class="title2" id="admin_name">관리자</p>
+            <p class="title3" onclick="location.href='adminMember'">회원정보</p>
+            <p class="title3" onclick="location.href='adminReport'">신고</p>
+            <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
+            <p class="title3" onclick="location.href='adminTag'">태그</p>
+            <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
+            <p class="title3" onclick="location.href='adminPopup'">팝업</p>
+            <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+            <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
+        </aside>
 		
-	<div class="inner" id="">
-	
-		<p class="title1" >회원정보</p>
-
+	 	<main class="main-content">
+			<p class="title1" >관리자정보</p>
 			<div class="btn03-l" onclick="location.href='adminMember'">일반회원</div>
 	    	<div class="btn02-l" onclick="location.href='admin'">관리자</div>
 	     
@@ -120,12 +104,7 @@
 		   <input class="input-txt-l" type="text"  id="searchKeyword" placeholder="검색어를 입력하세요"/>
 			    <input class="btn-sch" type="button" onclick="pageCall(1)" value="검색"/>
 		   </form>
-	   
-		
-	    
-		<table>
-		
-		
+			<table>
 			<colgroup>
 		 		<col width="30%"/>
 		 		<col width="30%"/>
@@ -152,8 +131,9 @@
 	             </nav>
 	            </div>
 	         </th>
-	      </tr>
-   </table>
+	      	</tr>
+   			</table>
+   		</main>
 	</div>
 	
 	<!-- 푸터 -->

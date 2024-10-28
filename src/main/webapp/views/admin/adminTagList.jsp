@@ -16,6 +16,11 @@
     margin-bottom: 20px;
     margin-top: 20px;
 	}
+	#searchForm{
+	margin-top: 20px; 
+	margin-bottom: 10px; 
+	}
+	
 	#text{
    
     margin-right: 15px
@@ -26,10 +31,6 @@
     min-height: 100vh;
     margin: 0;
 	}
-
-/* 헤더 스타일 */
-
-
 	/* 콘텐츠와 사이드바 감싸는 래퍼 */
 	.content-wrapper {
 	    display: flex;
@@ -70,12 +71,7 @@
 	    padding: 20px;
 	    overflow: auto;
 	}
-    .radio{
-    	
-    	 transform: scale(1.5);
-    }
-    
-    #content{
+	#content{
     	width: 750px; /* 너비를 250픽셀로 설정 */
         height: 350px;
         resize: vertical; /* 높이를 50픽셀로 설정 */
@@ -83,20 +79,12 @@
         padding: 10px; /* 내부 여백을 10픽셀로 설정 */
     
     }
-   
-	.btn01-l{
-	margin-top: 50px;
-	margin-bottom: 50px;
-	margin-left: 680px;
-	}
-    #radio{
-    margin-left: 10px;
-    }
-	#dot{
-	font-size: 34px;
-	color: #FB7E3A;
-	}
 	
+	.btn01-l{
+	margin-top: 10px;
+	margin-left: 1450px;
+	margin-bottom: 10px;
+	}
 </style>
 </head>
 <body>
@@ -104,7 +92,8 @@
 	<jsp:include page="../header.jsp"/> 
 	
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
-	<div class="content-wrapper">
+	
+		<div class="content-wrapper">
 		<aside class="fixed-left">
             <div class="image">
                 <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
@@ -121,77 +110,94 @@
         </aside>
         
         <main class="main-content">
-		<p class="title1" >회원정보</p>
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">카테고리</p>
-			<p class="title2" id="text">${info.category}</p>
-		</div>	
-		
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">게시글번호</p>
-			<p class="title2" id="text" onclick="location.href='adminIcon'">${info.report_idx}</p> <!-- -- 특정 게시글로 이동 -->
-		</div>	
-		
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">작성일시</p>
-			<p class="title2" id="text">${info.create_date}</p>
-		</div>	
-
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">신고자</p>
-			<p class="title2" id="text">${info.unlike_id}</p>
-		</div>	
-		
-		<div class="input-container">
-		<p class="title2" id="dot">•</p>
-		<p class="title2" id="text">이미지</p>
-	 		<c:if test="${file.size()>0}">
+		<p class="title1" >태그</p>
+	    <div class="btn01-l" onclick="location.href='adminTagWrite'" >등록</div>
+	    
+		 <table>
+			<colgroup>
+		 		<col width="40%"/>
+		 		<col width="30%"/>
+		 		<col width="30%"/> 		
+		 	</colgroup>
+		<thead>
 			<tr>
-				<td>
-					<!-- /photo 라는 컨텍스트 요청이 있으면 C:/upload 로 연결하도록 설정 되어야 한다.(server.xml) -->
-					<!-- server 파일에서 server.xml - >   <Context docBase="C:/upload" path="/photo" /> -->
-						<c:forEach items = "${file}" var ="imgfile">
-							<a href="download?new_filename = ${imgfile.img_new}&ori_fileName=${imgfile.img_ori}">
-								<img alt="${imgfile.img_ori}" src="/photo/${imgfile.img_new}">
-							</a>
-						</c:forEach>
-				</td>
+				<th>태그 이름</th>
+				<th>사용여부</th>
+				<th>수정</th>
 			</tr>
-			</c:if>
-		</div>
-		
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">내용</p>
-			<p class="title2" id="text">${info.content}</p>
-		</div>	
-		
-					
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">처리내용</p>
-			<p class="title2" id="text">${info.process}</p>
-		</div>	
-		
-   	
-	<div class="btn01-l" onclick="location.href='adminReportUpdate?report_idx=${info.report_idx}'">처리하기</div> <!-- 클릭시 색깔변경 -->
-	<div class="btn02-l" onclick="location.href='adminReport'">취소</div> <!-- 클릭시 색깔변경 -->
-	
-        
+		</thead>
+		 	<tbody id="list">
+		 		
+
+		 	</tbody>
+		 	<tr>
+	         <th colspan="6">
+	            <div class="container">
+	             <nav aria-label="Page navigation">
+	              <ul class="pagination" id="pagination"></ul>
+	             </nav>
+	            </div>
+	         </th>
+	      </tr>
+   </table>
         </main>
 	</div>
 	
 	<!-- 푸터 -->
-	<jsp:include page="../footer.jsp"/>
+	<jsp:include page="../footer.jsp" />
 </body>
 
 
 
 <script>
+
+	var show = 1;
+	pageCall(show);
+
+	function pageCall(page) {
+		var keyword = $('#searchKeyword').val(); // 검색어 여기 추가부터 리스트 안옴
+        var opt = $('#searchOption').val(); // 검색옵션
+		$.ajax({
+			type:'GET',
+			url:'adminTagList',
+			data:{
+				'page':page,
+				'cnt':15,
+			},
+			datatype:'JSON',
+			success:function(data){
+				console.log(data);
+				drawList(data.list)
+				$('#pagination').twbsPagination({ // 페이징 객체 만들기
+				startPage:1, 
+           		totalPages:data.totalPages, 
+           		visiblePages:10,
+           
+           		onPageClick:function(evt,page){
+           			console.log('evt',evt); 
+           			console.log('page',page); 
+           			pageCall(page);
+           		}
+				});
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+
+	function drawList(list) {
+		var content ='';
+		 for (var view of list) {
+			content +='<tr>';
+            content += '<td>'+view.tag_name+'</td>';
+			content += '<td>'+view.use_yn+'</td>';
+			content +='<td><a  href="adminTagUpdate?tag_idx='+view.tag_idx+'">수정</a></td>';
+			content +='</tr>';
+		  }
+	      $('#list').html(content);
+	   }
+ 
 
     
 </script>

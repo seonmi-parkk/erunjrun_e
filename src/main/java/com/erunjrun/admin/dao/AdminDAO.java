@@ -1,5 +1,6 @@
 package com.erunjrun.admin.dao;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -47,11 +48,16 @@ public interface AdminDAO {
 	
 	public int rightwrite(Map<String, String> param);
 	
-	public AdminDTO rightdetail(String id);
+	public AdminDTO rightdetail(String ban_idx);
 
 	public void rightupdate(Map<String, String> param);
 	
+	 // 시작일이 오늘 또는 과거인 권한을 모두 'Y'로 업데이트
+    void updateRightY(Date sqlDate);
 
+    // 종료일이 오늘 또는 과거인 권한을 모두 'N'으로 업데이트
+    void updateRightN(Date endDate);
+	
 // 신고	
 	public List<AdminDTO> reportlist(int limit, int offset);
 
@@ -62,6 +68,24 @@ public interface AdminDAO {
 	public ImageDTO image(String report_idx);
 
 	public void reportupdate(Map<String, String> param);
+	
+	
+// 문의하기
+	public List<AdminDTO> asklist(String opt, String keyword, int limit, int offset);
+
+	public int askcount(int cnt_);
+	
+	
+	
+// 태그
+	public List<AdminDTO> taglist(int limit, int offset);
+	
+	public int tagcount(int cnt_);
+
+	public void tagwrite(Map<String, String> param);
+
+	public Object tagdetail(String tag_idx);
+
 
 
 	

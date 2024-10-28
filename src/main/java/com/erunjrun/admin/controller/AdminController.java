@@ -187,16 +187,16 @@ public class AdminController {
 	  }
 	  
 	  @GetMapping(value = "/memberRightDetail")
-	  public String rightdetail(String id,Model model) {
-		  AdminDTO dto = admin_service.rightdetail(id);
+	  public String rightdetail(String ban_idx,Model model) {
+		  AdminDTO dto = admin_service.rightdetail(ban_idx);
 		  model.addAttribute("info",dto);
 		  
 		  return"admin/rightDetail";
 	  }
 	  
 	  @GetMapping(value = "/memberRightUpdate")
-	  public String rightupdate(String id, Model model) {
-		  AdminDTO dto = admin_service.rightdetail(id);
+	  public String rightupdate(String ban_idx, Model model) {
+		  AdminDTO dto = admin_service.rightdetail(ban_idx);
 		  model.addAttribute("info",dto);
 	
 		  return"admin/rightUpdate";
@@ -208,6 +208,9 @@ public class AdminController {
 		  
 		  return"redirect:/memberRightDetail?id="+param.get("id");
 	  }
+	  
+	 
+	  
 	  
 	  
 //		신고처리		  
@@ -261,9 +264,76 @@ public class AdminController {
 		 return "redirect:/adminReportDetail?report_idx="+param.get("report_idx");
 	  }
 	  
+	  
+	  //문의하기
+	  
 	  @GetMapping(value = "adminAsk")
 	  public String ask() {
 		  return "admin/adminAskList";
+	  }
+	  
+	  @GetMapping(value = "adminAskList")
+	  @ResponseBody 
+	  public Map<String, Object> asklist(String page, String cnt,String opt, String keyword) {
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+		int limit = cnt_;
+		int offset = (page_ - 1) * cnt_;
+		int totalPages = admin_service.askcount(cnt_);
+		Map<String,Object> result = new HashMap<String, Object>();
+		result.put("totalPages", totalPages);
+		result.put("currpage", page);
+		result.put("list", admin_service.asklist(opt, keyword, limit, offset));
+		
+		return result;
+  
+	  }
+	  
+	  
+	  // 태그
+	  
+	  @GetMapping(value = "adminTag")
+	  public String tag() {
+		  return "admin/adminTagList";
+	  }
+	  
+	  @GetMapping(value = "adminTagList")
+	  @ResponseBody 
+	  public Map<String, Object> taglist(String page, String cnt,String opt, String keyword) {
+			int page_ = Integer.parseInt(page);
+			int cnt_ = Integer.parseInt(cnt);
+			int limit = cnt_;
+			int offset = (page_ - 1) * cnt_;
+			int totalPages = admin_service.tagcount(cnt_);
+			Map<String,Object> result = new HashMap<String, Object>();
+			result.put("totalPages", totalPages);
+			result.put("currpage", page);
+			result.put("list", admin_service.taglist( limit, offset));
+			
+			return result;
+	  
+	  }
+	  @GetMapping(value = "adminTagWrite")
+	  public String tagwriteform() {
+		  return "admin/adminTagWrite";
+	  }
+	  
+	  
+	  @PostMapping(value = "adminTagWrite")
+	  public String tagwirte(@RequestParam Map<String, String> param, Model model) {
+
+		  return "redirect:/adminTagList";
+	  }
+	  
+	  
+	  
+	  
+	  @GetMapping(value = "adminTagUpdate")
+	  public String tagupdate(String tag_idx) {
+		 
+		  admin_service.tagdetail(tag_idx);
+		  
+		  return "";
 	  }
 	  
 	  

@@ -1,12 +1,18 @@
 package com.erunjrun.admin.service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.erunjrun.admin.dao.AdminDAO;
@@ -92,9 +98,9 @@ public class AdminService {
 		admin_dao.rightwrite(param);
 	}
 
-	public AdminDTO rightdetail(String id) {
+	public AdminDTO rightdetail(String ban_idx) {
 		
-		return admin_dao.rightdetail(id);
+		return admin_dao.rightdetail(ban_idx);
 	}
 
 	public void rightupdate(Map<String, String> param) {
@@ -102,7 +108,32 @@ public class AdminService {
 		
 	}
 	
+	@PostConstruct
+    public void init() {
+        logger.info("서버 시작 시 권한 업데이트 실행");
+        checkAndUpdateStatus(); // 서버가 시작될 때 권한 업데이트
+    }
 	
+	
+	
+	@Scheduled(cron = "0 0 0 * * ?") // 매일 자정 실행
+    @Transactional
+    public void checkAndUpdateStatus() {
+        LocalDate today = LocalDate.now();
+        Date sqlDate = Date.valueOf(today);
+
+        try {
+            // 1. 오늘 또는 과거의 시작일에 해당하는 권한을 'Y'로 변경
+            admin_dao.updateRightY(sqlDate);
+            System.out.println("지난 시작일 포함 모든 권한을 'Y'로 변경했습니다.");
+
+            // 2. 오늘 또는 과거의 종료일에 해당하는 권한을 'N'으로 변경
+            admin_dao.updateRightN(sqlDate);
+            System.out.println("지난 종료일 포함 모든 권한을 'N'으로 변경했습니다.");
+        } catch (Exception e) {
+            System.err.println("스케줄러 실행 중 오류 발생: " + e.getMessage());
+        }
+    }
 	
 	
 //	신고
@@ -128,9 +159,47 @@ public class AdminService {
 		admin_dao.reportupdate(param);
 		
 	}
+	
+	
+	
+	//문의하기
 
+	public List<AdminDTO> asklist(String opt, String keyword, int limit, int offset) {
+		
+		return admin_dao.asklist(opt, keyword ,limit, offset);
+	}
+	
+	public int askcount(int cnt_) {
+		
+		return admin_dao.askcount(cnt_);
+	}
 
+	
+ //태그	
+	
+	public List<AdminDTO>taglist(int limit, int offset) {
+		
+		return admin_dao.taglist(limit, offset);
+	}
 
+	public int tagcount(int cnt_) {
+	
+		return admin_dao.tagcount(cnt_);
+	}
+
+	public void tagwrite(Map<String, String> param) {
+		admin_dao.tagwrite(param);
+		
+	}
+
+	public void tagdetail(String tag_idx) {
+		
+		
+	}
+
+	
+
+	
 
 
 	

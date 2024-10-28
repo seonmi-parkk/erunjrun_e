@@ -35,34 +35,45 @@
    </select>
   	
   	<select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
-  		SELECT 
+    WITH ranked_ban AS (
+    SELECT 
+        b.id,
+        b.is_right,
+        ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY b.is_right DESC, b.start_date DESC) AS rn
+    FROM 
+        ban b
+	)
+	SELECT 
 	    m.id,
 	    m.nickname,
 	    m.email,
 	    m.join_date,
-	    COALESCE(b.is_right, 'N') AS report_status,
+	    COALESCE(rb.is_right, 'N') AS report_status,
 	    (SELECT COUNT(*) 
-	    FROM report_write rw
-	   		 WHERE rw.id = m.id) AS report_count
-		FROM 
-		    member m
-		LEFT JOIN 
-		    ban b ON m.id = b.id
-		  
-	     <where>
-        <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
-            m.id LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-        <if test="keyword != null and !keyword.equals('') and opt.equals('nickname')">         
-            m.nickname LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-        <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
-            m.email LIKE CONCAT('%', #{keyword}, '%')
-        </if>      
-    </where>
-    GROUP BY m.id, m.nickname, m.email, m.join_date, report_status
-  	 ORDER BY m.id DESC LIMIT #{limit} OFFSET #{offset}
-  	</select>
+	     FROM report_write rw 
+	     WHERE rw.id = m.id) AS report_count
+	FROM 
+	    member m
+	LEFT JOIN 
+	    ranked_ban rb ON m.id = rb.id AND rb.rn = 1  <!--가장 우선 순위가 높은 레코드만 가져오기 -->
+	<where>
+	    <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
+	        m.id LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	    <if test="keyword != null and !keyword.equals('') and opt.equals('nickname')">
+	        m.nickname LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	    <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
+	        m.email LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	</where>
+	GROUP BY 
+	    m.id, m.nickname, m.email, m.join_date, report_status
+	ORDER BY 
+	    m.id DESC
+	LIMIT #{limit} OFFSET #{offset}
+</select>
+
   	
   	<select id="count" resultType="int">
 		SELECT CEIL(count(id)/#{param1}) AS pages FROM member
@@ -86,16 +97,18 @@
 	</select>
 	
 	<select id="memberdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
-		SELECT id,nickname,email,address,gender,birth,phone FROM member where id = #{param1}
+		SELECT id,nickname,email,address,gender,birth,phone 
+		FROM member 
+		where id = #{param1}
 	</select>
 	
   
   	<select id="memberreportlist" resultType="com.erunjrun.admin.dto.AdminDTO" >
-  	  	SElECT id,code_name,unlike_id,use_yn,create_Date From report_write where id = #{param1}
+  	  	SElECT report_idx,id,code_name,unlike_id,use_yn,create_date From report_write where id = #{param1}
   	</select>
   
   	<select id="ban" resultType="com.erunjrun.admin.dto.AdminDTO">
-  	 	SELECT b.id,b.start_date,b.end_date,b.process_date,c.content FROM ban b
+  	 	SELECT b.ban_idx,b.id,b.start_date,b.end_date,b.process_date,c.content FROM ban b
 		JOIN code c ON b.code_name = c.code_name  WHERE id = #{param1}
   	</select>
   	
@@ -114,9 +127,9 @@
   <!-- id,admin_id,is_ban 추가해야됌 -->
   
   <select id="rightdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
-  		SELECT b.id,m.nickname,b.start_date,b.end_date,b.ban_content,b.code_name,c.content FROM ban b
+  		SELECT b.ban_idx,b.id,m.nickname,b.start_date,b.end_date,b.ban_content,b.code_name,c.content FROM ban b
 		LEFT JOIN  code c ON b.code_name = c.code_name  
-		LEFT JOIN  member m ON b.id = m.id WHERE b.id = #{param1}
+		LEFT JOIN  member m ON b.id = m.id WHERE b.ban_idx = #{param1}
   </select>
   
   <update id="rightupdate" parameterType="Map">
@@ -143,6 +156,21 @@
 			  WHERE id = #{id}
   </update>
   
+	 	<!-- 시작일이 오늘 또는 과거인 권한을 'Y'로 업데이트 -->
+    <update id="updateRightY" parameterType="date">
+        UPDATE ban
+        SET is_right = 'Y'
+        WHERE start_date &lt;= #{startDate}
+          AND is_right = 'N';  <!-- 이미 'Y'인 권한은 제외 -->
+    </update>
+
+    <!-- 종료일이 오늘 또는 과거인 권한을 'N'으로 업데이트 -->
+    <update id="updateRightN" parameterType="date">
+        UPDATE ban
+        SET is_right = 'N'
+        WHERE end_date  &lt;= #{endDate}
+          AND is_right = 'Y';  <!-- 이미 'N'인 권한은 제외 -->
+    </update>
   
   
   
@@ -165,7 +193,9 @@
 		LEFT JOIN 
 		     code c2 ON rp.code_name = c2.code_name
 		LEFT JOIN 
-			admin a ON rp.admin_id = a.admin_id      
+			admin a ON rp.admin_id = a.admin_id    
+		GROUP BY 
+   			rw.report_idx  
 		ORDER BY rw.report_idx DESC LIMIT #{limit} OFFSET #{offset}
 	</select>  
   
@@ -190,7 +220,7 @@
 		 WHERE rw.report_idx = #{param1}
    </select>
 	  
-	  <select id="image" resultType="com.erunjrun.image.dto.ImageDTO">
+	  <select id="image" resultType="com.erunjrun.admin.dto.AdminDTO">
 	  	select 
 	  	i.img_ori,
 	  	i.img_new,
@@ -211,6 +241,54 @@
 	 			code_name = #{code_name},
 	 			content = #{process}
 	 	</insert>
+	 	
+	 	
+  
+	 <select id="asklist">
+			SELECT 
+			a.ask_idx,
+		    c.content AS category, 
+		    a.id, 
+		    m.nickname,
+		   	a.subject,        
+			a.is_ask,
+		    a.create_date
+		    FROM ask a
+			LEFT JOIN 
+				code c ON a.code_name = c.code_name
+			LEFT JOIN 
+				member m ON a.id = m.id   
+		<where>
+	    <if test="keyword != null and !keyword.equals('') and opt.equals('category')">
+	        a.category LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	    <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
+	        a.id LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	    <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
+	        a.subject LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+		</where>   
+			ORDER BY a.ask_idx DESC LIMIT #{limit} OFFSET #{offset}
+		</select>  
 	  
+	  <select id="askcount" resultType="int">
+		SELECT CEIL(count(ask_idx)/#{param1}) AS pages FROM ask
+	</select>
+	
+	
+	
+	
+	  <select id="taglist" resultType="com.erunjrun.admin.dto.AdminDTO">
+	  select * from tag ORDER BY tag_idx DESC LIMIT #{limit} OFFSET #{offset}
+	  </select>
+	  
+	  <select id="tagcount" resultType="int">
+		SELECT CEIL(count(tag_idx)/#{param1}) AS pages FROM tag
+	</select>
+	  
+	  <insert id="tagwrite" parameterType="Map">
+	  		insert into tag(tag_name,use_yn)values(#{tag_name},#{use_yn})
+	  </insert>
   
   </mapper>

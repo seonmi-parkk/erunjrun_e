@@ -1,7 +1,8 @@
 package com.erunjrun.admin.dto;
 
 import java.sql.Date;
-import java.sql.Timestamp;
+
+import com.erunjrun.image.dto.ImageDTO;
 
 public class AdminDTO {
 	private String id;
@@ -15,6 +16,7 @@ public class AdminDTO {
 	private String code_name;
 	private String use_yn;
 	private Date create_date;
+	private Date update_date;
 	private Date start_date;
 	private Date end_date;
 	private Date process_date;
@@ -27,14 +29,46 @@ public class AdminDTO {
 	private String category;
 	private String process;
 	private String report_idx;
-	
-
-	
-	
-	
-	
+	private String ban_idx;
+	private ImageDTO image;
+	private String tag_idx;
+	private String tag_name;
 	
 	
+	
+	
+	
+	
+	public String getTag_name() {
+		return tag_name;
+	}
+	public void setTag_name(String tag_name) {
+		this.tag_name = tag_name;
+	}
+	public Date getUpdate_date() {
+		return update_date;
+	}
+	public void setUpdate_date(Date update_date) {
+		this.update_date = update_date;
+	}
+	public String getTag_idx() {
+		return tag_idx;
+	}
+	public void setTag_idx(String tag_idx) {
+		this.tag_idx = tag_idx;
+	}
+	public ImageDTO getImage() {
+		return image;
+	}
+	public void setImage(ImageDTO image) {
+		this.image = image;
+	}
+	public String getBan_idx() {
+		return ban_idx;
+	}
+	public void setBan_idx(String ban_idx) {
+		this.ban_idx = ban_idx;
+	}
 	public String getReport_idx() {
 		return report_idx;
 	}

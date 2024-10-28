@@ -10,66 +10,61 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-	footer {
-    position: relative; /* 또는 fixed */
-    bottom: 0;
-    z-index: 0;
-    width: 100%;
-     margin-top: 20px;
+	/* 전체 페이지 레이아웃 */
+	body {
+	    display: flex;
+	    flex-direction: column;
+	    min-height: 100vh;
+	    margin: 0;
 	}
 	
-
-	.title1{
-	margin-top: 100px;
+	/* 헤더 스타일 */
 	
+	
+	/* 콘텐츠와 사이드바 감싸는 래퍼 */
+	.content-wrapper {
+	    display: flex;
+	    width: 100%;
+	    margin-top: 80px; /* 헤더 높이만큼 여백 */
+	    flex-grow: 1; /* 남은 공간 채우기 */
 	}
 	
-	#searchForm{
-	margin-left: 0px;
-	margin-bottom: 10px;
-	margin-top: 10px;
+	/* 사이드바 스타일 */
+	.fixed-left {
+	    width: 300px;
+	    border-right: 1px solid #ccc;
+	    padding: 20px;
+	    position: sticky;
+	    top: 80px; /* 헤더 아래에 고정 */
+	    height: calc(100vh - 80px); /* 화면 높이에 맞추기 */
+	    overflow-y: auto;
 	}
-	.
-	.title2{
-        color: var(--font-color);
-        font-family: "Pretendard Variable", sans-serif;
-        font-size: 20px;
-        font-weight: 800;
-    }
-
-	 #catagory {
-        color: var(--font-color);
-        font-family: "Pretendard Variable", sans-serif;
-        font-size: 16px;
-        font-weight: 500;
-    }
-    .fixed-left {
-    position: fixed;
-    top: 80; /* 화면 상단에 고정 */
-    left: 50; /* 화면 왼쪽에 고정 */
-    width: 400px; /* 원하는 너비 설정 */
-    padding: 10px;
-    z-index: 999;
-   /* background-color: #f0f0f0;  배경색 설정 */
-    border-right: 1px solid #ccc; /* 오른쪽에 구분선 */
-    height: 100%; /* 전체 높이 설정 */
-    overflow-y: auto; /* 글이 길면 스크롤 가능하도록 설정 */
-    
+	.fixed-left p{
+	    margin: 15px 0;
+	    line-height: 1.5;
+	    font-size: 20px;
 	}
-	.inner{
-    margin-left: 550px;
-    
+	
+	#admin_name{
+	font-weight: 800;
+	font-size: 23px;
 	}
+	
 	.image img {
-    width: 30%;  /* 또는 원하는 픽셀 값 */
-    height: auto;
-    margin-bottom: 20px; /* 비율을 유지 */
+	    width: 35%;  /* 또는 원하는 픽셀 값 */
+	    height: auto;
+	    margin-bottom: 20px; /* 비율을 유지 */
+		}
+	/* 메인 콘텐츠 */
+	.main-content {
+	    flex: 1; /* 남은 공간 채우기 */
+	    padding: 20px;
+	    overflow: auto;
 	}
 	.btn02-l{
 	margin-top: 0px;
 	margin-bottom: 50px;
 	}
-
 </style>
 </head>
 <body>
@@ -77,43 +72,29 @@
 	<jsp:include page="../header.jsp"/> 
 	
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
-	<div class="inner">
+	<div class="content-wrapper">
+    <aside class="fixed-left">
+        <div class="image">
+            <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+        </div>
+        <p class="title2" id="admin_name">관리자</p>
+        <p class="title3" onclick="location.href='adminMember'">회원정보</p>
+        <p class="title3" onclick="location.href='adminReport'">신고</p>
+        <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
+        <p class="title3" onclick="location.href='adminTag'">태그</p>
+        <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
+        <p class="title3" onclick="location.href='adminPopup'">팝업</p>
+        <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+        <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
+       </aside>
 	
-		<p class="title1" >회원정보</p>
-	
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-		
-	    <div class="fixed-left">
-	    <div class="image">
-		    <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
-	    </div>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title2" id="admin_name">관리자</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminMember'"> 회원정보</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminReport'">신고</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminTag'">태그</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
-	    <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-	    <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
-	    
-	    </div>
-		
+   	 <main class="main-content">
 		<div class="btn02-l" onclick="location.href='adminMember'">전체</div> <!-- 클릭시 색깔변경 -->
 	    <div class="btn03-l" onclick="location.href='admin'">게시글</div>
 	    <div class="btn03-l" onclick="location.href='admin'">댓글</div>
 	    
-	   	
+	   	 
+		<p class="title1" >신고</p>
 		 <table>
 			<thead>
 			<colgroup>
@@ -134,18 +115,19 @@
 		
 		 	<tbody id="list">
 		 		
-
+	
 		 	</tbody>
-		 	<tr>
-	         <th colspan="6">
-	            <div class="container">
-	             <nav aria-label="Page navigation">
-	              <ul class="pagination" id="pagination"></ul>
-	             </nav>
-	            </div>
-	         </th>
-	      </tr>
-   </table>
+			 	<tr>
+		         <th colspan="6">
+		            <div class="container">
+		             <nav aria-label="Page navigation">
+		              <ul class="pagination" id="pagination"></ul>
+		             </nav>
+		            </div>
+		         </th>
+		      	</tr>
+			</table>
+	   	 </main>
 	</div>
 	
 	<!-- 푸터 -->
