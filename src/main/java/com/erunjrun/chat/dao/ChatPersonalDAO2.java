@@ -1,4 +1,6 @@
 package com.erunjrun.chat.dao;
+/*
+package com.erunjrun.chat.dao;
 
 import java.util.List;
 
@@ -9,7 +11,11 @@ import com.erunjrun.chat.dto.ChatPersonalDTO;
 @Mapper
 public interface ChatPersonalDAO {
 
-	 List<ChatPersonalDTO> getContent(String chatIdx, String baseUser);
 
+
+	List<ChatPersonalDTO> findByReceiverAndIsReadFalse(String receiver);
+
+	int save(ChatPersonalDTO chatPersonalDTO);
 
 }
+*/

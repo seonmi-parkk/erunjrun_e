@@ -135,7 +135,7 @@
 	    margin-left: 4px;
 	}
 	#profilePopup {
-	    left: 400px !important;
+	    left: 460px !important;
 	    transform: none !important;
 	}
 /* 	.info-title {
@@ -699,7 +699,6 @@
 				success: function(list){
 					console.log(list);
 				    closeList(list);
-					
 				},
 				error: function(e){
 					console.log(e);
