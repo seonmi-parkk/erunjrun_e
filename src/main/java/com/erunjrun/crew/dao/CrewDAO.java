@@ -44,7 +44,7 @@ public interface CrewDAO {
 
 	List<CrewMemberDTO> crewMemberList(int crew_idxs);
 
-	List<CrewMemberDTO> crewApplicationList(int crew_idxs);
+	List<CrewMemberDTO> crewApplicationList(int crew_idx, int limit, int offset);
 
 	int crewApplicationWrite(Map<String, Object> parmeterMap);
 

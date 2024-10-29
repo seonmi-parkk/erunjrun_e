@@ -40,5 +40,10 @@ public class CrewViewController {
     public String crewListView() {
     	return "/crew/crewList";
     }
+    
+    @GetMapping(value="/crewMemberListView")
+    public String crewMemberListView() {
+    	return "/crew/crewMemberList";
+    }
 
 }
