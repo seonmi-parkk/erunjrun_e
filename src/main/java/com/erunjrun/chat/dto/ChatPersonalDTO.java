@@ -1,13 +1,15 @@
 package com.erunjrun.chat.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class ChatPersonalDTO {
 	private String content_idx;
 	private String chat_idx;
 	private String content;
-	private Date start_date;
-	private Date end_date;
+	private String firstOfDay;
+	private LocalDateTime start_date;
+	private LocalDateTime end_date;
 	private String sender;
 	private String recipient;
 	private String use_yn;
@@ -16,7 +18,21 @@ public class ChatPersonalDTO {
 	private String icon_image;
 	private String nickname;
 	
+	// chat 테이블
+	private String create_date;
 	
+	public String getCreate_date() {
+		return create_date;
+	}
+	public void setCreate_date(String create_date) {
+		this.create_date = create_date;
+	}
+	public String getFirstOfDay() {
+		return firstOfDay;
+	}
+	public void setFirstOfDay(String firstOfDay) {
+		this.firstOfDay = firstOfDay;
+	}
 	public String getContent_idx() {
 		return content_idx;
 	}
@@ -53,16 +69,16 @@ public class ChatPersonalDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getStart_date() {
+	public LocalDateTime getStart_date() {
 		return start_date;
 	}
-	public void setStart_date(Date start_date) {
+	public void setStart_date(LocalDateTime start_date) {
 		this.start_date = start_date;
 	}
-	public Date getEnd_date() {
+	public LocalDateTime getEnd_date() {
 		return end_date;
 	}
-	public void setEnd_date(Date end_date) {
+	public void setEnd_date(LocalDateTime end_date) {
 		this.end_date = end_date;
 	}
 	public String getSender() {

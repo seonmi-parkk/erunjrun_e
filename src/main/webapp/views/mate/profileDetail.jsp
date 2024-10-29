@@ -144,7 +144,7 @@
 					           <div class="btn-mate-appl btn01-s">러닝메이트 신청</div>
 							</c:when>
 						</c:choose>
-			           <div class="btn-chat btn02-s">채팅하기</div>
+			           <div class="btn-chat btn02-s" onclick="chat('${sessionScope.loginId}','${profileDto.id}')">채팅하기</div>
 			           <div class="btn-like btn02-s" onclick="like()">
 			           		<c:choose>
 				           		<c:when test="${result.isLiked eq false}">

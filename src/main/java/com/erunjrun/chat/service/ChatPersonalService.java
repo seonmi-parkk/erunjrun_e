@@ -1,6 +1,12 @@
 package com.erunjrun.chat.service;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +21,68 @@ public class ChatPersonalService {
 
 	@Autowired ChatPersonalDAO chatPersonalDAO;
 	Logger logger = LoggerFactory.getLogger(getClass());
-	public  List<ChatPersonalDTO> getContent(String chatIdx, String baseUser) {
-		return chatPersonalDAO.getContent(chatIdx, baseUser);
+	
+	
+	public Map<String, Object> getContent(String chatIdx, String baseUser) {
+		Map<String, Object> values = new HashMap<String, Object>();
+		
+		
+		String[] userNames = chatPersonalDAO.getUserName(chatIdx);
+		//logger.info("userNames"+userNames[0]);
+		// userNames들어오는지 check하고 위에 values에 아래 list랑 usernames넣어서 컨트롤러 보내기
+		// 컨트롤러도 수정해야함.
+		List<ChatPersonalDTO> msgList = chatPersonalDAO.getContent(chatIdx, baseUser);
+		
+		// 날짜 비교 (날짜 바뀔경우 체크)
+		LocalDate previousDate = null;
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
+		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+	    
+        for(ChatPersonalDTO msg : msgList) {
+        	LocalDate msgDate = msg.getStart_date().toLocalDate();
+        	logger.info("msg.getStart_date(): "+msg.getStart_date());
+        	logger.info("msgDate: "+msgDate);
+        	
+        	if(previousDate == null || !msgDate.equals(previousDate)) {
+        		logger.info("previousDate: "+previousDate);
+        		logger.info("msgDate: "+msgDate);
+        		logger.info("msgDate.format(dateFormatter): "+msgDate.format(dateFormatter));
+        		msg.setFirstOfDay(msgDate.format(dateFormatter));
+        		
+        		previousDate = msgDate;
+
+        	}
+        }
+        
+       // logger.info("getFirstOfDay: "+ msgList.get(0).getFirstOfDay());
+        
+        values.put("userNames", userNames);
+        values.put("msgList", msgList);
+		return values;
+	}
+
+
+	public String getRoomNum(String id, String unlikeId) {
+		logger.info("id: {}, unlikeId: {}",id,unlikeId);
+		return chatPersonalDAO.getRoomNum(id,unlikeId);
+	}
+
+
+	public String createRoom(String id, String unlikeId) {
+		Date today = new Date();
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		logger.info(" dateFormat.format(today): "+ dateFormat.format(today));
+		
+		ChatPersonalDTO dto = new ChatPersonalDTO();
+		dto.setCreate_date(dateFormat.format(today));
+		
+		String chat_idx = null;
+		if(chatPersonalDAO.createRoom(dto)>0) {
+			chat_idx = dto.getChat_idx();
+			chatPersonalDAO.linkRoom(chat_idx,id,unlikeId);
+		}
+		return chat_idx;
 	}
 	
 	
