@@ -84,7 +84,9 @@ public interface AdminDAO {
 
 	public void tagwrite(Map<String, String> param);
 
-	public Object tagdetail(String tag_idx);
+	public AdminDTO tagdetail(String tag_idx);
+	
+	
 
 
 

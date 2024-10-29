@@ -131,20 +131,20 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">태그 이름</p>
-			<input type="text" name="end_date" id="end_date"/>
+			<input type="text" name="tag_idx" id="end_date"/>
 		</div>
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">사용여부</p>
-			<input type="radio" name="code_name" value="A100" class="raido" id="radio"/>사용
+			<input type="radio" name="use_yn" value="A100" class="raido" id="radio"/>사용
 		
-			<input type="radio" name="code_name" value="A101" class="raido" id="radio"/>미사용
+			<input type="radio" name="use_yn" value="A101" class="raido" id="radio"/>미사용
 		</div>
 		
 	
    	<button class="btn01-l" type="submit" id="text">등록</button>
-	<div class="btn02-l" onclick="location.href='adminMember'">취소</div> <!-- 클릭시 색깔변경 -->
+	<div class="btn02-l" onclick="location.href='adminTag'">취소</div> <!-- 클릭시 색깔변경 -->
 	</form>
 	 </main>
 	</div>

@@ -290,5 +290,24 @@
 	  <insert id="tagwrite" parameterType="Map">
 	  		insert into tag(tag_name,use_yn)values(#{tag_name},#{use_yn})
 	  </insert>
+	  
+	  <select id="tagdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
+	  		select * from tag where tag_idx = #{tag_idx}
+	  </select>
+  	
+  		<update id="tagupdate" parameterType="Map">
+  			update tag<set>
+  		 <if test= "tag_name != null">
+			tag_name = #{tag_name},
+		</if>
+		<if test="use_yn != null">
+			use_yn = #{use_yn},
+		</if>
+			where tag_idx = #{tag_idx}	
+  		</set>
+  		</update>
+  		
+  		
+  		
   
   </mapper>

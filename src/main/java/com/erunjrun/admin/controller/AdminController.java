@@ -314,14 +314,14 @@ public class AdminController {
 	  
 	  }
 	  @GetMapping(value = "adminTagWrite")
-	  public String tagwriteform() {
+	  public String tagwrite() {
 		  return "admin/adminTagWrite";
 	  }
 	  
 	  
 	  @PostMapping(value = "adminTagWrite")
-	  public String tagwirte(@RequestParam Map<String, String> param, Model model) {
-
+	  public String tagwrite(@RequestParam Map<String, String> param, Model model) {
+      logger.info(param.get("tag_idx"));
 		  return "redirect:/adminTagList";
 	  }
 	  
@@ -329,11 +329,20 @@ public class AdminController {
 	  
 	  
 	  @GetMapping(value = "adminTagUpdate")
-	  public String tagupdate(String tag_idx) {
+	  public String tagdetail(String tag_idx,Model model) {
 		 
-		  admin_service.tagdetail(tag_idx);
+		  admin_service.tagdetail(tag_idx,model);
 		  
-		  return "";
+		 
+		  return "admin/adminTagUpdate";
+	  }
+	  
+	  @PostMapping(value = "adminTagUpdate")
+	  public String tagupdate(@RequestParam Map<String, String> param) {
+		  
+		  admin_service.tagupdate(param);
+		  
+		  return "redirect:/adminTag";
 	  }
 	  
 	  

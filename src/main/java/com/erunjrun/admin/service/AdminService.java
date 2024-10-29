@@ -192,7 +192,14 @@ public class AdminService {
 		
 	}
 
-	public void tagdetail(String tag_idx) {
+	public void tagdetail(String tag_idx,Model model) {
+		AdminDTO dto = admin_dao.tagdetail(tag_idx);
+		model.addAttribute("info",dto);
+		
+		
+	}
+
+	public void tagupdate(Map<String, String> param) {
 		
 		
 	}
