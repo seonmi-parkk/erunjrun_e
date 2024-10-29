@@ -263,22 +263,22 @@
 		
 		<div class="tagBox">
 			<span id="tagFilter">
-				<label><input type="checkbox" name="tag_idx_list" value="is_recruit"/>🔔 모집중</label>
-                <label><input type="checkbox" name="tag_idx_list" value="1">🏃‍♂️러닝에 집중</label>
-                <label><input type="checkbox" name="tag_idx_list" value="2">🙋‍♀️ 친목도 중요</label>
-                <label><input type="checkbox" name="tag_idx_list" value="3"><img src="resources/img/common/ico_male.png" width="9px" class="tagImg-01"/> 남성만 가능</label>
-                <label><input type="checkbox" name="tag_idx_list" value="4"><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 여성만 가능</label>
-                <label><input type="checkbox" name="tag_idx_list" value="5"><img src="resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 혼성</label>
-                <label><input type="checkbox" name="tag_idx_list" value="6"> <b style='color: #FD6F22' class="tagImg-01">E</b> 환영해요</label>
-                <label><input type="checkbox" name="tag_idx_list" value="7"> <b style='color: #116DCA' class="tagImg-01">I</b> 환영해요</label>
-                <label><input type="checkbox" name="tag_idx_list" value="8">🐂 소규모 크루</label>
-                <label><input type="checkbox" name="tag_idx_list" value="9">🏆 대회 목적</label>
-                <label><input type="checkbox" name="tag_idx_list" value="10">💦 러닝 고수만</label>
-                <label><input type="checkbox" name="tag_idx_list" value="11">🥳 초보도 환영</label>
-                <label><input type="checkbox" name="tag_idx_list" value="shortsido_area"/>🗽 수도권(서울,경기,인천)</label>
-                <label><input type="checkbox" name="tag_idx_list" value="shortsido_etc"/><b style='color: gray' class="tagImg-01">#</b>수도권 외</label>
-                <label><input type="checkbox" name="tag_idx_list" value="weekdays"/><b style='color: #116DCA' class="tagImg-01">W</b>평일 포함</label>
-                <label><input type="checkbox" name="tag_idx_list" value="weekend"/><b style='color: #FD6F22' class="tagImg-01">S</b>주말 포함</label>
+				<label><input type="checkbox" name="tag_idx_list" value="option1"/>🔔 모집중</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option2">🏃‍♂️러닝에 집중</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option3">🙋‍♀️ 친목도 중요</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option4"><img src="resources/img/common/ico_male.png" width="9px" class="tagImg-01"/> 남성만 가능</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option5"><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 여성만 가능</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option6"><img src="resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 혼성</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option7"> <b style='color: #FD6F22' class="tagImg-01">E</b> 환영해요</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option8"> <b style='color: #116DCA' class="tagImg-01">I</b> 환영해요</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option9">🐂 소규모 크루</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option10">🏆 대회 목적</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option11">💦 러닝 고수만</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option12">🥳 초보도 환영</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option13"/>🗽 수도권(서울,경기,인천)</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option14"/><b style='color: gray' class="tagImg-01">#</b>수도권 외</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option15"/><b style='color: #116DCA' class="tagImg-01">W</b>평일 포함</label>
+                <label><input type="checkbox" name="tag_idx_list" value="option16"/><b style='color: #FD6F22' class="tagImg-01">S</b>주말 포함</label>
                 
             </span> <br>
 		</div> <!-- tagBox -->
@@ -347,8 +347,10 @@
 		// 필터링된 값을 배열로 업데이트하는 함수
 		 updateFiltering();
 	
+		console.log("filtering > ", filtering)
 	  	$.ajax({
 			type: 'GET',
+			async: true, // 비동기 방식이지만 데이터를 동기로 기다렸다가 다음 요청 보내기
 			url: '/crew/list',
 			data: $.param({'filtering': filtering, 'page': page, 'pageSize': 10 }, true),
 			dataType: 'JSON',

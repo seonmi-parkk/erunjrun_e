@@ -22,6 +22,10 @@ public class CrewMemberDTO {
     // crew_application
     private int application_idx;
     
+    private int totalpage;
+    
+    private Date birth;
+    
     
     // 회원 리스트를 위해 추가
     private String nickname;
@@ -29,6 +33,8 @@ public class CrewMemberDTO {
     private String image;
     
     private String like;
+    
+    
 
 	public int getCrew_idx() {
 		return crew_idx;
@@ -146,14 +152,37 @@ public class CrewMemberDTO {
 	public void setLike(String like) {
 		this.like = like;
 	}
+	
+	public int getTotalpage() {
+		return totalpage;
+	}
+
+	public void setTotalpage(int totalpage) {
+		this.totalpage = totalpage;
+	}
+	
+	
+
+	public Date getBirth() {
+		return birth;
+	}
+
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
 
 	@Override
 	public String toString() {
 		return "CrewMemberDTO [crew_idx=" + crew_idx + ", id=" + id + ", create_date=" + create_date + ", is_leader="
 				+ is_leader + ", history_idx=" + history_idx + ", code_name=" + code_name + ", leader=" + leader
 				+ ", is_agree=" + is_agree + ", update_date=" + update_date + ", application_idx=" + application_idx
-				+ ", nickname=" + nickname + ", gender=" + gender + ", image=" + image + ", like=" + like + "]";
+				+ ", totalpage=" + totalpage + ", birth=" + birth + ", nickname=" + nickname + ", gender=" + gender
+				+ ", image=" + image + ", like=" + like + "]";
 	}
+
+
+
+
 
 	
 

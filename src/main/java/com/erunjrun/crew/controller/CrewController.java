@@ -178,7 +178,7 @@ public class CrewController {
 	
 	@PostMapping(value="/memberList")
 	public Map<String, Object> crewMemberList(String crew_idx){
-		logger.info("memver crew_idx =>" + crew_idx);
+		logger.info("member crew_idx =>" + crew_idx);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		
@@ -186,7 +186,10 @@ public class CrewController {
 		
 		List<CrewMemberDTO> crewMemberList = crew_service.crewMemberList(crew_idxs);
 		
-		List<CrewMemberDTO> crewApplicationList = crew_service.crewApplicationList(crew_idxs);
+		int page = 0;
+		int cnt = 0;
+		
+		List<CrewMemberDTO> crewApplicationList = crew_service.crewApplicationList(crew_idxs, page, cnt);
 		
 		resultMap.put("result", crewMemberList);
 		resultMap.put("application", crewApplicationList);
@@ -334,6 +337,24 @@ public class CrewController {
 		Map<String, Object> resultMap = new HashMap<>();
 		List<Map<String, Object>> crewList = crew_service.crewList(filtering, page, pageSize);
 	    resultMap.put("result", crewList);
+		
+		return resultMap;
+	}
+	
+	@PostMapping(value="/applicationMemberList")
+	public Map<String, Object> ApplicationMemberList(
+			@RequestParam String crew_idx,
+			@RequestParam(value = "page") int page, 
+			@RequestParam(value = "cnt") int cnt){
+		
+		logger.info("crew_idx => " + crew_idx);
+		logger.info("page : cnt => " + page + " : " + cnt);
+		
+		int crew_idxs = Integer.parseInt(crew_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		resultMap.put("result", crew_service.crewApplicationList(crew_idxs ,page, cnt));
 		
 		return resultMap;
 	}

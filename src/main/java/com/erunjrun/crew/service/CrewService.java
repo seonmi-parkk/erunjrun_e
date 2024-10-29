@@ -290,8 +290,12 @@ public class CrewService {
 		return crewMemberList;
 	}
 
-	public List<CrewMemberDTO> crewApplicationList(int crew_idxs) {
-		return crew_dao.crewApplicationList(crew_idxs);
+	public List<CrewMemberDTO> crewApplicationList(int crew_idxs, int page, int cnt) {
+		
+		int limit = cnt;
+		int offset = (page -1) * cnt;
+		
+		return crew_dao.crewApplicationList(crew_idxs, limit, offset);
 	}
 
 	public boolean crewApplicationWrite(Map<String, Object> parmeterMap) {
@@ -372,6 +376,7 @@ public class CrewService {
 		int offset = (page - 1) * pageSize; // 0 -> 10 -> 20 .. 10씩 증가
 	    return crew_dao.crewList(filtering, offset, pageSize);
 	}
+
 
     
 }
