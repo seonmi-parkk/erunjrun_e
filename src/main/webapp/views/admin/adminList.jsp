@@ -87,7 +87,7 @@ font-size: 23px;
             <p class="title3" onclick="location.href='adminTag'">태그</p>
             <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
 		
@@ -194,7 +194,7 @@ function pageCall(page) {
 			content +='<td>'+view.admin_id+'</td>';
 			content += '<td>'+view.name+'</td>';
 			content +='<td>'+view.join_date+'</td>';
-			content +='<td><a href="board_del?idx='+view.id+'">삭제</a></td>';
+			content +='<td><a href="adminDel?admin_id='+view.admin_id+'"style="color: orange;">삭제</a></td>';
 			content +='</tr>';
 		  }
 	      $('#list').html(content);

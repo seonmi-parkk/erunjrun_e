@@ -103,7 +103,7 @@
             <p class="title3" onclick="location.href='adminTag'">태그</p>
             <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
         
@@ -114,7 +114,7 @@
 		        <option value="id">작성자</option>
 		        <option value="subject">제목</option>
 		        <option value="ask_use">답변</option>
-		        <option value="code_name">카테고리</option>
+		        <option value="category">카테고리</option>
 		    </select>
 		    <input class="input-txt-l" type="text"  id="searchKeyword" placeholder="검색어를 입력하세요"/>
 		    <input class="btn-sch" type="button" onclick="pageCall(1)" value="검색"/>

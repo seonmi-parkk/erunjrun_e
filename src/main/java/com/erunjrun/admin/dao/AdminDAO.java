@@ -25,7 +25,7 @@ public interface AdminDAO {
 	
 	
 //	회원리스트
-	public List<AdminDTO> memberlist(String opt, String keyword, int limit, int offset);
+	public List<AdminDTO> memberlist(String opt, String keyword,String sortField,String sortOrder, int limit, int offset);
 	
 	int count(int cnt);
 
@@ -85,6 +85,31 @@ public interface AdminDAO {
 	public void tagwrite(Map<String, String> param);
 
 	public AdminDTO tagdetail(String tag_idx);
+
+	public void tagupdate(Map<String, String> param);
+
+	
+	
+// 구분코드	
+	public List<AdminDTO> codelist(int limit, int offset, String opt, String keyword);
+	
+	public int codecount(int cnt_);
+
+	public void codewrite(Map<String, String> param);
+
+	public int codeoverlay(String code_name);
+
+	public AdminDTO codedetail(String code_name);
+
+	public void codeupdate(Map<String, String> param);
+	
+	
+	
+	
+	// 팝업
+	public List<AdminDTO> pupuplist(int limit, int offset);
+
+	public int pupupcount(int cnt_);
 	
 	
 

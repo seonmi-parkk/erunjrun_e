@@ -100,7 +100,7 @@ public class AdminController {
 	
 	  @GetMapping(value = "/adminMemberList") //post?
 	  @ResponseBody 
-	  public Map<String,Object> memberlist(String page, String cnt,String opt, String keyword){
+	  public Map<String,Object> memberlist(String page, String cnt,String opt, String keyword,String sortField,String sortOrder){
 		  
 		int page_ = Integer.parseInt(page);
 		int cnt_ = Integer.parseInt(cnt);
@@ -115,7 +115,7 @@ public class AdminController {
 		Map<String,Object> result = new HashMap<String, Object>();
 		result.put("totalPages", totalPages);
 		result.put("currpage", page);
-		result.put("list", admin_service.memberlist(opt, keyword, limit, offset));
+		result.put("list", admin_service.memberlist(opt, keyword,sortField,sortOrder, limit, offset));
 		
 		return result;
 	  
@@ -203,10 +203,12 @@ public class AdminController {
 	  }
 	  
 	  @PostMapping(value = "/memberRightUpdate")
-	  public String rightupdate( @RequestParam Map<String, String> param,Model model) {
+	  public String rightupdate( @RequestParam Map<String, String> param,Model model,HttpSession session) {
+		  String admin_id = (String)session.getAttribute("loginId");
+		  param.put("admin_id", admin_id);
 		  admin_service.rightupdate(param);
 		  
-		  return"redirect:/memberRightDetail?id="+param.get("id");
+		  return"redirect:/memberRightDetail?ban_idx="+param.get("ban_idx");
 	  }
 	  
 	 
@@ -299,7 +301,7 @@ public class AdminController {
 	  
 	  @GetMapping(value = "adminTagList")
 	  @ResponseBody 
-	  public Map<String, Object> taglist(String page, String cnt,String opt, String keyword) {
+	  public Map<String, Object> taglist(String page, String cnt) {
 			int page_ = Integer.parseInt(page);
 			int cnt_ = Integer.parseInt(cnt);
 			int limit = cnt_;
@@ -308,7 +310,7 @@ public class AdminController {
 			Map<String,Object> result = new HashMap<String, Object>();
 			result.put("totalPages", totalPages);
 			result.put("currpage", page);
-			result.put("list", admin_service.taglist( limit, offset));
+			result.put("list", admin_service.taglist(limit, offset));
 			
 			return result;
 	  
@@ -321,19 +323,17 @@ public class AdminController {
 	  
 	  @PostMapping(value = "adminTagWrite")
 	  public String tagwrite(@RequestParam Map<String, String> param, Model model) {
-      logger.info(param.get("tag_idx"));
-		  return "redirect:/adminTagList";
+      logger.info(param.get("tag_name"));
+      logger.info(param.get("use_yn"));
+      admin_service.tagwrite(param);
+		  return "redirect:/adminTag";
 	  }
 	  
 	  
-	  
-	  
 	  @GetMapping(value = "adminTagUpdate")
-	  public String tagdetail(String tag_idx,Model model) {
-		 
+	  public String tagdetail(String tag_idx,Model model) { 
 		  admin_service.tagdetail(tag_idx,model);
-		  
-		 
+
 		  return "admin/adminTagUpdate";
 	  }
 	  
@@ -341,8 +341,96 @@ public class AdminController {
 	  public String tagupdate(@RequestParam Map<String, String> param) {
 		  
 		  admin_service.tagupdate(param);
+		  logger.info(param.get("tag_idx"));
 		  
 		  return "redirect:/adminTag";
+	  }
+	  
+	  
+	  
+	  
+	  // 구분코드
+	  @GetMapping(value = "adminCode")
+	  public String code() {
+		  return "admin/adminCodeList";
+	  }
+	  
+	  @GetMapping(value = "adminCodeList")
+	  @ResponseBody
+	  public Map<String, Object> codelist(String page, String cnt,String opt, String keyword) {
+			int page_ = Integer.parseInt(page);
+			int cnt_ = Integer.parseInt(cnt);
+			int limit = cnt_;
+			int offset = (page_ - 1) * cnt_;
+			int totalPages = admin_service.codecount(cnt_);
+			Map<String,Object> result = new HashMap<String, Object>();
+			result.put("totalPages", totalPages);
+			result.put("currpage", page);
+			result.put("list", admin_service.codelist(limit, offset,opt,keyword));
+			
+			return result;
+	  
+	  }
+	  
+	  @GetMapping(value = "adminCodeWrite")
+	  public String codewrite(){
+		  return "admin/adminCodeWrite";
+	  }
+	  
+	  @PostMapping(value = "adminCodeWrite")
+	  public String codewrite(@RequestParam Map<String, String> param,Model model) {
+		  admin_service.codewrite(param);
+		  return "redirect:/adminCode";
+	  }
+	  
+	  @PostMapping(value = "/adminCodeOverlay")
+	  @ResponseBody
+		public Map<String, Object> codeoverlay(String code_name) {
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("overlay",admin_service.codeoverlay(code_name));
+			return map;
+		}
+	  
+	  @GetMapping(value = "adminCodeUpdate")
+	  public String codedetail(String code_name,Model model) { 
+		  admin_service.codedetail(code_name,model);
+		  return "admin/adminCodeUpdate";
+	  }
+	  
+	  @PostMapping(value = "adminCodeUpdate")
+	  public String codeupdate(@RequestParam Map<String, String> param) { 
+		  admin_service.codeupdate(param);
+		  logger.info(param.get("code_name"));
+		  logger.info(param.get("content"));
+		  logger.info(param.get("use_yn"));
+		  
+		  return "redirect:/adminCode";
+	  }
+	  
+	  
+	  @GetMapping(value = "adminPopup")
+	  public String popup() {
+		  
+		  return "admin/adminPopupList";
+	  }
+	  
+	  
+	  @GetMapping(value = "adminPopupList")
+	  @ResponseBody
+	  public Map<String, Object> popuplist(String page, String cnt) {
+			int page_ = Integer.parseInt(page);
+			int cnt_ = Integer.parseInt(cnt);
+			int limit = cnt_;
+			int offset = (page_ - 1) * cnt_;
+			int totalPages = admin_service.popupcount(cnt_);
+			
+			Map<String,Object> result = new HashMap<String, Object>();
+			result.put("totalPages", totalPages);
+			result.put("currpage", page);
+			result.put("list", admin_service.popuplist(limit, offset));
+			
+			return result;
 	  }
 	  
 	  

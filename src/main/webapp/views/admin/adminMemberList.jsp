@@ -11,57 +11,57 @@
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 /* 전체 페이지 레이아웃 */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-}
-
-/* 헤더 스타일 */
-
-
-/* 콘텐츠와 사이드바 감싸는 래퍼 */
-.content-wrapper {
-    display: flex;
-    width: 100%;
-    margin-top: 80px; /* 헤더 높이만큼 여백 */
-    flex-grow: 1; /* 남은 공간 채우기 */
-}
-
-/* 사이드바 스타일 */
-.fixed-left {
-    width: 300px;
-    border-right: 1px solid #ccc;
-    padding: 20px;
-    position: sticky;
-    top: 80px; /* 헤더 아래에 고정 */
-    height: calc(100vh - 80px); /* 화면 높이에 맞추기 */
-    overflow-y: auto;
-}
-.fixed-left p{
-    margin: 15px 0;
-    line-height: 1.5;
-    font-size: 20px;
-}
-
-#admin_name{
-font-weight: 800;
-font-size: 23px;
-}
-
-.image img {
-    width: 35%;  /* 또는 원하는 픽셀 값 */
-    height: auto;
-    margin-bottom: 20px; /* 비율을 유지 */
+	body {
+	    display: flex;
+	    flex-direction: column;
+	    min-height: 100vh;
+	    margin: 0;
 	}
-/* 메인 콘텐츠 */
-.main-content {
-    flex: 1; /* 남은 공간 채우기 */
-    padding: 20px;
-    overflow: auto;
-}
-
+	
+	/* 헤더 스타일 */
+	
+	
+	/* 콘텐츠와 사이드바 감싸는 래퍼 */
+	.content-wrapper {
+	    display: flex;
+	    width: 100%;
+	    margin-top: 80px; /* 헤더 높이만큼 여백 */
+	    flex-grow: 1; /* 남은 공간 채우기 */
+	}
+	
+	/* 사이드바 스타일 */
+	.fixed-left {
+	    width: 300px;
+	    border-right: 1px solid #ccc;
+	    padding: 20px;
+	    position: sticky;
+	    top: 80px; /* 헤더 아래에 고정 */
+	    height: calc(100vh - 80px); /* 화면 높이에 맞추기 */
+	    overflow-y: auto;
+	}
+	.fixed-left p{
+	    margin: 15px 0;
+	    line-height: 1.5;
+	    font-size: 20px;
+	}
+	
+	#admin_name{
+	font-weight: 800;
+	font-size: 23px;
+	}
+	
+	.image img {
+	    width: 35%;  /* 또는 원하는 픽셀 값 */
+	    height: auto;
+	    margin-bottom: 20px; /* 비율을 유지 */
+		}
+	/* 메인 콘텐츠 */
+	.main-content {
+	    flex: 1; /* 남은 공간 채우기 */
+	    padding: 20px;
+	    overflow: auto;
+	}
+	
 
 	.btn02-l{
 	margin-top: 0px;
@@ -88,7 +88,7 @@ font-size: 23px;
             <p class="title3" onclick="location.href='adminTag'">태그</p>
             <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
 
@@ -115,8 +115,8 @@ font-size: 23px;
                         <th>닉네임</th>
                         <th>이메일</th>
                         <th>권한</th>
-                        <th>신고누적수</th>
-                        <th>가입일시</th>
+                        <th onclick="sortby(report_count)">신고누적수</th>
+                        <th onclick="sortby(join_date)">가입일시</th>
                     </tr>
                 </thead>
                 <tbody id="list"></tbody>
@@ -137,64 +137,64 @@ font-size: 23px;
     <jsp:include page="../footer.jsp"/>
 </body>
 <script>
+    var show = 1;
+    pageCall(show);
 
-	var show = 1;
-	pageCall(show);
+    function sortby(field) {
+        const currentOrder = $('#sortOrder').val() || 'ASC';
+        const newOrder = currentOrder === 'ASC' ? 'DESC' : 'ASC';
+        $('#sortOrder').val(newOrder);
+        pageCall(1, field, newOrder);
+    }
 
-	function pageCall(page) {
-		var keyword = $('#searchKeyword').val(); // 검색어 여기 추가부터 리스트 안옴
-        var opt = $('#searchOption').val(); // 검색옵션
-		$.ajax({
-			type:'GET',
-			url:'adminMemberList',
-			data:{
-				'page':page,
-				'cnt':15,
-				'opt': opt,
-	            'keyword': keyword
-			},
-			datatype:'JSON',
-			success:function(data){
-				console.log(data);
-				drawList(data.list)
-				$('#pagination').twbsPagination({ // 페이징 객체 만들기
-				startPage:1, 
-           		totalPages:data.totalPages, 
-           		visiblePages:10,
-           
-           		onPageClick:function(evt,page){
-           			console.log('evt',evt); 
-           			console.log('page',page); 
-           			pageCall(page);
-           		}
-				});
-			},
-			error:function(e){
-				console.log(e);
-			}
-		});
-	}
+    function pageCall(page, sortField = '', sortOrder = '') {
+        const keyword = $('#searchKeyword').val();
+        const opt = $('#searchOption').val();
 
-	function drawList(list) {
-		var content ='';
-		 for (var view of list) {
-			content +='<tr>';
-			if (view.report_status == 'Y') {
-                content += '<td style="color: blue;">'+view.id+'</td>';
-            } else {
-                content += '<td>'+view.id+'</td>';
+        $.ajax({
+            type: 'GET',
+            url: 'adminMemberList',
+            data: {
+                page: page,
+                cnt: 15,
+                opt: opt,
+                keyword: keyword,
+                sortField: sortField,
+                sortOrder: sortOrder
+            },
+            datatype: 'JSON',
+            success: function (data) {
+                console.log(data);
+                drawList(data.list);
+                $('#pagination').twbsPagination({
+                    startPage: 1,
+                    totalPages: data.totalPages,
+                    visiblePages: 10,
+                    onPageClick: function (evt, page) {
+                        pageCall(page, sortField, sortOrder);
+                    }
+                });
+            },
+            error: function (e) {
+                console.log(e);
             }
-			content += '<td><a href="adminMemberDetail?id='+view.id+'">'+view.nickname+'<a/></td>';
-			content +='<td>'+view.email+'</td>';
-			content +='<td><a  href="memberRight?nickname='+view.nickname+'" style="color: orange;">권한</a></td>';
-			content +='<td>'+view.report_count+'</td>';
-			content +='<td>'+view.join_date+'</td>';
-			content +='</tr>';
-		  }
-	      $('#list').html(content);
-	   }
- 
+        });
+    }
 
+    function drawList(list) {
+        var content = '';
+        for (var view of list) {
+            content += '<tr>';
+            content += `<td style="${view.report_status === 'Y' ? 'color: blue;' : ''}">${view.id}</td>`;
+            content += `<td><a href="adminMemberDetail?id=${view.id}">${view.nickname}</a></td>`;
+            content += `<td>${view.email}</td>`;
+            content += `<td><a href="memberRight?nickname=${view.nickname}" style="color: orange;">권한</a></td>`;
+            content += `<td>${view.report_count}</td>`;
+            content += `<td>${view.join_date}</td>`;
+            content += '</tr>';
+        }
+        $('#list').html(content);
+    }
     
 </script>
 <script src="resources/js/common.js" type="text/javascript"></script>

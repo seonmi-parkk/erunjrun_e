@@ -105,7 +105,7 @@
             <p class="title3" onclick="location.href='adminTag'">태그</p>
             <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
         
@@ -155,12 +155,14 @@
 	pageCall(show);
 
 	function pageCall(page) {
+		
 		$.ajax({
 			type:'GET',
 			url:'adminTagList',
 			data:{
 				'page':page,
 				'cnt':15
+			
 			},
 			datatype:'JSON',
 			success:function(data){
@@ -189,8 +191,12 @@
 		 for (var view of list) {
 			content +='<tr>';
             content += '<td>'+view.tag_name+'</td>';
-			content += '<td>'+view.use_yn+'</td>';
-			content +='<td><a  href="adminTagUpdate?tag_idx='+view.tag_idx+'">수정</a></td>';
+            if (view.use_yn == 'Y') {
+                content += '<td style="color: green;">사용중</td>';
+            } else {
+            	content += '<td style="color: red;">미사용</td>';
+            }
+			content +='<td><a  href="adminTagUpdate?tag_idx='+view.tag_idx+'"style="color: orange;">수정</a></td>';
 			content +='</tr>';
 		  }
 	      $('#list').html(content);

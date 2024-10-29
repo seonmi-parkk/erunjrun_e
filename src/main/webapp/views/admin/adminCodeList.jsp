@@ -10,13 +10,17 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-
 	.input-container {
     display: flex;        /* Flexbox 사용 */
     align-items: center; /* 수직 중앙 정렬 */
     margin-bottom: 20px;
     margin-top: 20px;
 	}
+	#searchForm{
+	margin-top: 20px; 
+	margin-bottom: 10px; 
+	}
+	
 	#text{
    
     margin-right: 15px
@@ -27,10 +31,6 @@
     min-height: 100vh;
     margin: 0;
 	}
-
-/* 헤더 스타일 */
-
-
 	/* 콘텐츠와 사이드바 감싸는 래퍼 */
 	.content-wrapper {
 	    display: flex;
@@ -71,12 +71,7 @@
 	    padding: 20px;
 	    overflow: auto;
 	}
-    .radio{
-    	
-    	 transform: scale(1.5);
-    }
-    
-    #content{
+	#content{
     	width: 750px; /* 너비를 250픽셀로 설정 */
         height: 350px;
         resize: vertical; /* 높이를 50픽셀로 설정 */
@@ -84,20 +79,12 @@
         padding: 10px; /* 내부 여백을 10픽셀로 설정 */
     
     }
-    #radio{
-    margin-left: 10px;
+    .btn01-l{
+    	margin-left: 1450px;
+    	margin-bottom: 10px;
     }
-   
-    
-	.btn01-l{
-	margin-top: 50px;
-	margin-left: 650px;
-	}
-	#dot{
-	font-size: 34px;
-	color: #FB7E3A;
-	}
 	
+
 </style>
 </head>
 <body>
@@ -105,8 +92,10 @@
 	<jsp:include page="../header.jsp"/> 
 	
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
-		
-	 <div class="content-wrapper">	
+	
+	
+	
+		<div class="content-wrapper">
 		<aside class="fixed-left">
             <div class="image">
                 <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
@@ -118,44 +107,118 @@
             <p class="title3" onclick="location.href='adminTag'">태그</p>
             <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
-	 	<main class="main-content">
-	 	
-		<p class="title1" >태그</p>
-		
-		
-	  	<form action="adminTagWrite" method="post" id="form">
-		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">태그 이름</p>
-			<input type="text" name="tag_name" id="tag_name"/>
-		</div>
-		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">사용여부</p>
-			<input type="radio" name="use_yn" value="Y" class="raido" id="radio"/>사용
-		
-			<input type="radio" name="use_yn" value="N" class="raido" id="radio"/>미사용
-		</div>
-		
-	
-   	<button class="btn01-l" type="submit" id="text">등록</button>
-	<div class="btn02-l" onclick="location.href='adminTag'">취소</div> <!-- 클릭시 색깔변경 -->
-	</form>
-	 </main>
+        
+        <main class="main-content">
+		<p class="title1" >구분코드</p>
+	    <form id="searchForm" onsubmit="return false;">
+		    <select id="searchOption">
+		        <option value="content">유형내용</option>
+		        <option value="code_name">구분코드명</option>
+		    </select>
+		    <input class="input-txt-l" type="text"  id="searchKeyword" placeholder="검색어를 입력하세요"/>
+		    <input class="btn-sch" type="button" onclick="pageCall(1)" value="검색"/>
+	   	</form>
+	   	<div class="btn01-l" onclick="location.href='adminCodeWrite'" >등록</div>
+		 <table>
+			<colgroup>
+		 		<col width="20%"/>
+		 		<col width="20%"/>
+		 		<col width="20%"/>
+		 		<col width="20%"/>
+		 		<col width="20%"/>		 		
+		 	</colgroup>
+		<thead>
+			<tr>
+				<th>유형내용</th>
+				<th>구분코드명</th>
+				<th>사용여부</th>
+				<th>수정</th>
+				<th>등록일자</th>
+			</tr>
+		</thead>
+		 	<tbody id="list">
+		 		
+
+		 	</tbody>
+		 	<tr>
+	         <th colspan="6">
+	            <div class="container">
+	             <nav aria-label="Page navigation">
+	              <ul class="pagination" id="pagination"></ul>
+	             </nav>
+	            </div>
+	         </th>
+	      </tr>
+   </table>
+        </main>
 	</div>
 	
 	<!-- 푸터 -->
-	<jsp:include page="../footer.jsp"/>
+	<jsp:include page="../footer.jsp" />
 </body>
 
 
 
 <script>
+
+	var show = 1;
+	pageCall(show);
+
+	function pageCall(page) {
+		var keyword = $('#searchKeyword').val(); // 검색어 여기 추가부터 리스트 안옴
+        var opt = $('#searchOption').val(); // 검색옵션
+		$.ajax({
+			type:'GET',
+			url:'adminCodeList',
+			data:{
+				'page':page,
+				'cnt':15,
+				'opt': opt,
+	            'keyword': keyword
+			},
+			datatype:'JSON',
+			success:function(data){
+				console.log(data);
+				drawList(data.list)
+				$('#pagination').twbsPagination({ // 페이징 객체 만들기
+				startPage:1, 
+           		totalPages:data.totalPages, 
+           		visiblePages:10,
+           
+           		onPageClick:function(evt,page){
+           			console.log('evt',evt); 
+           			console.log('page',page); 
+           			pageCall(page);
+           		}
+				});
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+
+	function drawList(list) {
+		var content ='';
+		 for (var view of list) {
+			content +='<tr>';
+            content += '<td>'+view.content+'</td>';
+			content += '<td>'+view.code_name+'<a/></td>';
+			if (view.use_yn == 'Y') {
+                content += '<td style="color: green;">사용중</td>';
+            }else {
+            	content += '<td style="color: red;">미사용</td>';
+            }
+			content +='<td><a  href="adminCodeUpdate?code_name='+view.code_name+'" style="color: orange;">수정</a></td>';
+			content +='<td>'+view.create_date+'</td>';
+			content +='</tr>';
+		  }
+	      $('#list').html(content);
+	   }
+ 
 
     
 </script>

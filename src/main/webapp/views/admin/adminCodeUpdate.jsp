@@ -10,7 +10,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-.input-container {
+
+	.input-container {
     display: flex;        /* Flexbox 사용 */
     align-items: center; /* 수직 중앙 정렬 */
     margin-bottom: 20px;
@@ -69,14 +70,34 @@
 	    flex: 1; /* 남은 공간 채우기 */
 	    padding: 20px;
 	    overflow: auto;
-	    }
+	}
+    .radio{
+    	
+    	 transform: scale(1.5);
+    }
+    
+    #content{
+    	width: 750px; /* 너비를 250픽셀로 설정 */
+        height: 350px;
+        resize: vertical; /* 높이를 50픽셀로 설정 */
+        font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
+        padding: 10px; /* 내부 여백을 10픽셀로 설정 */
+    
+    }
+    #radio{
+    margin-left: 10px;
+    }
+   
+    
+	.btn01-l{
+	margin-top: 50px;
+	margin-left: 400px;
+	}
 	#dot{
 	font-size: 34px;
 	color: #FB7E3A;
 	}
-	.btn01-l{
-	margin-left: 265px;
-	}
+	
 </style>
 </head>
 <body>
@@ -85,11 +106,7 @@
 	
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
 		
-	
-	
-	
-		<div class="content-wrapper">	
-	
+	 <div class="content-wrapper">	
 		<aside class="fixed-left">
             <div class="image">
                 <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
@@ -104,51 +121,43 @@
             <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
-        
-         <main class="main-content">         
-	    <p class="title1" >회원정보</p>
-		<p class="title1"  id="text">${info.nickname}님</p>
+	 	<main class="main-content">
+	 	
+		<p class="title1" >구분코드</p>
 		
-	  	<form action="memberRightUpdate" method="post">
-	  	
-	  	<input type="text" name="id" id="text" value="${info.id}" hidden=""/>
-	  	
-	  	
+	  	<form action="adminCodeUpdate" method="post" id="form">
+	
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">카테고리</p>
-			<input type="radio" name="code_name" value="A100"
-						<c:if test="${info.code_name eq 'A100'}">checked</c:if>						
-						/>게시글
-					
-						<input type="radio" name="code_name" value="A101"
-						<c:if test="${info.code_name eq 'A101'}">checked</c:if>						
-						/>댓글
-					
-						<input type="radio" name="code_name" value="A102"
-						<c:if test="${info.code_name eq 'A102'}">checked</c:if>						
-						/> 회원
+			<p class="title2" id="text">유형내용</p>
+			<input type="text" name="content" id="text" value="${info.content}"/>
+		</div>
+		
+		<input type="text" name="code_name" id="text" value="${info.code_name}" hidden=""/>
+		
+		<div class="input-container">
+			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">구분코드명</p>
+			<p class="title2"  id="text">${info.code_name}</p>
 		</div>
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">정지기간</p>
-			<input type="date" name="start_date" id="text" value="${info.start_date}"/>
-			<p class="title2" id=""> ~ </p>
-			<input type="date" name="end_date" id="text" value="${info.end_date}"/>
+			<p class="title2" id="text">사용여부</p>
+			<input type="radio" name="use_yn" value="Y" class="raido" id="radio"
+			<c:if test="${info.use_yn eq 'Y'}">checked</c:if>						
+			/>사용
+			
+			<input type="radio" name="use_yn" value="N" class="raido" id="radio"
+			<c:if test="${info.use_yn eq 'N'}">checked</c:if>						
+			/>미사용
+	
 		</div>
-		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">정지내용</p>
-			<input type="text" name="ban_content" id="text" value="${info.ban_content}"/>
-		</div>
-		
-   			<input type="text" name="ban_idx" id="text" value="${info.ban_idx}" hidden=""/>
-   	<button class="btn01-l" type="submit">수정</button>
-	<div class="btn02-l" onclick="location.href='adminMemberDetail?id=${info.id}'">취소</div> <!-- 클릭시 색깔변경 -->
+	
+   	<button class="btn01-l" type="submit" id="text">수정</button>
+	<div class="btn02-l" onclick="location.href='adminCode'">취소</div> <!-- 클릭시 색깔변경 -->
 	</form>
-         </main>
+	 </main>
 	</div>
 	
 	<!-- 푸터 -->

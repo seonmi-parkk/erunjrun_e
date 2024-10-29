@@ -126,7 +126,16 @@
 		<p class="title1" >태그</p>
 		
 		
-	  	<form action="adminTagWrite" method="post" id="form">
+	  	<form action="adminTagUpdate" method="post" id="form">
+		
+		
+		
+		
+		<div class="input-container">
+			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">태그 이름</p>
+			<input type="text" name="tag_idx"  value="${info.tag_idx}" hidden="hidden"/>
+		</div>
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
@@ -137,10 +146,11 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">사용여부</p>
-			<input type="radio" name="use_yn" value="Y"
+			<input type="radio" name="use_yn" value="Y" id="radio"
 				<c:if test="${info.use_yn eq 'Y'}">checked</c:if>						
 				/>사용
-				<input type="radio" name="code_name" value="N"
+				
+				<input type="radio" name="use_yn" value="N" id="radio"
 				<c:if test="${info.use_yn eq 'N'}">checked</c:if>						
 				/>미사용
 		</div>

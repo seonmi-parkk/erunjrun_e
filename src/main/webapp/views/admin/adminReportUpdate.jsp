@@ -109,7 +109,7 @@
         
          <main class="main-content">
          
-		<p class="title1" >회원정보</p>
+		<p class="title1" >신고</p>
 		<form action="adminReportUpdate" method="post">
 		
 	 		<div class="input-container">
@@ -120,7 +120,7 @@
 			
 	 		<div class="input-container">
 	  			<p class="title2" id="dot">•</p>
-				<p class="title2" id="text">신고등록번호</p>
+				<p class="title2" id="text">게시글번호</p>
 				<p class="title2" id="text" >${info.report_idx}</p>
 			</div>	
 			
@@ -174,7 +174,6 @@
 			<button class="btn02-l" type="submit" name="code_name" value="D100">취소</button>
 		</form>
 						
-   	
          </main>
 	
 	

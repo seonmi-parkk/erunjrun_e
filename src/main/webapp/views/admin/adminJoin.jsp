@@ -60,9 +60,82 @@
             display: inline-block; /* 수평 정렬 */
             margin-left: 10px; /* 버튼과 결과 사이의 간격 */
         }
+        
+        body {
+	    display: flex;
+	    flex-direction: column;
+	    min-height: 100vh;
+	    margin: 0;
+	}
+	
+	/* 헤더 스타일 */
+	
+	
+	/* 콘텐츠와 사이드바 감싸는 래퍼 */
+	.content-wrapper {
+	    display: flex;
+	    width: 100%;
+	    margin-top: 80px; /* 헤더 높이만큼 여백 */
+	    flex-grow: 1; /* 남은 공간 채우기 */
+	}
+	
+	/* 사이드바 스타일 */
+	.fixed-left {
+	    width: 300px;
+	    border-right: 1px solid #ccc;
+	    padding: 20px;
+	    position: sticky;
+	    top: 80px; /* 헤더 아래에 고정 */
+	    height: calc(100vh - 80px); /* 화면 높이에 맞추기 */
+	    overflow-y: auto;
+	}
+	.fixed-left p{
+	    margin: 15px 0;
+	    line-height: 1.5;
+	    font-size: 20px;
+	}
+	
+	#admin_name{
+	font-weight: 800;
+	font-size: 23px;
+	}
+	
+	.image img {
+	    width: 35%;  /* 또는 원하는 픽셀 값 */
+	    height: auto;
+	    margin-bottom: 20px; /* 비율을 유지 */
+		}
+	/* 메인 콘텐츠 */
+	.main-content {
+	    flex: 1; /* 남은 공간 채우기 */
+	    padding: 20px;
+	    overflow: auto;
+	}
     </style>
 </head>
 <body>
+	<!-- 헤더 -->
+    
+
+    <!-- 콘텐츠 영역 (사이드바와 메인 콘텐츠를 감싸는 래퍼) -->
+    <div class="content-wrapper">
+    
+	<aside class="fixed-left">
+            <div class="image">
+                <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+            </div>
+            <p class="title2" id="admin_name">관리자</p>
+            <p class="title3" onclick="location.href='adminMember'">회원정보</p>
+            <p class="title3" onclick="location.href='adminReport'">신고</p>
+            <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
+            <p class="title3" onclick="location.href='adminTag'">태그</p>
+            <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
+            <p class="title3" onclick="location.href='adminPopup'">팝업</p>
+            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
+            <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
+        </aside>
+
+	 <main class="main-content">
     <div class="container">
         <h3>관리자 회원가입</h3>
         <form id="adminJoinForm" action="adminJoin" method="post">
@@ -89,7 +162,9 @@
             </div>
         </form>
     </div>
-
+	 </main>
+    </div>
+	
     <script>
         // ID 중복 체크
         $('#idCheck').click(function() {

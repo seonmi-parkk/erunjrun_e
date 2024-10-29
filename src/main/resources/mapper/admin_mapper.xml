@@ -36,43 +36,49 @@
   	
   	<select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
     WITH ranked_ban AS (
+        SELECT 
+            b.id,
+            b.is_right,
+            ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY b.is_right DESC, b.start_date DESC) AS rn
+        FROM 
+            ban b
+    )
     SELECT 
-        b.id,
-        b.is_right,
-        ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY b.is_right DESC, b.start_date DESC) AS rn
+        m.id,
+        m.nickname,
+        m.email,
+        m.join_date,
+        COALESCE(rb.is_right, 'N') AS report_status,
+        (SELECT COUNT(*) 
+         FROM report_write rw 
+         WHERE rw.id = m.id) AS report_count
     FROM 
-        ban b
-	)
-	SELECT 
-	    m.id,
-	    m.nickname,
-	    m.email,
-	    m.join_date,
-	    COALESCE(rb.is_right, 'N') AS report_status,
-	    (SELECT COUNT(*) 
-	     FROM report_write rw 
-	     WHERE rw.id = m.id) AS report_count
-	FROM 
-	    member m
-	LEFT JOIN 
-	    ranked_ban rb ON m.id = rb.id AND rb.rn = 1  <!--가장 우선 순위가 높은 레코드만 가져오기 -->
-	<where>
-	    <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
-	        m.id LIKE CONCAT('%', #{keyword}, '%')
-	    </if>
-	    <if test="keyword != null and !keyword.equals('') and opt.equals('nickname')">
-	        m.nickname LIKE CONCAT('%', #{keyword}, '%')
-	    </if>
-	    <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
-	        m.email LIKE CONCAT('%', #{keyword}, '%')
-	    </if>
-	</where>
-	GROUP BY 
-	    m.id, m.nickname, m.email, m.join_date, report_status
-	ORDER BY 
-	    m.id DESC
-	LIMIT #{limit} OFFSET #{offset}
+        member m
+    LEFT JOIN 
+        ranked_ban rb ON m.id = rb.id AND rb.rn = 1  <!-- 가장 우선 순위가 높은 레코드만 가져오기 -->
+    <where>
+        <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
+            m.id LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="keyword != null and !keyword.equals('') and opt.equals('nickname')">
+            m.nickname LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
+            m.email LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </where>
+    GROUP BY 
+        m.id, m.nickname, m.email, m.join_date, report_status
+    ORDER BY 
+        <if test="sortField != null and sortField != ''">
+            ${sortField} ${sortOrder}
+        </if>
+        <if test="sortField == null or sortField == ''">
+            m.join_date DESC
+        </if>
+    LIMIT #{limit} OFFSET #{offset}
 </select>
+
 
   	
   	<select id="count" resultType="int">
@@ -153,7 +159,7 @@
 			ban_content = #{ban_content} 
 		</if>
   	</set>
-			  WHERE id = #{id}
+			  WHERE ban_idx = #{ban_idx}
   </update>
   
 	 	<!-- 시작일이 오늘 또는 과거인 권한을 'Y'로 업데이트 -->
@@ -288,25 +294,77 @@
 	</select>
 	  
 	  <insert id="tagwrite" parameterType="Map">
-	  		insert into tag(tag_name,use_yn)values(#{tag_name},#{use_yn})
+	  		INSERT INTO tag(tag_name,use_yn)VALUES(#{tag_name},#{use_yn})
 	  </insert>
 	  
 	  <select id="tagdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
 	  		select * from tag where tag_idx = #{tag_idx}
 	  </select>
-  	
+	  
   		<update id="tagupdate" parameterType="Map">
   			update tag<set>
   		 <if test= "tag_name != null">
 			tag_name = #{tag_name},
 		</if>
 		<if test="use_yn != null">
-			use_yn = #{use_yn},
+			use_yn = #{use_yn}
 		</if>
-			where tag_idx = #{tag_idx}	
   		</set>
+			where tag_idx = #{tag_idx}	
   		</update>
   		
+  		
+  		
+  		
+  		<select id="codelist" resultType="com.erunjrun.admin.dto.AdminDTO">
+  			select * from code
+  			<where>
+	    <if test="keyword != null and !keyword.equals('') and opt.equals('content')">
+	        content LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	    <if test="keyword != null and !keyword.equals('') and opt.equals('code_name')">
+	        code_name LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+  		</where>   
+			ORDER BY code_name DESC LIMIT #{limit} OFFSET #{offset}	
+  		</select>
+  		
+	    <select id="codecount" resultType="int">
+			SELECT CEIL(count(code_name)/#{param1}) AS pages FROM code
+		</select>
+	
+  		<insert id="codewrite" parameterType="Map">
+  			INSERT INTO code(content,code_name,use_yn)VALUES(#{content},#{code_name},#{use_yn})
+  		</insert>
+  		
+  		<select id="codeoverlay" resultType="int">
+  			SELECT COUNT(code_name) FROM code WHERE code_name = #{param1}
+  		</select>
+  		
+  		<select id="codedetail" resultType="com.erunjrun.admin.dto.AdminDTO">
+  			select * from code where code_name = #{param1}
+  		</select>
+  		
+  		<update id="codeupdate" parameterType="Map">
+  			UPDATE code<set>
+  		 <if test= "content != null">
+			content = #{content},
+		</if>
+		<if test="use_yn != null">
+			use_yn = #{use_yn}
+		</if>
+  		</set>
+			WHERE code_name = #{code_name}	
+  		</update>
+  		
+  		
+  		<select id="popuplist" resultType="com.erunjrun.admin.dto.AdminDTO">
+	  		select * from popup ORDER BY popup_idx DESC LIMIT #{limit} OFFSET #{offset}
+	  </select>
+  		
+  		<select id="popupcount" resultType="int">
+			SELECT CEIL(count(popup_idx)/#{param1}) AS pages FROM popup
+		</select>
   		
   		
   

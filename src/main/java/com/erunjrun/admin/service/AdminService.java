@@ -55,9 +55,9 @@ public class AdminService {
 	}
 
 
-	public List<AdminDTO> memberlist(String opt, String keyword, int limit, int offset) {
+	public List<AdminDTO> memberlist(String opt, String keyword, String sortField,String sortOrder,int limit, int offset) {
 		
-		return admin_dao.memberlist(opt, keyword ,limit, offset);
+		return admin_dao.memberlist(opt, keyword, sortField,sortOrder,limit, offset);
 	}
 
 	public int admincount(int cnt_) {
@@ -200,9 +200,64 @@ public class AdminService {
 	}
 
 	public void tagupdate(Map<String, String> param) {
-		
+		admin_dao.tagupdate(param);
 		
 	}
+
+	
+	
+	
+	
+	
+	
+	public int codecount(int cnt_) {
+		
+		return admin_dao.codecount(cnt_);
+	}
+
+
+	public List<AdminDTO> codelist(int limit, int offset, String opt, String keyword) {
+		
+		return admin_dao.codelist(limit, offset,opt,keyword);
+	}
+	
+	public void codewrite(Map<String, String> param) {
+		admin_dao.codewrite(param);
+			
+	
+	}
+
+	public int codeoverlay(String code_name) {
+		
+		return admin_dao.codeoverlay(code_name);
+	}
+
+	public void codedetail(String code_name, Model model) {
+		AdminDTO dto = admin_dao.codedetail(code_name);
+		model.addAttribute("info",dto);
+		
+	}
+
+	public void codeupdate(Map<String, String> param) {
+		admin_dao.codeupdate(param);
+		
+	}
+
+	
+	
+	
+	public int popupcount(int cnt_) {
+		
+		return admin_dao.pupupcount(cnt_);
+	}
+
+	public List<AdminDTO> popuplist(int limit, int offset) {
+		
+		return admin_dao.pupuplist(limit,offset);
+	}
+
+	
+
 
 	
 

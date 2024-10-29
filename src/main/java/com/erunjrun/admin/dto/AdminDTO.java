@@ -33,12 +33,26 @@ public class AdminDTO {
 	private ImageDTO image;
 	private String tag_idx;
 	private String tag_name;
+	private String code_use;
+	private PopupDTO popupdto;
 	
 	
 	
 	
 	
 	
+	public PopupDTO getPopupdto() {
+		return popupdto;
+	}
+	public void setPopupdto(PopupDTO popupdto) {
+		this.popupdto = popupdto;
+	}
+	public String getCode_use() {
+		return code_use;
+	}
+	public void setCode_use(String code_use) {
+		this.code_use = code_use;
+	}
 	public String getTag_name() {
 		return tag_name;
 	}
