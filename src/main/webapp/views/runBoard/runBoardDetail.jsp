@@ -69,7 +69,7 @@
     		margin-top: 45px;
     	}
     	.title2{
-			transform: translateY(-35px);
+			transform: translateY(0px);
     	}
     	.ori{
 
@@ -199,13 +199,14 @@
 			  
 		}
 		
-		/*운동프로필 레이어팝업*/
+		/*신고 레이어팝업*/
 		#reportPopup {
 		    width: fit-content;
-		    top: 80px;
+		    top: 130px;
 		    left: 50%;
 		    transform: translateX(-50%);
 			z-index: 996;
+			
 		}
 		#reportPopup .close {
 		    font-size: 40px;
@@ -544,11 +545,12 @@ function initializeMap() {
 		});
 		*/
 		
-		// 운동프로필 레이어 팝업 열기
+		// 신고 레이어 팝업 열기
 		function openReport(boardIdx){
 			var modal = document.getElementById("reportPopup");
 		    var PopupBody = document.getElementById("reportPopupBody");
-			
+		    
+			console.log('가지고와ㅣ?',${info.board_idx});
 		    // AJAX 요청 데이터 넣을때 해당 게시판 idx 값 넣기!!!!
 		    var xhr = new XMLHttpRequest();
 		    xhr.open("GET", "/reportForm", true);
@@ -558,11 +560,11 @@ function initializeMap() {
 		            modal.style.display = "block"; // 모달 열기
 		            
 		         	// JS 파일을 동적으로 로드
-		         	/*
+		         	
 		            var script = document.createElement('script');
-		            script.src = '/resources/js/profileDetail.js'; 
+		            script.src = '/resources/js/report.js'; 
 		            document.body.appendChild(script);
-		            */
+		            
 		        }
 		    };
 		    xhr.send();

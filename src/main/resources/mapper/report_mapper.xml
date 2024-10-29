@@ -4,5 +4,10 @@
 >
 
 <mapper namespace="com.erunjrun.report.dao.ReportDAO">
-
+	
+	<insert id="report" parameterType="com.erunjrun.report.dto.ReportDTO">
+		insert into report_write(id,code_name,content,unlike_id)
+								value(#{id},#{code_name},#{content},#{unlike_id})
+	</insert>
+	
 </mapper>

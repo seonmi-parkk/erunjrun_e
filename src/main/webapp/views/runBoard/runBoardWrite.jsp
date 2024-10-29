@@ -474,7 +474,7 @@
 	 	}
 
 	 	$('#writeRun').on('click',function(){
-	 		layerPopup('게시글을 등록 하시겠습니까?','수정','취소' ,secondBtn1Act , secondBtn2Act);
+	 		layerPopup('게시글을 등록 하시겠습니까?','등록','취소' ,secondBtn1Act , secondBtn2Act);
 	 	});
 	 	
 	 	$('#cancelWrite').on('click',function(){
