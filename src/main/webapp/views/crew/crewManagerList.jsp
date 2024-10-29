@@ -1,0 +1,444 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Crew Manager</title>
+<link rel="stylesheet" href="/resources/css/crew.css">
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<script src="/resources/js/layerPopup.js"></script>
+<style>
+
+	.innerr {
+	    max-width: 1300px;
+	    margin: 80px auto 0;
+	    display: flex;                  
+	    justify-content: space-between; 
+	    align-items: flex-start;        
+	    gap: 20px;      
+	}
+	
+	.layoutbox {
+	    height: 90px;                  /* 이 높이와 동일한 값을 .two의 top에 설정 */
+	    background-color: white;        /* 헤더 영역이 배경과 겹치지 않도록 배경색 추가 */
+	}
+
+	.crew-info{
+		background: #fff;
+		border-style: solid;
+		border-color: #bdbdbd;
+		border-width: 0px 0px 1px 0px;
+		height: 300x;
+		position: relative;
+		display: flex;
+	}
+	.crew-application-list{
+		background: #fff;
+		border-style: solid;
+		border-color: #bdbdbd;
+		border-width: 0px 0px 1px 0px;
+		height: 350px;
+		position: relative;
+	}
+	
+	.crew-chat-list{
+		background: #fff;
+		border-style: solid;
+		border-color: #bdbdbd;
+		border-width: 0px 0px 1px 0px;
+		height: 350px;
+		position: relative;
+	}
+	
+	.one {
+	    width: 70%;                     
+	    padding: 20px;                  
+	    box-sizing: border-box;          
+	    /* background-color: #D5D5D5; */
+	    position: relative;              /* 기본 요소 배치를 유지 */
+	    z-index: 1;                      /* 다른 요소들 위에 놓기 */
+	}
+	
+    .two {
+        width: 30%;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #FBFBFB;
+        position: relative;
+        max-height: 1200px;
+        overflow-y: hidden;
+        position: sticky;
+        top: 100px;
+        z-index: 80;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* 자식 요소들이 위아래로 배치되도록 설정 */
+    }
+    
+    .fixbox {
+	    position: sticky;                /* 이 부분은 고정 */
+	    top: 0;                          /* 상단에 고정 */
+/* 	    background-color: #FFD9EC;        *//* 스크롤 시 배경이 덮이지 않도록 설정 */
+    	z-index: 10;
+	}
+	
+    .title2-2{
+    	color: var(--main-color);
+        font-family: "Pretendard Variable", sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+        display: inline-block;
+   		width: 200px;
+   		padding: 0px 11px 0px 6px;
+   		position: relative; /* 상대적인 위치 설정 */
+   		bottom: 3px;
+    }
+
+    .title1-1 {
+        color: var(--font-color);
+        font-family: "GmarketSans", sans-serif;
+        font-size: 25px;
+        font-weight: 700;
+        padding: 10px 0px 10px;
+    }
+    
+    .title1-12 {
+        color: var(--font-color);
+        font-family: "GmarketSans", sans-serif;
+        font-size: 25px;
+        font-weight: 700;
+        padding: 25px 25px 5px;
+    }
+   
+	.scrollable-content {
+	    max-height: 1200px;               /* 스크롤할 영역의 최대 높이 설정 */
+	    overflow-y: auto;                /* 이 부분만 스크롤 가능하게 설정 */
+	    margin-top: 20px;                /* 위쪽 고정 영역과의 간격 */
+	    
+	    margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 16px;
+        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+        vertical-align: baseline;
+        box-sizing: border-box;
+        color: var(--font-color);
+        background: #fff;
+        height: 700px;
+	}
+	
+	.btn-layout{
+		margin-bottom: 10px;
+	}
+	
+	.btn02-s1 {
+    	 display: inline-block;
+         height: 32px;
+         padding: 8px 11px;
+         margin: 0 4px;
+         border-radius: 10px;
+         border: 1px solid #AAAAAA;
+         color: #AAAAAA;
+         background: #fff;
+         cursor: pointer;
+         font-size: 14px;
+         margin-right: 140px;
+	}
+	
+	.btn04-s{
+    	display: inline-block;
+        height: 32px;
+        padding: 6px 11px;
+        margin: 0 4px;
+        border-radius: 10px;
+        border: 1px solid #6994FF;
+        color: #6994FF;
+        background: #fff;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    
+    .title-layout{
+    	display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+    
+	.crewImg {
+	    position: relative; /* 하트 아이콘이 이미지 위에 배치될 수 있도록 상대 위치 설정 */
+	    width: 180px; /* 이미지의 너비를 140px로 설정 */
+	    height: 180px; /* 이미지의 높이를 140px로 설정 */
+	    border-radius: 12px; /* 이미지 모서리를 둥글게 설정 */
+	    overflow: hidden; /* 이미지가 영역을 넘칠 경우 숨김 */
+	    margin: 35px 0px 0px 25px
+	}
+    
+	.crew-img {
+	    width: 100%; /* 이미지 너비를 부모 요소에 맞춤 */
+	    height: 100%; /* 이미지 높이를 부모 요소에 맞춤 */
+	    object-fit: cover; /* 이미지 비율을 유지하면서 넘치는 부분을 잘라냄 */
+	}
+	
+	.crew-text-box{
+		margin: 10px 0px 0px 0px;
+	}
+	
+    .contentbox{
+    	width: 100%;
+   		padding-left: 25px;
+   		line-height: 30px;
+   		
+    }
+    
+    .content-box01{
+        margin-left: 25px;
+    	margin-top: 12px;
+  		margin-bottom: 17px;
+    }
+    
+    .leaderjb{
+		display: flex;  /*수직 정렬 flex, center*/
+    	align-items: center;  
+	}
+	
+	.testeee{
+		margin-left: 10px;
+		display: flex;  /*수직 정렬 flex, center*/
+    	align-items: center;  
+    	padding: 9px 0px 0px 0px;
+	}
+	 
+</style>
+</head>
+<body>
+	<jsp:include page="../header.jsp"/>
+	
+	<input type="hidden" name="crew_idx" value="52"/>
+	
+	<div class="layoutbox"></div>
+	
+	<div class="innerr">
+		<div class="one">
+			<div class="crew-info">
+				<div class="crewImg">
+					<img class="crew-img" id="crew-img" alt="크루 이미지" src="/resources/img/crew/crewImg300.png" onerror="this.src=/resources/img/crew/crewImg300.png" width="100%" height="100%">
+				</div>
+				<div class="crew-text-box">
+					<div class="title1-12" id="crew-name"></div>
+					<div class="contentbox">
+						<div id="leaderprofile">크루장 정보</div>
+						<p><img src="/resources/img/crew/img01.png" width="10px" class="imglayout" /> <span id="crew-address"></span></p>
+						<p><img src="/resources/img/crew/img02.png" width="13px" class="imglayout"/> <span id="crew-member"></span> 명</p>
+						<p><img src="/resources/img/crew/img03.png" width="14px" class="imglayout"/> 매주 <span id="crew-days"></span></p>
+						<p><img src="/resources/img/crew/img04.png" width="14px" class="imglayout"/> <span id="crew-minute"></span> 분 / <span id="crew-distance"></span> km</p>
+					</div>
+				</div>
+			</div>
+			<div class="crew-application-list">
+			
+				<div class="title-layout">
+					<div class="title1-12">가입 신청 대기자</div>
+					<button class="btn02-s1">모두보기</button>
+				</div>
+				<div class="content-box01" id="crewApplicationMemberList"></div>
+				
+			
+			</div>
+			<div class="crew-chat-list">
+				<div class="title-layout">
+					<div class="title1-12">크루장 문의하기 채팅</div>
+					<button class="btn02-s1">모두보기</button>
+				</div>
+				<div class="content-box01">어쩌구 저쩌구</div>
+				<div class="content-box01">어쩌구 저쩌구</div>
+				<div class="content-box01">어쩌구 저쩌구</div>
+				<div class="content-box01">어쩌구 저쩌구</div>
+				<div class="content-box01">어쩌구 저쩌구</div>
+			</div>
+		</div>
+		<div class="two">
+			<div class="fixbox">
+				<div class="title1-1" id="crew-name">크루원 관리</div>
+				<div class="btn-layout">
+					<button class="btn02-s1">권한기록</button>
+					<button class="btn04-s" onclick="layerPopup('크루장 권한을 양도하시겠습니까?', '확인', '취소', crewAdminUpdate, applBtn2Act)">권한</button>
+					<button class="btn02-s">퇴출</button>
+				</div>
+			</div>
+			
+		    <div class="scrollable-content" id="crew-member">
+				<span class="profile-text" id="crew-member-profile"></span> <!-- 크루원 정보 -->
+		    </div>
+		</div>
+		
+		
+	</div>
+	
+	<div class="layoutbox"></div>
+	<jsp:include page="../footer.jsp"/>
+	
+</body>
+<script>
+
+	var loginId = '${sessionScope.loginId}';
+	var crewLeader = '';
+	var crew_idx = $('input[name="crew_idx"]').val();
+	var crewone = [];
+
+	$(document).ready(function () {
+	    
+	    console.log('crew_idx =>', crew_idx);
+	    crewDetail(); 
+	    crewMemberList();
+	});
+	
+	function crewMemberList() {
+	    console.log('크루 회원 리스트 요청');
+	    $.ajax({
+	        type: 'POST',
+	        url: '/crew/memberList',
+	        data: { 'crew_idx': crew_idx },
+	        dataType: 'JSON',
+	        success: function (response) {
+	            console.log('회원 데이터 받아옴 => ', response);
+	            console.log('신청 회원 리스트 =>', response.application);
+
+	            if (response.success) {
+	                var result = response.result;
+	                var application = response.application;
+	                
+	                crewApplicationMember(application);
+
+	                // 프로필 이미지 기본값 설정 (추가 조건이 있으면 적용 가능)
+	                var profileImg = '<img src="resources/img/common/profile.png" width="32px"/>';
+	                var genderImg = '';
+	                var content = '';
+
+	                result.forEach(function(item, idx) {
+	                    // 성별에 따른 이미지 설정
+	                    genderImg = item.gender === '남' 
+	                        ? '<img src="resources/img/common/ico_male.png" width="9px" class="genderImg"/>'
+	                        : '<img src="resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
+
+	                    // 크루장 체크
+	                    if (item.is_leader === 'Y') {
+	                        crewLeader = item.id;
+	                        console.log('반복문 안에서 리더 id 체크 =>', crewLeader);
+	                        $('#leaderprofile').html(
+	                            '<a href="#"><div class="leaderjb">' 
+	                            + profileImg + ' ' + item.nickname + ' / ' 
+	                            + genderImg + ' / ' + '크루장' 
+	                            + '</div></a>'
+	                        );
+	                    } else {
+	                        crewone.push(item.id); // 배열에 크루원 id 추가
+	                        content += '<div class="testeee"><input class="basictex" type="checkbox" name="crew_member"/><a href="#">' 
+	                            + profileImg + ' ' + item.nickname 
+	                            + ' / ' + genderImg + ' / ' 
+	                            + item.create_date + '</div></a>';
+	                    }
+	                });
+
+	                $('#crew-member-profile').append(content);
+	            }
+	        },
+	        error: function (e) {
+	            console.log('에러 발생 => ', e);
+	        }
+	    });
+	}
+	
+	function crewDetail() {
+        console.log('크루 데이터 요청');
+        
+        $.ajax({
+            type: 'POST',
+            url: '/crew/detail',
+            data: { 'crew_idx': crew_idx },
+            dataType: 'JSON',
+            success: function (response) {
+                console.log('데이터 받아옴 => ', response);
+                if (response.success) {
+                    // 받아온 데이터를 HTML에 반영
+                    var result = response.result;
+                    
+                    
+                    if(result.is_recruit === 'N'){
+                    	is_recruit = result.is_recruit;
+                    	$('#crew-btn-01').html('크루 모집완료');
+                    	$('#crew-btn-01').css({'border' : '1px solid var(--btn-bd-g)', 'color' : 'var(--btn-bd-g)', 'background' : '#fff'});
+                    }
+                    
+                    
+
+                    // 이미지 업데이트
+                    if (result.img_new) {
+                        $('#crew-img').attr('src', '/photo/' + result.img_new);
+                    }
+                    var day = result.days; // 예: "mon"
+
+	                // replace를 사용해서 변환
+	                day = day.replace('mon', '월')
+	                         .replace('tue', '화')
+	                         .replace('wen', '수')
+	                         .replace('thu', '목')
+	                         .replace('fri', '금')
+	                         .replace('sat', '토')
+	                         .replace('sun', '일');
+
+                    // 크루명, 소개, 안내사항 등 업데이트
+                    $('#crew-name').text(result.crew_name);
+                    $('#crew-content').html(result.content);
+                    $('#crew-address').text(result.address);
+                    $('#crew-member').text(result.member);
+                    $('#crew-days').text(day);
+                    $('#crew-minute').text(result.minute);
+                    $('#crew-distance').text(result.distance);
+                    $('#crew-location').text(result.shortsido + ' ' + result.sigungu);
+                    
+                    
+                }
+            },
+            error: function (e) {
+                console.log('에러 발생 => ', e);
+            }
+        });
+    }
+    
+	function crewApplicationMember(application) {
+		var profileImg = '<img src="resources/img/common/profile.png" width="32px"/>';
+        var genderImg = '';
+        var content = '';
+	    
+        application.slice(0, 5).forEach(function(item, idx) {
+	        // 성별에 따른 이미지 설정
+	        var genderImg = item.gender === '남' 
+	            ? '<img src="resources/img/common/ico_male.png" width="9px" class="genderImg"/>'
+	            : '<img src="resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
+
+	        // 프로필 이미지와 닉네임, 성별 및 날짜 정보 추가
+	        content += '<div class="testeee"><a href="#">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + item.create_date + '</a>'
+	            + '</div>';
+	    });
+
+	    $('#crewApplicationMemberList').append(content);
+	}
+	
+	function crewAdminUpdate(){
+		console.log('실행됨');
+	}
+	
+	
+	// 팝업 취소
+	function applBtn2Act() {
+	    removeAlert(); 
+	}
+	
+</script>
+
+</html>

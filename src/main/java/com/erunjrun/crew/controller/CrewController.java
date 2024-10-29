@@ -188,8 +188,9 @@ public class CrewController {
 		
 		int page = 0;
 		int cnt = 0;
+		String keyword = "";
 		
-		List<CrewMemberDTO> crewApplicationList = crew_service.crewApplicationList(crew_idxs, page, cnt);
+		List<CrewMemberDTO> crewApplicationList = crew_service.crewApplicationList(crew_idxs, page, cnt, keyword);
 		
 		resultMap.put("result", crewMemberList);
 		resultMap.put("application", crewApplicationList);
@@ -236,9 +237,13 @@ public class CrewController {
 		// 크루 승인
 		}else if(code_name.equals("C101")) {
 			logger.info("크루승인");
+			success = crew_service.crewMemberApproval(parmeterMap);
+			msg = "크루 승인";
 		// 크루 미승인
 		}else if(code_name.equals("C102")) {
 			logger.info("크루 미승인");
+			success = crew_service.crewMemberRefusal(parmeterMap);
+			msg = "크루 미승인";
 		// 크루 퇴출
 		}else{
 			logger.info("크루퇴출");
@@ -303,13 +308,14 @@ public class CrewController {
 		
 		if(likeCrew.equals("N")) {
 			success = crew_service.likeRequest(parmeterMap);
+			msg = "좋아요 등록 성공";
 			
 		}else {
 			success = crew_service.likeCencel(parmeterMap);
+			msg = "좋아요 취소 성공";
 		}
 		
 		if(success) {
-			msg = "좋아요 성공";
 		}else {
 			msg="좋아요 실패";
 		}
@@ -345,16 +351,38 @@ public class CrewController {
 	public Map<String, Object> ApplicationMemberList(
 			@RequestParam String crew_idx,
 			@RequestParam(value = "page") int page, 
-			@RequestParam(value = "cnt") int cnt){
+			@RequestParam(value = "cnt") int cnt,
+			@RequestParam(defaultValue = "", value="keyword") String keyword){
 		
 		logger.info("crew_idx => " + crew_idx);
 		logger.info("page : cnt => " + page + " : " + cnt);
+		logger.info("keyword=>" + keyword);
 		
 		int crew_idxs = Integer.parseInt(crew_idx);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		
-		resultMap.put("result", crew_service.crewApplicationList(crew_idxs ,page, cnt));
+		resultMap.put("result", crew_service.crewApplicationList(crew_idxs ,page, cnt, keyword));
+		
+		return resultMap;
+	}
+	
+	@PostMapping(value="/applicationAdminList")
+	public Map<String, Object> applicationAdminList(
+			@RequestParam String crew_idx,
+			@RequestParam(value = "page") int page, 
+			@RequestParam(value = "cnt") int cnt,
+			@RequestParam(defaultValue = "", value="keyword") String keyword){
+		
+		logger.info("crew_idx => " + crew_idx);
+		logger.info("page : cnt => " + page + " : " + cnt);
+		logger.info("keyword=>" + keyword);
+		
+		int crew_idxs = Integer.parseInt(crew_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		resultMap.put("result", crew_service.applicationAdminList(crew_idxs ,page, cnt, keyword));
 		
 		return resultMap;
 	}

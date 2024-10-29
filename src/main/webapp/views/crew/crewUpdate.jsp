@@ -315,30 +315,7 @@ $(document).ready(function() {
     
     // 크루 삭제 => use_yn = 'N' (crew_member, crew_tag => delete)
     // 팝업 추가 필요!
-    function crewDelete(){
-    	
-    	console.log('delete?');
-    	
-    	var crew_idx = 39; // 히든으로 숨겨서 받아서 넘겨야 함! (상세페이지)
-    	
-    	$.ajax({
-    		type: 'DELETE',
-    		url: '/crew/delete',
-    		data: {'crew_idx' : crew_idx},
-    		dataType: 'JSON',
-    		success: function(data){
-    			if(data.success){
-	    			alert('크루 삭제 성공');
-    			}else{
-    				alert('크루 삭제 실패');
-    			}
-    		},error: function(e){
-    			console.log('삭제 에러 => ',e);
-    		}
-    		
-    	});
-    	
-    }
+
     
 </script>
 

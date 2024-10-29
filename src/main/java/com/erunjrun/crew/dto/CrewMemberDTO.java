@@ -35,6 +35,14 @@ public class CrewMemberDTO {
     private String like;
     
     
+    // 권한기록 
+    private String member_id;
+    private String member_nickname;
+    private String member_image;
+    private String leader_id;
+    private String leader_nickname;
+    private String leader_image;
+    
 
 	public int getCrew_idx() {
 		return crew_idx;
@@ -170,6 +178,59 @@ public class CrewMemberDTO {
 	public void setBirth(Date birth) {
 		this.birth = birth;
 	}
+	
+	
+
+	public String getLeader_nickname() {
+		return leader_nickname;
+	}
+
+	public void setLeader_nickname(String leader_nickname) {
+		this.leader_nickname = leader_nickname;
+	}
+	
+	
+	
+
+	public String getMember_id() {
+		return member_id;
+	}
+
+	public void setMember_id(String member_id) {
+		this.member_id = member_id;
+	}
+
+	public String getMember_nickname() {
+		return member_nickname;
+	}
+
+	public void setMember_nickname(String member_nickname) {
+		this.member_nickname = member_nickname;
+	}
+
+	public String getMember_image() {
+		return member_image;
+	}
+
+	public void setMember_image(String member_image) {
+		this.member_image = member_image;
+	}
+
+	public String getLeader_id() {
+		return leader_id;
+	}
+
+	public void setLeader_id(String leader_id) {
+		this.leader_id = leader_id;
+	}
+
+	public String getLeader_image() {
+		return leader_image;
+	}
+
+	public void setLeader_image(String leader_image) {
+		this.leader_image = leader_image;
+	}
 
 	@Override
 	public String toString() {
@@ -177,8 +238,13 @@ public class CrewMemberDTO {
 				+ is_leader + ", history_idx=" + history_idx + ", code_name=" + code_name + ", leader=" + leader
 				+ ", is_agree=" + is_agree + ", update_date=" + update_date + ", application_idx=" + application_idx
 				+ ", totalpage=" + totalpage + ", birth=" + birth + ", nickname=" + nickname + ", gender=" + gender
-				+ ", image=" + image + ", like=" + like + "]";
+				+ ", image=" + image + ", like=" + like + ", member_id=" + member_id + ", member_nickname="
+				+ member_nickname + ", member_image=" + member_image + ", leader_id=" + leader_id + ", leader_nickname="
+				+ leader_nickname + ", leader_image=" + leader_image + "]";
 	}
+
+
+
 
 
 

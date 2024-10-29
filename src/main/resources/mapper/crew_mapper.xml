@@ -93,24 +93,30 @@
 	
 	<!-- 크루 멤버 리스트 (프로필 이미지 포함) -->
 	<select id="crewMemberList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="int">
-		SELECT m.id, m.nickname, m.gender, COALESCE(p.image, '') as image, cm.is_leader
+		SELECT m.id, m.nickname, m.gender, COALESCE(p.image, '') as image, cm.is_leader, cm.create_date
 			FROM crew_member cm JOIN member m ON cm.id = m.id
 			LEFT JOIN profile p ON m.id = p.id WHERE cm.crew_idx = #{crew_idx};
 			
 	</select>
 	
 	<!-- 크루 신청자 리스트 -->
-	<select id="crewApplicationList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="int">
+	<select id="crewApplicationList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="map">
 		SELECT m.id, m.nickname, m.gender, m.birth, COALESCE(p.image, '') as image, ca.create_date,
-	       (SELECT COUNT(*) FROM crew_application WHERE crew_idx = 52) AS totalPage
+	       (SELECT COUNT(*) FROM crew_application WHERE crew_idx = 52) AS totalpage
 			FROM crew_application ca
 			JOIN member m ON ca.id = m.id
 			LEFT JOIN profile p ON m.id = p.id
 			WHERE ca.crew_idx = #{crew_idx}
+			
+			<if test="keyword != null and keyword != ''">
+		        AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
+		    </if>
+			
 			GROUP BY m.id, m.nickname, m.gender, m.birth, p.image
 			<if test="offset > 0">
 				LIMIT #{limit} OFFSET #{offset}
 			</if>
+			ORDER BY ca.create_date DESC
 	</select>
 	
 	<!-- 크루 신청 -->
@@ -146,52 +152,7 @@
 		DELETE FROM crew_like WHERE id = #{id} AND crew_idx = #{crew_idx}
 	</delete>
 	
-<!-- 	<select id="crewList" resultType="map" parameterType="String">
-		SELECT 
-		    c.*, 
-		    i.img_ori, 
-		    i.img_new,  
-		    GROUP_CONCAT(DISTINCT ct.tag_idx) AS tag_idxs,
-		    GROUP_CONCAT(DISTINCT t.tag_name) AS tag_names
-		FROM crew c
-		LEFT JOIN image i ON c.crew_idx = i.img_no AND i.code_name = 'I101'
-		LEFT JOIN crew_tag ct ON c.crew_idx = ct.crew_idx
-		LEFT JOIN tag t ON ct.tag_idx = t.tag_idx
-		
-		WHERE 1 = 1
-	        <if test="filtering != null and filtering.contains('is_recruit')">
-	            AND c.is_recruit = 'Y'
-	        </if>
-	        
-	        <if test="filtering != null and filtering.contains('shortsido_area')">
-	            AND c.shortsido IN ('서울', '경기', '인천')
-	        </if>
-	        
-	        <if test="filtering != null and filtering.contains('shortsido_etc')">
-	            AND c.shortsido NOT IN ('서울', '경기', '인천')
-	        </if>
-	        
-	        <if test="filtering != null and filtering.contains('weekdays')">
-	            AND (c.days NOT REGEXP 'sat|sun')
-	        </if>
-	        
-	        <if test="filtering != null and filtering.contains('weekend')">
-	            AND (c.days REGEXP 'sat|sun')
-	        </if>
-		
-		GROUP BY c.crew_idx
-
-	    HAVING 조건
-	    <if test="filtering != null and filtering.size() > 0">
-	        HAVING 
-	        <foreach collection="filtering" item="filter" separator="OR">
-	            tag_idxs LIKE CONCAT('%', #{filter}, '%')
-	        </foreach>
-	    </if>
-		
-		ORDER BY c.crew_idx DESC
-	</select> -->
-	
+	<!-- 크루 리스트 (필터링) -->
 	<select id="crewList" resultType="map" parameterType="map">
 	    SELECT 
 	        c.*, 
@@ -203,6 +164,8 @@
 	    LEFT JOIN image i ON c.crew_idx = i.img_no AND i.code_name = 'I101'
 	    LEFT JOIN crew_tag ct ON c.crew_idx = ct.crew_idx
 	    LEFT JOIN tag t ON ct.tag_idx = t.tag_idx
+	    
+	    WHERE c.use_yn = 'Y'
 	    
 	    <trim prefix="WHERE" prefixOverrides="AND">
 		    <if test="filtering != null">
@@ -320,60 +283,59 @@
 		            )
 		        </if>
 		        
-		        <!-- 선택한 tag_idx를 포함한 모든 크루 데이터 조회 -->
-<!-- 		        <if test="filtering.size > 0">
-		            AND c.crew_idx IN (
-		                SELECT crew_idx
-		                FROM crew_tag
-		                WHERE tag_idx IN
-		                <foreach collection="filtering" item="filter" open="(" separator="," close=")">
-		                    <choose>
-		                        <when test="filter == 'option2'">1</when>
-		                        <when test="filter == 'option3'">2</when>
-		                        <when test="filter == 'option4'">3</when>
-		                        <when test="filter == 'option5'">4</when>
-		                        <when test="filter == 'option6'">5</when>
-		                        <when test="filter == 'option7'">6</when>
-		                        <when test="filter == 'option8'">7</when>
-		                        <when test="filter == 'option9'">8</when>
-		                        <when test="filter == 'option10'">9</when>
-		                        <when test="filter == 'option11'">10</when>
-		                        <when test="filter == 'option12'">11</when>
-		                    </choose>
-		                </foreach>
-		            )
-		        </if> -->
-		        
-		       <!--  <if test="filtering.matches('option[2-9]|option1[0-2]')">
-		            AND ct.tag_idx LIKE CONCAT('%', SUBSTRING(#{filter}, 7), '%')
-		        </if> -->
 		    </if>
-	        <!-- <choose>
-		        <when test="filtering != null and filtering.contains('shortsido_area')">
-		            c.shortsido IN ('서울', '경기', '인천')
-		        </when>
-		        <when test="filtering != null and filtering.contains('shortsido_etc')">
-		        	c.shortsido NOT IN ('서울', '경기', '인천')
-		        </when>
-		        <when test="filtering != null and filtering.contains('weekdays')">
-		        	c.days NOT REGEXP 'sat|sun'
-		        </when>
-		        <when test="filtering != null and filtering.contains('weekend')">
-		        	c.days REGEXP 'sat|sun'
-		        </when>
-		        <when test="filtering != null and filtering.contains('is_recruit')">
-		        	c.is_recruit = 'Y'
-		        </when>
-		        <when test="filtering != null">
-		        	<foreach collection="filtering" item="filter" separator="AND">
-		                ct.tag_idx LIKE CONCAT('%', #{filter}, '%')
-			        </foreach>
-		        </when>
-		    </choose> -->
 		</trim>
 	    GROUP BY c.crew_idx
 	    ORDER BY c.crew_idx DESC
 	    LIMIT #{offset}, #{pageSize}
 	</select>
+	
+	<!-- 크루 권한 기록 리스트 -->
+	<select id="applicationAdminList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="map">
+		SELECT 
+		    m.id AS member_id,
+		    m.nickname AS member_nickname,
+		    COALESCE(p.image, '') AS member_image,
+		    
+		    leader.id AS leader_id,
+		    leader.nickname AS leader_nickname,
+		    COALESCE(leader_profile.image, '') AS leader_image,
+		    
+		    cah.create_date,
+		    cah.update_date,
+		    cah.is_agree,
+		    
+		    (SELECT COUNT(*) FROM crew_application_history WHERE crew_idx = #{crew_idx}) AS totalpage
+		FROM 
+		    crew_application_history cah
+		    JOIN member m ON cah.id = m.id  
+		    LEFT JOIN profile p ON m.id = p.id
+		    JOIN member leader ON cah.leader = leader.id  
+		    LEFT JOIN profile leader_profile ON leader.id = leader_profile.id 
+		WHERE 
+		    cah.crew_idx = #{crew_idx}
+		    
+		<if test="keyword != null and keyword != ''">
+		    AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+			
+		GROUP BY cah.history_idx;
+		
+		<if test="offset > 0">
+			LIMIT #{limit} OFFSET #{offset}
+		</if>
+	</select>
+	
+	<insert id="crewMemberApproval" parameterType="map">
+		INSERT INTO crew_member(crew_idx, id) VALUES(#{crew_idx}, #{id})				
+	</insert>
 
+	<delete id="crewMemberRefusal" parameterType="map">
+		DELETE FROM crew_application WHERE crew_idx = #{crew_idx} AND id = #{id}
+	</delete>
+	
+	<!-- 크루 생성 시 채팅방 생성 -->
+	<insert id="crewChatInsert" parameterType="int">
+		INSERT INTO crew_chat(crew_idx, code_cp) VALUES(#{img_no}, 'C')
+	</insert>
 </mapper>

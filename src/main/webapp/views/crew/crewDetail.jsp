@@ -10,6 +10,9 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<script src="/resources/js/layerPopup.js"></script>
+
 <style>
 	.innerr {
 	    max-width: 1300px;
@@ -289,18 +292,18 @@
 <body>
 	<jsp:include page="../header.jsp"/>
 	
-	<input type="hidden" name="crew_idx" value="52"/>
+	<input type="hidden" name="crew_idx" value="49"/>
 	
 	<div class="layoutbox"></div>
 	
 	<div class="innerr">
 		<div class="one">
 			<div id="imgbox">
-				<img id="crew-img" src="/resources/img/crew/crewImg800.png" width="100%" height="100%"/>
+				<img id="crew-img" src="/resources/img/crew/crewImg800.png" onerror="this.src=/resources/img/crew/crewImg800.png" width="100%" height="100%"/>
 			</div>
 	
-			<button class="btn03-s1" style='visibility : hidden'>수정하기</button>
-			<button class="btn03-s1" style='visibility : hidden'>크루삭제</button>
+			<button class="btn03-s1" style='visibility : hidden' onclick="crewUpdate()">수정하기</button>
+			<button class="btn03-s1" style='visibility : hidden' onclick="layerPopup('크루를 삭제하시겠습니까?', '삭제', '취소', crewDelete ,applBtn2Act)";>크루삭제</button>
 	
 			<div class="title2-1">크루소개</div>
 	
@@ -358,8 +361,7 @@
 		    <div class="btn-box">
 		    
 		    	<div class="crew-box">
-			    	<button class="btn01-l2" id="crew-btn-01">러닝크루 신청하기</button>
-			    	
+			    	<button class="btn01-l2" id="crew-btn-01" onclick="layerPopup('신청 및 취소하시겠습니까?', '확인', '취소', crewMemberUpdate, applBtn2Act)">러닝크루 신청하기</button>
 			    	<!-- 크루 페이지 로딩 시 가져오기 -->
 			    	<div class="btn-like btn02-s1" onclick="like()">
 			    		<img src="resources/img/common/ico_heart_no_act.png" id="likeImg" alt="좋아요비활성">
@@ -407,6 +409,7 @@
 	    crewMemberList();
 	    
 	    likeList();
+	});
 	
 	    function crewDetail() {
 	        console.log('크루 데이터 요청');
@@ -465,10 +468,11 @@
 	        });
 	    }
 	    
+	    
 	    function crewMemberList(){
 			console.log('크루 회원 리스트 요청');
 	        $.ajax({
-	            type: 'POST',
+	            type: 'POST'genderImg,
 	            url: '/crew/memberList',
 	            data: { 'crew_idx': crew_idx },
 	            dataType: 'JSON',
@@ -549,44 +553,48 @@
 	            }
 	        });
 	    }
-	    
-	    
-	    function likeList(){
-	    	$.ajax({
-	    		type: 'POST',
-	    		url: '/crew/likeIs',
-	    		data: {'loginId': loginId,
-						'crew_idx' : crew_idx},
-	    		dateType: 'JSON',
-	    		success: function(response){
-	    			
-	    			if(response.success){
-	    				likeCrew = 'Y';
-		    			console.log('좋아요 리스트에서 회원 있음');
-		    			$('#likeImg').attr('src', 'resources/img/common/ico_heart_act.png');
-	    			}
-	    			// DB에서 찾아온 count가 1이면 하트로 0이면 빈 하트로
-	    		},error: function(e){
-	    			console.log('좋아요 찾다가 =>', e);
-	    		}
-	    	});
-	    }
-	    
-	    
-	});
+	
+	function likeList(){
+		$.ajax({
+			type: 'POST',
+			url: '/crew/likeIs',
+			data: {'loginId': loginId,
+					'crew_idx' : crew_idx},
+			dateType: 'JSON',
+			success: function(response){
+				
+				if(response.success){
+					likeCrew = 'Y';
+	    			console.log('좋아요 리스트에서 회원 있음');
+	    			$('#likeImg').attr('src', 'resources/img/common/ico_heart_act.png');
+				}else{
+					likeCrew = 'N';
+					console.log('좋아요 리스트에서 회원 없음');
+					$('#likeImg').attr('src', 'resources/img/common/ico_heart_no_act.png');
+				}
+				// DB에서 찾아온 count가 1이면 하트로 0이면 빈 하트로
+			},error: function(e){
+				console.log('좋아요 찾다가 =>', e);
+			}
+		});
+	}
 
 	function crewApplication(application, result){
 		
 		 // 신청 리스트에서 로그인 ID와 일치하는 신청 내역이 있는지 확인
         var isApplied = application.some(app => app.id === loginId);
 
+		 
 		 if(is_recruit != 'N'){
 	        // 로그인 여부에 따라 버튼 텍스트 변경
 	        if (loginId == null || loginId === '') { // 로그인 x  => 완료
+		        $('#crew-btn-01').removeAttr('onclick');
 	            $('#crew-btn-01').html('러닝크루 신청하기');
 	        	$('#crew-btn-01').click(function(){
-	        		alert('로그인 하세여!');
+	        		layerPopup('로그인이 필요한 서비스입니다.', '로그인 하기', '취소',loginPageLocation ,applBtn2Act);
+	        		event.preventDefault(); 
 	        	});
+	        	
 	        
 	        } else if(loginId != null && loginId === crewLeader){ // 크루장 => 완료
 	        	$('#crew-btn-01').html('러닝크루 신청하기');
@@ -598,7 +606,6 @@
 	            $('#crew-btn-01').css({'border' : '1px solid var(--main-color)', 'color' : 'var(--main-color)', 'background' : '#fff'});
 	            $('#crew-btn-01').click(function(){
 		        	code_name = 'C105';
-		        	crewMemberUpdate();
 	        	});
 	            
 	            
@@ -607,7 +614,6 @@
 	        	$('#crew-btn-01').css({'border' : '1px solid var(--main-color)', 'color' : 'var(--main-color)', 'background' : '#fff'});
 	        	$('#crew-btn-01').click(function(){
 		        	code_name = 'C104';
-		        	crewMemberUpdate();
 	        	});
 	        	
 	        	
@@ -615,7 +621,6 @@
 	            $('#crew-btn-01').html('러닝크루 신청하기');
 	        	$('#crew-btn-01').click(function(){
 		        	code_name = 'C100';
-		        	crewMemberUpdate();
 	        	});
 	        }
 			 
@@ -625,11 +630,13 @@
 		
 	}
 	
+	// 팝업 취소
+	function applBtn2Act() {
+	    removeAlert(); 
+	}
+    
 	// 크루 버튼 클릭 시 신청, 취소, 탈퇴 요청 함수
 	function crewMemberUpdate(){
-		
-		console.log('버튼 눌렸을 때 =>', likeCrew);
-		
 		$.ajax({
 			type: 'POST',
 			url: '/crew/applicationWrite',
@@ -641,9 +648,18 @@
 				console.log('성공?????');
 				
 				if(response.success){
-					/* crewMemberList(); */
-					alert(response.msg);
-				}
+					removeAlert();
+					layerPopup(response.msg + ' 완료되었습니다.', '확인', '', function() {
+	                    applBtn2Act();
+	                    location.reload(); // 페이지 새로고침
+	                }, function() {
+	                    applBtn2Act();
+	                    location.reload(); // 페이지 새로고침
+	                });
+	            } else {
+	                removeAlert();
+	                layerPopup(response.msg + ' 미완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
+	            }
 				
 			},error: function(e){
 				console.log('버튼 요청 시 에러남 =>', e);
@@ -666,22 +682,25 @@
 				success: function(response){
 					console.log('좋아요 눌림');
 					console.log(response.like);
-					alert(response.msg);
+					if(response.success){
+						likeList();
+					}
+					
+					
+					
 				},error: function(e){
 					console.log('좋아요 에러 => ', e);
 				}
 			});
 			
 		}else{
-			alert('로그인하세요');
+			layerPopup('로그인이 필요한 서비스입니다.', '로그인 하기', '취소',loginPageLocation ,applBtn2Act);
 		}
-		
-		
 	}
 	
 	function crewChat_Admin(){
 		if(loginCheckLeader === 'N'){
-			alert('로그인 하세요');
+			layerPopup('로그인이 필요한 서비스입니다.', '로그인 하기', '취소',loginPageLocation ,applBtn2Act);
 		}else if(loginCheckLeader === 'C'){
 			location.href='#';
 			console.log('크루 1:1 채팅');
@@ -690,6 +709,46 @@
 			console.log('크루장 관리 페이지 이동');
 		}
 	}
+	
+	function loginPageLocation(){
+		location.href='/'; // 로그인 페이지로 수정 필요
+	}
+	
+	function crewUpdate(){
+		location.href='/'; // 크루수정페이지로 수정 필요
+	}
+	
+	
+    function crewDelete(){
+    	
+    	console.log('delete?');
+    	
+    	$.ajax({
+    		type: 'DELETE',
+    		url: '/crew/delete',
+    		data: {'crew_idx' : crew_idx},
+    		dataType: 'JSON',
+    		success: function(response){
+    			if(response.success){
+					removeAlert();
+					layerPopup('완료되었습니다.', '확인', '', function() {
+						console.log('삭제성공');
+	                    applBtn2Act();
+	                    location.href = '/' // 크루 리스트 페이지로 이동
+	                }, function() {
+	                    applBtn2Act();
+	                    location.href = '/' 
+	                });
+    			}else{
+    				alert('크루 삭제 실패');
+    			}
+    		},error: function(e){
+    			console.log('삭제 에러 => ',e);
+    		}
+    		
+    	});
+    	
+    }
 	
 
 </script>
