@@ -3,8 +3,6 @@ package com.erunjrun.crew.dto;
 import java.sql.Date;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.erunjrun.image.dto.ImageDTO;
 
 

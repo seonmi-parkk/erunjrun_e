@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Crew Member List</title>
+<title>Crew Authority List</title>
 <link rel="stylesheet" href="/resources/css/common.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -100,7 +100,7 @@
     	padding-bottom: 2px;
     }
     
-    #btn04-s{
+    .btn04-s{
     	display: inline-block;
         height: 32px;
         padding: 6px 11px;
@@ -120,11 +120,17 @@
 	
 	/* 프로필 컨테이너 */
 	table tbody tr td.profileContainer {
-	    display: block;
+/* 	    display: block;
 	    align-items: center;
 	    vertical-align: middle;
 	    text-align: left;
-    	margin-left: 60px;
+    	margin-left: 60px; */
+    	
+    	display: table-cell;
+	    align-items: center;
+	    vertical-align: middle;
+	    text-align: center;
+	    margin-left: 70px;
 	}   
 </style>
 </head>
@@ -143,11 +149,11 @@
 	<table>
 		<thead>
 			<tr>
-				<th>신청회원</th>
-				<th>연령대</th>
-				<th>성별</th>
-				<th>신청일자</th>
-				<th>신청처리</th>
+				<th>크루장</th>
+				<th>크루원</th>
+				<th>요청일자</th>
+				<th>응답일자</th>
+				<th>결과</th>
 			</tr>
 		</thead>
 		<tbody id="list" >
@@ -198,7 +204,7 @@
 	
 	    $.ajax({
 	        type: 'POST',
-	        url: '/crew/applicationMemberList',
+	        url: '/crew/applicationAdminList',
 	        data: {
 	        	'crew_idx' : crew_idx,
 	            'page': page,
@@ -246,41 +252,47 @@
 	// 게시글 리스트
 	function drawList(result) {
 		var content ='';
+		var btn = '';
 		result.forEach(function(item,idx){
 			
-			if(item.gender === '남'){
-        		genderImg = '<img src="resources/img/common/ico_male.png" width="9px" class="genderImg"/>';
-        	}else{
-        		genderImg = '<img src="resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
-        	}
+			if(item.is_agree === 'Y'){
+				btn = '<button class="btn02-s">수락</button>';
+			}else if(item.is_agree === 'N'){
+				btn = '<button class="btn04-s">거절</button></td>';
+			}
 			
-	        var birth = item.birth;
-	        //console.log("Birth value:", birth); // birth 값 확인
-	        
-	         // birth의 연도만 추출
-	        var birthYear = parseInt(birth.split('-')[0], 10);
-
-	        // 현재 연도에서 출생 연도를 빼고 나이대 계산
-	        var ageGroup = Math.floor((new Date().getFullYear() - birthYear) / 10) * 10 + "대";
-
+			if(item.update_date === null){
+				item.update_date = '없음';
+			}
+			
 	        
             content += '<tr>';
             // 프로필 + 닉네임 (나중에 연결 필요)
-            content +='<td class="profileContainer"><img src="resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.nickname+'</td>';
-			
-			content +='<td>'+ageGroup+'</td>';
-			content +='<td>'+genderImg+ '&nbsp;' +item.gender+'</td>';
+            content +='<td class="profileContainer"><img src="resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.member_nickname+'</td>';
+            content +='<td class="profileContainer"><img src="resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.leader_nickname+'</td>';
+            
 			content +='<td>'+item.create_date+'</td>'; // 신청일자
-			content += '<td><button class="btn02-s" onclick="layerPopup(\'' + item.nickname + '님을 승인 하시겠습니까?\', \'승인\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'Y\'); }, applBtn2Act)">승인</button>';
-
-
-
-		 	content += '<button class="btn02-s" id="btn04-s" data-value="Y" onclick="layerPopup(\'' + item.nickname + '님을 거절 하시겠습니까?\', \'거절\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'N\'); }, applBtn2Act)">거절</button></td>'; 
+			content +='<td>'+item.update_date+'</td>'; // 응답일자
+			content += '<td>'+btn+'</td>';
 	        content += '</tr>';
 
 		});
 		$('#list').html(content);
 	}
+	
+/*  	// 체크
+	function secondBtn1Act() {
+		// 두번째팝업 2번버튼 클릭시 수행할 내용
+	 	console.log('두번째팝업 1번 버튼 동작');
+		// 로그인 페이지로 이동하기 넣어주기!!!!!!!!
+	 	removeAlert();
+	 	}
+	function secondBtn2Act() {
+ 	    // 두번째팝업 2번버튼 클릭시 수행할 내용
+ 	    console.log('두번째팝업 2번 버튼 동작');
+ 	    removeAlert();
+ 	}
+		
 	
 	 	$('#loginPop').on('click',function(){
 	 		
@@ -292,7 +304,7 @@
 	 			location.href='runBoardWrite';
 	 		}
 	 		
-	 	});
+	 	}); */
 	 	
 	 	
 /* 	 // 클릭시 운동프로필 레이어 팝업
@@ -329,60 +341,6 @@
 		document.getElementsByClassName("close")[0].onclick = function() {
 		    document.getElementById("profilePopup").style.display = "none";
 		};  */
-		
-		// 팝업 취소
-		function applBtn2Act() {
-		    removeAlert(); 
-		}
-		
-		
-		function memberResult(id, nickname, value) {
-		    console.log('ID:', id);
-		    console.log('Nickname:', nickname);
-		    console.log('value:', value);
-		    
-			var crew_idx = 52; // 나중에 변경 필요
-			var code_name = '';
-			
-			if(value === 'Y'){
-				code_name = 'C101';
-			}else{
-				code_name = 'C102';
-			}
-
-			console.log('code_name : ', code_name);			
-			console.log('실행됨>');
-			
-  			$.ajax({
-				type: 'POST',
-				url: '/crew/applicationWrite',
-				data: {'loginId' : id,
-					'crew_idx' : crew_idx,
-					'code_name' : code_name},
-				dataType: 'JSON',
-				success: function(response){
-					
-					console.log('성공');
-					
-					if(response.success){
-						removeAlert();
-						layerPopup(response.msg + '완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
-						pageCall(firstPage);
-					}else{
-						removeAlert();
-						layerPopup(response.msg + '미완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
-					}
-					
-				},error: function(e){
-					soncole.log('에러남 => ', e);
-				}
-			}); 
-			 
-		    
-		}
-		
-		
-
 
 </script>
 </html>
