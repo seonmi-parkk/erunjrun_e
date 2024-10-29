@@ -1,6 +1,7 @@
 package com.erunjrun.mypage.dto;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 public class MypageDTO {
 
@@ -19,6 +20,28 @@ public class MypageDTO {
 	private String profile_use;
 	private String exercise_use;
 	
+	private Timestamp creat_date;
+	private String code_name;
+	private int point;
+	
+	public Timestamp getCreat_date() {
+		return creat_date;
+	}
+	public void setCreat_date(Timestamp creat_date) {
+		this.creat_date = creat_date;
+	}
+	public String getCode_name() {
+		return code_name;
+	}
+	public void setCode_name(String code_name) {
+		this.code_name = code_name;
+	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
+	}
 	public String getProfile_use() {
 		return profile_use;
 	}

@@ -77,6 +77,17 @@ button:hover {
 	display: inline-block; /* 수평 정렬 */
 	margin-left: 10px; /* 버튼과 결과 사이의 간격 */
 }
+
+.image-container {
+	display: inline-block; /* 이미지와 아이콘을 수평으로 배치 */
+	position: relative; /* 자식 요소의 절대 위치 기준 */
+}
+
+.profile-image {
+	max-width: 150px; /* 원하는 최대 너비 */
+	max-height: 150px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
+}
 </style>
 </head>
 <body>
@@ -91,11 +102,16 @@ button:hover {
 				<button type="button" id="nickNameCheck">중복확인</button>
 				<span id="nickNameResult" class="result"></span>
 			</div>
-			<div class="form-group">
-				<label for="image">이미지</label> <img src="/photo/${profile.image}"
-					alt="회원 이미지" style="max-width: 50%; border-radius: 4px;" /> <input
-					type="file" name="imageFile" id="imageFile" />
-			</div>
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-image" src="/photo/${profile.image}"
+							alt="회원 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-image" src="/resources/img/common/profile.png"
+							alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
 			<div class="form-group">
 				<label for="phone">전화번호</label> <input type="text" name="phone"
 					id="phone" value="${member.phone}" />
@@ -115,6 +131,7 @@ button:hover {
 	</div>
 
 	<script>
+
 		$('#nickNameCheck').click(
 				function() {
 					var nickName = $('input[name="nickname"]').val();

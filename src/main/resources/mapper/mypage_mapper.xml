@@ -29,6 +29,7 @@
 	<select id="profileDetail"
 		resultType="com.erunjrun.member.dto.MemberDTO">
 		SELECT
+		id,
 		nickname,
 		point,
 		phone,
@@ -67,7 +68,8 @@
 
 	<update id="updateProfileImage" parameterType="map">
 		UPDATE profile
-		SET image = #{image}, content = content  <!-- 기존 값을 유지 -->
+		SET
+		image = #{image}
 		WHERE id = (SELECT id FROM member WHERE id = #{id});
 	</update>
 
@@ -83,9 +85,10 @@
 	</update>
 
 	<insert id="firstExerciseProfile" parameterType="map">
-		INSERT INTO
-		profile (
+		<!-- 프로필 정보 삽입 -->
+		INSERT INTO profile (
 		id,
+		image,
 		content,
 		exercise_min,
 		exercise_dis,
@@ -97,8 +100,10 @@
 		dong,
 		detail_address,
 		shortsido
-		) VALUES (
+		)
+		VALUES (
 		#{id},
+		#{image},
 		#{content},
 		#{exercise_min},
 		#{exercise_dis},
@@ -110,8 +115,9 @@
 		#{dong},
 		#{detail_address},
 		#{shortsido}
-		)
+		);
 	</insert>
+
 
 	<select id="mypageDetail" parameterType="String"
 		resultType="com.erunjrun.mypage.dto.MypageDTO">
@@ -135,8 +141,9 @@
 	</select>
 
 	<update id="updateProfileVisibility" parameterType="map">
-		UPDATE profile
-		SET 
+		UPDATE
+		profile
+		SET
 		profile_use = #{profileVisibility}
 		WHERE id = #{id}
 	</update>
@@ -149,45 +156,70 @@
 	</update>
 
 	<update id="ExerciseProfileUpdate" parameterType="map">
-    UPDATE profile
-    JOIN member ON member.id = profile.id
-    SET
-    <if test="nickname != null">
-        member.nickname = #{nickname},
-    </if>
-    <if test="content != null">
-        profile.content = #{content},
-    </if>
-    <if test="exercise_min != null">
-        profile.exercise_min = #{exercise_min},
-    </if>
-    <if test="exercise_dis != null">
-        profile.exercise_dis = #{exercise_dis},
-    </if>
-    <if test="exercise != null">
-        profile.exercise = #{exercise},
-    </if>
-    <if test="mate != null">
-        profile.mate = #{mate},
-    </if>
-    <if test="latitude != null">
-        profile.latitude = #{latitude},
-    </if>
-    <if test="longitude != null">
-        profile.longitude = #{longitude},
-    </if>
-    <if test="sido != null">
-        profile.sido = #{sido},
-    </if>
-    <if test="dong != null">
-        profile.dong = #{dong},
-    </if>
-    <if test="detail_address != null">
-        profile.detail_address = #{detail_address},
-    </if>
-    <if test="shortsido != null">
-        profile.shortsido = #{shortsido}
-    </if>
-    WHERE profile.id = #{id}
-</update>
+		UPDATE profile
+		JOIN member ON member.id = profile.id
+		SET
+		<if test="nickname != null">
+			member.nickname = #{nickname},
+		</if>
+		<if test="content != null">
+			profile.content = #{content},
+		</if>
+		<if test="exercise_min != null">
+			profile.exercise_min = #{exercise_min},
+		</if>
+		<if test="exercise_dis != null">
+			profile.exercise_dis = #{exercise_dis},
+		</if>
+		<if test="exercise != null">
+			profile.exercise = #{exercise},
+		</if>
+		<if test="mate != null">
+			profile.mate = #{mate},
+		</if>
+		<if test="latitude != null">
+			profile.latitude = #{latitude},
+		</if>
+		<if test="longitude != null">
+			profile.longitude = #{longitude},
+		</if>
+		<if test="sido != null">
+			profile.sido = #{sido},
+		</if>
+		<if test="dong != null">
+			profile.dong = #{dong},
+		</if>
+		<if test="detail_address != null">
+			profile.detail_address = #{detail_address},
+		</if>
+		<if test="shortsido != null">
+			profile.shortsido = #{shortsido}
+		</if>
+		WHERE profile.id = #{id}
+	</update>
+
+	<insert id="addPoint" parameterType="map">
+		INSERT INTO member_point
+		(id, code_name, point)
+		VALUES (#{id}, 'P100', 10)
+	</insert>
+
+	<select id="list" resultType="com.erunjrun.mypage.dto.MypageDTO">
+		SELECT
+		member_point.create_date,
+		member_point.code_name,
+		SUM(member_point.point) AS total_points
+		FROM
+		member
+		LEFT JOIN
+		member_point ON member.id = member_point.member_id
+		GROUP BY
+		member_point.create_date,
+		member_point.code_name;
+	</select>
+
+	<select id="count" resultType="int">
+		SELECT CEIL(COUNT(*) / #{param1}) AS pages FROM member_point
+	</select>
+
 </mapper>   	

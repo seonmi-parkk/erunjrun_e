@@ -1,5 +1,6 @@
 package com.erunjrun.mypage.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -34,5 +35,12 @@ public interface MypageDAO {
 	void updateMateSearch(String id, String mateSearch);
 
 	void ExerciseProfileUpdate(Map<String, String> params);
+
+	void addPoint(String id, int point);
+
+	List<MypageDTO> list(int limit, int offset);
+
+	int count();
+
 	
 }

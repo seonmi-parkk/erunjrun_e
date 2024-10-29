@@ -137,10 +137,6 @@ button:hover {
 <body>
 	<div class="container">
 		<div class="profile-header">
-			<div class="profile-image-container">
-				<img src="/photo/${sessionScope.profileImage}" alt="회원 이미지">
-				<div class="edit-button" onclick="editProfile()">✎</div>
-			</div>
 			<h2>${sessionScope.loginId}</h2>
 		</div>
 		<hr class="divider">
@@ -148,8 +144,31 @@ button:hover {
 			enctype="multipart/form-data">
 			<input type="hidden" name="id" value="${sessionScope.loginId}" />
 			<div class="form-group">
-				<label for="nickname">닉네임</label> <input type="text" name="nickname"
-					id="nickname" value="${member.nickname}" required />
+				<label for="nickname">닉네임 *</label>
+				<div class="input-group">
+					<input type="text" name="nickname" id="nickname"
+						value="${member.nickname}" required placeholder="예시) 달려달려달려" />
+					<button type="button" id="nickNameCheck">중복확인</button>
+				</div>
+				<span id="nickNameResult" class="result"></span>
+			</div>
+			<div class="profile-image-container">
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-image" src="/photo/${profile.image}"
+							alt="회원 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-image" src="/resources/img/common/profile.png"
+							alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
+				<div class="edit-button"
+					onclick="document.getElementById('fileInput').click()">✎</div>
+				<input type="file" id="fileInput" name="fileInput"
+					style="display: none;" accept="image/*"
+					onchange="previewImage(event)">
+
 			</div>
 			<div class="form-group">
 				<label>연령대</label> <input type="text" id="ageGroup" readonly />
@@ -190,10 +209,11 @@ button:hover {
 			<div class="form-group">
 				<label>프로필 공개 여부</label>
 				<div class="radio-group">
-					<label><input type="radio" name="profileVisibility" value="Y"
-						${profileVisibility == 'Y' ? 'checked' : ''}> 공개</label> <label><input
-						type="radio" name="profileVisibility" value="N"
-						${profileVisibility == 'N' ? 'checked' : ''}> 비공개</label>
+					<label><input type="radio" name="profileVisibility"
+						value="Y" ${profileVisibility == 'Y' ? 'checked' : ''}> 공개</label>
+					<label><input type="radio" name="profileVisibility"
+						value="N" ${profileVisibility == 'N' ? 'checked' : ''}>
+						비공개</label>
 				</div>
 			</div>
 			<div class="form-group">
@@ -212,6 +232,48 @@ button:hover {
 	</div>
 
 	<script>
+	$('#nickNameCheck').click(
+			function() {
+				var nickName = $('input[name="nickname"]').val();
+				$.ajax({
+					type : 'get',
+					url : 'nickNameOverlay',
+					data : {
+						'nickName' : nickName
+					},
+					dataType : 'JSON',
+					success : function(data) {
+						if (data.overlay > 0) {
+							$('#nickNameResult').html(
+									nickName + ' 는 이미 사용중 입니다.').css(
+									'color', 'red');
+						} else {
+							$('#nickNameResult').html(
+									nickName + ' 는 사용 가능합니다.').css('color',
+									'green');
+						}
+					},
+					error : function(e) {
+						console.log(e);
+					}
+				});
+			});
+	
+	
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('.profile-image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(file);
+        } else {
+            console.log("No file selected."); // 파일이 선택되지 않았을 경우 로그
+        }
+    }
+ 
+	
 	
 	$(document)
 	.ready(
@@ -301,6 +363,7 @@ button:hover {
                         const addressComponents = result[0].address;
                         $('#sido').val(addressComponents.region_1depth_name); // 시도
                         $('#dong').val(addressComponents.region_2depth_name); // 읍면동
+                        $('#shortsido').val(addressComponents.region_3depth_name); // 시군구
                     } else {
                         alert('주소를 찾을 수 없습니다.');
                     }

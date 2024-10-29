@@ -1,5 +1,6 @@
 package com.erunjrun.mypage.service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -16,23 +17,24 @@ import com.erunjrun.mypage.dto.MypageDTO;
 public class MypageService {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
-	
-	@Autowired MypageDAO mypageDAO;
-	
+
+	@Autowired
+	MypageDAO mypageDAO;
+
 	public MemberDTO findSessionId(String id) {
 		return mypageDAO.findSessionId(id);
 	}
-	
+
 	public MemberDTO profileDetail(String id) {
 		MemberDTO member = mypageDAO.profileDetail(id);
 		return member;
 	}
-	
+
 	public ProfileDTO ProfileImage(String id) {
 		ProfileDTO profile = mypageDAO.ProfileImage(id); // 프로필 이미지 정보 조회
 		return profile;
 	}
-	
+
 	public void profileUpdate(Map<String, String> params) {
 		int row = mypageDAO.profileUpdate(params); // 회원 정보 업데이트
 		logger.info("Update ID: {}", params.get("id"));
@@ -51,30 +53,49 @@ public class MypageService {
 
 	public void updateProfile_use(String id, String Profile_use) {
 		mypageDAO.updateProfile_use(id, Profile_use);
-		
+
 	}
 
 	public void firstExerciseProfile(Map<String, String> params) {
 		mypageDAO.firstExerciseProfile(params);
-		
+
 	}
 
 	public MypageDTO mypageDetail(String id) {
-	    return mypageDAO.mypageDetail(id);
+		return mypageDAO.mypageDetail(id);
 	}
-	
+
 	public void updateProfileVisibility(String id, String profileVisibility) {
-	    // DB에서 프로필 공개 여부 업데이트
-	    mypageDAO.updateProfileVisibility(id, profileVisibility);
+		// DB에서 프로필 공개 여부 업데이트
+		mypageDAO.updateProfileVisibility(id, profileVisibility);
 	}
 
 	public void updateMateSearch(String id, String mateSearch) {
-	    // DB에서 운동 메이트 찾기 여부 업데이트
-	    mypageDAO.updateMateSearch(id, mateSearch);
+		// DB에서 운동 메이트 찾기 여부 업데이트
+		mypageDAO.updateMateSearch(id, mateSearch);
+	}
+
+	public void addPoint(String id, int point) {
+		logger.info("Adding points: {} to user: {}", point, id);
+		mypageDAO.addPoint(id, point);
 	}
 
 	public void ExerciseProfileUpdate(Map<String, String> params) {
 		mypageDAO.ExerciseProfileUpdate(params);
-		
+
+	}
+
+	public Map<String, Object> list(int page, int cnt) {
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+		int totalpage = mypageDAO.count();
+
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("totalpages", totalpage);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.list(limit, offset));
+
+		return result;
 	}
 }

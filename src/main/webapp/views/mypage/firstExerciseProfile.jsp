@@ -136,62 +136,65 @@ button:hover {
 </style>
 </head>
 <body>
-	<div class="container">
-		<div class="profile-header">
-			<div class="profile-image-container">
-				<img src="/photo/${sessionScope.profileImage}" alt="회원 이미지">
-				<div class="edit-button" onclick="editProfile()">✎</div>
-			</div>
-			<h2>${sessionScope.loginId}</h2>
-		</div>
-		<hr class="divider">
-		<form id="profileCreate" action="firstExerciseProfile" method="post"
-			enctype="multipart/form-data">
-			<input type="hidden" name="id" value="${sessionScope.loginId}" />
-			<div class="form-group">
-				<label for="nickname">닉네임</label> <input type="text" name="nickname"
-					id="nickname" value="${member.nickname}" readonly />
-			</div>
-			<div class="form-group">
-				<label>연령대</label> <input type="text" id="ageGroup" readonly />
-			</div>
-			<div class="form-group">
-				<label for="exercise">나의 성향</label> <input type="text"
-					name="exercise" id="exercise" required />
-			</div>
-			<div class="form-group">
-				<label for="mate">원하는 메이트 성향</label> <input type="text" name="mate"
-					id="mate" required />
-			</div>
-			<div class="form-group">
-				<label for="content">소개글</label> <input type="text" name="content"
-					id="content" required />
-			</div>
-			<div class="form-group">
-				<label for="exercise">운동 시간 (분) / 운동 거리 (km)</label> <input
-					type="number" name="exercise_min" id="exercise_min" placeholder="분"
-					required style="width: calc(50% - 10px); margin-right: 10px;" /> <input
-					type="number" name="exercise_dis" id="exercise_dis"
-					placeholder="km" required style="width: calc(50% - 10px);" />
-			</div>
-			<div class="form-group">
-				<label for="address">운동 지역</label> <input type="text"
-					name="detail_address" id="detail_address" readonly />
-			</div>
-			<div id="map"></div>
-			<input type="hidden" name="latitude" id="latitude" /> <input
-				type="hidden" name="longitude" id="longitude" /> <input
-				type="hidden" name="sido" id="sido" />
-			<!-- sido hidden input 추가 -->
-			<input type="hidden" name="dong" id="dong" />
-			<!-- dong hidden input 추가 -->
-			<input type="hidden" name="shortsido" id="shortsido" />
-			<!-- shortsido hidden input 추가 -->
-			<div class="form-group">
+    <div class="container">
+        <div class="profile-header">
+            <h2>${sessionScope.loginId}</h2>
+        </div>
+        <hr class="divider">
+        <form id="profileCreate" action="firstExerciseProfile" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="${sessionScope.loginId}" />
+            <div class="form-group">
+                <label for="nickname">닉네임 *</label>
+                <div class="input-group">
+                    <input type="text" name="nickname" id="nickname" value="${member.nickname}" required placeholder="예시) 달려달려달려" />
+                    <button type="button" id="nickNameCheck">중복확인</button>
+                </div>
+                <span id="nickNameResult" class="result"></span>
+            </div>
+            <div class="form-group">
+                <label for="image">이미지</label>
+                <div class="image-container" style="position: relative;">
+                    <img id="previewImage" src="${profile.image != null && profile.image != '' ? '/photo/' + profile.image : '/resources/img/common/profile.png'}" alt="회원 이미지" />
+                    <span id="changeImage" class="edit-icon" style="cursor: pointer; color: #ff7f50;">✎</span>
+                    <input type="file" name="imageFile" id="imageFile" style="display: none;" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label>연령대</label>
+                <input type="text" id="ageGroup" readonly />
+            </div>
+            <div class="form-group">
+                <label for="exercise">나의 성향</label>
+                <input type="text" name="exercise" id="exercise" required />
+            </div>
+            <div class="form-group">
+                <label for="mate">원하는 메이트 성향</label>
+                <input type="text" name="mate" id="mate" required />
+            </div>
+            <div class="form-group">
+                <label for="content">소개글</label>
+                <input type="text" name="content" id="content" required />
+            </div>
+            <div class="form-group">
+                <label for="exercise">운동 시간 (분) / 운동 거리 (km)</label>
+                <input type="number" name="exercise_min" id="exercise_min" placeholder="분" required style="width: calc(50% - 10px); margin-right: 10px;" />
+                <input type="number" name="exercise_dis" id="exercise_dis" placeholder="km" required style="width: calc(50% - 10px);" />
+            </div>
+            <div class="form-group">
+                <label for="address">운동 지역</label>
+                <input type="text" name="detail_address" id="detail_address" readonly />
+            </div>
+            <div id="map"></div>
+            <input type="hidden" name="latitude" id="latitude" />
+            <input type="hidden" name="longitude" id="longitude" />
+            <input type="hidden" name="sido" id="sido" />
+            <input type="hidden" name="dong" id="dong" />
+            <input type="hidden" name="shortsido" id="shortsido" />
+            <div class="form-group">
                 <label>프로필 공개 여부</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="profile_use" value="Y" checked> 공개</label>
-                    <label><input type="radio" name="profile_use" value="N"> 비공개</label>
+                    <label><input type="radio" name="profileVisibility" value="Y" checked> 공개</label>
+                    <label><input type="radio" name="profileVisibility" value="N"> 비공개</label>
                 </div>
             </div>
             <div class="form-group">
@@ -200,63 +203,108 @@ button:hover {
                     <label><input type="radio" name="mateSearch" value="Y" checked> 찾기</label>
                     <label><input type="radio" name="mateSearch" value="N"> 찾지 않기</label>
                 </div>
-			</div>
-			<div class="submit-group">
-				<button type="submit">생성 완료</button>
-			</div>
-		</form>
-	</div>
+            </div>
+            <div class="submit-group">
+                <button type="submit">생성 완료</button>
+            </div>
+        </form>
+    </div>
 
 	<script>
-	
-	$(document)
-	.ready(
+	$('#nickNameCheck').click(
 			function() {
-				var birthString = "${birthString}"; // JSP에서 JavaScript로 변수 전달
-				console.log("생년월일:", birthString); // 값 확인
-
-				// 나이 계산 로직
-				if (birthString.length === 8 && !isNaN(birthString)) {
-					const birthYear = parseInt(birthString
-							.substring(0, 4), 10);
-					const birthMonth = parseInt(birthString.substring(4,
-							6), 10);
-					const birthDay = parseInt(
-							birthString.substring(6, 8), 10);
-
-					const currentDate = new Date();
-					const currentYear = currentDate.getFullYear();
-					const currentMonth = currentDate.getMonth() + 1; // 0부터 시작하므로 +1
-					const currentDay = currentDate.getDate();
-
-					let age = currentYear - birthYear;
-
-					// 생일이 지나지 않았다면 나이 하나 감소
-					if (currentMonth < birthMonth
-							|| (currentMonth === birthMonth && currentDay < birthDay)) {
-						age--;
+				var nickName = $('input[name="nickname"]').val();
+				$.ajax({
+					type : 'get',
+					url : 'nickNameOverlay',
+					data : {
+						'nickName' : nickName
+					},
+					dataType : 'JSON',
+					success : function(data) {
+						if (data.overlay > 0) {
+							$('#nickNameResult').html(
+									nickName + ' 는 이미 사용중 입니다.').css(
+									'color', 'red');
+						} else {
+							$('#nickNameResult').html(
+									nickName + ' 는 사용 가능합니다.').css('color',
+									'green');
+						}
+					},
+					error : function(e) {
+						console.log(e);
 					}
-
-					let ageGroup;
-					if (age < 20) {
-						ageGroup = "10대";
-					} else if (age < 25) {
-						ageGroup = "20~25대";
-					} else if (age < 30) {
-						ageGroup = "26~30대";
-					} else if (age < 35) {
-						ageGroup = "31~35대";
-					} else if (age < 40) {
-						ageGroup = "36~40대";
-					} else {
-						ageGroup = "41대 이상";
-					}
-
-					$('#ageGroup').val(ageGroup);
-				} else {
-					$('#ageGroup').val("정보 없음");
-				}
+				});
 			});
+	
+	
+	// 이미지 미리보기 기능
+	document
+			.getElementById('imageFile')
+			.addEventListener(
+					'change',
+					function(event) {
+						const file = event.target.files[0];
+						if (file) {
+							const reader = new FileReader();
+							reader.onload = function(e) {
+								document.getElementById('previewImage').src = e.target.result;
+							};
+							reader.readAsDataURL(file);
+						} else {
+							document.getElementById('previewImage').src = "/photo/${profile.image}";
+						}
+					});
+
+	// 이미지 변경 아이콘 클릭 시 파일 선택 대화창 열기
+	document.getElementById('changeImage').addEventListener('click',
+			function() {
+				document.getElementById('imageFile').click();
+			});
+	
+	$(document).ready(function() {
+		var birthString = "${birthString}"; // JSP에서 JavaScript로 변수 전달
+		console.log("생년월일:", birthString); // 값 확인
+
+		// 나이 계산 로직
+		if (birthString.length === 8 && !isNaN(birthString)) {
+			const birthYear = parseInt(birthString.substring(0, 4), 10);
+			const birthMonth = parseInt(birthString.substring(4, 6), 10);
+			const birthDay = parseInt(birthString.substring(6, 8), 10);
+
+			const currentDate = new Date();
+			const currentYear = currentDate.getFullYear();
+			const currentMonth = currentDate.getMonth() + 1; // 0부터 시작하므로 +1
+			const currentDay = currentDate.getDate();
+
+			let age = currentYear - birthYear;
+
+			// 생일이 지나지 않았다면 나이 하나 감소
+			if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+				age--;
+			}
+
+			let ageGroup;
+			if (age < 20) {
+				ageGroup = "10대";
+			} else if (age < 25) {
+				ageGroup = "20~25대";
+			} else if (age < 30) {
+				ageGroup = "26~30대";
+			} else if (age < 35) {
+				ageGroup = "31~35대";
+			} else if (age < 40) {
+				ageGroup = "36~40대";
+			} else {
+				ageGroup = "41대 이상";
+			}
+
+			$('#ageGroup').val(ageGroup);
+		} else {
+			$('#ageGroup').val("정보 없음");
+		}
+	});
 	
         let marker; // 전역 변수로 마커 선언
 
@@ -297,6 +345,7 @@ button:hover {
                         const addressComponents = result[0].address;
                         $('#sido').val(addressComponents.region_1depth_name); // 시도
                         $('#dong').val(addressComponents.region_2depth_name); // 읍면동
+                        $('#shortsido').val(addressComponents.region_3depth_name); // 시군구
                     } else {
                         alert('주소를 찾을 수 없습니다.');
                     }

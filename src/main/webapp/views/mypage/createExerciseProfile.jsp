@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>운동 프로필 작성</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -71,7 +72,9 @@ body {
 <body>
 	<div class="container">
 		<div class="profile-header">
-			<img src="/photo/${sessionScope.profileImage}" alt="Profile Image">
+			<img
+				src="${profile.image != null && profile.image != '' ? '/photo/' + profile.image : '/resources/img/common/profile.png'}"
+				alt="회원 이미지" />
 			<h2>${sessionScope.loginId}</h2>
 		</div>
 
@@ -81,12 +84,13 @@ body {
 		</div>
 
 		<div class="button-container">
-			<button class="btn" onclick="location.href='firstExerciseProfileView'">최초
-				작성하기</button>
+			<button class="btn"
+				onclick="location.href='firstExerciseProfileView'">최초 작성하기</button>
 		</div>
 	</div>
 
 	<script>
+		
 	</script>
 </body>
 </html>

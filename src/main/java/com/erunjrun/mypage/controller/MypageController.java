@@ -16,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.member.dto.MemberDTO;
@@ -63,40 +65,26 @@ public class MypageController {
 	}
 
 	@PostMapping(value = "/profileUpdate")
-	public String profileUpdate(Model model, @RequestParam Map<String, String> params,
-			@RequestParam("imageFile") MultipartFile imageFile, HttpSession session) {
+	public String profileUpdate(Model model, @RequestParam Map<String, String> params, HttpSession session) {
 
-		String id = (String) session.getAttribute("loginId");
-		if (id != null) {
-			params.put("id", id); // 세션에서 가져온 ID를 params에 추가
-			// 이미지 파일 처리
-			if (!imageFile.isEmpty()) {
-				String originalFileName = imageFile.getOriginalFilename();
-				String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
+	    String id = (String) session.getAttribute("loginId");
+	    if (id != null) {
+	        params.put("id", id); // 세션에서 가져온 ID를 params에 추가
 
-				// 파일 저장 경로
-				String uploadDir = "C:/upload/"; // 실제 경로
-				Path path = Paths.get(uploadDir + newFileName);
-
-				try {
-					Files.write(path, imageFile.getBytes()); // 파일 저장
-					params.put("image", newFileName); // params에 이미지 파일 이름 추가
-				} catch (IOException e) {
-					e.printStackTrace();
-					model.addAttribute("msg", "파일 저장 중 오류가 발생했습니다.");
-					return "member/profileUpdate"; // 에러 페이지로 리다이렉트
-				}
-			}
-			mypageService.profileUpdate(params); // 업데이트 호출
-			MemberDTO member = mypageService.profileDetail(id);
-			ProfileDTO profile = mypageService.ProfileImage(id);
-			model.addAttribute("profile", profile);
-			model.addAttribute("member", member);
-			return "mypage/profile"; // 프로필 페이지로
-		} else {
-			// 세션에 ID가 없으면 로그인 페이지로
-			return "member/login";
-		}
+	        // 업데이트 호출
+	        mypageService.profileUpdate(params);
+	        
+	        // 사용자 정보 및 프로필 이미지 가져오기
+	        MemberDTO member = mypageService.profileDetail(id);
+	        ProfileDTO profile = mypageService.ProfileImage(id);
+	        model.addAttribute("profile", profile);
+	        model.addAttribute("member", member);
+	        
+	        return "mypage/profile"; // 프로필 페이지로
+	    } else {
+	        // 세션에 ID가 없으면 로그인 페이지로
+	        return "member/login";
+	    }
 	}
 
 	@GetMapping(value = "/deleteView")
@@ -138,7 +126,7 @@ public class MypageController {
 				MypageDTO mypage = mypageService.mypageDetail(id);
 				model.addAttribute("mypage", mypage); // 모델에 MypageDTO 추가
 				// 운동 프로필이 이미 작성된 경우
-				return "mypage/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
+				return "redirect:/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
 			}
 			model.addAttribute("loginId", id);
 
@@ -165,6 +153,10 @@ public class MypageController {
 			}
 			model.addAttribute("loginId", id);
 			model.addAttribute("member", member); // member를 모델에 추가
+			logger.info("Member Birth: {}", member.getBirth());
+			String birthString = member.getFormattedBirth();
+			model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
+
 			String profileImage = (String) session.getAttribute("profileImage");
 			model.addAttribute("profileImage", profileImage);
 		} else {
@@ -176,32 +168,63 @@ public class MypageController {
 	}
 
 	@PostMapping(value = "/firstExerciseProfile")
-	public String firstExerciseProfile(@RequestParam Map<String, String> params, HttpSession session, Model model) {
-		String id = (String) session.getAttribute("loginId");
-		if (id != null) {
-			// 운동 프로필 생성
-			mypageService.firstExerciseProfile(params);
+	public String firstExerciseProfile(@RequestParam Map<String, String> params,
+	                                    @RequestParam("imageFile") MultipartFile imageFile,
+	                                    HttpSession session, Model model) {
+	    String id = (String) session.getAttribute("loginId");
+	    if (id != null) {
+	        // 이미지 파일 처리
+	        if (!imageFile.isEmpty()) {
+	            String originalFileName = imageFile.getOriginalFilename();
+	            String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
 
-			// 프로필 작성 상태 업데이트
-			mypageService.updateProfile_use(id, "Y");
+	            // 파일 저장 경로
+	            String uploadDir = "C:/upload/"; // 실제 경로
+	            Path path = Paths.get(uploadDir + newFileName);
 
-			// 프로필 공개 여부 및 운동 메이트 찾기 여부 업데이트
-			String profileVisibility = params.get("profileVisibility");
-			String mateSearch = params.get("mateSearch");
+	            try {
+	                Files.write(path, imageFile.getBytes()); // 파일 저장
+	                params.put("image", newFileName); // params에 이미지 파일 이름 추가
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	                model.addAttribute("msg", "파일 저장 중 오류가 발생했습니다.");
+	                return "mypage/createExerciseProfile"; // 에러 페이지로 리다이렉트
+	            }
+	        }
 
-			// 프로필 공개 여부 업데이트
-			mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
+	        // 운동 프로필 생성
+	        mypageService.profileUpdate(params); // 업데이트 호출
+	        ProfileDTO profile = mypageService.ProfileImage(id);
+	        model.addAttribute("profile", profile);
+	        mypageService.firstExerciseProfile(params);
+	        logger.info("Params: {}", params);
+	        
+	        // 프로필 작성 상태 업데이트
+	        mypageService.updateProfile_use(id, "Y");
 
-			// 운동 메이트 찾기 여부 업데이트
-			mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
+	        // 프로필 공개 여부 및 운동 메이트 찾기 여부 업데이트
+	        String profileVisibility = params.get("profileVisibility");
+	        String mateSearch = params.get("mateSearch");
 
-			// 업데이트된 회원 정보 가져오기
-			MemberDTO member = mypageService.profileDetail(id);
-			String birthString = member.getFormattedBirth();
-			model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
-			model.addAttribute("member", member);
-		}
-		return "mypage/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
+	        // 프로필 공개 여부 업데이트
+	        mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
+
+	        // 운동 메이트 찾기 여부 업데이트
+	        mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
+
+	        // 포인트 추가
+	        mypageService.addPoint(id, 10);
+
+	        // 업데이트된 회원 정보 가져오기
+	        MemberDTO member = mypageService.profileDetail(id);
+	        String birthString = member.getFormattedBirth();
+	        model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
+	        model.addAttribute("member", member);
+	    } else {
+	        model.addAttribute("msg", "로그인이 필요합니다.");
+	        return "member/login"; // 로그인 페이지로 리다이렉트
+	    }
+		return "redirect:/ExerciseProfile";
 	}
 
 	@GetMapping(value = "/ExerciseProfile")
@@ -235,9 +258,12 @@ public class MypageController {
 		if (id != null) {
 			MemberDTO member = mypageService.profileDetail(id);
 			MypageDTO mypage = mypageService.mypageDetail(id);
+			ProfileDTO profile = mypageService.ProfileImage(id);
+
 			String birthString = member.getFormattedBirth();
 			model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
 			model.addAttribute("member", member);
+	        model.addAttribute("profile", profile);
 			model.addAttribute("mypage", mypage); // 모델에 MypageDTO 추가
 			model.addAttribute("profileVisibility", mypage.getProfile_use());
 			model.addAttribute("mateSearch", mypage.getExercise_use());
@@ -249,19 +275,61 @@ public class MypageController {
 	}
 
 	@PostMapping(value = "/ExerciseProfileUpdate")
-	public String ExerciseProfileUpdate(Model model, HttpSession session, @RequestParam Map<String, String> params) {
+	public String ExerciseProfileUpdate(Model model, HttpSession session, 
+	                                     @RequestParam Map<String, String> params,
+	                                     @RequestParam(value = "fileInput", required = false) MultipartFile imageFile) {
 	    logger.info("Received params: {}", params);
-		String id = (String) session.getAttribute("loginId");
-		if (id != null) {
-			mypageService.ExerciseProfileUpdate(params);
-			String profileVisibility = params.get("profileVisibility");
-			String mateSearch = params.get("mateSearch");
-			mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
-			mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
-		} else {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			return "member/login"; // 로그인 페이지로 리다이렉트
-		}
-		return "mypage/ExerciseProfile";
+	    logger.info("Image parameter added to params: {}", params.get("image"));
+	    String id = (String) session.getAttribute("loginId");
+
+	    if (id != null) {
+	        // 이미지 파일 처리
+	        if (imageFile != null && !imageFile.isEmpty()) {
+	            String originalFileName = imageFile.getOriginalFilename();
+	            String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
+
+	            // 파일 저장 경로
+	            String uploadDir = "C:/upload/"; // 실제 경로
+	            Path path = Paths.get(uploadDir + newFileName);
+
+	            try {
+	                Files.write(path, imageFile.getBytes()); // 파일 저장
+	                params.put("image", newFileName); // params에 이미지 파일 이름 추가
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	                model.addAttribute("msg", "파일 저장 중 오류가 발생했습니다.");
+	                return "mypage/createExerciseProfile"; // 에러 페이지로 리다이렉트
+	            }
+	        }
+
+	        // 프로필 정보 업데이트
+	        mypageService.profileUpdate(params); // 업데이트 호출
+	        mypageService.ExerciseProfileUpdate(params);
+	        String profileVisibility = params.get("profileVisibility");
+	        String mateSearch = params.get("mateSearch");
+	        mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
+	        mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
+	        
+	        model.addAttribute("msg", "프로필이 성공적으로 업데이트되었습니다.");
+	    } else {
+	        model.addAttribute("msg", "로그인이 필요합니다.");
+	        return "member/login"; // 로그인 페이지로 리다이렉트
+	    }
+
+	    return "redirect:/ExerciseProfile"; // 업데이트 후 프로필 페이지로 리다이렉트
+	}
+	
+	@GetMapping(value = "/pointHistoryListView")
+	public String pointHistoryListView() {
+		return "pointHistoryList";
+	}
+	
+	@GetMapping(value = "/pointHistoryList.ajax")
+	@ResponseBody
+	public Map<String, Object> list(String page,String cnt){
+		
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+		return mypageService.list(page_, cnt_);
 	}
 }
