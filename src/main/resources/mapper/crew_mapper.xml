@@ -96,10 +96,21 @@
 		SELECT m.id, m.nickname, m.gender, COALESCE(p.image, '') as image, cm.is_leader
 			FROM crew_member cm JOIN member m ON cm.id = m.id
 			LEFT JOIN profile p ON m.id = p.id WHERE cm.crew_idx = #{crew_idx};
+			
 	</select>
 	
+	<!-- 크루 신청자 리스트 -->
 	<select id="crewApplicationList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="int">
-		SELECT id, application_idx FROM crew_application WHERE crew_idx = #{crew_idx}
+		SELECT m.id, m.nickname, m.gender, m.birth, COALESCE(p.image, '') as image, ca.create_date,
+	       (SELECT COUNT(*) FROM crew_application WHERE crew_idx = 52) AS totalPage
+			FROM crew_application ca
+			JOIN member m ON ca.id = m.id
+			LEFT JOIN profile p ON m.id = p.id
+			WHERE ca.crew_idx = #{crew_idx}
+			GROUP BY m.id, m.nickname, m.gender, m.birth, p.image
+			<if test="offset > 0">
+				LIMIT #{limit} OFFSET #{offset}
+			</if>
 	</select>
 	
 	<!-- 크루 신청 -->
@@ -193,40 +204,175 @@
 	    LEFT JOIN crew_tag ct ON c.crew_idx = ct.crew_idx
 	    LEFT JOIN tag t ON ct.tag_idx = t.tag_idx
 	    
-	    <where>
-	        <if test="filtering != null and filtering.contains('is_recruit')">
-	            AND c.is_recruit = 'Y'
-	        </if>
-	        <if test="filtering != null and filtering.contains('shortsido_area')">
-	            AND c.shortsido IN ('서울', '경기', '인천')
-	        </if>
-	        <if test="filtering != null and filtering.contains('shortsido_etc')">
-	            AND c.shortsido NOT IN ('서울', '경기', '인천')
-	        </if>
-	        <if test="filtering != null and filtering.contains('weekdays')">
-	            AND c.days NOT REGEXP 'sat|sun'
-	        </if>
-	        <if test="filtering != null and filtering.contains('weekend')">
-	            AND c.days REGEXP 'sat|sun'
-	        </if>
-	        <if test="filtering != null and !filtering.isEmpty()">
-			    AND (
-			        <foreach collection="filtering" item="filter" separator=" OR ">
-			            <if test="filter == '1' or filter == '2' or filter == '3' or filter == '4' or filter == '5' or 
-			                     filter == '6' or filter == '7' or filter == '8' or filter == '9' or filter == '10' or filter == '11'">
-			                ct.tag_idx LIKE CONCAT('%', #{filter}, '%')
-			            </if>
+	    <trim prefix="WHERE" prefixOverrides="AND">
+		    <if test="filtering != null">
+		        <!-- is_recruit 조건 -->
+		        <if test="filtering.contains('option1')">
+		            AND c.is_recruit = 'Y'
+		        </if>
+		        
+		        <!-- shortsido_area 조건 -->
+		        <if test="filtering.contains('option13')">
+		            AND c.shortsido IN ('서울', '경기', '인천')
+		        </if>
+		        
+		        <!-- shortsido_etc 조건 -->
+		        <if test="filtering.contains('option14')">
+		            AND c.shortsido NOT IN ('서울', '경기', '인천')
+		        </if>
+		        
+		        <!-- weekdays 조건 -->
+		        <if test="filtering.contains('option15')">
+		            AND c.days NOT REGEXP 'sat|sun'
+		        </if>
+		        
+		        <!-- weekend 조건 -->
+		        <if test="filtering.contains('option16')">
+		            AND (c.days like '%sat%' OR c.days like '%sun%')
+		        </if>
+		        
+		         <!-- 선택한 tag_idx를 포함한 모든 크루 데이터 조회 -->
+		        <if test="filtering.contains('option2')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 1
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option3')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 2
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option4')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 3
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option5')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 4
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option6')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 5
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option7')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 6
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option8')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 7
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option9')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 8
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option10')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 9
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option11')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 10
+		            )
+		        </if>
+		        
+		        <if test="filtering.contains('option12')">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx = 11
+		            )
+		        </if>
+		        
+		        <!-- 선택한 tag_idx를 포함한 모든 크루 데이터 조회 -->
+<!-- 		        <if test="filtering.size > 0">
+		            AND c.crew_idx IN (
+		                SELECT crew_idx
+		                FROM crew_tag
+		                WHERE tag_idx IN
+		                <foreach collection="filtering" item="filter" open="(" separator="," close=")">
+		                    <choose>
+		                        <when test="filter == 'option2'">1</when>
+		                        <when test="filter == 'option3'">2</when>
+		                        <when test="filter == 'option4'">3</when>
+		                        <when test="filter == 'option5'">4</when>
+		                        <when test="filter == 'option6'">5</when>
+		                        <when test="filter == 'option7'">6</when>
+		                        <when test="filter == 'option8'">7</when>
+		                        <when test="filter == 'option9'">8</when>
+		                        <when test="filter == 'option10'">9</when>
+		                        <when test="filter == 'option11'">10</when>
+		                        <when test="filter == 'option12'">11</when>
+		                    </choose>
+		                </foreach>
+		            )
+		        </if> -->
+		        
+		       <!--  <if test="filtering.matches('option[2-9]|option1[0-2]')">
+		            AND ct.tag_idx LIKE CONCAT('%', SUBSTRING(#{filter}, 7), '%')
+		        </if> -->
+		    </if>
+	        <!-- <choose>
+		        <when test="filtering != null and filtering.contains('shortsido_area')">
+		            c.shortsido IN ('서울', '경기', '인천')
+		        </when>
+		        <when test="filtering != null and filtering.contains('shortsido_etc')">
+		        	c.shortsido NOT IN ('서울', '경기', '인천')
+		        </when>
+		        <when test="filtering != null and filtering.contains('weekdays')">
+		        	c.days NOT REGEXP 'sat|sun'
+		        </when>
+		        <when test="filtering != null and filtering.contains('weekend')">
+		        	c.days REGEXP 'sat|sun'
+		        </when>
+		        <when test="filtering != null and filtering.contains('is_recruit')">
+		        	c.is_recruit = 'Y'
+		        </when>
+		        <when test="filtering != null">
+		        	<foreach collection="filtering" item="filter" separator="AND">
+		                ct.tag_idx LIKE CONCAT('%', #{filter}, '%')
 			        </foreach>
-			    )
-			</if>
-	    </where>
-	    
+		        </when>
+		    </choose> -->
+		</trim>
 	    GROUP BY c.crew_idx
-	
-
-	
 	    ORDER BY c.crew_idx DESC
-	
 	    LIMIT #{offset}, #{pageSize}
 	</select>
 
