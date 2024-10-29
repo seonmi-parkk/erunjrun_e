@@ -80,7 +80,7 @@ public class CrewService {
 
 					img.setImg_no(img_no);
 					img.setCode_name("I100");
-					fileWrite(img); // 게시글
+					fileWrite(img); // 크루 설명글
 					
 				}
 			}
@@ -103,6 +103,8 @@ public class CrewService {
 			
 			
 			fileUpload(img_no, crew_img);
+			
+			int chatRow = crew_dao.crewChatInsert(img_no);
 			
 		}
 		
@@ -290,12 +292,18 @@ public class CrewService {
 		return crewMemberList;
 	}
 
-	public List<CrewMemberDTO> crewApplicationList(int crew_idxs, int page, int cnt) {
+	public List<CrewMemberDTO> crewApplicationList(int crew_idxs, int page, int cnt, String keyword) {
 		
 		int limit = cnt;
 		int offset = (page -1) * cnt;
 		
-		return crew_dao.crewApplicationList(crew_idxs, limit, offset);
+		Map<String, Object> parmeterMap = new HashMap<>();
+		parmeterMap.put("limit", limit);
+		parmeterMap.put("offset", offset);
+		parmeterMap.put("keyword", keyword);
+		parmeterMap.put("crew_idx", crew_idxs);
+		
+		return crew_dao.crewApplicationList(parmeterMap);
 	}
 
 	public boolean crewApplicationWrite(Map<String, Object> parmeterMap) {
@@ -375,6 +383,46 @@ public class CrewService {
 	public List<Map<String, Object>> crewList(List<String> filtering, int page, int pageSize) {
 		int offset = (page - 1) * pageSize; // 0 -> 10 -> 20 .. 10씩 증가
 	    return crew_dao.crewList(filtering, offset, pageSize);
+	}
+
+	public List<CrewMemberDTO> applicationAdminList(int crew_idxs, int page, int cnt, String keyword) {
+		int limit = cnt;
+		int offset = (page -1) * cnt;
+		
+		Map<String, Object> parmeterMap = new HashMap<>();
+		parmeterMap.put("limit", limit);
+		parmeterMap.put("offset", offset);
+		parmeterMap.put("keyword", keyword);
+		parmeterMap.put("crew_idx", crew_idxs);
+		
+		return crew_dao.applicationAdminList(parmeterMap);
+	}
+
+	public boolean crewMemberApproval(Map<String, Object> parmeterMap) {
+		int row = crew_dao.crewMemberApproval(parmeterMap);
+		
+		if(row>0) {
+			logger.info("크루 승인 =>" + row);
+			int deleteRow = crew_dao.crewApplicationCancel(parmeterMap);
+			logger.info("크루 승인 후 신청 리스트에서 삭제 =>" + deleteRow);
+			crewHistoryWrite(parmeterMap);
+			return true;
+		}
+		
+		return false;
+	}
+
+	public boolean crewMemberRefusal(Map<String, Object> parmeterMap) {
+		int row = crew_dao.crewMemberRefusal(parmeterMap);
+		
+		if(row>0) {
+			logger.info("크루 미승인 =>" + row);
+			
+			crewHistoryWrite(parmeterMap);
+			return true;
+		}
+		
+		return false;
 	}
 
 

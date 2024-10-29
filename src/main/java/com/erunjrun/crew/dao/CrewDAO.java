@@ -44,7 +44,7 @@ public interface CrewDAO {
 
 	List<CrewMemberDTO> crewMemberList(int crew_idxs);
 
-	List<CrewMemberDTO> crewApplicationList(int crew_idx, int limit, int offset);
+	List<CrewMemberDTO> crewApplicationList(Map<String, Object> parmeterMap);
 
 	int crewApplicationWrite(Map<String, Object> parmeterMap);
 
@@ -61,6 +61,14 @@ public interface CrewDAO {
 	int likeCencel(Map<String, Object> parmeterMap);
 
 	List<Map<String, Object>> crewList(List<String> filtering, int offset, int pageSize);
+
+	List<CrewMemberDTO> applicationAdminList(Map<String, Object> parmeterMap);
+
+	int crewMemberApproval(Map<String, Object> parmeterMap);
+
+	int crewMemberRefusal(Map<String, Object> parmeterMap);
+
+	int crewChatInsert(int img_no);
 	
 	
 
