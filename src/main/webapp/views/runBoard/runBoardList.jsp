@@ -73,7 +73,7 @@
    	   position: relative;
    	   width: 760px;
        padding: 34px 50px 10px;
-       height: fit-content !important;
+       height: 70vh !important;
    	   overflow-y: auto;
    }
     .profileDetail .user-info .user-name{

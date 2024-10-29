@@ -199,6 +199,38 @@
 			  
 		}
 		
+		/*운동프로필 레이어팝업*/
+		#reportPopup {
+		    width: fit-content;
+		    top: 80px;
+		    left: 50%;
+		    transform: translateX(-50%);
+			z-index: 996;
+		}
+		#reportPopup .close {
+		    font-size: 40px;
+		    font-weight: 300;
+		    position: absolute;
+		    z-index: 996;
+		    top: 30px;
+		    right: 30px;
+		    display: inline-block;
+		    width: 30px;
+		    height: 30px;
+		    line-height: 27px;
+		    text-align: center;
+		}
+		#reportPopup .modal-content{
+		    padding: 20px 20px;
+		    background: #f8f8f8;
+		    border: none;
+	    	border-radius: 0;
+	    }
+	    #reportPopupBody {
+	    	background: #fff;
+	    	border-radius: 10px;
+	    }
+		
     </style>
 </head>
 <body>
@@ -246,7 +278,7 @@
 			        </c:otherwise>
 		        </c:choose>
 		          -->
-		    	<div id="reo" class="btn-like btn02-s" style="padding: 20px;"><img src="/resources/img/run/신고.png" alt="신고"></div>	    	
+		    	<div id="reo" class="btn-like btn02-s" data-board-idx="${info.board_idx}" style="padding: 20px;"><img src="/resources/img/run/신고.png" alt="신고"></div>	    	
 	    	</div>
 	    	<div class="supa">
 		    	<span id="title2-1" class="title2">등록순</span>
@@ -284,6 +316,15 @@
 	    	</div>
 		    <button type="button" class="btn02-l" onclick="location.href='/runBoard'">목록</button>
 	    </div>
+	    
+	    <!-- 모달 -->
+		<div id="reportPopup" class="modal">
+		    <div class="modal-content">
+		        <span class="close">&times;</span>
+		        <div id="reportPopupBody"></div>
+		    </div>
+		</div>
+	    
 	
 	</div>
     <jsp:include page="../footer.jsp" />
@@ -488,9 +529,49 @@ function initializeMap() {
 	 	function secondBtn3Act() {
 	 	    // 두번째팝업 3번버튼 클릭시 수행할 내용
 	 	    console.log('두번째팝업 2번 버튼 동작');
-	 	   location.href = "/reportForm";
-	 	  
+	 	   var boardIdx = $(this).data('board_idx');
+	 	   openReport(boardIdx);
+	 	   removeAlert();
 	 	}
+	 	
+	 	
+	 	// 클릭시 신고하기 레이어 팝업
+	 	/*
+		$(document).on('click','#reo',function(){
+		    var boardIdx = $(this).data('board_idx');
+		   // console.log('toUserId',toUserId);
+		    openReport(boardIdx);
+		});
+		*/
+		
+		// 운동프로필 레이어 팝업 열기
+		function openReport(boardIdx){
+			var modal = document.getElementById("reportPopup");
+		    var PopupBody = document.getElementById("reportPopupBody");
+			
+		    // AJAX 요청 데이터 넣을때 해당 게시판 idx 값 넣기!!!!
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("GET", "/reportForm", true);
+		    xhr.onreadystatechange = function() {
+		        if (xhr.readyState === 4 && xhr.status === 200) {
+		            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+		            modal.style.display = "block"; // 모달 열기
+		            
+		         	// JS 파일을 동적으로 로드
+		         	/*
+		            var script = document.createElement('script');
+		            script.src = '/resources/js/profileDetail.js'; 
+		            document.body.appendChild(script);
+		            */
+		        }
+		    };
+		    xhr.send();
+		}
+		
+		// 팝업 닫기
+		document.getElementsByClassName("close")[0].onclick = function() {
+		    document.getElementById("reportPopup").style.display = "none";
+		};
 	 	
 	 	
 	 	
