@@ -12,9 +12,31 @@ public class ChatPersonalDTO {
 	private String recipient;
 	private String use_yn;
 	
+	private String image;
+	private String icon_image;
+	private String nickname;
+	
 	
 	public String getContent_idx() {
 		return content_idx;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public String getIcon_image() {
+		return icon_image;
+	}
+	public void setIcon_image(String icon_image) {
+		this.icon_image = icon_image;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	public void setContent_idx(String content_idx) {
 		this.content_idx = content_idx;

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="com.erunjrun.board.dao.RunBoardDAO">
+	
+	<select id="list" resultType="com.erunjrun.board.dto.RunBoardDTO">
+        SELECT 
+        	b.id,
+            b.board_idx,
+            m.nickname,
+            b.subject,
+            b.bHit,
+            b.likes,
+            b.create_date
+        FROM 
+            board b 
+        JOIN 
+            member m ON b.id = m.id
+        WHERE 
+            b.code_name = 'B100'
+            AND b.use_yn = 'Y'
+            AND b.is_map = 'Y'
+        ORDER BY
+            b.board_idx DESC
+        LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<!-- CEIL(COUNT(board_idx)/#{param1}) AS pages -->
+	<select id="count" resultType="int">
+		SELECT COUNT(*) FROM board b WHERE b.use_yn = 'Y' AND b.is_map = 'Y' AND b.code_name = 'B100'
+    </select>
+    
+    <select id="bHitList" resultType="com.erunjrun.board.dto.RunBoardDTO">
+		SELECT 
+            b.board_idx,
+            b.id,
+            m.nickname,
+            b.subject,
+            b.bHit,
+            b.likes,
+            b.create_date
+        FROM 
+            board b 
+        JOIN 
+            member m ON b.id = m.id
+		WHERE WEEK(create_date, 1) = WEEK(NOW(), 1)
+			AND b.code_name = 'B100'
+            AND b.use_yn = 'Y'
+            AND b.is_map = 'Y' 
+			ORDER BY likes DESC
+			LIMIT 3;
+    </select>
+    
+    <select id="search" resultType="com.erunjrun.board.dto.RunBoardDTO">
+	    SELECT 
+	        b.board_idx,
+	        m.nickname,
+	        b.subject,
+	        b.content,
+	        b.bHit,
+	        b.likes,
+	        b.create_date
+	    FROM 
+	        board b
+	    JOIN 
+	        member m ON b.id = m.id
+	    WHERE 
+	        b.use_yn = 'Y'
+	        AND b.is_map = 'Y'
+	        AND b.code_name = 'B100'
+	        <if test="keyword != null and keyword != ''">
+	            <choose>
+	                <when test="opt == 'subject'">
+	                    AND b.subject LIKE CONCAT('%', #{keyword}, '%')
+	                </when>
+	                <when test="opt == 'nickname'">
+	                    AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
+	                </when>
+	                <when test="opt == 'content'">
+	                    AND b.content LIKE CONCAT('%', #{keyword}, '%')
+	                </when>
+	            </choose>
+	        </if>
+	    ORDER BY 
+	        b.board_idx DESC
+	    LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="getSearchTotalPages" resultType="int">
+	    SELECT  COUNT(*)
+	    FROM 
+	        board b
+	    JOIN 
+	        member m ON b.id = m.id
+	    WHERE 
+	        b.use_yn = 'Y'
+	        AND b.is_map = 'Y'
+	        AND b.code_name = 'B100'
+	        <if test="keyword != null and keyword != ''">
+	            <choose>
+	                <when test="opt == 'subject'">
+	                    AND b.subject LIKE CONCAT('%', #{keyword}, '%')
+	                </when>
+	                <when test="opt == 'nickname'">
+	                    AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
+	                </when>
+	                <when test="opt == 'content'">
+	                    AND b.content LIKE CONCAT('%', #{keyword}, '%')
+	                </when>
+	            </choose>
+	        </if>
+	</select>
+	
+	<!-- 게시글 삽입 -->
+    <insert id="insertRunBoard" 
+    			useGeneratedKeys="true"
+				keyColumn="board_idx"
+				keyProperty="board_idx"
+    			parameterType="com.erunjrun.board.dto.RunBoardDTO">
+        INSERT INTO board (id, code_name, subject, content, use_yn, is_map)
+        	VALUES (#{id}, #{code_name}, #{subject}, #{content}, 'Y', 'Y')
+    </insert>
+    
+    <!-- 경로 데이터 삽입 -->
+    <insert id="insertRouteData" parameterType="com.erunjrun.board.dto.RunBoardDTO">
+        INSERT INTO board_map (board_idx, latitude, longitude, path, order_num)
+        	VALUES (#{board_idx}, #{latitude}, #{longitude}, #{path}, #{order_num})
+    </insert>
+    
+        <!-- 파일 정보 저장 -->
+    <insert id="fileWrite" parameterType="com.erunjrun.image.dto.ImageDTO">
+        INSERT INTO image (code_name, img_ori, img_new, img_no)
+        	VALUES (#{code_name}, #{img_ori}, #{img_new}, #{img_no})
+    </insert>
+    
+    <!-- 주마다 최다추천 게시글 3개 포인트 지급 -->
+    <insert id="point" parameterType="com.erunjrun.board.dto.RunBoardDTO">
+    	INSERT INTO member_point (code_name, id, point)
+    		VALUES (#{code_name}, #{id},#{point})
+    </insert>
+    
+    <!-- 게시글 상세보기 -->
+    <select id="detail" resultType="com.erunjrun.board.dto.RunBoardDTO">
+    	SELECT m.id, b.board_idx, b.subject, b.content, m.nickname, b.create_date , b.bHit ,b.likes
+			FROM board b
+		LEFT JOIN member m ON b.id = m.id WHERE b.board_idx = #{param1}
+    </select>
+    
+    <!-- 지도 데이터 -->
+    <select id="mapData" resultType="com.erunjrun.board.dto.RunBoardDTO">
+    	SELECT board_idx,
+           latitude,
+           longitude,
+           path,
+           order_num
+	    FROM board_map
+	    WHERE board_idx = #{param1} 
+    </select>
+    
+    <!-- 조회수 -->
+    <update id="bHit">
+		UPDATE board SET bHit = bHit + 1 WHERE board_idx = #{param1}
+	</update>
+	
+	<select id="like" resultType="int">
+        SELECT COUNT(*) > 0 FROM likes 
+        WHERE id = #{loginId} AND code_name = 'B100' AND board_idx = #{board_idx}
+    </select>
+    
+    <insert id="addLike">
+        INSERT INTO likes (id, code_name, board_idx) 
+        	VALUES (#{loginId}, 'B100', #{board_idx})
+    </insert>
+    
+    <delete id="disLike">
+        DELETE FROM likes 
+        	WHERE id = #{loginId} AND code_name = 'B100' AND board_idx = #{board_idx}
+    </delete>
+    
+    <update id="updateDelLike">
+    	UPDATE board SET likes = likes - 1 WHERE board_idx = #{board_idx}
+    </update>
+    
+    <update id="updateLike">
+    	UPDATE board SET likes = likes + 1 WHERE board_idx = #{board_idx}
+    </update>
+    
+	<!-- 게시글 정보 업데이트 -->
+	<update id="runUpdate" parameterType="com.erunjrun.board.dto.RunBoardDTO">
+	    UPDATE board
+	    SET subject = #{subject},
+	        content = #{content}
+	    WHERE board_idx = #{board_idx} AND id = #{id}
+	</update>
+	
+	<!-- 기존 경로 데이터 삭제 -->
+	<delete id="deleteRouteData" parameterType="int">
+	    DELETE FROM board_map
+	    WHERE board_idx = #{board_idx}
+	</delete>
+	
+	<!-- 기존 이미지 데이터 삭제 -->
+	<delete id="deleteImg" parameterType="int">
+	    DELETE FROM image
+	    WHERE img_no = #{board_idx}
+	</delete>
+	
+	<update id="runBoardDelete">
+		UPDATE board SET use_yn = 'N' WHERE board_idx = #{param1}
+	</update>
+    
+    
+    
+    
+</mapper>
