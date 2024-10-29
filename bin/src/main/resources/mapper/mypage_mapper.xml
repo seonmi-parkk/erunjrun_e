@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="com.erunjrun.mypage.dao.MypageDAO">
+
+	<select id="findSessionId" parameterType="String"
+		resultType="com.erunjrun.member.dto.MemberDTO">
+		SELECT
+		member.id,
+		member.email,
+		member.pw,
+		member.profile_use,
+		profile.image AS
+		image,
+		member.icon_image
+		FROM
+		member
+		LEFT JOIN
+		profile ON
+		member.id =
+		profile.id
+		WHERE
+		member.id = #{id} LIMIT 1;
+
+	</select>
+
+	<select id="profileDetail"
+		resultType="com.erunjrun.member.dto.MemberDTO">
+		SELECT
+		nickname,
+		point,
+		phone,
+		address,
+		pw,
+		email,
+		birth,
+		gender
+		FROM
+		member
+		WHERE
+		id = #{id}
+	</select>
+
+	<select id="ProfileImage" parameterType="String"
+		resultType="com.erunjrun.member.dto.ProfileDTO">
+		SELECT
+		id,
+		image
+		FROM
+		profile
+		WHERE
+		id = #{id} LIMIT 1;
+	</select>
+
+	<update id="profileUpdate" parameterType="map">
+		UPDATE member
+		<set>
+			<if test="pw != null">pw = #{pw},</if>
+			<if test="nickname != null">nickname = #{nickname},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="phone != null">phone = #{phone}</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateProfileImage" parameterType="map">
+		UPDATE profile
+		SET image = #{image}, content = content  <!-- 기존 값을 유지 -->
+		WHERE id = (SELECT id FROM member WHERE id = #{id});
+	</update>
+
+	<update id="setUseY" parameterType="String">
+		UPDATE member SET use_yn =
+		'Y' WHERE id = #{id}
+	</update>
+
+	<update id="updateProfile_use" parameterType="map">
+		UPDATE member
+		SET
+		profile_use = 'Y' WHERE id = #{id}
+	</update>
+
+	<insert id="firstExerciseProfile" parameterType="map">
+		INSERT INTO
+		profile (
+		id,
+		content,
+		exercise_min,
+		exercise_dis,
+		exercise,
+		mate,
+		latitude,
+		longitude,
+		sido,
+		dong,
+		detail_address,
+		shortsido
+		) VALUES (
+		#{id},
+		#{content},
+		#{exercise_min},
+		#{exercise_dis},
+		#{exercise},
+		#{mate},
+		#{latitude},
+		#{longitude},
+		#{sido},
+		#{dong},
+		#{detail_address},
+		#{shortsido}
+		)
+	</insert>
+
+	<select id="mypageDetail" parameterType="String"
+		resultType="com.erunjrun.mypage.dto.MypageDTO">
+		SELECT
+		id,
+		content,
+		exercise_min,
+		exercise_dis,
+		exercise,
+		mate,
+		latitude,
+		longitude,
+		sido,
+		dong,
+		detail_address,
+		shortsido,
+		profile_use,
+		exercise_use
+		FROM profile
+		WHERE id = #{id} LIMIT 1;
+	</select>
+
+	<update id="updateProfileVisibility" parameterType="map">
+		UPDATE profile
+		SET 
+		profile_use = #{profileVisibility}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateMateSearch" parameterType="map">
+		UPDATE profile
+		SET
+		exercise_use = #{mateSearch}
+		WHERE id = #{id}
+	</update>
+
+	<update id="ExerciseProfileUpdate" parameterType="map">
+    UPDATE profile
+    JOIN member ON member.id = profile.id
+    SET
+    <if test="nickname != null">
+        member.nickname = #{nickname},
+    </if>
+    <if test="content != null">
+        profile.content = #{content},
+    </if>
+    <if test="exercise_min != null">
+        profile.exercise_min = #{exercise_min},
+    </if>
+    <if test="exercise_dis != null">
+        profile.exercise_dis = #{exercise_dis},
+    </if>
+    <if test="exercise != null">
+        profile.exercise = #{exercise},
+    </if>
+    <if test="mate != null">
+        profile.mate = #{mate},
+    </if>
+    <if test="latitude != null">
+        profile.latitude = #{latitude},
+    </if>
+    <if test="longitude != null">
+        profile.longitude = #{longitude},
+    </if>
+    <if test="sido != null">
+        profile.sido = #{sido},
+    </if>
+    <if test="dong != null">
+        profile.dong = #{dong},
+    </if>
+    <if test="detail_address != null">
+        profile.detail_address = #{detail_address},
+    </if>
+    <if test="shortsido != null">
+        profile.shortsido = #{shortsido}
+    </if>
+    WHERE profile.id = #{id}
+</update>
+</mapper>   	

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.erunjrun.mate.dao.MateDAO">
+	<insert id="mateApplication">
+		INSERT INTO mate_application (id,unlike_id) VALUES (#{toUserId},#{fromUserId})
+	</insert>
+
+	<insert id="mateHistory">
+		INSERT INTO mate_history (id,code_name,unlike_id) VALUES (#{toUserId},'M100',#{fromUserId})
+	</insert>
+	
+ 	<select id="checkMate" resultType="int">
+		SELECT count(mate_idx) FROM mate WHERE id IN(#{fromUserId},#{toUserId}) OR unlike_id IN(#{fromUserId},#{toUserId})
+	</select>
+
+	<select id="checkMateAppl" resultType="com.erunjrun.mate.dto.MateDTO">
+		SELECT mate_history_idx, code_name, id, unlike_id 
+			FROM mate_history 
+			WHERE mate_history_idx = 
+			(SELECT max(mate_history_idx) FROM mate_history 
+			WHERE unlike_id IN (#{fromUserId},#{toUserId}) AND id IN (#{fromUserId},#{toUserId}))
+	</select>
+
+	<select id="checkBlock" resultType="int"> <!-- unlike_id 신청회원 -->
+		SELECT count(unlike_id) FROM block_member WHERE unlike_id = #{fromUserId} AND id = #{toUserId}
+	</select>
+
+<!-- 	<select id="profileOpen" resultType="String">
+		SELECT profile_use FROM profile WHERE id = #{toUserId}
+	</select> -->
+
+	<select id="checkLike" resultType="int">
+		SELECT count(unlike_id) FROM interest_member WHERE unlike_id = #{fromUserId} AND id = #{toUserId}    
+	</select>
+	
+	<select id="getProfile" resultType="com.erunjrun.mate.dto.MateProfileDTO"> 
+		SELECT 
+			image, icon_image, nickname, dong, shortsido, gender, birth, p.profile_use,
+			m.id, exercise_min, exercise_dis, exercise, mate, content 
+			FROM member m JOIN profile p ON m.id = p.id WHERE m.id = #{toUserId}
+	</select>
+
+	<insert id="like">
+		INSERT INTO interest_member (id, unlike_id) VALUES (#{toUserId},#{fromUserId})
+	</insert>
+	
+	<delete id="dislike">
+		DELETE FROM interest_member WHERE unlike_id = #{fromUserId} AND id = #{toUserId}
+	</delete>
+	
+	<insert id="mateBlock">
+		INSERT INTO block_member (id,unlike_id) VALUES (#{toUserId},#{fromUserId})
+	</insert>
+
+	<insert id="mateUnblock">
+		DELETE FROM block_member WHERE id = #{toUserId} AND unlike_id = #{fromUserId}
+	</insert>
+	
+	<select id="getUserPos" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+		SELECT shortsido, dong, latitude, longitude FROM profile WHERE id = #{fromUserId} 
+	</select>
+	
+	<select id="searchMateList" parameterType="com.erunjrun.mate.dto.MateProfileDTO" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+		SELECT p.id, nickname, gender, shortsido, dong, image, icon_image, exercise_use, latitude, longitude,
+		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{id}) AND unlike_id IN (p.id,#{id})) AS mate_idx
+		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
+		AND shortsido = #{shortsido}
+		AND dong = #{dong}
+		AND p.id != #{id}
+		<!-- check!! 어차피 처음에 input에 동을 적어서 보여줘야 하기 때문에 동을 먼저가져오고 그변수를 이용하기 -->
+	</select>
+	
+	<select id="getPosList" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+		SELECT p.id, nickname, image, icon_image, gender, latitude, longitude,
+		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{fromUserId}) AND unlike_id IN (p.id,#{fromUserId})) AS mate_idx
+		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
+	</select>
+	
+	<select id="moveMateList" resultType="com.erunjrun.mate.dto.MateProfileDTO">
+		SELECT p.id, nickname, gender, shortsido, dong, image, icon_image, exercise_use, latitude, longitude,
+		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{fromUserId}) AND unlike_id IN (p.id,#{fromUserId})) AS mate_idx
+		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
+		AND p.id != #{fromUserId}
+		AND nickname IN
+        <foreach item="nickname" collection="users" open="(" separator="," close=")">
+            #{nickname}
+        </foreach>
+	</select>
+
+</mapper>
