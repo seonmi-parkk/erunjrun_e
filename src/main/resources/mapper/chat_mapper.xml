@@ -8,6 +8,31 @@
 		SELECT content_idx, c.content , start_date, sender, recipient, image, icon_image, nickname
 			FROM chat_content c JOIN profile p ON c.sender = p.id 
 			JOIN member m ON c.sender = m.id 
-			WHERE chat_idx = 1 AND c.use_yn = 'Y'
+			WHERE chat_idx = #{chatIdx} AND c.use_yn = 'Y'
 	</select>
+	
+	<select id="getUserName" resultType="String">
+		SELECT nickname FROM chat_link c join member m on c.id = m.id WHERE chat_idx = #{chatIdx}
+	</select>
+	
+	<select id="getRoomNum" resultType="String">
+		SELECT c1.chat_idx 
+			FROM chat_link c1 JOIN chat_link c2 
+			ON c1.chat_idx = c2.chat_idx 
+			WHERE c1.id = #{unlikeId} AND c2.id = #{id}
+	</select>
+	
+	<insert id="createRoom" 
+		useGeneratedKeys="true"
+		keyColumn="chat_idx"
+		keyProperty="chat_idx"
+		parameterType="com.erunjrun.chat.dto.ChatPersonalDTO">
+		INSERT INTO chat (create_date) VALUES (#{create_date})
+		<!-- insert into chat_link (chat_idx,id) values (generatedkey, #{}); -->
+	</insert>
+	
+	<insert id="linkRoom">
+		INSERT INTO chat_link (chat_idx,id) 
+			VALUES (#{chat_idx},#{id}), (#{chat_idx},#{unlikeId})
+	</insert>
 </mapper>

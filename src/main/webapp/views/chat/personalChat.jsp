@@ -5,9 +5,11 @@
 <meta charset="UTF-8">
 <title>이런저런</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="resources/css/common.css">
+<link rel="stylesheet" href="/resources/css/common.css">
 
  <style>
+	 html {overflow:hidden;} 
+
     .chat {
         width: 400px; height: 700px;
     }
@@ -46,13 +48,27 @@
 		padding: 26px 14px 26px 7px;
 		background: #f8f8f8;
 		border-radius: 20px 20px 0 0;
+		overflow-y: auto;
+	}
+	.msg-area::-webkit-scrollbar {
+	    width: 10px;
+	}
+	.msg-area::-webkit-scrollbar-track {
+	    background-color: #eaeaea;
+	}
+	.msg-area::-webkit-scrollbar-thumb { 
+	    background-color: #d0d0d0;
+	    border-radius: 10px;
+	}
+	.msg-area::-webkit-scrollbar-button {
+	    display: none;
 	}
 	.chat .profile-box {
 		display : flex; display: -moz-box; display: -ms-flexbox;
 		-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
 		-webkit-box-align: center; -ms-flex-align: center; align-items: center;
 		flex-shrink: 0;  
-		width: 40px; height: 40px;
+		width: 44px; height: 44px;
 		margin-right: 2px;
 	}
 	.chat .profile-box .profile-img {
@@ -92,6 +108,7 @@
 		 flex-direction: row-reverse;
 	}
 	.chat .line .time {
+	    min-width: fit-content;
 		margin-left: 4px;
 		font-size: 10px;
 		color: #666;
@@ -128,53 +145,31 @@
 		padding: 6px 0 8px;
 		text-align: right;
 	}
-
+	.chat .tag-date {
+		width: 120px;
+	    margin: 30px auto;
+	    padding: 1px 0;
+	    background: #999;
+	    color: #fff;
+	    border-radius: 100px;
+	    font-size: 12px;
+	    text-align: center;
+	}
+	.chat .tag-date:first-of-type {
+		margin-top:0;
+	}
 </style>
 </head>
 <body>
 	<div class="chat">
-		<input type="hidden" name="chatIdx" value="1"/>
+		<input type="hidden" name="chatIdx" value="${roomNum}"/>
         <div class="top-bar">
             <div class="title-box">
-                <span class="title">김현아, 김지성</span><img src="/resources/img/common/ico_user.png" alt="인원수"/><span class="num">2</span>
+                <span class="title"></span><img src="/resources/img/common/ico_user.png" alt="인원수"/><span class="num"></span>
             </div>
             <span class="exit"></span>
         </div>
         <div class="msg-area">
-            <div class="line">
-            	<!-- check!! 아이콘 & 프로필 이미지 바꾸기 -->
-            	<div class="profile-box" style="background: url('/resources/img/icon/') center center / 100% 100% no-repeat;">
-            		<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>
-            		<%-- <div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div> --%>
-                </div>
-            
-               <%--  <div class="profile-box" style="background: url('/resources/img/icon/${profileDto.icon_image}') center center / 100% 100% no-repeat;">
-                    <!-- <c:choose>
-                        <c:when test="${not empty profileDto.image}">   -->
-                            <div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div>
-                        <!-- </c:when>
-                        <c:otherwise> -->
-                            <div class="profile-img"  style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>
-                        <!-- </c:otherwise> -->
-                    </c:choose>
-                </div> --%>
-                <div class="name-text">
-                    <div class="name">김현아</div>
-                    <div class="text-area">
-                        <div class="text">안녕하세요!</div>
-                        <div class="time">오후 5:18</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="line me">
-                <div class="name-text">
-                    <div class="text-area">
-                        <div class="text">안녕하세요! 반갑습니다. </div>
-                        <div class="time">오후 5:18</div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="btm-box">
@@ -201,60 +196,106 @@
 
 
 <script>
+	console.log("roomNum", "${roomNum}");
+	//없으면 채팅방을 만들고채팅방 넘버를 전달해줘야함.
+
+
 	var chatIdx = $('input[name="chatIdx"]').val();
 	$.ajax({
 		type: 'GET',
-		url: '/personalChatList/'+chatIdx,
+		url: '/chat/data/'+chatIdx,
 		//contentType: 'application/json', // JSON 형식으로 보낼 경우 필요
 	    //data: JSON.stringify(users),  // 배열을 JSON 문자열로 변환
 		dataType: 'JSON',
-		success: function(list){
-			console.log(list);
-			drawContent(list);
+		success: function(data){
+			console.log(data);
+			drawContent(data.msgList);
+			drawTitle(data.userNames);
 		},
 		error: function(e){
 			console.log(e);
 		}
 	});
 
+	// 채팅방제목(참여 유저닉네임)
+	function drawTitle(userNames){
+		var nameCont = '';
+		userNames.forEach(function(name,index){
+			nameCont+= name;
+			if(index != userNames.length-1){
+				nameCont+= ', ';
+			}
+		});
+		$('.chat .top-bar .title').text(nameCont);
+		$('.chat .top-bar .num').text(userNames.length);
+	}
 	
 	function drawContent(list){
 		var msgCont = '';
-		list.forEach(function(cont){
-			console.log("line.content",cont.content);
-			/* if(cont.sender = ${sessionCope.loginId}){
-				msgCont += '<div class="line">';
-            
-				msgCont += '<div class="profile-box" style="background: url('/resources/img/icon/${profileDto.icon_image}') center center / 100% 100% no-repeat;">';
-                    <c:choose>
-                        <c:when test="${not empty profileDto.image}"> 
-                        msgCont += '<div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div>';
-                        </c:when>
-                        <c:otherwise>
-                        msgCont += '<div class="profile-img"  style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>';
-                        </c:otherwise> 
-                    </c:choose>
-                    
-                    
-               
-                    
-                    
-                    
-                    
-                    msgCont += '</div>';
-                <div class="name-text">
-                    <div class="name">김현아</div>
-                    <div class="text-area">
-                        <div class="text">안녕하세요!</div>
-                        <div class="time">오후 5:18</div>
-                    </div>
-                </div>
-            </div> 
-			}*/
-		});
+		if(list.length>0){
+			list.forEach(function(cont){
+
+				var timestamp = cont.start_date;
+				var date = timestamp.split('T')[0];
+				var cvTime = convertHour(timestamp);
+				
+				// 24 -> 12시간으로 변환
+				function convertHour(a) {
+					var time = timestamp.split('T')[1].slice(0,5);
+					var getHour = time.substring(0, 2); 
+					var intHour = parseInt(getHour);  
+					if (intHour < 12 ) { 
+						var str = '오전 ';
+					} else {
+						var str = '오후 ';  
+					}
+					if (intHour == 12) {
+						var cvHour = intHour;
+					}
+					else {
+						var cvHour = intHour%12;
+					}
+					// 'hh:mm'형태로 만들기
+					var res = str + ('0' + cvHour).slice(-2) + time.slice(-3);  
+					// return
+					return res;
+				}
+				
+				
+				if(cont.firstOfDay != null){
+					msgCont +='<div class="tag-date">'+cont.firstOfDay+'</div>';
+				}
+				if(cont.sender == '${sessionScope.loginId}'){
+					msgCont += '<div class="line me">';
+				}else{
+					msgCont += '<div class="line">';				
+				}
+				if(cont.sender != '${sessionScope.loginId}'){
+					msgCont += '<div class="profile-box" style="background: url(/resources/img/icon/'+cont.icon_image+') center center / 100% 100% no-repeat;">';
+	               if(cont.image != null){
+		                   msgCont += '<div class="profile-img" style="background: url(/photo/'+cont.image+') center center / cover no-repeat;"></div>';
+	               }else{  
+		                   msgCont += '<div class="profile-img"  style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>';
+	               }
+		            msgCont += '</div>';
+				}
+				
+		           msgCont += '<div class="name-text">';
+		           if(cont.sender != '${sessionScope.loginId}'){
+		           		msgCont += '<div class="name">'+cont.nickname+'</div>';
+		           }
+		           msgCont += '<div class="text-area">';
+		           msgCont += '<div class="text">'+cont.content+'</div>';
+		           msgCont += '<div class="time">'+cvTime+'</div>';
+		           msgCont += '</div></div></div>'; 
+				
+			});
+		}else{
+			msgCont += '<img src="/resources/img/common/ico_chat.png" alt="[채팅]"><p>채팅을 시작해보세요!</p>';
+		}
 		
 		
-					
+		$('.msg-area').append(msgCont);		
 
 	}
     

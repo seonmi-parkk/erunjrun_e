@@ -324,7 +324,7 @@
 				if(member.icon_image != null){
 					icon = 'background: url(/resources/img/icon/'+member.icon_image+') center center / 100% 100% no-repeat';
 				}
-				userCont+='<div class="profile-box" style="">';
+				userCont+='<div class="profile-box" style="'+icon+'">';
 		           	if(member.image != null){
 		           		userCont+='<div class="profile-img" style="background: url(/photo/'+member.image+') center center / cover no-repeat;"></div>';
 		           		

@@ -71,7 +71,7 @@ public class MateService {
 //		if(mateDAO.profileOpen(toUserId).equals("Y")) {
 //			isOpened = true;
 //		}
-		//logger.info("isOpend:"+isOpened);
+		logger.info("toUserId:"+toUserId);
 		MateProfileDTO profileDTO = mateDAO.getProfile(toUserId);
 		int birthYear = Integer.parseInt(profileDTO.getBirth().split("-")[0]);
 		Calendar c = Calendar.getInstance();

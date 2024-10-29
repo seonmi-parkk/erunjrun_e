@@ -138,6 +138,38 @@
 	    xhr.send();
 	}
 	
+
 	
 
 	
+	// 채팅방 열기
+	function chat(id,unlikeId){
+		$.ajax({
+			type:'GET',
+			url:'/chat/'+id+'/'+unlikeId,
+			data:{},
+			dataType:'JSON',
+			success:function(data){
+				console.log(data.roomNum);
+				openChat(data.roomNum);
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+	
+	function openChat(roomNum) {
+	    // 새 창의 URL
+	    var url = '/chat/'+roomNum;
+	
+	    // 새 창의 크기와 위치 설정
+	    var width = 400;
+	    var height = 700;
+	    var left = (screen.width - width) / 2;
+	    var top = (screen.height - height) / 2;
+	
+	    // 새 창을 열고, 크기와 위치 설정
+	    window.open(url, '_blank', `width=${width},height=${height},left=${left},top=${top},resizable=no,scrollbars=no,status=no,menubar=no,location=no`);
+	}
+
