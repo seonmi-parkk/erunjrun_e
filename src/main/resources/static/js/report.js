@@ -2,6 +2,14 @@
 	/* 신고하기 버튼 이벤트 */
 	$('#reportBoard').on('click',function(){
 		console.log('신고하기 버튼');
+		var unlike_id = $('.user').text();
+		var userId = $("input[name='reput']").val();
+		var code_name = $("input[name='code_name']").val();
+		var board_idx = $("input[name='board_idx']").val();
+		console.log('신고한', unlike_id);
+		console.log('신고받은', userId);
+		console.log('코드네임', code_name);
+		console.log('게시글 번호', board_idx);
 		reportBoard();
 	});
 	
@@ -9,15 +17,27 @@
 		
 		var formData = new FormData($('form')[0]); 
 		
-		var userId = '${sessionScope.loginId}';
-		console.log('로그인 유저 : ',userId);
+		var fileInput = $('input[type="file"]')[0]; // 파일 input에서 파일 가져오기
+        if(fileInput.files.length > 0) {
+            formData.append('report_img', fileInput.files[0]); // 파일 데이터 추가
+            console.log(fileInput);
+        }
 		
-		var codeName = 'B100';
 		
 		
-		formData.append('unlike_id',userId);
-		formData.append('code_name',codeName);
-		formData.append('subject',subect);
+		
+		
+		
+		var subject = $("input[name='subject']").text();
+        var content = $("input[name='content']").text();
+        var unlike_id = $('.user').text();
+		var userId = $("input[name='reput']").val();
+		var board_idx = $("input[name='board_idx']").val();
+         
+         
+        formData.append('id',userId);  
+        formData.append('unlike_id',unlike_id);   
+		formData.append('subject',subject);
 		formData.append('content',content);
 		
 		$.ajax({
@@ -29,7 +49,7 @@
             enctype: 'multipart/form-data',     // multipart/form-data 사용
             success: function (response) {
                 console.log('글 전송 성공:', response);
-              
+                document.getElementById("reportPopup").style.display = "none";
             },
             error: function (e) {
                 console.log('신고 전송 에러:', e);

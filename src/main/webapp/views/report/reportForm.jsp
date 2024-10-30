@@ -11,6 +11,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
     <script src="/resources/js/layerPopup.js"></script>
     <script src="/resources/js/report.js"></script>
+    <script src="/resources/js/reportSummernote.js"></script>
 <style>
 	#duri {
    	   position: relative;
@@ -110,6 +111,9 @@
 <body>
 <form enctype="multipart/form-data">
 <div class="rel">
+	<input type="hidden" value="${report.board_idx}" name="board_idx" readonly="readonly">
+	<input type="hidden" value="${report.id}" name="reput" readonly="readonly">
+	<input type="hidden" value="${report.code_name}" name="code_name" readonly="readonly">
 	<p class="title1" id="dari"><img style="height: 30;" src="/resources/img/run/진짜신고.png" alt="아이콘">
 		신고하기
 	<img style="height: 30;" src="/resources/img/run/진짜신고.png" alt="아이콘"></p>
@@ -140,10 +144,12 @@
 	</div>
 </div>	
 </form>
-</body>
 <script>
 	
-	
-
 </script>
+
+
+
+</body>
+
 </html>

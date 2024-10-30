@@ -300,7 +300,7 @@
     		</div>
 	    	<div class="com">
 	    		<div>
-	    			<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">     김진형</div>
+	    			<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">   ${sessionScope.loginId}</div>
 		    		<input type="text" class="tex">
 	    		</div>
 	    		<div>
@@ -549,11 +549,13 @@ function initializeMap() {
 		function openReport(boardIdx){
 			var modal = document.getElementById("reportPopup");
 		    var PopupBody = document.getElementById("reportPopupBody");
-		    
-			console.log('가지고와ㅣ?',${info.board_idx});
+		    var userId = '${sessionScope.loginId}';
+		    var board_idx = '${info.board_idx}';
+			console.log('가지고와ㅣ?',board_idx);
+			console.log('가지고와ㅣ?',userId);
 		    // AJAX 요청 데이터 넣을때 해당 게시판 idx 값 넣기!!!!
 		    var xhr = new XMLHttpRequest();
-		    xhr.open("GET", "/reportForm", true);
+		    xhr.open("GET", "/reportForm/"+board_idx, true);
 		    xhr.onreadystatechange = function() {
 		        if (xhr.readyState === 4 && xhr.status === 200) {
 		            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
