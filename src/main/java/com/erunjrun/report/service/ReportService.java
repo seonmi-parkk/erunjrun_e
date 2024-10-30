@@ -1,16 +1,11 @@
 package com.erunjrun.report.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.board.dto.RunBoardDTO;
-import com.erunjrun.crew.dto.CrewMemberDTO;
 import com.erunjrun.image.dto.ImageDTO;
 import com.erunjrun.report.dao.ReportDAO;
 import com.erunjrun.report.dto.ReportDTO;
@@ -31,7 +25,8 @@ public class ReportService {
 	public boolean report(ReportDTO reportDto, MultipartFile report_img) {
 		
 		 boolean report = reportDAO.report(reportDto) > 0; // 신고 테이블에 저장
-
+		 
+		 
 	        if (report && report_img != null && !report_img.isEmpty()) {
 	            String originalFilename = report_img.getOriginalFilename();
 	            String ext = originalFilename.substring(originalFilename.lastIndexOf("."));
