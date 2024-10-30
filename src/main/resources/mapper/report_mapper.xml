@@ -5,9 +5,24 @@
 
 <mapper namespace="com.erunjrun.report.dao.ReportDAO">
 	
-	<insert id="report" parameterType="com.erunjrun.report.dto.ReportDTO">
-		insert into report_write(id,code_name,content,unlike_id)
-								value(#{id},#{code_name},#{content},#{unlike_id})
+	<insert id="report" 
+				useGeneratedKeys="true"
+				keyColumn="report_idx"
+				keyProperty="report_idx"
+				parameterType="com.erunjrun.report.dto.ReportDTO">
+		insert into report_write(id,code_name,content,unlike_id,subject)
+								values(#{id},#{code_name},#{content},#{unlike_id},#{subject})
 	</insert>
+	
+	<select id="reput" parameterType="int" resultType="com.erunjrun.board.dto.RunBoardDTO">
+		select * from board where board_idx = #{board_idx}
+	</select>
+	
+	<insert id="fileWrite" parameterType="com.erunjrun.image.dto.ImageDTO">
+		INSERT INTO image(code_name, img_ori, img_new, img_no)
+						VALUES(#{code_name}, #{img_ori}, #{img_new}, #{img_no})
+	</insert>
+	
+
 	
 </mapper>

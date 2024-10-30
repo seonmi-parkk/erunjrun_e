@@ -1,6 +1,9 @@
 package com.erunjrun.report.dto;
 
 import java.util.Date;
+import java.util.List;
+
+import com.erunjrun.image.dto.ImageDTO;
 
 public class ReportDTO {
 	
@@ -9,6 +12,7 @@ public class ReportDTO {
 	private String id;
 	private String code_name;
 	private String content;
+	private String subject;
 	private Date create_date;
 	private String unlike_id;
 	private String use_yn;
@@ -18,11 +22,25 @@ public class ReportDTO {
 	// 게시판 테이블
 	private String board_idx;
 	
+	// 이미지 테이블
+	private List<ImageDTO> imgs;
 	
 	
 	
 	
 
+	public List<ImageDTO> getImgs() {
+		return imgs;
+	}
+	public void setImgs(List<ImageDTO> imgs) {
+		this.imgs = imgs;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 	public String getBoard_idx() {
 		return board_idx;
 	}
