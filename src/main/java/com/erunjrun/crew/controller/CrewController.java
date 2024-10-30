@@ -387,5 +387,36 @@ public class CrewController {
 		return resultMap;
 	}
 	
+	@PostMapping(value="/AdminUpdate")
+	public Map<String, Object> crewAdminUpdate(@RequestParam(value="crew_idx") String crew_idx, @RequestParam(value="id") String id, @RequestParam(value="leader") String leader){
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		logger.info("권한 양도 id =>" + id);
+		logger.info("리더 id =>" + leader);
+		
+		int crew_idxs = Integer.parseInt(crew_idx);
+		
+		resultMap.put("success", crew_service.crewAdminUpdate(id, leader, crew_idxs));
+		
+		return resultMap;
+	}
+	
+	@PostMapping(value="/crewExpel")
+	public Map<String, Object> crewExpel(@RequestParam(value="crew_idx") String crew_idx, @RequestParam(value="ids") List<String> ids){
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		logger.info(" 양도 id =>" + ids);
+		
+	    Map<String, Object> params = new HashMap<>();
+	    
+	    params.put("crew_idx", Integer.parseInt(crew_idx));
+	    params.put("ids", ids);
+	    params.put("code_name", "C103");
+	    
+	    // 서비스에 Map 전달
+	    resultMap.put("success", crew_service.crewExpel(params));
+	    
+	    return resultMap;
+	}
 	
 }

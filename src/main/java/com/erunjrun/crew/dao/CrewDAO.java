@@ -69,6 +69,12 @@ public interface CrewDAO {
 	int crewMemberRefusal(Map<String, Object> parmeterMap);
 
 	int crewChatInsert(int img_no);
+
+	int crewAdminUpdate(Map<String, Object> parmeterMap);
+
+	int crewExpel(Map<String, Object> params);
+
+	int crewExpelHistoryWrite(Map<String, Object> params);
 	
 	
 
