@@ -1,6 +1,9 @@
 package com.erunjrun.chat.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +63,7 @@ public class ChatPersonalController {
         return "chat/personalChat";
     }
 
+	 // 채팅내용 불러오기
 	 @GetMapping("/chat/data/{chatIdx}")
 	 @ResponseBody
 	 public Map<String, Object> getContent(@PathVariable String chatIdx, HttpSession session){
@@ -70,6 +74,7 @@ public class ChatPersonalController {
 		 return values;
 	 }
 	
+	 // 메세지 전송 (여기에 pathvariable {chatIdx} 추가하고,    sseService.sendMessage(roomId, message); 추가하기)
 	 @PostMapping("/chat/send")
 	 @ResponseBody
 	 public Map<String, Object> sendMessage(@RequestBody Map<String, Object> param){
@@ -102,12 +107,16 @@ public class ChatPersonalController {
 	 
 	// 채팅 메시지 전송 - 특정 채팅방에 메시지 전송
 	    @PostMapping("/chat/{roomId}")
-	    public String postMessage(@PathVariable String roomId, @RequestParam String message) {
+	    public String postMessage(@PathVariable String roomId, @RequestParam String message, HttpSession session) {
 	        // 1. 메시지 저장 로직 (데이터베이스에 roomId와 함께 저장)
 	        // 예시: messageRepository.save(new Message(roomId, message));
 
+			
+	    	String userId = (String) session.getAttribute("loginId");
+			
+			
 	        // 2. 해당 채팅방의 클라이언트에게만 메시지 전송
-	        sseService.sendMessage(roomId, message);
+	        sseService.sendMessage(roomId, userId, message);
 
 	        return "Message sent successfully!";
 	    }

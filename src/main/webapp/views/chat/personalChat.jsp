@@ -167,6 +167,24 @@
 		font-size: 16px;
 		color: #999;
 	}
+	
+	
+	
+	/*check!! 임시  */
+	#message-input{
+	    position: absolute;
+    	top: 0;
+	}
+	#send-message{
+	    position: absolute;
+  	  	top: 50px;
+	}
+	#chat-box{
+	    position: absolute;
+    	top: 100px;
+	}
+	
+	
 </style>
 </head>
 <body onload="startSse()">
@@ -193,7 +211,7 @@
 
 
 	<input type="text" id="message-input">
-    <button onclick="sendMessage1()">Send</button>
+    <button id="send-message" onclick="sendMessage1()">Send</button>
 
     <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div>
 
@@ -375,6 +393,7 @@
         })
         .then(response => response.text())
         .then(data => console.log(data));
+        // 데이터 여러개 넣을 수 있는지?? 메세지, 시간, 상대방프사 아이콘, 닉네임
     }
 
     // SSE 연결 함수
