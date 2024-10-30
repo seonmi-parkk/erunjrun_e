@@ -249,9 +249,9 @@
 		result.forEach(function(item,idx){
 			
 			if(item.gender === '남'){
-        		genderImg = '<img src="resources/img/common/ico_male.png" width="9px" class="genderImg"/>';
+        		genderImg = '<img src="/resources/img/common/ico_male.png" width="9px" class="genderImg"/>';
         	}else{
-        		genderImg = '<img src="resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
+        		genderImg = '<img src="/resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
         	}
 			
 	        var birth = item.birth;
@@ -266,7 +266,7 @@
 	        
             content += '<tr>';
             // 프로필 + 닉네임 (나중에 연결 필요)
-            content +='<td class="profileContainer"><img src="resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.nickname+'</td>';
+            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.nickname+'</td>';
 			
 			content +='<td>'+ageGroup+'</td>';
 			content +='<td>'+genderImg+ '&nbsp;' +item.gender+'</td>';

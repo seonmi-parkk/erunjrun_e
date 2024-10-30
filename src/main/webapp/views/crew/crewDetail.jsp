@@ -286,13 +286,27 @@
  	#crewLeaderCheck{
  		color: var(--main-color);
  	}
+ 	
+ 	.btn03-s22{
+ 		display: inline-block;
+	    height: 32px;
+	    padding: 0px 11px;
+	    margin: 0px 4px;
+	    border-radius: 10px;
+	    border: 1px solid var(--main-color);
+	    color: var(--main-color);
+	    background: #fff;
+	    cursor: pointer;
+	    font-size: 14px;
+	    margin-top: 50px;
+ 	}
   
 </style>
 </head>
 <body>
 	<jsp:include page="../header.jsp"/>
 	
-	<input type="hidden" name="crew_idx" value="52"/>
+	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
 	
 	<div class="layoutbox"></div>
 	
@@ -337,6 +351,7 @@
 			<div class="contentbox">
 				<span><img src="/resources/img/crew/img06.png" width="17px" class="imglayout"/> 마지막 대화 n 분 전</span>
 			</div>
+			<a href="/crewList"><button class="btn03-s22">목록</button></a>
 		</div>
 
 		<div class="two">
@@ -488,7 +503,7 @@
 	                    
 	                    // 프로필 이미지 '' 여부 확인해서 이미지 설정 if문 추가 필요
    	                   /*  var profileImg = '<img src="/photo/' + result.image + '"/>';  */
-	                    var profileImg = '<img src="resources/img/common/profile.png" width="32px"/>';
+	                    var profileImg = '<img src="/resources/img/common/profile.png" width="32px"/>';
 	                    
 	                    var genderImg = '';
 	                    var content = '';
@@ -496,9 +511,9 @@
 	                    result.forEach(function(item, idx){
 	                    	// 성별 체크 -> 이미지 변환
 	                    	if(item.gender === '남'){
-	                    		genderImg = '<img src="resources/img/common/ico_male.png" width="9px" class="genderImg"/>';
+	                    		genderImg = '<img src="/resources/img/common/ico_male.png" width="9px" class="genderImg"/>';
 	                    	}else{
-	                    		genderImg = '<img src="resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
+	                    		genderImg = '<img src="/resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
 	                    	}
 	                    	
 	                    	// 크루장 체크 -> 회원 리스트 노출 내용
@@ -566,11 +581,11 @@
 				if(response.success){
 					likeCrew = 'Y';
 	    			console.log('좋아요 리스트에서 회원 있음');
-	    			$('#likeImg').attr('src', 'resources/img/common/ico_heart_act.png');
+	    			$('#likeImg').attr('src', '/resources/img/common/ico_heart_act.png');
 				}else{
 					likeCrew = 'N';
 					console.log('좋아요 리스트에서 회원 없음');
-					$('#likeImg').attr('src', 'resources/img/common/ico_heart_no_act.png');
+					$('#likeImg').attr('src', '/resources/img/common/ico_heart_no_act.png');
 				}
 				// DB에서 찾아온 count가 1이면 하트로 0이면 빈 하트로
 			},error: function(e){
@@ -705,7 +720,7 @@
 			location.href='#';
 			console.log('크루 1:1 채팅');
 		}else{
-			location.href='#';
+			location.href="/crewManagerList/"+$('input[name="crew_idx"]').val();
 			console.log('크루장 관리 페이지 이동');
 		}
 	}
@@ -715,7 +730,7 @@
 	}
 	
 	function crewUpdate(){
-		location.href='/'; // 크루수정페이지로 수정 필요
+		location.href="/crewUpdate/"+ $('input[name="crew_idx"]').val(); // 크루수정페이지로 수정 필요
 	}
 	
 	
@@ -726,7 +741,7 @@
     	$.ajax({
     		type: 'DELETE',
     		url: '/crew/delete',
-    		data: {'crew_idx' : crew_idx},
+    		data: {'crew_idx' : $('input[name="crew_idx"]').val()},
     		dataType: 'JSON',
     		success: function(response){
     			if(response.success){
@@ -734,7 +749,7 @@
 					layerPopup('완료되었습니다.', '확인', '', function() {
 						console.log('삭제성공');
 	                    applBtn2Act();
-	                    location.href = '/' // 크루 리스트 페이지로 이동
+	                    location.href = '/crewList' // 크루 리스트 페이지로 이동
 	                }, function() {
 	                    applBtn2Act();
 	                    location.href = '/' 

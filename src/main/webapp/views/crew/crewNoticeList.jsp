@@ -69,7 +69,7 @@
     	background: #fff;
     	border-radius: 10px;
     }
-	   .profileDetail {
+	.profileDetail {
    	   position: relative;
    	   width: 760px;
        padding: 34px 50px 10px;
@@ -80,11 +80,7 @@
        font-size: 30px;
        margin-bottom: 0px;
    }
-   .addr{
-   	    transform: translateY(5px);
-    	display: inline-block;
-   }
-   
+
    .layoutbox-bt {
 	    height: 90px; /* 하단 배너 영역의 높이를 90px로 설정 */
 	    background-color: white; /* 배경색을 흰색으로 설정 */
@@ -96,36 +92,12 @@
     	height: 46px;
     }
     
-    .genderImg{
-    	padding-bottom: 2px;
-    }
-    
-    #btn04-s{
-    	display: inline-block;
-        height: 32px;
-        padding: 6px 11px;
-        margin: 0 4px;
-        border-radius: 10px;
-        border: 1px solid #6994FF;
-        color: #6994FF;
-        background: #fff;
-        cursor: pointer;
-        font-size: 14px;
-    }
-    
-     .profileBox{
-    	margin-right: 10px;
-    } 
-
+  	
+  	table thead tr th.thSize{
+  		width: 550px;
+  	}
 	
-	/* 프로필 컨테이너 */
-	table tbody tr td.profileContainer {
-	    display: block;
-	    align-items: center;
-	    vertical-align: middle;
-	    text-align: left;
-    	margin-left: 60px;
-	}   
+	
 </style>
 </head>
 <body>
@@ -135,7 +107,7 @@
 	<p class="title1">크루 공지사항</p>
 	<form id="searchForm">
     <select id="searchOption">
-        <option value="subject">닉네임</option>
+        <option value="subject">제목</option>
         <option value="nickname">작성자</option>
         <option value="content">내용</option>
     </select>
@@ -146,7 +118,7 @@
 		<thead>
 			<tr>
 				<th>no</th>
-				<th>제목</th>
+				<th class="thSize">제목</th>
 				<th>작성자</th>
 				<th>조회수</th>
 				<th>작성일</th>
@@ -266,18 +238,28 @@
 			
 			// 공지넘버가 1~3이면 상단에 배치하는 로직 구현 필요
 			var priority = item.priority; // 순위
+			var noticeBtn = '';
+			
+			if(item.priority == 1 || item.priority == 2 || item.priority == 3){
+				console.log('필독 1번 =>', item.notice_idx);
+				noticeBtn = '<button class="btn02-s">필독공지</button>';
+			}else{
+				console.log('일반 공지');
+				noticeBtn = item.notice_idx;
+			}
+			
 			
             content += '<tr>';
             
-            content += '<td>'+item.notice_idx+'</td>';
-            content += '<td>'+item.subject+'</td>';
+            content += '<td>'+noticeBtn+'</td>';
+            content += '<td class="subjectTable"><a href="/crewNoticeDetail/'+item.notice_idx+'">'+item.subject+'</a></td>';
             content += '<td>'+item.nickname+'</td>';
             content += '<td>'+item.hit+'</td>';
             content += '<td>'+item.create_date+'</td>';
 	        content += '</tr>';
 
 		});
-		$('#list').append(content);
+		$('#list').html(content);
 	}
 	 	
 	 	

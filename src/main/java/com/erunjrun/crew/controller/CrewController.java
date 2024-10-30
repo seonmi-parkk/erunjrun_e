@@ -1,4 +1,4 @@
-package com.erunjrun.crew.controller;
+ package com.erunjrun.crew.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.crew.dto.CrewDTO;
 import com.erunjrun.crew.dto.CrewMemberDTO;
+import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.crew.service.CrewService;
 import com.erunjrun.image.dto.ImageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,7 +57,7 @@ public class CrewController {
 	
 	@PostMapping(value="/write")
 	public Map<String, Object> submitPost(@RequestParam("crew_img") MultipartFile crew_img, 
-			@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // boardDto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
+			@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson) { // Dto랑 이름이 같으면 착각하고 에러나서 이름 다르게!
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		
@@ -68,7 +69,7 @@ public class CrewController {
 		try {
 			// TypeFactory를 사용하여 제네릭 타입을 처리
 	        imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ImageDTO.class));
-	        crewDto.setImgs(imgs);  // 변환한 리스트를 BoardDTO에 설정
+	        crewDto.setImgs(imgs);  // 변환한 리스트를 DTO에 설정
 		} catch (Exception e) {
 			logger.error("파싱 오류 : {}", e.getMessage());
 			return Map.of("error", e.getMessage());
@@ -116,10 +117,6 @@ public class CrewController {
 	@PutMapping(value="/update")
 	public Map<String, Object> crewUpdate(@RequestParam("crew_img") MultipartFile crew_img, 
 			@ModelAttribute CrewDTO crewDto, @RequestParam("imgsJson") String imgsJson){
-		
-		// 나중에 빼줘야 함
-		int crew_idx = 39;
-		crewDto.setCrew_idx(crew_idx);
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		
@@ -425,10 +422,80 @@ public class CrewController {
 		
 		logger.info("crew_idx : priority " + crew_idx + " : " + priority);
 		
-		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("success", crew_service.crewPriorityOverlay(crew_idx, priority));
 		
-		return null;
+		CrewNoticeDTO crewNoticeDto = new CrewNoticeDTO();
+		crewNoticeDto.setCrew_idx(Integer.parseInt(crew_idx));
+		crewNoticeDto.setPriority(priority);
+		
+		Map<String, Object> resultMap = crew_service.crewPriorityOverlay(crewNoticeDto);
+		return resultMap;
+	}
+	
+	@PostMapping(value="/noticeWrite")
+	public Map<String, Object> crewNoticeWrite(@ModelAttribute CrewNoticeDTO crewNoticeDto, @RequestParam("imgsJson") String imgsJson){
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		List<ImageDTO> imgs = null;
+		try {
+			// TypeFactory를 사용하여 제네릭 타입을 처리
+	        imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ImageDTO.class));
+	        crewNoticeDto.setImgs(imgs);  // 변환한 리스트를 DTO에 설정
+		} catch (Exception e) {
+			logger.error("파싱 오류 : {}", e.getMessage());
+			return Map.of("error", e.getMessage());
+		}
+		
+		if (imgs != null && !imgs.isEmpty()) {
+		    for (ImageDTO img : imgs) {
+		        logger.info("Original Filename: " + img.getImg_ori());
+		        logger.info("New Filename: " + img.getImg_new());
+		    }
+		}
+		
+		logger.info("crewNoticeDto => " + crewNoticeDto.toString());
+		
+		if(crew_service.crewNoticeWrite(crewNoticeDto)) {
+			logger.info("공지사항 업로드 완료");
+			resultMap.put("success", true);
+			resultMap.put("notice_idx", crewNoticeDto.getNotice_idx());
+		}
+		
+		
+		return resultMap;
+	}
+	
+	
+	@PostMapping(value="/noticePriorityUpdate")
+	public Map<String, Object> crewNoticePriorityUpdate(@RequestParam(value="crew_idx") String crew_idx, 
+			@RequestParam(value="priority") String priority){
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("success", crew_service.crewNoticePriorityUpdate(crew_idx, priority));
+		return resultMap;
+		
+	}
+	
+	@PostMapping(value="/noticeList")
+	public Map<String, Object> crewNoticeList(@RequestParam String crew_idx,
+			@RequestParam(value = "page") int page, 
+			@RequestParam(value = "cnt") int cnt,
+			@RequestParam(defaultValue = "", value = "option") String option,
+			@RequestParam(defaultValue = "", value="keyword") String keyword){
+		
+		logger.info("keyword => "+keyword);
+		logger.info("option => "+option);
+		logger.info("crew_idx => "+crew_idx);
+		logger.info("page => "+page);
+		logger.info("cnt => "+cnt);
+		
+		int crew_idxs = Integer.parseInt(crew_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("result", crew_service.crewNoticeList(crew_idxs, page, cnt, option, keyword));
+		
+		return resultMap;
+		
 	}
 	
 }

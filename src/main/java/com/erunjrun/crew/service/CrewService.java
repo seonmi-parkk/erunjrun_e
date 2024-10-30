@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.erunjrun.crew.dao.CrewDAO;
 import com.erunjrun.crew.dto.CrewDTO;
 import com.erunjrun.crew.dto.CrewMemberDTO;
+import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.image.dto.ImageDTO;
 
 
@@ -385,6 +386,7 @@ public class CrewService {
 	    return crew_dao.crewList(filtering, offset, pageSize);
 	}
 
+	
 	public List<CrewMemberDTO> applicationAdminList(int crew_idxs, int page, int cnt, String keyword) {
 		int limit = cnt;
 		int offset = (page -1) * cnt;
@@ -455,17 +457,69 @@ public class CrewService {
 		return false;
 	}
 
-	public int crewPriorityOverlay(String crew_idx, String priority) {
+	public Map<String, Object> crewPriorityOverlay(CrewNoticeDTO crewNoticeDto) {
 		
-		int crew_idxs = Integer.parseInt(crew_idx);
+//		int crew_idxs = Integer.parseInt(crew_idx);
 		
-		Map<String, Object> params = new HashMap<>();
-		params.put("priority", priority);
-		params.put("crew_idx", crew_idxs);
+//		Map<String, Object> params = new HashMap<>();
+//		params.put("priority", priority);
+//		params.put("crew_idx", crew_idxs);
 		
-		return crew_dao.crewPriorityOverlay(params);
+		return crew_dao.crewPriorityOverlay(crewNoticeDto);
 	}
 
+	public boolean crewNoticeWrite(CrewNoticeDTO crewNoticeDto) {
+		
+		int row = crew_dao.crewNoticeWrite(crewNoticeDto);
+		
+		if(row > 0) {
+			int img_no = crewNoticeDto.getNotice_idx();
+			
+			List<ImageDTO> imgs = crewNoticeDto.getImgs();
+			if(imgs.size() > 0) {
+				for (ImageDTO img : imgs) {
 
-    
+					img.setImg_no(img_no);
+					img.setCode_name("B104");
+					fileWrite(img); // 크루 공지사항
+					
+				}
+			}
+			return true;
+		}
+		
+		return false;
+	}
+
+	public boolean crewNoticePriorityUpdate(String crew_idx, String priority) {
+		
+		if(crew_dao.crewNoticePriorityUpdate(crew_idx, priority) > 0) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	public List<CrewNoticeDTO> crewNoticeList(int crew_idxs, int page, int cnt, String option, String keyword) {
+		
+		int limit = cnt;
+		int offset = (page -1) * cnt;
+		
+		Map<String, Object> parmeterMap = new HashMap<>();
+		parmeterMap.put("limit", limit);
+		parmeterMap.put("offset", offset);
+		parmeterMap.put("option", option);
+		parmeterMap.put("keyword", keyword);
+		parmeterMap.put("crew_idx", crew_idxs);
+		
+		return crew_dao.crewNoticeList(parmeterMap);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

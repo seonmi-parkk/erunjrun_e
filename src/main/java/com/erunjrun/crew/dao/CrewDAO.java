@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.crew.dto.CrewDTO;
 import com.erunjrun.crew.dto.CrewMemberDTO;
+import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.image.dto.ImageDTO;
 
 @Mapper
@@ -76,7 +77,13 @@ public interface CrewDAO {
 
 	int crewExpelHistoryWrite(Map<String, Object> params);
 
-	int crewPriorityOverlay(Map<String, Object> params);
+	Map<String, Object> crewPriorityOverlay(CrewNoticeDTO crewNoticeDto);
+
+	int crewNoticeWrite(CrewNoticeDTO crewNoticeDto);
+
+	int crewNoticePriorityUpdate(String crew_idx, String priority);
+
+	List<CrewNoticeDTO> crewNoticeList(Map<String, Object> parmeterMap);
 	
 	
 
