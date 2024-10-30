@@ -1,4 +1,4 @@
-package com.erunjrun.admin.controller;
+/*package com.erunjrun.admin.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -434,4 +434,4 @@ public class AdminController {
 	  }
 	  
 	  
-}
+}*/

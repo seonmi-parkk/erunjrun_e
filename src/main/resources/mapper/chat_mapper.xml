@@ -11,8 +11,8 @@
 			WHERE chat_idx = #{chatIdx} AND c.use_yn = 'Y'
 	</select>
 	
-	<select id="getUserName" resultType="String">
-		SELECT nickname FROM chat_link c join member m on c.id = m.id WHERE chat_idx = #{chatIdx}
+	<select id="getUserName" resultType="com.erunjrun.chat.dto.ChatPersonalDTO">
+		SELECT c.id, nickname FROM chat_link c join member m on c.id = m.id WHERE chat_idx = #{chatIdx}
 	</select>
 	
 	<select id="getRoomNum" resultType="String">
@@ -34,5 +34,10 @@
 	<insert id="linkRoom">
 		INSERT INTO chat_link (chat_idx,id) 
 			VALUES (#{chat_idx},#{id}), (#{chat_idx},#{unlikeId})
+	</insert>
+	
+	<insert id="sendMessage" parameterType="map">
+		INSERT INTO  chat_content (chat_idx,content,sender,recipient) 
+			VALUES (#{chatIdx},#{message},#{baseUser},#{otherUser})
 	</insert>
 </mapper>

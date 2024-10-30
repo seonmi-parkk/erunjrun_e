@@ -158,11 +158,22 @@
 	.chat .tag-date:first-of-type {
 		margin-top:0;
 	}
+	.chat .empty-msg{
+		margin-top: 150px;
+		text-align: center;
+	}
+	.chat .empty-msg p{
+		margin-top: 16px;
+		font-size: 16px;
+		color: #999;
+	}
 </style>
 </head>
-<body>
+<body onload="startSse()">
 	<div class="chat">
 		<input type="hidden" name="chatIdx" value="${roomNum}"/>
+		<input type="hidden" name="baseUser" value=""/>
+		<input type="hidden" name="otherUser" value=""/>
         <div class="top-bar">
             <div class="title-box">
                 <span class="title"></span><img src="/resources/img/common/ico_user.png" alt="인원수"/><span class="num"></span>
@@ -175,22 +186,19 @@
         <div class="btm-box">
             <textarea name="msg"></textarea>
             <div class="btn-area">
-            	<button class="btn01-s" type="submit">전송</button>
+            	<button class="btn01-s" onclick="sendMessage()">전송</button>
            	</div>
         </div>
-
     </div>
 
 
+	<input type="text" id="message-input">
+    <button onclick="sendMessage1()">Send</button>
 
+    <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div>
 
-
-
-
-
+	<!-- <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div> -->
 </body>
-
-
 
 <script src="/resources/js/common.js" type="text/javascript"></script>
 
@@ -210,7 +218,7 @@
 		success: function(data){
 			console.log(data);
 			drawContent(data.msgList);
-			drawTitle(data.userNames);
+			drawTitle(data.userList);
 		},
 		error: function(e){
 			console.log(e);
@@ -218,16 +226,25 @@
 	});
 
 	// 채팅방제목(참여 유저닉네임)
-	function drawTitle(userNames){
+	function drawTitle(userList){
 		var nameCont = '';
-		userNames.forEach(function(name,index){
-			nameCont+= name;
-			if(index != userNames.length-1){
+		console.log("userList",userList);
+		userList.forEach(function(user,index){
+			nameCont+= user.nickname;
+			if(index != userList.length-1){
 				nameCont+= ', ';
+			}
+			// 유저 아이디 세팅
+			if(user.id == '${sessionScope.loginId}'){				
+				$('.chat input[name="baseUser"]').val(user.id);
+			}else{
+				$('.chat input[name="otherUser"]').val(user.id);				
 			}
 		});
 		$('.chat .top-bar .title').text(nameCont);
-		$('.chat .top-bar .num').text(userNames.length);
+		$('.chat .top-bar .num').text(userList.length);
+		
+
 	}
 	
 	function drawContent(list){
@@ -291,13 +308,95 @@
 				
 			});
 		}else{
-			msgCont += '<img src="/resources/img/common/ico_chat.png" alt="[채팅]"><p>채팅을 시작해보세요!</p>';
+			msgCont += '<div class="empty-msg"><img src="/resources/img/common/ico_chat.png" alt="[채팅]"><p>채팅을 시작해보세요!</p></div>';
 		}
 		
 		
 		$('.msg-area').append(msgCont);		
 
 	}
+	
+	function sendMessage(){
+		//var message = $('.chat .msg').text();
+		var sendData = {};
+		sendData.message = $('.chat textarea[name="msg"]').val();
+		sendData.chatIdx = chatIdx;
+		sendData.baseUser = $('.chat input[name="baseUser"]').val();
+		sendData.otherUser = $('.chat input[name="otherUser"]').val();	
+		
+		$.ajax({
+			type: 'POST',
+			url: '/chat/send/',
+			contentType: 'application/json', 
+		    data: JSON.stringify(sendData),  
+			dataType: 'JSON',
+			success: function(data){
+				console.log(data);
+
+			},
+			error: function(e){
+				console.log(e);
+			}
+		});
+		
+	}
+	
+	
+	// db변동 발생시 업데이트
+	/*  function startSse() {
+        if (!!window.EventSource) {
+            const eventSource = new EventSource('/sse');
+
+            eventSource.onmessage = function(event) {
+                const newElement = document.createElement("div");
+                newElement.innerHTML = "Received message: " + event.data;
+                document.getElementById("chat-box").appendChild(newElement);
+            };
+
+            eventSource.onerror = function(event) {
+                console.error("SSE error occurred");
+                eventSource.close();  // 에러 발생 시 SSE 연결 닫기
+            };
+        } else {
+            alert("Your browser does not support SSE.");
+        }
+    } */
+    
+ // 메시지 전송 함수
+    function sendMessage1() {
+    	const message = document.getElementById("message-input").value;
+
+        fetch('/chat/' + chatIdx, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'message=' + encodeURIComponent(message)
+        })
+        .then(response => response.text())
+        .then(data => console.log(data));
+    }
+
+    // SSE 연결 함수
+    function startSse() {
+    	if (!!window.EventSource) {
+            const eventSource = new EventSource('/chat/' + chatIdx + '/sse');
+
+            eventSource.onmessage = function(event) {
+                const newElement = document.createElement("div");
+                newElement.innerHTML = "New message: " + event.data;
+                document.getElementById("chat-box").appendChild(newElement);
+            };
+
+            eventSource.onerror = function(event) {
+                console.error("SSE error occurred");
+                eventSource.close();  // 에러 발생 시 SSE 연결 닫기
+            };
+        } else {
+            alert("Your browser does not support SSE.");
+        }
+    }
+    
     
 </script>
 </html>

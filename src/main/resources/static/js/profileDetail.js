@@ -142,7 +142,7 @@
 	
 
 	
-	// 채팅방 열기
+	// 채팅방 id가져오기
 	function chat(id,unlikeId){
 		$.ajax({
 			type:'GET',
@@ -159,6 +159,7 @@
 		});
 	}
 	
+	// 채팅방 열기
 	function openChat(roomNum) {
 	    // 새 창의 URL
 	    var url = '/chat/'+roomNum;
