@@ -59,7 +59,7 @@ public interface AdminDAO {
     void updateRightN(Date endDate);
 	
 // 신고	
-	public List<AdminDTO> reportlist(int limit, int offset);
+	public List<AdminDTO> reportlist(int limit, int offset,String category);
 
 	public int reportcount(int cnt_);
 

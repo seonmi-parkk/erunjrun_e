@@ -115,8 +115,8 @@
                         <th>닉네임</th>
                         <th>이메일</th>
                         <th>권한</th>
-                        <th onclick="sortby(report_count)">신고누적수</th>
-                        <th onclick="sortby(join_date)">가입일시</th>
+                        <th onclick="sortby('report_count')">신고누적수</th>
+                        <th onclick="sortby('join_date')">가입일시</th>
                     </tr>
                 </thead>
                 <tbody id="list"></tbody>
@@ -140,16 +140,26 @@
     var show = 1;
     pageCall(show);
 
+    var currentSortField = '';
+    var currentSortOrder = 'ASC';
+
     function sortby(field) {
-        const currentOrder = $('#sortOrder').val() || 'ASC';
-        const newOrder = currentOrder === 'ASC' ? 'DESC' : 'ASC';
-        $('#sortOrder').val(newOrder);
-        pageCall(1, field, newOrder);
+        // 같은 필드를 클릭하면 정렬 순서를 반대로 변경
+        if (currentSortField == field) {
+            currentSortOrder = currentSortOrder == 'ASC' ? 'DESC' : 'ASC';
+        } else {
+            // 새로운 필드를 클릭하면 정렬 순서를 ASC로 초기화
+            currentSortField = field;
+            currentSortOrder = 'ASC';
+        }
+
+        // 정렬된 순서와 필드로 페이지 호출
+        pageCall(1, currentSortField, currentSortOrder);
     }
 
     function pageCall(page, sortField = '', sortOrder = '') {
-        const keyword = $('#searchKeyword').val();
-        const opt = $('#searchOption').val();
+        var keyword = $('#searchKeyword').val();
+        var opt = $('#searchOption').val();
 
         $.ajax({
             type: 'GET',
@@ -167,7 +177,7 @@
                 console.log(data);
                 drawList(data.list);
                 $('#pagination').twbsPagination({
-                    startPage: 1,
+                    startPage: page,
                     totalPages: data.totalPages,
                     visiblePages: 10,
                     onPageClick: function (evt, page) {
@@ -181,17 +191,19 @@
         });
     }
 
+
     function drawList(list) {
         var content = '';
         for (var view of list) {
-            content += '<tr>';
-            content += `<td style="${view.report_status === 'Y' ? 'color: blue;' : ''}">${view.id}</td>`;
-            content += `<td><a href="adminMemberDetail?id=${view.id}">${view.nickname}</a></td>`;
-            content += `<td>${view.email}</td>`;
-            content += `<td><a href="memberRight?nickname=${view.nickname}" style="color: orange;">권한</a></td>`;
-            content += `<td>${view.report_count}</td>`;
-            content += `<td>${view.join_date}</td>`;
-            content += '</tr>';
+        	content += '<tr>';
+        	content += '<td style="' + (view.report_status == 'Y' ? 'color: blue;' : '') + '">' + view.id + '</td>';
+        	content += '<td><a href="adminMemberDetail?id=' + view.id + '">' + view.nickname + '</a></td>';
+        	content += '<td>' + view.email + '</td>';
+        	content += '<td><a href="memberRight?nickname=' + view.nickname + '" style="color: orange;">권한</a></td>';
+        	content += '<td>' + view.report_count + '</td>';
+        	content += '<td>' + view.join_date + '</td>';
+        	content += '</tr>';
+
         }
         $('#list').html(content);
     }
