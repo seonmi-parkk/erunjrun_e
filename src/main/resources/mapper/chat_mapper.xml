@@ -59,7 +59,7 @@
 			AND id = #{baseUser}
 	</select>
 
-	<select id="getCrewLeaderUserName" resultType="">
+	<select id="getCrewLeaderUserName" resultType="String">
 		SELECT c.id, nickname FROM crew_chat_link c JOIN member m ON c.id = m.id WHERE chat_idx = #{chatIdx}
 	</select>
 	
