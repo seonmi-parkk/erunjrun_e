@@ -72,7 +72,7 @@
                         </label>
                     </div>
                     <div class="firstbox"> <!-- 레이아웃 구성을 위한 div -->
-
+						<input type="hidden" name="crew_idx" value="${crew_idx}"/>
                         <div class="boxheigth">
                             <span class="title2">크루명 </span>
                             <input type="text" name="crew_name" value="${result.crew_name}" required />
@@ -312,9 +312,7 @@ $(document).ready(function() {
             }
         });
     }
-    
-    // 크루 삭제 => use_yn = 'N' (crew_member, crew_tag => delete)
-    // 팝업 추가 필요!
+
 
     
 </script>

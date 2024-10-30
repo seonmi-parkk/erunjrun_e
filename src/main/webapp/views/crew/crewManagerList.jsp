@@ -231,7 +231,7 @@
 <body>
 	<jsp:include page="../header.jsp"/>
 	
-	<input type="hidden" name="crew_idx" value="52"/>
+	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
 	
 	<div class="layoutbox"></div>
 	
@@ -256,7 +256,7 @@
 			
 				<div class="title-layout">
 					<div class="title1-12">가입 신청 대기자</div>
-					<button class="btn02-s1">모두보기</button>
+					<a href="/crewMemberList/${crew_idx}"><button class="btn02-s1">모두보기</button></a>
 				</div>
 				<div class="content-box01" id="crewApplicationMemberList"></div>
 				
@@ -328,15 +328,15 @@
 	                crewApplicationMember(application);
 
 	                // 프로필 이미지 기본값 설정 (추가 조건이 있으면 적용 가능)
-	                var profileImg = '<img src="resources/img/common/profile.png" width="32px"/>';
+	                var profileImg = '<img src="/resources/img/common/profile.png" width="32px"/>';
 	                var genderImg = '';
 	                var content = '';
 
 	                result.forEach(function(item, idx) {
 	                    // 성별에 따른 이미지 설정
 	                    genderImg = item.gender === '남' 
-	                        ? '<img src="resources/img/common/ico_male.png" width="9px" class="genderImg"/>'
-	                        : '<img src="resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
+	                        ? '<img src="/resources/img/common/ico_male.png" width="9px" class="genderImg"/>'
+	                        : '<img src="/resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
 
 	                    // 크루장 체크
 	                    if (item.is_leader === 'Y') {
@@ -357,7 +357,7 @@
 	                    }
 	                });
 
-	                $('#crew-member-profile').append(content);
+	                $('#crew-member-profile').html(content);
 	            }
 	        },
 	        error: function (e) {
@@ -413,7 +413,7 @@
     }
     
 	function crewApplicationMember(application) {
-		var profileImg = '<img src="resources/img/common/profile.png" width="32px"/>';
+		var profileImg = '<img src="/resources/img/common/profile.png" width="32px"/>';
         var genderImg = '';
         var content = '';
         
@@ -422,8 +422,8 @@
         application.slice(0, 5).forEach(function(item, idx) {
 	        // 성별에 따른 이미지 설정
 	        var genderImg = item.gender === '남' 
-	            ? '<img src="resources/img/common/ico_male.png" width="9px" class="genderImg"/>'
-	            : '<img src="resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
+	            ? '<img src="/resources/img/common/ico_male.png" width="9px" class="genderImg"/>'
+	            : '<img src="/resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
 
 	        // 프로필 이미지와 닉네임, 성별 및 날짜 정보 추가
 	        content += '<div class="testeee"><a href="#">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + item.create_date + '</a>'
@@ -431,7 +431,7 @@
 	            + '<button class="btn02-s" id="btn04-s" onclick="layerPopup(\'' + item.nickname + '님을 거절 하시겠습니까?\', \'거절\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'N\'); }, applBtn2Act)">거절</button></div>';
 	    });
 
-	    $('#crewApplicationMemberList').append(content);
+	    $('#crewApplicationMemberList').html(content);
 	}
 	
 	function memberResult(id, nickname, value) {
