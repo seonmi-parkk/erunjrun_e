@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <jsp:include page="header.jsp"/> 
+    <jsp:include page="../header.jsp"/> 
        
         <p class="title1">--------리스트--------</p>
         <select id="pagePerNum">
@@ -46,7 +46,7 @@
         </table>
 
        
-    <jsp:include page="footer.jsp"/>
+    <jsp:include page="../footer.jsp"/>
 
 
 

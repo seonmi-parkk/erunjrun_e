@@ -34,7 +34,7 @@
       admin_id = #{id}
    </select>
   	
-  	<select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+  <select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
     WITH ranked_ban AS (
         SELECT 
             b.id,
@@ -55,29 +55,32 @@
     FROM 
         member m
     LEFT JOIN 
-        ranked_ban rb ON m.id = rb.id AND rb.rn = 1  <!-- 가장 우선 순위가 높은 레코드만 가져오기 -->
+        ranked_ban rb ON m.id = rb.id AND rb.rn = 1
     <where>
-        <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
-            m.id LIKE CONCAT('%', #{keyword}, '%')
+        <if test="keyword != null and keyword != '' and opt == 'id'">
+            AND m.id LIKE CONCAT('%', #{keyword}, '%')
         </if>
-        <if test="keyword != null and !keyword.equals('') and opt.equals('nickname')">
-            m.nickname LIKE CONCAT('%', #{keyword}, '%')
+        <if test="keyword != null and keyword != '' and opt == 'nickname'">
+            AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
         </if>
-        <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
-            m.email LIKE CONCAT('%', #{keyword}, '%')
+        <if test="keyword != null and keyword != '' and opt == 'email'">
+            AND m.email LIKE CONCAT('%', #{keyword}, '%')
         </if>
     </where>
     GROUP BY 
         m.id, m.nickname, m.email, m.join_date, report_status
     ORDER BY 
-        <if test="sortField != null and sortField != ''">
-            ${sortField} ${sortOrder}
-        </if>
-        <if test="sortField == null or sortField == ''">
-            m.join_date DESC
-        </if>
+        <choose>
+            <when test="sortField != null and sortField != ''">
+                ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                m.join_date ASC
+            </otherwise>
+        </choose>
     LIMIT #{limit} OFFSET #{offset}
 </select>
+
 
 
   	
@@ -180,31 +183,35 @@
   
   
   
-	<select id="reportlist">
-		SELECT 
-		rw.report_idx,
-	    rw.code_name, 
-	    c1.content AS category, 
-	    rw.unlike_id,            
-		rw.create_date,
-	    a.name,
-	    rp.code_name,      
-	    c2.content AS process
-		FROM 
-		    report_write rw
-		LEFT JOIN 
-		    code c1 ON rw.code_name = c1.code_name
-		LEFT JOIN 
-		    report_process rp ON rw.report_idx = rp.report_idx
-		LEFT JOIN 
-		     code c2 ON rp.code_name = c2.code_name
-		LEFT JOIN 
-			admin a ON rp.admin_id = a.admin_id    
-		GROUP BY 
-   			rw.report_idx  
-		ORDER BY rw.report_idx DESC LIMIT #{limit} OFFSET #{offset}
-	</select>  
-  
+	<select id="reportlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+	    SELECT 
+	        rw.report_idx,
+	        rw.code_name,
+	        c1.content AS category,
+	        rw.unlike_id,
+	        rw.create_date,
+	        a.name,
+	        rp.code_name,
+	        c2.content AS process
+	    FROM 
+	        report_write rw
+	    LEFT JOIN 
+	        code c1 ON rw.code_name = c1.code_name
+	    LEFT JOIN 
+	        report_process rp ON rw.report_idx = rp.report_idx
+	    LEFT JOIN 
+	        code c2 ON rp.code_name = c2.code_name
+	    LEFT JOIN 
+	        admin a ON rp.admin_id = a.admin_id
+	    <where>
+	        <if test="category != null and category != 'all'">
+	            c1.content = #{category}
+	        </if>
+	    </where>
+	    ORDER BY rw.report_idx DESC
+	    LIMIT #{limit} OFFSET #{offset}
+	</select>
+	  
   	<select id="reportcount" resultType="int">
 		SELECT CEIL(count(report_idx)/#{param1}) AS pages FROM report_write
 	</select>
