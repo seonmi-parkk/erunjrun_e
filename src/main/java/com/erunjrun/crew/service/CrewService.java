@@ -425,6 +425,36 @@ public class CrewService {
 		return false;
 	}
 
+	public boolean crewAdminUpdate(String id, String leader, int crew_idxs) {
+		
+		Map<String, Object> parmeterMap = new HashMap<>();
+		parmeterMap.put("id", id);
+		parmeterMap.put("leader", leader);
+		parmeterMap.put("crew_idx", crew_idxs);
+		
+		int row = crew_dao.crewAdminUpdate(parmeterMap);
+		if(row > 0) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	public boolean crewExpel(Map<String, Object> params) {
+
+		int row = crew_dao.crewExpel(params);
+		
+		if(row>0) {
+			logger.info("크루 퇴출 =>" + row);
+			
+			int historyrow = crew_dao.crewExpelHistoryWrite(params);
+			logger.info("퇴출 히스토리 insert=> " + historyrow);
+			return true;
+		}
+		
+		return false;
+	}
+
 
     
 }

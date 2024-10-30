@@ -212,6 +212,19 @@
     	align-items: center;  
     	padding: 9px 0px 0px 0px;
 	}
+	
+    #btn04-s{
+    	display: inline-block;
+        height: 32px;
+        padding: 6px 11px;
+        margin: 0 4px;
+        border-radius: 10px;
+        border: 1px solid #6994FF;
+        color: #6994FF;
+        background: #fff;
+        cursor: pointer;
+        font-size: 14px;
+    }
 	 
 </style>
 </head>
@@ -266,8 +279,8 @@
 				<div class="title1-1" id="crew-name">크루원 관리</div>
 				<div class="btn-layout">
 					<button class="btn02-s1">권한기록</button>
-					<button class="btn04-s" onclick="layerPopup('크루장 권한을 양도하시겠습니까?', '확인', '취소', crewAdminUpdate, applBtn2Act)">권한</button>
-					<button class="btn02-s">퇴출</button>
+					<button class="btn04-s" onclick="crewAdminUpdate()">권한</button>
+					<button class="btn02-s" onclick="layerPopup('크루원을 퇴출하시겠습니까?', '확인', '취소', crewExpel, applBtn2Act)">퇴출</button>
 				</div>
 			</div>
 			
@@ -337,7 +350,7 @@
 	                        );
 	                    } else {
 	                        crewone.push(item.id); // 배열에 크루원 id 추가
-	                        content += '<div class="testeee"><input class="basictex" type="checkbox" name="crew_member"/><a href="#">' 
+	                        content += '<div class="testeee"><input class="basictex" type="checkbox" name="crew_member" data-id="'+item.id+'"/><a href="#">' 
 	                            + profileImg + ' ' + item.nickname 
 	                            + ' / ' + genderImg + ' / ' 
 	                            + item.create_date + '</div></a>';
@@ -367,15 +380,6 @@
                     // 받아온 데이터를 HTML에 반영
                     var result = response.result;
                     
-                    
-                    if(result.is_recruit === 'N'){
-                    	is_recruit = result.is_recruit;
-                    	$('#crew-btn-01').html('크루 모집완료');
-                    	$('#crew-btn-01').css({'border' : '1px solid var(--btn-bd-g)', 'color' : 'var(--btn-bd-g)', 'background' : '#fff'});
-                    }
-                    
-                    
-
                     // 이미지 업데이트
                     if (result.img_new) {
                         $('#crew-img').attr('src', '/photo/' + result.img_new);
@@ -399,8 +403,6 @@
                     $('#crew-days').text(day);
                     $('#crew-minute').text(result.minute);
                     $('#crew-distance').text(result.distance);
-                    $('#crew-location').text(result.shortsido + ' ' + result.sigungu);
-                    
                     
                 }
             },
@@ -414,6 +416,8 @@
 		var profileImg = '<img src="resources/img/common/profile.png" width="32px"/>';
         var genderImg = '';
         var content = '';
+        
+        console.log('신청자 리스트 함수 실행');
 	    
         application.slice(0, 5).forEach(function(item, idx) {
 	        // 성별에 따른 이미지 설정
@@ -423,14 +427,141 @@
 
 	        // 프로필 이미지와 닉네임, 성별 및 날짜 정보 추가
 	        content += '<div class="testeee"><a href="#">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + item.create_date + '</a>'
-	            + '</div>';
+	            + '<button class="btn02-s" onclick="layerPopup(\'' + item.nickname + '님을 승인 하시겠습니까?\', \'승인\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'Y\'); }, applBtn2Act)">승인</button>'
+	            + '<button class="btn02-s" id="btn04-s" onclick="layerPopup(\'' + item.nickname + '님을 거절 하시겠습니까?\', \'거절\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'N\'); }, applBtn2Act)">거절</button></div>';
 	    });
 
 	    $('#crewApplicationMemberList').append(content);
 	}
 	
-	function crewAdminUpdate(){
-		console.log('실행됨');
+	function memberResult(id, nickname, value) {
+	    console.log('ID:', id);
+	    console.log('Nickname:', nickname);
+	    console.log('value:', value);
+	    
+		var crew_idx = 52; // 나중에 변경 필요
+		var code_name = '';
+		
+		if(value === 'Y'){
+			code_name = 'C101';
+		}else{
+			code_name = 'C102';
+		}
+
+		console.log('code_name : ', code_name);			
+		console.log('실행됨>');
+		
+			$.ajax({
+			type: 'POST',
+			url: '/crew/applicationWrite',
+			data: {'loginId' : id,
+				'crew_idx' : crew_idx,
+				'code_name' : code_name},
+			dataType: 'JSON',
+			success: function(response){
+				
+				console.log('성공');
+				
+				if(response.success){
+					removeAlert();
+					layerPopup(response.msg + '완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
+					crewMemberList();
+				}else{
+					removeAlert();
+					layerPopup(response.msg + '미완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
+				}
+				
+			},error: function(e){
+				soncole.log('에러남 => ', e);
+			}
+		}); 
+		 
+	    
+	}
+	
+	// 선택된 체크박스의 ID 배열을 가져오는 함수
+	function getSelectedIds() {
+	    var selectedIds = [];
+	    $('input[name="crew_member"]:checked').each(function() {
+	        selectedIds.push($(this).data('id')); // 체크된 체크박스의 data-id 값을 배열에 추가
+	    });
+	    return selectedIds;
+	}
+
+	function crewAdminUpdate() {
+	    var selectedIds = getSelectedIds(); // 선택된 체크박스의 ID 배열 가져오기
+	    
+	    if (selectedIds.length === 0) {
+	        // 선택된 체크박스가 없을 때 알림
+	        alert("권한을 양도할 회원을 선택해 주세요.");
+	    } else if (selectedIds.length > 1) {
+	        // 1개 이상의 ID가 선택된 경우 알림
+	        layerPopup('권한은 한명에게만 양도할 수 있습니다.', '확인', false, applBtn2Act, applBtn2Act);
+	    } else {
+	        // 선택된 ID가 1개인 경우에만 권한 양도 팝업 띄우기
+	        layerPopup('권한을 양도하시겠습니까?', '확인', '취소', function() {
+	            sendCrewAdminUpdate(selectedIds[0]); // 선택된 ID를 서버에 전송
+	        }, applBtn2Act);
+	    }
+	}
+
+	
+	
+	function sendCrewAdminUpdate(memberId){
+		var selectedIds = getSelectedIds();
+	    
+	    var leader = crewLeader;
+	    console.log('선택된 ID:', selectedIds[0]); // 콘솔에 선택된 ID 출력
+	    console.log('리더 아이디 => ', leader);
+	    
+	    var crew_idx = $('input[name="crew_idx"]').val();
+		
+  		$.ajax({
+			type: 'POST',
+			url : '/crew/AdminUpdate',
+			data: { 'id' : memberId,
+					'leader' : leader,
+					'crew_idx' : crew_idx}, // JSON 형태로 전송
+			dataType: 'JSON',
+			success: function(response){
+				if(response.success){
+					removeAlert();
+					layerPopup('권한 양도 요청이 완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
+				}else{
+					removeAlert();
+					layerPopup('권한 양도 요청이 미완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
+				}
+			}, error: function(e){
+				console.log('권한 전송 중 에러 => ', e);
+			}
+		});  
+		
+	}
+	
+	function crewExpel(){
+		var crew_idx = $('input[name="crew_idx"]').val();
+		var selectedIds = getSelectedIds();
+		
+		$.ajax({
+			type: 'POST',
+			url: '/crew/crewExpel',
+			traditional: true,
+			data: { 'ids' : selectedIds,
+				'crew_idx' : crew_idx},
+			dataType: 'JSON',
+			success: function(response){
+				if(response.success){
+					removeAlert();
+					layerPopup('크루원 퇴출이 완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
+					crewMemberList();
+				}else{
+					removeAlert();
+					layerPopup('크루원 퇴출이 미완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
+				}
+			}, error: function(e){
+				console.log('권한 전송 중 에러 => ', e);
+			}
+		});
 	}
 	
 	
