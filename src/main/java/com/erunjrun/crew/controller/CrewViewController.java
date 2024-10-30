@@ -2,6 +2,8 @@ package com.erunjrun.crew.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,10 +34,11 @@ public class CrewViewController {
     	
         return "/crew/crewUpdate";
     }
-    
+
+
     @GetMapping(value="/crewDetail/{crew_idx}")
-    public String crewDetailView(@PathVariable int crew_idx, Model model) {
-    	
+    public String crewDetailView(@PathVariable int crew_idx, Model model, HttpSession session) {
+		session.setAttribute("loginId", "kimee01");
     	model.addAttribute("crew_idx", crew_idx);
     	
     	return "/crew/crewDetail";

@@ -11,8 +11,8 @@
 			WHERE chat_idx = #{chatIdx} AND c.use_yn = 'Y'
 	</select>
 	
-	<select id="getUserName" resultType="String">
-		SELECT nickname FROM chat_link c join member m on c.id = m.id WHERE chat_idx = #{chatIdx}
+	<select id="getUserName" resultType="com.erunjrun.chat.dto.ChatPersonalDTO">
+		SELECT c.id, nickname FROM chat_link c join member m on c.id = m.id WHERE chat_idx = #{chatIdx}
 	</select>
 	
 	<select id="getRoomNum" resultType="String">
@@ -35,4 +35,37 @@
 		INSERT INTO chat_link (chat_idx,id) 
 			VALUES (#{chat_idx},#{id}), (#{chat_idx},#{unlikeId})
 	</insert>
+	
+	<insert id="sendMessage" parameterType="map">
+		INSERT INTO  chat_content (chat_idx,content,sender,recipient) 
+			VALUES (#{chatIdx},#{message},#{baseUser},#{otherUser})
+	</insert>
+	
+	<update id="exitRoom">
+		UPDATE chat_link SET use_yn = 'Y' WHERE chat_idx= #{chatIdx} AND id=#{user}
+	</update>
+	
+	<delete id="deleteChatData">
+		DELETE FROM chat_content WHERE DATE(end_date) = CURDATE()
+	</delete>
+	
+	
+	
+	<select id="getCrewLeaderChat" resultType="int">
+		SELECT chat_idx FROM crew_chat_link 
+			WHERE chat_idx IN 
+				(SELECT chat_idx FROM crew_chat 
+				WHERE crew_idx = #{crewIdx} AND code_cp = 'P') 
+			AND id = #{baseUser}
+	</select>
+
+	<select id="getCrewLeaderUserName" resultType="">
+		SELECT c.id, nickname FROM crew_chat_link c JOIN member m ON c.id = m.id WHERE chat_idx = #{chatIdx}
+	</select>
+	
+	<!--크루챗방넘버 가져오기 	<select id="getCrewLeaderChat">
+		다시 작성해야함
+		SELECT chat_idx FROM crew_chat 
+			WHERE crew_idx = #{crewIdx} AND code_cp ='P'
+	</select> -->
 </mapper>

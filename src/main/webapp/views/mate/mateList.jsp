@@ -272,8 +272,8 @@
 	</div>
 </body>
 
-<script src="resources/js/common.js" type="text/javascript"></script>
-<script src="resources/js/layerPopup.js"></script>
+<script src="/resources/js/common.js" type="text/javascript"></script>
+<script src="/resources/js/layerPopup.js"></script>
 <script>
 	
 	// 해당 지역의 유저리스트 불러오기(동 기반)

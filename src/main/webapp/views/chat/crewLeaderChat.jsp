@@ -170,21 +170,9 @@
 	
 	
 	
-	/* check!! 임시 */
-	#message-input{
-		position:absolute;top:0;	
-	}
-    #message-btn{
-    	position:absolute; top: 50px;
-    }
-
-    #chat-box{
-		position: absolute;top: 100px;
-    }
-	
 </style>
 </head>
-<body onload="startSse()">
+<body>
 	<div class="chat">
 		<input type="hidden" name="chatIdx" value="${roomNum}"/>
 		<input type="hidden" name="baseUser" value=""/>
@@ -226,18 +214,16 @@
 	}
 
 	var chatIdx = $('input[name="chatIdx"]').val();
-	getChat();
+ 	getChat();
 	function getChat(){
 		$.ajax({
 			type: 'GET',
-			url: '/chat/data/'+chatIdx,
-			//contentType: 'application/json', // JSON 형식으로 보낼 경우 필요
-		    //data: JSON.stringify(users),  // 배열을 JSON 문자열로 변환
+			url: '/crewLdchat/data/'+chatIdx,
 			dataType: 'JSON',
 			success: function(data){
 				console.log(data);
-				drawContent(data.msgList);
-				drawTitle(data.userList);
+				//drawContent(data.msgList);
+				//drawTitle(data.userList);
 				scrollBtm();
 			},
 			error: function(e){
@@ -248,7 +234,7 @@
 
 
 	// 채팅방제목(참여 유저닉네임)
-	function drawTitle(userList){
+	/* function drawTitle(userList){
 		var nameCont = '';
 		console.log("userList",userList);
 		userList.forEach(function(user,index){
@@ -267,9 +253,9 @@
 		$('.chat .top-bar .num').text(userList.length);
 		
 
-	}
+	} */
 	
-	function drawContent(list){
+	/* function drawContent(list){
 		var msgCont = '';
 		if(list.length>0){
 			list.forEach(function(cont){
@@ -336,9 +322,9 @@
 		
 		$('.msg-area').html(msgCont);		
 
-	}
+	} */
 	
-	function sendMessage(){
+	/* function sendMessage(){
 		console.log("전송클릭");
 		//var message = $('.chat .msg').text();
 		var sendData = {};
@@ -364,14 +350,14 @@
 			}
 		});
 		
-	}
+	} */
 	
 	// 채팅방 나가기
-	$('.exit').on('click',function(){
+	/* $('.exit').on('click',function(){
 		layerPopup('채팅방을 나가시겠습니까?','나가기','취소',exitBtn1Act,exitBtn2Act);
-	});
+	}); */
 	
-	function exitBtn1Act(){
+	/* function exitBtn1Act(){
 		alert('나가기');
 		$.ajax({
 			type: 'POST',
@@ -388,12 +374,12 @@
 			}
 		});
 		removeAlert();
-	}
+	} */
 	
-	function exitBtn2Act(){
+	/* function exitBtn2Act(){
 		alert('취소');
 		removeAlert();
-	}
+	} */
 	
 	
 	// textarea 글자수 제한
