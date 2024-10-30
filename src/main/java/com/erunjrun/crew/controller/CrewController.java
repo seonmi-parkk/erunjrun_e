@@ -419,4 +419,16 @@ public class CrewController {
 	    return resultMap;
 	}
 	
+	@PostMapping(value="/priorityOverlay")
+	public Map<String, Object> crewPriorityOverlay(@RequestParam(value="crew_idx") String crew_idx, 
+			@RequestParam(value="priority") String priority){
+		
+		logger.info("crew_idx : priority " + crew_idx + " : " + priority);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("success", crew_service.crewPriorityOverlay(crew_idx, priority));
+		
+		return null;
+	}
+	
 }

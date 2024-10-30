@@ -455,6 +455,17 @@ public class CrewService {
 		return false;
 	}
 
+	public int crewPriorityOverlay(String crew_idx, String priority) {
+		
+		int crew_idxs = Integer.parseInt(crew_idx);
+		
+		Map<String, Object> params = new HashMap<>();
+		params.put("priority", priority);
+		params.put("crew_idx", crew_idxs);
+		
+		return crew_dao.crewPriorityOverlay(params);
+	}
+
 
     
 }

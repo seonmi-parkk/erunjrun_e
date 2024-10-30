@@ -362,4 +362,12 @@
 			</foreach>
 	</insert>
 	
+	<!-- 크루 공지사항 순위 중복체크 -->
+	<select id="crewPriorityOverlay" resultType="int" parameterType="map">
+		SELECT * FROM crew_notice WHERE crew_idx = #{crew_idx} AND priority = 
+		<if test="pri.contains('option11')">
+		#{priority}
+		</if>
+	</select>
+	
 </mapper>

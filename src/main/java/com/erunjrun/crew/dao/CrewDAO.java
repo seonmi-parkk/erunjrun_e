@@ -75,6 +75,8 @@ public interface CrewDAO {
 	int crewExpel(Map<String, Object> params);
 
 	int crewExpelHistoryWrite(Map<String, Object> params);
+
+	int crewPriorityOverlay(Map<String, Object> params);
 	
 	
 

@@ -55,5 +55,15 @@ public class CrewViewController {
     public String crewManagerView() {
     	return "/crew/crewManagerList";
     }
+    
+    @GetMapping(value="/crewNoticeListView")
+    public String crewNoticeListView() {
+    	return "/crew/crewNoticeList";
+    }
+    
+    @GetMapping(value="/crewNoticeWriteView")
+    public String crewNoticeWrete() {
+    	return "/crew/crewNoticeWrite";
+    }
 
 }
