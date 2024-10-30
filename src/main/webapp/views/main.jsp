@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+<script src="resources/js/popup.js"></script>
 <style>
 	
 </style>
@@ -15,6 +16,21 @@
 <body>
 	<!-- 헤더 -->
 	<jsp:include page="header.jsp"/> 
+	
+	<c:forEach var="popup" items="${popups}">
+        <div id="popup_${popup.popup_idx}" 
+             style="position:fixed; top:${popup.y}px; left:${popup.x}px; 
+                    width:${popup.width}px; height:${popup.height}px; 
+                    z-index:${popup.priority}; background-color:white;">
+             <h1>${popup.subject}</h1>       
+            <p>${popup.content}</p>
+            <button class="btn01-m" onclick="closePopup(${popup.popup_idx})">오늘 하루 그만 보기</button>
+        </div>
+    </c:forEach>
+	
+	
+	
+	
 	
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
 	<div class="inner">

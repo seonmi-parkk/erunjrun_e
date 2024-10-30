@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.admin.dto.AdminDTO;
+import com.erunjrun.admin.dto.PopupDTO;
 import com.erunjrun.image.dto.ImageDTO;
 
 @Mapper
@@ -50,13 +51,13 @@ public interface AdminDAO {
 	
 	public AdminDTO rightdetail(String ban_idx);
 
-	public void rightupdate(Map<String, String> param);
+	public int rightupdate(Map<String, String> param);
 	
 	 // 시작일이 오늘 또는 과거인 권한을 모두 'Y'로 업데이트
-    void updateRightY(Date sqlDate);
+	int updateRightY(Date sqlDate);
 
     // 종료일이 오늘 또는 과거인 권한을 모두 'N'으로 업데이트
-    void updateRightN(Date endDate);
+	int updateRightN(Date endDate);
 	
 // 신고	
 	public List<AdminDTO> reportlist(int limit, int offset,String category);
@@ -67,7 +68,7 @@ public interface AdminDAO {
 
 	public ImageDTO image(String report_idx);
 
-	public void reportupdate(Map<String, String> param);
+	public int reportupdate(Map<String, String> param);
 	
 	
 // 문의하기
@@ -82,11 +83,11 @@ public interface AdminDAO {
 	
 	public int tagcount(int cnt_);
 
-	public void tagwrite(Map<String, String> param);
+	public int tagwrite(Map<String, String> param);
 
 	public AdminDTO tagdetail(String tag_idx);
 
-	public void tagupdate(Map<String, String> param);
+	public int tagupdate(Map<String, String> param);
 
 	
 	
@@ -95,21 +96,29 @@ public interface AdminDAO {
 	
 	public int codecount(int cnt_);
 
-	public void codewrite(Map<String, String> param);
+	public int codewrite(Map<String, String> param);
 
 	public int codeoverlay(String code_name);
 
 	public AdminDTO codedetail(String code_name);
 
-	public void codeupdate(Map<String, String> param);
+	public int codeupdate(Map<String, String> param);
 	
 	
 	
 	
 	// 팝업
-	public List<AdminDTO> pupuplist(int limit, int offset);
+	public List<PopupDTO> popuplist(int limit, int offset);
+	
+	public int popupcount(int cnt_);
+	
+	public int popupwrite(Map<String, String> param);
 
-	public int pupupcount(int cnt_);
+	public PopupDTO popupdetail(String popup_idx);
+
+	public int popupupdate(Map<String, String> param);
+
+
 	
 	
 

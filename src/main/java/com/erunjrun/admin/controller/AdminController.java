@@ -433,5 +433,36 @@ public class AdminController {
 			return result;
 	  }
 	  
+	  @GetMapping(value = "adminPopupWrite")
+	  public String popupwrite() {
+		  return "admin/adminPopupWrite";
+	  }
+	  
+	  
+	  @PostMapping(value = "adminPopupWrite")
+	  public String popupwrite(@RequestParam Map<String, String> param, Model model) {
+      logger.info(param.get("tag_name"));
+      logger.info(param.get("use_yn"));
+      admin_service.popupwrite(param);
+		  return "redirect:/adminPopup";
+	  }
+	  
+	  @GetMapping(value = "adminPopupUpdate")
+	  public String popupupdetail(String popup_idx,Model model) { 
+		  admin_service.popupdetail(popup_idx,model);
+		  return "admin/adminPopupUpdate";
+	  }
+	  
+	  @PostMapping(value = "adminPopupUpdate")
+	  public String popupupdate(@RequestParam Map<String, String> param) { 
+		  admin_service.popupupdate(param);
+		  logger.info(param.get("popup_idx"));
+		  logger.info(param.get("content"));
+		  logger.info(param.get("use_yn"));
+		  
+		  return "redirect:/adminPopup";
+	  }
+	  
+	  
 	  
 }

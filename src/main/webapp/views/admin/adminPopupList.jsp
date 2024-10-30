@@ -110,16 +110,17 @@
         </aside>
         
         <main class="main-content">
-		<p class="title1" >태그</p>
+		<p class="title1" >팝업</p>
 	    <div class="btn01-l" onclick="location.href='adminPopupWrite'" >등록</div>
 	    
 		 <table>
 			<colgroup>
 		 		<col width="15%"/>
 		 		<col width="15%"/>
-		 		<col width="30%"/> 		
-		 		<col width="20%"/> 		
-		 		<col width="20%"/> 		
+		 		<col width="25%"/> 		
+		 		<col width="15%"/> 		
+		 		<col width="15%"/> 		
+		 		<col width="15%"/> 		
 		 	</colgroup>
 		<thead>
 			<tr>
@@ -127,6 +128,7 @@
 				<th>순서</th>
 				<th>제목</th>
 				<th>사용여부</th>
+				<th>수정</th>
 				<th>작성일자</th>
 			</tr>
 		</thead>
@@ -197,6 +199,7 @@
             } else {
             	content += '<td style="color: red;">미사용</td>';
             }
+            content +='<td><a  href="adminPopupUpdate?popup_idx='+view.popup_idx+'"style="color: orange;">수정</a></td>';
             content += '<td>'+view.create_date+'</td>';
 			content +='</tr>';
 		  }

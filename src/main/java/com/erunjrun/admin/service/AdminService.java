@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 
 import com.erunjrun.admin.dao.AdminDAO;
 import com.erunjrun.admin.dto.AdminDTO;
+import com.erunjrun.admin.dto.PopupDTO;
 import com.erunjrun.image.dto.ImageDTO;
 
 @Service
@@ -249,12 +250,29 @@ public class AdminService {
 	
 	public int popupcount(int cnt_) {
 		
-		return admin_dao.pupupcount(cnt_);
+		return admin_dao.popupcount(cnt_);
 	}
 
-	public List<AdminDTO> popuplist(int limit, int offset) {
+	public List<PopupDTO> popuplist(int limit, int offset) {
 		
-		return admin_dao.pupuplist(limit,offset);
+		return admin_dao.popuplist(limit,offset);
+	}
+
+	public void popupwrite(Map<String, String> param) {
+		admin_dao.popupwrite(param);
+		
+	}
+
+	public void popupdetail(String popup_idx, Model model) {
+		
+		model.addAttribute("info",admin_dao.popupdetail(popup_idx));
+		
+		
+	}
+
+	public void popupupdate(Map<String, String> param) {
+		admin_dao.popupupdate(param);
+		
 	}
 
 	

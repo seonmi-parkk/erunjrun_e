@@ -84,14 +84,14 @@
         <p class="title3" onclick="location.href='adminTag'">태그</p>
         <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
         <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-        <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+        <p class="title3" onclick="location.href='adminCode'">구분코드</p>
         <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
        </aside>
 	
    	 <main class="main-content">
 		<div class="btn02-l btn-category" data-category="all">전체</div>
-		<div class="btn03-l btn-category" data-category="게시글">게시글</div>
-		<div class="btn03-l btn-category" data-category="댓글">댓글</div>
+		<div class="btn03-l btn-category" data-category="게시글 신고">게시글</div>
+		<div class="btn03-l btn-category" data-category="댓글 신고">댓글</div>
 	    
 	   	 
 		<p class="title1" >신고</p>

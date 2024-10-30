@@ -79,14 +79,35 @@
     #content{
     	width: 750px; /* 너비를 250픽셀로 설정 */
         height: 350px;
-        resize: vertical; /* 높이를 50픽셀로 설정 */
+        resize: none; /* 높이를 50픽셀로 설정 */
         font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
-        padding: 10px; /* 내부 여백을 10픽셀로 설정 */
-    
+       	padding: 7px 8px; /* 내부 여백을 10픽셀로 설정 */
+       	border-radius: 6px;
+       	border: 1px solid var(--input-bd);
     }
+    
+   /*  input[type="text"]{
+        width: 360px;
+        padding: 7px 8px;
+        margin-right: 4px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: 1px solid var(--input-bd);
+    }
+    input[type="text"].input-txt-l{
+        width: 550px;
+        padding: 11px 8px;
+   		height: 46px;
+     */
+    
     #radio{
     margin-left: 10px;
     }
+    #short,#searchOption{
+   width: 100px; /* 너비를 250픽셀로 설정 */
+   font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
+   padding: 10px; 
+   }
    
     
 	.btn01-l{
@@ -123,41 +144,96 @@
         </aside>
 	 	<main class="main-content">
 	 	
-		<p class="title1" >태그</p>
+		<p class="title1" >팝업</p>
 		
 		
-	  	<form action="adminTagUpdate" method="post" id="form">
-		
-		
-		
-		
+	  	<form action="adminPopupWrite" method="post" id="form">
+	  	
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">태그 이름</p>
-			<input type="text" name="tag_idx"  value="${info.tag_idx}" hidden="hidden"/>
+			<p class="title2" id="text">제목</p>
+			<input type="text" name="subject" id="text"/>
 		</div>
 		
 		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">태그 이름</p>
-			<input type="text" name="tag_name"  value="${info.tag_name}"/>
+		<p class="title2" id="dot">•</p>
+		<p class="title2" id="text">이미지</p>
+	 		<c:if test="${file.size()>0}">
+			<tr>
+				<td>
+					<!-- /photo 라는 컨텍스트 요청이 있으면 C:/upload 로 연결하도록 설정 되어야 한다.(server.xml) -->
+					<!-- server 파일에서 server.xml - >   <Context docBase="C:/upload" path="/photo" /> -->
+						<c:forEach items = "${file}" var ="imgfile">
+							<a href="download?new_filename = ${imgfile.img_new}&ori_fileName=${imgfile.img_ori}">
+								<img alt="${imgfile.img_ori}" src="/photo/${imgfile.img_new}">
+							</a>
+						</c:forEach>
+				</td>
+			</tr>
+			</c:if>
+		</div>
+		<div class="input-container">
+		<p class="title2" id="dot">•</p>
+		<p class="title2" id="text">순서</p>
+		<select id="searchOption" name="priority">
+               <option  value="1">1</option>
+               <option value="2">2</option>
+               <option value="3">3</option>
+        </select>
 		</div>
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">사용여부</p>
-			<input type="radio" name="use_yn" value="Y" id="radio"
-				<c:if test="${info.use_yn eq 'Y'}">checked</c:if>						
-				/>사용
-				
-				<input type="radio" name="use_yn" value="N" id="radio"
-				<c:if test="${info.use_yn eq 'N'}">checked</c:if>						
-				/>미사용
+			<input type="radio" name="use_yn" value="Y" class="raido" id="radio"/>사용
+		
+			<input type="radio" name="use_yn" value="N" class="raido" id="radio"/>미사용
 		</div>
-			<button class="btn01-l" type="submit" id="text">수정</button>
-			<div class="btn02-l" onclick="location.href='adminTag'">취소</div> <!-- 클릭시 색깔변경 -->
-		</form>
-	 	</main>
+		
+		<div class="input-container">
+			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">위치</p>
+			<p class="title2" id="text"> X: </p>
+			<input type="text" name="x" id="short"/>
+			<p class="title2" id="text"> Y: </p>
+			<input type="text" name="y" id="short"/>
+		</div>
+		
+		
+		<div class="input-container">
+			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">크기</p>
+			<p class="title2" id="text"> 가로: </p>
+			<input type="text" name="width" id="short"/>
+			<p class="title2" id="text"> 세로: </p>
+			<input type="text" name="height" id="short"/>
+		</div>
+		
+		
+		<div class="input-container">
+			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">기간</p>
+			<input type="date" name="start_date" id="start_date"/>
+			<p class="title2" id=""> ~ </p>
+			<input type="date" name="end_date" id="end_date"/>
+		</div>
+		
+		<div class="input-container">
+			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">내용</p>
+			<textarea name="content" id="content"></textarea>
+			
+			
+		</div>
+		
+		
+		
+		
+		
+   	<button class="btn01-l" type="submit" id="text">등록</button>
+	<div class="btn02-l" onclick="location.href='adminPopup'">취소</div> <!-- 클릭시 색깔변경 -->
+	</form>
+	 </main>
 	</div>
 	
 	<!-- 푸터 -->

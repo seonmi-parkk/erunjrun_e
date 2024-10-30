@@ -235,14 +235,12 @@
 	  
 	  <select id="image" resultType="com.erunjrun.admin.dto.AdminDTO">
 	  	select 
-	  	i.img_ori,
-	  	i.img_new,
-	  	i.img_idx,
-	  	rw.report_idx
-	  	from image i 
-	  	Left join 
-	  	 report_write rw on rw.img_idx = i.img_idx
-	  	 where rw.report_idx = #{param1}
+	  	img_ori,
+	  	img_new,
+	  	img_no
+	  	img_idx
+	  	from image 
+	  	 where img_no = #{report_idx}
 	  </select>
 	  
 	 	<insert id="reportupdate" parameterType="Map">
@@ -365,14 +363,56 @@
   		</update>
   		
   		
-  		<select id="popuplist" resultType="com.erunjrun.admin.dto.AdminDTO">
+  		<select id="popuplist" resultType="com.erunjrun.admin.dto.PopupDTO">
 	  		select * from popup ORDER BY popup_idx DESC LIMIT #{limit} OFFSET #{offset}
 	  </select>
   		
   		<select id="popupcount" resultType="int">
 			SELECT CEIL(count(popup_idx)/#{param1}) AS pages FROM popup
 		</select>
+		
+		<insert id="popupwrite" parameterType="Map">
+			insert into popup(subject,priority,use_yn,x,y,width,height,start_date,end_date,content)
+				values(#{subject},#{priority},#{use_yn},#{x},#{y},#{width},#{height},#{start_date},#{end_date},#{content})
+		</insert>
   		
+  		<select id="popupdetail" resultType="com.erunjrun.admin.dto.PopupDTO" >
+  			select * from popup where popup_idx = #{popup_idx}
+  		</select>
   		
-  
+  		<update id="popupupdate">
+  			update popup <set>
+  		 <if test= "subject != null">
+			subject = #{subject},
+		</if>
+		<if test="priority != null">
+			priority = #{priority},
+		</if>
+		<if test="use_yn != null">
+			use_yn = #{use_yn},
+		</if>
+		<if test="x != null">
+			x = #{x},
+		</if>
+		<if test="y != null">
+			y = #{y},
+		</if>
+		<if test="width != null">
+			width = #{width},
+		</if>
+		<if test="height != null">
+			height = #{height},
+		</if>
+		<if test="start_date != null">
+			start_date = #{start_date},
+		</if>
+		<if test="end_date != null">
+			end_date = #{end_date},
+		</if>
+		<if test="content != null">
+			content = #{content}
+		</if>
+  		</set>
+			where popup_idx = #{popup_idx}	
+  		</update>
   </mapper>

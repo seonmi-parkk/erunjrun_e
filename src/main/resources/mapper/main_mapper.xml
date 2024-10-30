@@ -4,5 +4,11 @@
 >
 
 <mapper namespace="com.erunjrun.main.dao.MainDAO">
-
+	<select id="getActivePopups" resultType="com.erunjrun.admin.dto.PopupDTO">
+        SELECT * FROM popup
+        WHERE use_yn = 'Y' 
+          AND start_date &lt;= #{today}
+          AND end_date &gt;= #{today}
+        ORDER BY `priority` ASC;
+    </select>
 </mapper>
