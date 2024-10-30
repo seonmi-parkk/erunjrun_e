@@ -292,7 +292,7 @@
 <body>
 	<jsp:include page="../header.jsp"/>
 	
-	<input type="hidden" name="crew_idx" value="49"/>
+	<input type="hidden" name="crew_idx" value="52"/>
 	
 	<div class="layoutbox"></div>
 	
@@ -472,7 +472,7 @@
 	    function crewMemberList(){
 			console.log('크루 회원 리스트 요청');
 	        $.ajax({
-	            type: 'POST'genderImg,
+	            type: 'POST',
 	            url: '/crew/memberList',
 	            data: { 'crew_idx': crew_idx },
 	            dataType: 'JSON',

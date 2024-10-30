@@ -102,7 +102,7 @@
 	<!-- 크루 신청자 리스트 -->
 	<select id="crewApplicationList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="map">
 		SELECT m.id, m.nickname, m.gender, m.birth, COALESCE(p.image, '') as image, ca.create_date,
-	       (SELECT COUNT(*) FROM crew_application WHERE crew_idx = 52) AS totalpage
+	       (SELECT COUNT(*) FROM crew_application WHERE crew_idx = #{crew_idx}) AS totalpage
 			FROM crew_application ca
 			JOIN member m ON ca.id = m.id
 			LEFT JOIN profile p ON m.id = p.id
@@ -338,4 +338,28 @@
 	<insert id="crewChatInsert" parameterType="int">
 		INSERT INTO crew_chat(crew_idx, code_cp) VALUES(#{img_no}, 'C')
 	</insert>
+	
+	<!-- 크루장 권한 양도 요청 -->
+	<insert id="crewAdminUpdate" parameterType="map">
+		INSERT INTO crew_application_history(crew_idx, id, leader) VALUES(#{crew_idx}, #{id}, #{leader})
+	</insert>
+	
+	<!-- 크루 퇴출 -->
+	<delete id="crewExpel" parameterType="map">
+		DELETE FROM crew_member
+		    WHERE crew_idx = #{crew_idx}
+		      AND id IN 
+		      <foreach item="id" collection="ids" open="(" separator="," close=")">
+		          #{id}
+		      </foreach>
+	</delete>
+	
+	<insert id="crewExpelHistoryWrite" parameterType="map">
+		INSERT INTO crew_history(crew_idx, id, code_name)
+			VALUES
+			<foreach collection="ids" item="id" separator=",">
+				(#{crew_idx}, #{id}, #{code_name})
+			</foreach>
+	</insert>
+	
 </mapper>

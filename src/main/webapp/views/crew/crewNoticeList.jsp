@@ -132,10 +132,12 @@
 	<jsp:include page="../header.jsp"/>
 	
 	<div class="inner">
-	<p class="title1">크루 신청자 관리</p>
+	<p class="title1">크루 공지사항</p>
 	<form id="searchForm">
     <select id="searchOption">
         <option value="subject">닉네임</option>
+        <option value="nickname">작성자</option>
+        <option value="content">내용</option>
     </select>
     <input class="input-txt-l01" type="text" id="searchKeyword" placeholder="검색어를 입력하세요"/>
     <input class="btn-sch" type="submit" value="검색"/>
@@ -143,11 +145,11 @@
 	<table>
 		<thead>
 			<tr>
-				<th>신청회원</th>
-				<th>연령대</th>
-				<th>성별</th>
-				<th>신청일자</th>
-				<th>신청처리</th>
+				<th>no</th>
+				<th>제목</th>
+				<th>작성자</th>
+				<th>조회수</th>
+				<th>작성일</th>
 			</tr>
 		</thead>
 		<tbody id="list" >
@@ -158,6 +160,7 @@
 				<div class="container">
 		    		<nav aria-label="Page navigation">
 		        		<ul class="pagination" id="pagination"></ul>
+		        		<div class="btn01-l" style='visibility : hidden'>게시글 등록</div>
 		    		</nav>
 				</div>
 			</th>
@@ -183,6 +186,10 @@
 	
 	pageCall(firstPage);
 	
+	var loginId = '${sessionScope.loginId}';
+	
+	
+	
 	// 검색 폼 제출 시 AJAX 호출
 	$('#searchForm').on('submit', function(event) {
 	    event.preventDefault();  // 폼 제출 기본 동작 중지
@@ -193,16 +200,18 @@
 	
 
 	function pageCall(page) {
+		var option = $('#searchOption').val();
 	    var keyword = $('#searchKeyword').val();  // 검색어
 	    var crew_idx = 52; // 나중에 변경 필요
 	
 	    $.ajax({
 	        type: 'POST',
-	        url: '/crew/applicationMemberList',
+	        url: '/crew/noticeList',
 	        data: {
 	        	'crew_idx' : crew_idx,
 	            'page': page,
 	            'cnt': 15,
+	            'option': option,
 	            'keyword': keyword  // 검색어
 	        },
 	        datatype: 'JSON',
@@ -212,6 +221,11 @@
 	            console.log(response.result.totalpage);
 	            
 	            var result = response.result;
+	            
+	            // 리더인지 체크해서 버튼 숨기고, 보이기
+	            if(loginId === result.leader){
+	            	$('.btn03-s1').css('visibility', 'visible');
+	            }
 	            
 	            
 	            var totalCount = result.length;  // 총 게시글 수를 서버에서 가져옴
@@ -235,6 +249,7 @@
 		                    pageCall(page);
 		                }
 		            });
+		            
 		            paginationInitialized = true;
 	            }
 	        },
@@ -243,56 +258,27 @@
 	        }
 	    });
 	}
+	
 	// 게시글 리스트
 	function drawList(result) {
 		var content ='';
 		result.forEach(function(item,idx){
 			
-			if(item.gender === '남'){
-        		genderImg = '<img src="resources/img/common/ico_male.png" width="9px" class="genderImg"/>';
-        	}else{
-        		genderImg = '<img src="resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
-        	}
+			// 공지넘버가 1~3이면 상단에 배치하는 로직 구현 필요
+			var priority = item.priority; // 순위
 			
-	        var birth = item.birth;
-	        //console.log("Birth value:", birth); // birth 값 확인
-	        
-	         // birth의 연도만 추출
-	        var birthYear = parseInt(birth.split('-')[0], 10);
-
-	        // 현재 연도에서 출생 연도를 빼고 나이대 계산
-	        var ageGroup = Math.floor((new Date().getFullYear() - birthYear) / 10) * 10 + "대";
-
-	        
             content += '<tr>';
-            // 프로필 + 닉네임 (나중에 연결 필요)
-            content +='<td class="profileContainer"><img src="resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.nickname+'</td>';
-			
-			content +='<td>'+ageGroup+'</td>';
-			content +='<td>'+genderImg+ '&nbsp;' +item.gender+'</td>';
-			content +='<td>'+item.create_date+'</td>'; // 신청일자
-			content += '<td><button class="btn02-s" onclick="layerPopup(\'' + item.nickname + '님을 승인 하시겠습니까?\', \'승인\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'Y\'); }, applBtn2Act)">승인</button>';
-
-
-
-		 	content += '<button class="btn02-s" id="btn04-s" onclick="layerPopup(\'' + item.nickname + '님을 거절 하시겠습니까?\', \'거절\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'N\'); }, applBtn2Act)">거절</button></td>'; 
+            
+            content += '<td>'+item.notice_idx+'</td>';
+            content += '<td>'+item.subject+'</td>';
+            content += '<td>'+item.nickname+'</td>';
+            content += '<td>'+item.hit+'</td>';
+            content += '<td>'+item.create_date+'</td>';
 	        content += '</tr>';
 
 		});
-		$('#list').html(content);
+		$('#list').append(content);
 	}
-	
-	 	$('#loginPop').on('click',function(){
-	 		
-	 		var userId = "${sessionScope.loginId}";
-	 		
-	 		if(!userId){
-	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn1Act,secondBtn1Act);	
-	 		}else{
-	 			location.href='runBoardWrite';
-	 		}
-	 		
-	 	});
 	 	
 	 	
 /* 	 // 클릭시 운동프로필 레이어 팝업
@@ -330,57 +316,11 @@
 		    document.getElementById("profilePopup").style.display = "none";
 		};  */
 		
+		
 		// 팝업 취소
 		function applBtn2Act() {
 		    removeAlert(); 
 		}
-		
-		
-		function memberResult(id, nickname, value) {
-		    console.log('ID:', id);
-		    console.log('Nickname:', nickname);
-		    console.log('value:', value);
-		    
-			var crew_idx = 52; // 나중에 변경 필요
-			var code_name = '';
-			
-			if(value === 'Y'){
-				code_name = 'C101';
-			}else{
-				code_name = 'C102';
-			}
-
-			console.log('code_name : ', code_name);			
-			console.log('실행됨>');
-			
-  			$.ajax({
-				type: 'POST',
-				url: '/crew/applicationWrite',
-				data: {'loginId' : id,
-					'crew_idx' : crew_idx,
-					'code_name' : code_name},
-				dataType: 'JSON',
-				success: function(response){
-					
-					console.log('성공');
-					
-					if(response.success){
-						removeAlert();
-						layerPopup(response.msg + '완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
-						pageCall(firstPage);
-					}else{
-						removeAlert();
-						layerPopup(response.msg + '미완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
-					}
-					
-				},error: function(e){
-					soncole.log('에러남 => ', e);
-				}
-			}); 
-			 
-		    
-		}
-		
 		
 
 
