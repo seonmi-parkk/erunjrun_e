@@ -2,6 +2,8 @@ package com.erunjrun.crew.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +34,9 @@ public class CrewViewController {
     }
     
     @GetMapping(value="/crewDetailView")
-    public String crewDetailView() {
+    public String crewDetailView(HttpSession session) {
+    	//check!! 임시세션 나중에 지우기
+    	session.setAttribute("loginId", "kimee01");
     	return "/crew/crewDetail";
     }
     

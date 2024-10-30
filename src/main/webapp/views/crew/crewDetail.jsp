@@ -299,7 +299,7 @@
 	<div class="innerr">
 		<div class="one">
 			<div id="imgbox">
-				<img id="crew-img" src="/resources/img/crew/crewImg800.png" onerror="this.src=/resources/img/crew/crewImg800.png" width="100%" height="100%"/>
+				<!-- <img id="crew-img" src="/resources/img/crew/crewImg800.png" onerror="this.src=/resources/img/crew/crewImg800.png" width="100%" height="100%"/> -->
 			</div>
 	
 			<button class="btn03-s1" style='visibility : hidden' onclick="crewUpdate()">수정하기</button>
@@ -702,13 +702,45 @@
 		if(loginCheckLeader === 'N'){
 			layerPopup('로그인이 필요한 서비스입니다.', '로그인 하기', '취소',loginPageLocation ,applBtn2Act);
 		}else if(loginCheckLeader === 'C'){
-			location.href='#';
+			
+			//location.href='#';
+			// 채팅방 열기
+			var crewIdx = $('input[name="crew_idx"]').val();
+			$.ajax({
+				type:'GET',
+				url:'/crewLdchat/'+crewIdx,
+				data:{},
+				dataType:'JSON',
+				success:function(data){
+					console.log(data.roomNum);
+					openChat(data.roomNum);
+				},
+				error:function(e){
+					console.log(e);
+				}
+			});
+	
 			console.log('크루 1:1 채팅');
 		}else{
 			location.href='#';
 			console.log('크루장 관리 페이지 이동');
 		}
 	}
+	
+	function openChat(roomNum){
+		 // 새 창의 URL
+	    var url = '/crewLdchat/open/'+roomNum;
+	
+	    // 새 창의 크기와 위치 설정
+	    var width = 400;
+	    var height = 700;
+	    var left = (screen.width - width) / 2;
+	    var top = (screen.height - height) / 2;
+	
+	    // 새 창을 열고, 크기와 위치 설정
+	    window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+top+',resizable=no,scrollbars=no,status=no,menubar=no,location=no');
+	}
+	
 	
 	function loginPageLocation(){
 		location.href='/'; // 로그인 페이지로 수정 필요

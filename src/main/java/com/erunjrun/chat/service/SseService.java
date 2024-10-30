@@ -8,10 +8,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +20,12 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.erunjrun.chat.dao.ChatPersonalDAO;
 import com.erunjrun.chat.dto.ChatPersonalDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class SseService {
+	// ObjectMapper 초기화
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	// 채팅방 별로 클라이언트를 관리하는 Map
     private final Map<String, List<SseEmitter>> roomEmitters = new HashMap<>();
@@ -33,42 +35,47 @@ public class SseService {
         SseEmitter emitter = new SseEmitter(0L); // 타임아웃 없는 SSE
         this.roomEmitters.computeIfAbsent(roomId, k -> new ArrayList<>()).add(emitter);
 
-     // 연결 종료 시 Emitter 삭제
         emitter.onCompletion(() -> this.roomEmitters.get(roomId).remove(emitter));
         emitter.onTimeout(() -> this.roomEmitters.get(roomId).remove(emitter));
-
+        emitter.onError((e) -> {
+            roomEmitters.get(roomId).remove(emitter);
+            // IOException 발생 시 처리: 로깅 또는 에러 처리 로직 추가
+            System.out.println("SSE connection error: " + e.getMessage());
+            emitter.completeWithError(e); 
+        });
+        
         return emitter;
     }
 
     // 특정 채팅방에 메시지 전송
     public void sendMessage(String roomId, String userId, String message) {
-    	
-    	// 날짜 비교 (날짜 바뀔경우 체크)
-		LocalDateTime currentTime = LocalDateTime.now();
-		//DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		//currentTime.format(dateFormatter));    //2024-10-28 10:51:43
-    	
-		Map<String, String> data = new HashMap<String, String>();
-		data.put("userId", userId);
-		data.put("time", currentTime.toString());
-		data.put("message", message);
-    	
-    	
+    	 // 현재 시간 가져오기
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        // 전송할 데이터 (JSON 형태로 묶음)
+        Map<String, String> data = new HashMap<>();
+        data.put("userId", userId);            // 사용자 ID
+        data.put("time", currentTime.toString()); // 현재 시간
+        data.put("message", message);          // 메시지
+
+        
     	
         List<SseEmitter> emitters = this.roomEmitters.get(roomId);
         if (emitters != null) {
             List<SseEmitter> deadEmitters = new ArrayList<>();
 
-            emitters.forEach(emitter -> {
+            for (Iterator<SseEmitter> iterator = emitters.iterator(); iterator.hasNext(); ) {
+                SseEmitter emitter = iterator.next();
                 try {
-                	// 데이터를 JSON으로 변환하여 전송
-                    emitter.send(SseEmitter.event().name("message").data(message));
+                	 String jsonData = objectMapper.writeValueAsString(data); // JSON 문자열로 변환
+                     emitter.send(SseEmitter.event().name("message").data(jsonData));
                 } catch (IOException e) {
                     deadEmitters.add(emitter);  // 전송 실패한 emitter는 제거
+                    System.out.println("Failed to send SSE message: " + e.getMessage());
+                    iterator.remove(); // 실패한 emitter를 즉시 리스트에서 제거
                 }
-            });
-
-            emitters.removeAll(deadEmitters);
+            }
+            
         }
     }
 	
