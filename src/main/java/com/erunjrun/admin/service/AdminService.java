@@ -82,7 +82,7 @@ public class AdminService {
 	}
 	
 	
-//	권한처리
+//	권한처리 - 게시글등록,댓글등록,로그인 할때 session에 권한 저장해서 가져오기
 
 	public List<AdminDTO> ban(String id) {
 		
@@ -136,10 +136,10 @@ public class AdminService {
     }
 	
 	
-//	신고
-	public List<AdminDTO> reportlist(int limit, int offset) {
+//	신고 - 신고게시글 번호 누르면 신고 상세페이지로 이동해야함.
+	public List<AdminDTO> reportlist(int limit, int offset,String category) {
 		
-		return admin_dao.reportlist(limit,offset);
+		return admin_dao.reportlist(limit,offset,category);
 	}
 
 	public int reportcount(int cnt_) {
@@ -162,7 +162,7 @@ public class AdminService {
 	
 	
 	
-	//문의하기
+	//문의하기 - 경로설정 누르면 상세페이지로 이동하기
 
 	public List<AdminDTO> asklist(String opt, String keyword, int limit, int offset) {
 		
@@ -209,7 +209,7 @@ public class AdminService {
 	
 	
 	
-	
+// 구분코드	
 	public int codecount(int cnt_) {
 		
 		return admin_dao.codecount(cnt_);
@@ -245,6 +245,7 @@ public class AdminService {
 
 	
 	
+// 팝업리스트
 	
 	public int popupcount(int cnt_) {
 		

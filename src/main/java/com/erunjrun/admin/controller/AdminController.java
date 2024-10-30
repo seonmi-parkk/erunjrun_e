@@ -224,7 +224,7 @@ public class AdminController {
 	  
 	  @GetMapping(value = "/adminReportList")
 	  @ResponseBody 
-	  public Map<String,Object> reportlist(String page, String cnt) {
+	  public Map<String,Object> reportlist(String page, String cnt,String category) {
 	  	int page_ = Integer.parseInt(page);
 		int cnt_ = Integer.parseInt(cnt);
 		int limit = cnt_;
@@ -232,7 +232,7 @@ public class AdminController {
 		int totalPages = admin_service.reportcount(cnt_);
 		
 		Map<String,Object> result = new HashMap<String, Object>();
-		List<AdminDTO> list =  admin_service.reportlist(limit, offset);
+		List<AdminDTO> list =  admin_service.reportlist(limit, offset,category);
 		logger.info("페이지"+list);
 		result.put("totalPages", totalPages);
 		result.put("currpage", page);

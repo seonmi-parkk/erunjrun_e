@@ -89,9 +89,9 @@
        </aside>
 	
    	 <main class="main-content">
-		<div class="btn02-l" onclick="location.href='adminMember'">전체</div> <!-- 클릭시 색깔변경 -->
-	    <div class="btn03-l" onclick="location.href='admin'">게시글</div>
-	    <div class="btn03-l" onclick="location.href='admin'">댓글</div>
+		<div class="btn02-l btn-category" data-category="all">전체</div>
+		<div class="btn03-l btn-category" data-category="게시글">게시글</div>
+		<div class="btn03-l btn-category" data-category="댓글">댓글</div>
 	    
 	   	 
 		<p class="title1" >신고</p>
@@ -137,41 +137,51 @@
 
 
 <script>
+var currentCategory = 'all'; // 기본값 설정
+var show = 1; // 기본 페이지 설정
 
-	var show = 1;
-	pageCall(show);
+// 페이지 로딩 시 호출
+$(document).ready(function () {
+    pageCall(show, currentCategory);
+});
+
+// 카테고리 버튼 클릭 시 이벤트 처리
+$('.btn-category').on('click', function () {
+    currentCategory = $(this).data('category'); // 클릭한 버튼의 카테고리 값 가져오기
+    show = 1; // 페이지를 초기화
+    pageCall(show, currentCategory); // 페이지 호출
+});
+
+// 페이지 호출 함수
+function pageCall(page, category) {
+    $.ajax({
+        type: 'GET',
+        url: 'adminReportList',
+        data: {
+            page: page,
+            cnt: 15,
+            category: category
+        },
+        dataType: 'JSON',
+        success: function (data) {
+            console.log(data);
+            drawList(data.list);
+            $('#pagination').twbsPagination({
+                startPage: page,
+                totalPages: data.totalPages,
+                visiblePages: 10,
+                onPageClick: function (evt, page) {
+                    pageCall(page, currentCategory);
+                }
+            });
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+}
 
 
-
-	function pageCall(page) {
-		$.ajax({
-			type:'GET',
-			url:'adminReportList',
-			data:{
-				'page':page,
-				'cnt':15,
-			},
-			datatype:'JSON',
-			success:function(data){
-				console.log(data);
-				drawList(data.list)
-				$('#pagination').twbsPagination({ // 페이징 객체 만들기
-				startPage:1, 
-           		totalPages:data.totalPages, 
-           		visiblePages:10,
-           
-           		onPageClick:function(evt,page){
-           			console.log('evt',evt); 
-           			console.log('page',page); 
-           			pageCall(page);
-           		}
-				});
-			},
-			error:function(e){
-				console.log(e);
-			}
-		});
-	}
 
 	function drawList(list) {
 		var content ='';
@@ -188,7 +198,7 @@
 		  }
 	      $('#list').html(content);
 	   }
- 
+	
     
 	
     
