@@ -26,7 +26,7 @@
 		
 		
 		
-		
+		var code
 		
 		var subject = $("input[name='subject']").text();
         var content = $("input[name='content']").text();

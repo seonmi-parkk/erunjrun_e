@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.board.service.RunBoardService;
 import com.erunjrun.image.dto.ImageDTO;
+import com.erunjrun.member.dto.MemberDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -187,7 +188,7 @@ public class RunBoardController {
     }
     
     // 주간 포인트 지급
-    @Scheduled(cron = "0 0 0 * * MON") // 매주 월요일에 실행
+    @Scheduled(cron = "0 0 0 * * MON") // 매주 일요일에 생각하게 
     public void point() {
     	logger.info("월요일마다 실행되는 작업입니다.");
         runBoardService.point();
@@ -200,7 +201,12 @@ public class RunBoardController {
     	logger.info("로그인 아이디 : "+loginId);
     	boolean isLike = runBoardService.like(board_idx, loginId);
     	logger.info("조아요 여부 : "+isLike);
-    	
+    	MemberDTO nickname = null;
+    	if(loginId != null) {
+    		nickname = runBoardService.nickName(loginId);
+    		logger.info("닉네임 맞냐 :"+nickname);
+    	}
+   
     	RunBoardDTO run = runBoardService.detail(board_idx);
     	logger.info("내용 : "+run.toString());
     	List<RunBoardDTO> mapData = runBoardService.mapData(board_idx);
@@ -221,6 +227,9 @@ public class RunBoardController {
     	model.addAttribute("isLike", isLike);
     	model.addAttribute("info", run);
     	model.addAttribute("mapData", mapDataJson);
+    	model.addAttribute("nickname", nickname);
+    	
+    	
 
     	return "runBoard/runBoardDetail";
     }

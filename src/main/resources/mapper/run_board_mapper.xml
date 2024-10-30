@@ -141,11 +141,22 @@
     		VALUES (#{code_name}, #{id},#{point})
     </insert>
     
+    <!-- 게시글 등록 할때마다 포인트 지급 -->
+    <insert id="boardPoint" parameterType="map">
+    	INSERT INTO member_point (code_name, id, point)
+    		VALUES (#{code_name}, #{id},#{point})
+    </insert>
+    
     <!-- 게시글 상세보기 -->
     <select id="detail" resultType="com.erunjrun.board.dto.RunBoardDTO">
     	SELECT m.id, b.board_idx, b.subject, b.content, m.nickname, b.create_date , b.bHit ,b.likes
 			FROM board b
 		LEFT JOIN member m ON b.id = m.id WHERE b.board_idx = #{param1}
+    </select>
+    
+    <!-- 닉네임 가져오기 -->
+    <select id="nickName" resultType="com.erunjrun.member.dto.MemberDTO">
+    	select * from member where id = #{param1}
     </select>
     
     <!-- 지도 데이터 -->

@@ -5,5 +5,18 @@
 
 <mapper namespace="com.erunjrun.comment.dao.CommentDAO">
 	
+	<select id="list" resultType="com.erunjrun.comment.dto.CommentDTO">
+		SELECT * FROM comment WHERE board_idx = #{board_idx}
+	</select>
+	
+	<insert id="addComment" parameterType="com.erunjrun.comment.dto.CommentDTO">
+		insert into comment(code_name,board_idx,content,nickname)
+							values('B100',#{board_idx},#{content},#{nickname})
+	</insert>
+	
+	 <insert id="commPoint" parameterType="map">
+    	INSERT INTO member_point (code_name, id, point)
+    		VALUES (#{code_name}, #{id},#{point})
+    </insert>
 
 </mapper>

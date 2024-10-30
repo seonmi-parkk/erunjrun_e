@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.erunjrun.board.dao.RunBoardDAO;
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.image.dto.ImageDTO;
+import com.erunjrun.member.dto.MemberDTO;
 
 
 @Service
@@ -85,9 +86,11 @@ public class RunBoardService {
     // 게시글 등록 로직 구현
     @Transactional
     public boolean submitPost(RunBoardDTO runBoard) {
+    	 	
+    	
         try {
             boolean success = false;
-
+            
             // 게시글 정보 저장
             runBoard.setCode_name("B100");
             logger.info("insertRunBoard 호출 전 - 제목: {}", runBoard.getSubject());
@@ -123,6 +126,13 @@ public class RunBoardService {
                     fileWrite(img); // 게시글 이미지 파일 복사 저장
                 }
             }
+            
+            Map<String, Object> boardPoint = new HashMap<String, Object>();
+            boardPoint.put("code_name", "P101");
+            boardPoint.put("id", runBoard.getId());
+            boardPoint.put("point", 5);
+            
+            runBoardDAO.boardPoint(boardPoint);
        
             success = true;
             
@@ -283,6 +293,12 @@ public class RunBoardService {
 		logger.info("비활 : "+row);
 		
 		return row > 0;
+	}
+
+
+	public MemberDTO nickName(String loginId) {
+		
+		return runBoardDAO.nickName(loginId);
 	}
 
 

@@ -11,7 +11,7 @@
 				keyProperty="report_idx"
 				parameterType="com.erunjrun.report.dto.ReportDTO">
 		insert into report_write(id,code_name,content,unlike_id,subject)
-								values(#{id},#{code_name},#{content},#{unlike_id},#{subject})
+								values(#{id},'R100',#{content},#{unlike_id},#{subject})
 	</insert>
 	
 	<select id="reput" parameterType="int" resultType="com.erunjrun.board.dto.RunBoardDTO">

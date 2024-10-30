@@ -285,6 +285,8 @@
 		    	<span id="title2-1" class="title2">등록순</span>
 	    		<span id="title2-2" class="title2">최신순</span>
 	    	</div>
+	    	<div id="list">
+	    	<!-- 
 	    	<div class="sort">
  				<div>
 		    		<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">     김진형</div>
@@ -298,13 +300,15 @@
 		    		<div class="suj2 btn-popup">삭제</div>
 	    		</div>
     		</div>
+    		 -->
+    		 </div>
 	    	<div class="com">
 	    		<div>
-	    			<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">   ${sessionScope.loginId}</div>
+	    			<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">   ${nickname.nickname}</div>
 		    		<input type="text" class="tex">
 	    		</div>
 	    		<div>
-	    			<div id="ins" class=btn03-s>등록</div>	    		
+	    			<div id="ins" class=btn03-s onclick="comment()">등록</div>	    		
 	    		</div>
 	    	</div>
 	    </div>
@@ -315,8 +319,9 @@
 				    <button type="button" class="btn03-l btn-popup" >삭제</button>	    	    	
 	    		</c:if>
 	    	</div>
-		    <button type="button" class="btn02-l" onclick="location.href='/runBoard'">목록</button>
+		    <button type="button" class="btn02-l"  onclick="location.href='/runBoard'">목록</button>
 	    </div>
+	    
 	    
 	    <!-- 모달 -->
 		<div id="reportPopup" class="modal">
@@ -333,6 +338,8 @@
     
 </body>
 <script>
+
+
 
 // 지도가 로드된 후 경로 표시 및 거리 계산을 수행하는 함수
 function initializeMap() {
@@ -430,7 +437,6 @@ function initializeMap() {
 	    return R * c; // 거리 (미터)
 	}
 	
-	
 	 // 추천 업데이트
 	 function boardLike(board_idx) {
 		 	 
@@ -440,8 +446,7 @@ function initializeMap() {
          	alert("로그인이 필요한 서비스 입니다.");
          	return;
          }
-		 
-		 
+		 	 
 	        $.ajax({
 	            type: 'POST',
 	            url: '/boardLike',
@@ -576,15 +581,112 @@ function initializeMap() {
 		document.getElementsByClassName("close")[0].onclick = function() {
 		    document.getElementById("reportPopup").style.display = "none";
 		};
+		
+		commentCall();
+		
+		// 댓글 리스트
+		function commentCall() {
+			
+			var board_idx = '${info.board_idx}';
+			
+			$.ajax({
+	        	type: "POST",
+	            url: "/comment/" + board_idx ,
+	            data: { 'board_idx': board_idx },
+	            datatype: 'JSON',
+	            success: function(data) {
+	                console.log('댓글 불러오기');
+	                commentDraw(data.list);
+	            },
+	            error: function(error) {
+	               console.log('댓글 못 불러오기');    
+	            }
+	        });
+			
+		}
+	 	
+		function commentDraw(list) {
+			
+			var content ='';
+			list.forEach(function(view,idx){
+				var nickName = '${nickname.nickname}';
+				var addName = view.nickname;
+				var comment_idx = view.comment_idx;
+
+				content +='<div class="sort-area">';
+				content +='<div class="sort">';
+				content +='<div>';
+				content +='<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+view.nickname+'</div>';
+				content +='<p class="coco">'+view.content+'</p>';
+				content +='<div class="date">'+view.create_date+'</div>';
+				content +='</div>';
+				content +='<div class="ard">';
+				content +='<div class="detail"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>'
+				content +='<div id ="bih" class=btn03-s>비활성화</div>';
+				if(nickName == addName){
+					content +='<div class="suj1 btn-popup" onclick="update('+comment_idx+')">수정</div>';
+					content +='<div class="suj2 btn-popup">삭제</div>';
+				}else{
+					content +='<div id="sin" style="margin-top: 5px;"  class="suj2 btn-popup">신고</div>';
+				}
+				content +='</div>';
+				content +='</div>';
+				content +='</div>';
+			});
+			$('#list').html(content);
+		}
+		
+		function comment() {
+			
+			var content = $('input[class="tex"]').val();
+			console.log('댓굴 내용 : ',content);
+			var board_idx = '${info.board_idx}';
+			var nickname = '${nickname.nickname}';
+			
+			$.ajax({
+				type:'POST',
+				url:'/addComment',
+				data:{'board_idx':board_idx, 'content':content, 'nickname':nickname},
+				dataType:'JSON',
+				success:function(data){
+					console.log('댓글 등록',data);
+					commentCall();
+				},
+				error:function(e){
+					console.log('댓글 등록 오류',e);
+				}
+			})
+			
+		}
+		
+		function update(comment_idx) {
+			
+			console.log('댓글no : ',comment_idx);
+			
+			
+			$.ajax({
+				type:'POST',
+				url:'/updateComment/'+comment_idx,
+				data:{'comment_idx':comment_idx, 'content':content},
+				dataType:'JSON',
+				success:function(data){
+					console.log('댓글 수정',data);
+					commentCall();
+				},
+				error:function(e){
+					console.log('댓글 수정 오류',e);
+				}
+			})
+			
+		}
+		
+		
+		
+		
+
 	 	
 	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
-	 	
+		 	
 	 	
 
 

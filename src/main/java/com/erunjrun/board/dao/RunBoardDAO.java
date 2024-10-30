@@ -1,11 +1,13 @@
 package com.erunjrun.board.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.image.dto.ImageDTO;
+import com.erunjrun.member.dto.MemberDTO;
 
 
 @Mapper
@@ -52,6 +54,10 @@ public interface RunBoardDAO {
 	int deleteImg(int board_idx);
 
 	int runBoardDelete(int board_idx);
+
+	int boardPoint(Map<String, Object> boardPoint);
+
+	MemberDTO nickName(String loginId);
 
 
 
