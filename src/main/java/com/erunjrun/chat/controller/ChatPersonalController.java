@@ -1,9 +1,12 @@
 package com.erunjrun.chat.controller;
 
+<<<<<<< HEAD
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+=======
+>>>>>>> origin/master
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,15 +20,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.erunjrun.chat.dto.ChatPersonalDTO;
 import com.erunjrun.chat.service.ChatPersonalService;
-import com.erunjrun.chat.service.SseService;
 
 
 
@@ -33,7 +31,6 @@ import com.erunjrun.chat.service.SseService;
 public class ChatPersonalController {
 
 	@Autowired ChatPersonalService chatPersonalService;
-	@Autowired SseService sseService;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	 @GetMapping("/chat/{id}/{unlikeId}")
@@ -74,6 +71,7 @@ public class ChatPersonalController {
 		 return values;
 	 }
 	
+<<<<<<< HEAD
 	 // 메세지 전송 (여기에 pathvariable {chatIdx} 추가하고,    sseService.sendMessage(roomId, message); 추가하기)
 	 @PostMapping("/chat/send")
 	 @ResponseBody
@@ -129,4 +127,8 @@ public class ChatPersonalController {
 	 
 	 
 	 
+=======
+>>>>>>> origin/master
 }
+
+

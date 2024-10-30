@@ -158,6 +158,7 @@
 	.chat .tag-date:first-of-type {
 		margin-top:0;
 	}
+<<<<<<< HEAD
 	.chat .empty-msg{
 		margin-top: 150px;
 		text-align: center;
@@ -185,13 +186,13 @@
 	}
 	
 	
+=======
+>>>>>>> origin/master
 </style>
 </head>
-<body onload="startSse()">
+<body>
 	<div class="chat">
 		<input type="hidden" name="chatIdx" value="${roomNum}"/>
-		<input type="hidden" name="baseUser" value=""/>
-		<input type="hidden" name="otherUser" value=""/>
         <div class="top-bar">
             <div class="title-box">
                 <span class="title"></span><img src="/resources/img/common/ico_user.png" alt="인원수"/><span class="num"></span>
@@ -204,19 +205,27 @@
         <div class="btm-box">
             <textarea name="msg"></textarea>
             <div class="btn-area">
-            	<button class="btn01-s" onclick="sendMessage()">전송</button>
+            	<button class="btn01-s" type="submit">전송</button>
            	</div>
         </div>
+
     </div>
 
 
+<<<<<<< HEAD
 	<input type="text" id="message-input">
     <button id="send-message" onclick="sendMessage1()">Send</button>
+=======
+>>>>>>> origin/master
 
-    <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div>
 
-	<!-- <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div> -->
+
+
+
+
 </body>
+
+
 
 <script src="/resources/js/common.js" type="text/javascript"></script>
 
@@ -236,7 +245,7 @@
 		success: function(data){
 			console.log(data);
 			drawContent(data.msgList);
-			drawTitle(data.userList);
+			drawTitle(data.userNames);
 		},
 		error: function(e){
 			console.log(e);
@@ -244,25 +253,16 @@
 	});
 
 	// 채팅방제목(참여 유저닉네임)
-	function drawTitle(userList){
+	function drawTitle(userNames){
 		var nameCont = '';
-		console.log("userList",userList);
-		userList.forEach(function(user,index){
-			nameCont+= user.nickname;
-			if(index != userList.length-1){
+		userNames.forEach(function(name,index){
+			nameCont+= name;
+			if(index != userNames.length-1){
 				nameCont+= ', ';
-			}
-			// 유저 아이디 세팅
-			if(user.id == '${sessionScope.loginId}'){				
-				$('.chat input[name="baseUser"]').val(user.id);
-			}else{
-				$('.chat input[name="otherUser"]').val(user.id);				
 			}
 		});
 		$('.chat .top-bar .title').text(nameCont);
-		$('.chat .top-bar .num').text(userList.length);
-		
-
+		$('.chat .top-bar .num').text(userNames.length);
 	}
 	
 	function drawContent(list){
@@ -326,13 +326,14 @@
 				
 			});
 		}else{
-			msgCont += '<div class="empty-msg"><img src="/resources/img/common/ico_chat.png" alt="[채팅]"><p>채팅을 시작해보세요!</p></div>';
+			msgCont += '<img src="/resources/img/common/ico_chat.png" alt="[채팅]"><p>채팅을 시작해보세요!</p>';
 		}
 		
 		
 		$('.msg-area').append(msgCont);		
 
 	}
+<<<<<<< HEAD
 	
 	function sendMessage(){
 		//var message = $('.chat .msg').text();
@@ -416,6 +417,8 @@
         }
     }
     
+=======
+>>>>>>> origin/master
     
 </script>
 </html>
