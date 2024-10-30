@@ -14,6 +14,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="/resources/js/summernote.js"></script>
+	<script src="/resources/js/layerPopup.js"></script>
 
 
     <style>
@@ -125,6 +126,7 @@
 
                 <div class="btn-parent">
                     <button type="button" class="btn03-l">등록 취소하기</button>
+                    <!-- 등록 팝업 추가 필요 -->
                     <button type="button" class="btn01-l" onclick="submitPost()">크루 등록하기</button>
                 </div>
             </form>
