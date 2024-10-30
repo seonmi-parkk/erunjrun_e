@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,24 +66,24 @@ public class MypageController {
 	@PostMapping(value = "/profileUpdate")
 	public String profileUpdate(Model model, @RequestParam Map<String, String> params, HttpSession session) {
 
-	    String id = (String) session.getAttribute("loginId");
-	    if (id != null) {
-	        params.put("id", id); // 세션에서 가져온 ID를 params에 추가
+		String id = (String) session.getAttribute("loginId");
+		if (id != null) {
+			params.put("id", id); // 세션에서 가져온 ID를 params에 추가
 
-	        // 업데이트 호출
-	        mypageService.profileUpdate(params);
-	        
-	        // 사용자 정보 및 프로필 이미지 가져오기
-	        MemberDTO member = mypageService.profileDetail(id);
-	        ProfileDTO profile = mypageService.ProfileImage(id);
-	        model.addAttribute("profile", profile);
-	        model.addAttribute("member", member);
-	        
-	        return "mypage/profile"; // 프로필 페이지로
-	    } else {
-	        // 세션에 ID가 없으면 로그인 페이지로
-	        return "member/login";
-	    }
+			// 업데이트 호출
+			mypageService.profileUpdate(params);
+
+			// 사용자 정보 및 프로필 이미지 가져오기
+			MemberDTO member = mypageService.profileDetail(id);
+			ProfileDTO profile = mypageService.ProfileImage(id);
+			model.addAttribute("profile", profile);
+			model.addAttribute("member", member);
+
+			return "mypage/profile"; // 프로필 페이지로
+		} else {
+			// 세션에 ID가 없으면 로그인 페이지로
+			return "member/login";
+		}
 	}
 
 	@GetMapping(value = "/deleteView")
@@ -169,61 +168,60 @@ public class MypageController {
 
 	@PostMapping(value = "/firstExerciseProfile")
 	public String firstExerciseProfile(@RequestParam Map<String, String> params,
-	                                    @RequestParam("imageFile") MultipartFile imageFile,
-	                                    HttpSession session, Model model) {
-	    String id = (String) session.getAttribute("loginId");
-	    if (id != null) {
-	        // 이미지 파일 처리
-	        if (!imageFile.isEmpty()) {
-	            String originalFileName = imageFile.getOriginalFilename();
-	            String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
+			@RequestParam("imageFile") MultipartFile imageFile, HttpSession session, Model model) {
+		String id = (String) session.getAttribute("loginId");
+		if (id != null) {
+			// 이미지 파일 처리
+			if (!imageFile.isEmpty()) {
+				String originalFileName = imageFile.getOriginalFilename();
+				String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
 
-	            // 파일 저장 경로
-	            String uploadDir = "C:/upload/"; // 실제 경로
-	            Path path = Paths.get(uploadDir + newFileName);
+				// 파일 저장 경로
+				String uploadDir = "C:/upload/"; // 실제 경로
+				Path path = Paths.get(uploadDir + newFileName);
 
-	            try {
-	                Files.write(path, imageFile.getBytes()); // 파일 저장
-	                params.put("image", newFileName); // params에 이미지 파일 이름 추가
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	                model.addAttribute("msg", "파일 저장 중 오류가 발생했습니다.");
-	                return "mypage/createExerciseProfile"; // 에러 페이지로 리다이렉트
-	            }
-	        }
+				try {
+					Files.write(path, imageFile.getBytes()); // 파일 저장
+					params.put("image", newFileName); // params에 이미지 파일 이름 추가
+				} catch (IOException e) {
+					e.printStackTrace();
+					model.addAttribute("msg", "파일 저장 중 오류가 발생했습니다.");
+					return "mypage/createExerciseProfile"; // 에러 페이지로 리다이렉트
+				}
+			}
 
-	        // 운동 프로필 생성
-	        mypageService.profileUpdate(params); // 업데이트 호출
-	        ProfileDTO profile = mypageService.ProfileImage(id);
-	        model.addAttribute("profile", profile);
-	        mypageService.firstExerciseProfile(params);
-	        logger.info("Params: {}", params);
-	        
-	        // 프로필 작성 상태 업데이트
-	        mypageService.updateProfile_use(id, "Y");
+			// 운동 프로필 생성
+			mypageService.profileUpdate(params); // 업데이트 호출
+			ProfileDTO profile = mypageService.ProfileImage(id);
+			model.addAttribute("profile", profile);
+			mypageService.firstExerciseProfile(params);
+			logger.info("Params: {}", params);
 
-	        // 프로필 공개 여부 및 운동 메이트 찾기 여부 업데이트
-	        String profileVisibility = params.get("profileVisibility");
-	        String mateSearch = params.get("mateSearch");
+			// 프로필 작성 상태 업데이트
+			mypageService.updateProfile_use(id, "Y");
 
-	        // 프로필 공개 여부 업데이트
-	        mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
+			// 프로필 공개 여부 및 운동 메이트 찾기 여부 업데이트
+			String profileVisibility = params.get("profileVisibility");
+			String mateSearch = params.get("mateSearch");
 
-	        // 운동 메이트 찾기 여부 업데이트
-	        mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
+			// 프로필 공개 여부 업데이트
+			mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
 
-	        // 포인트 추가
-	        mypageService.addPoint(id, 10);
+			// 운동 메이트 찾기 여부 업데이트
+			mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
 
-	        // 업데이트된 회원 정보 가져오기
-	        MemberDTO member = mypageService.profileDetail(id);
-	        String birthString = member.getFormattedBirth();
-	        model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
-	        model.addAttribute("member", member);
-	    } else {
-	        model.addAttribute("msg", "로그인이 필요합니다.");
-	        return "member/login"; // 로그인 페이지로 리다이렉트
-	    }
+			// 포인트 추가
+			mypageService.addPoint(id, 10);
+
+			// 업데이트된 회원 정보 가져오기
+			MemberDTO member = mypageService.profileDetail(id);
+			String birthString = member.getFormattedBirth();
+			model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
+			model.addAttribute("member", member);
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
 		return "redirect:/ExerciseProfile";
 	}
 
@@ -263,7 +261,7 @@ public class MypageController {
 			String birthString = member.getFormattedBirth();
 			model.addAttribute("birthString", birthString); // 포맷된 생년월일 추가
 			model.addAttribute("member", member);
-	        model.addAttribute("profile", profile);
+			model.addAttribute("profile", profile);
 			model.addAttribute("mypage", mypage); // 모델에 MypageDTO 추가
 			model.addAttribute("profileVisibility", mypage.getProfile_use());
 			model.addAttribute("mateSearch", mypage.getExercise_use());
@@ -275,61 +273,85 @@ public class MypageController {
 	}
 
 	@PostMapping(value = "/ExerciseProfileUpdate")
-	public String ExerciseProfileUpdate(Model model, HttpSession session, 
-	                                     @RequestParam Map<String, String> params,
-	                                     @RequestParam(value = "fileInput", required = false) MultipartFile imageFile) {
-	    logger.info("Received params: {}", params);
-	    logger.info("Image parameter added to params: {}", params.get("image"));
-	    String id = (String) session.getAttribute("loginId");
+	public String ExerciseProfileUpdate(Model model, HttpSession session, @RequestParam Map<String, String> params,
+			@RequestParam(value = "fileInput", required = false) MultipartFile imageFile) {
+		logger.info("Received params: {}", params);
+		logger.info("Image parameter added to params: {}", params.get("image"));
+		String id = (String) session.getAttribute("loginId");
 
-	    if (id != null) {
-	        // 이미지 파일 처리
-	        if (imageFile != null && !imageFile.isEmpty()) {
-	            String originalFileName = imageFile.getOriginalFilename();
-	            String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
+		if (id != null) {
+			// 이미지 파일 처리
+			if (imageFile != null && !imageFile.isEmpty()) {
+				String originalFileName = imageFile.getOriginalFilename();
+				String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
 
-	            // 파일 저장 경로
-	            String uploadDir = "C:/upload/"; // 실제 경로
-	            Path path = Paths.get(uploadDir + newFileName);
+				// 파일 저장 경로
+				String uploadDir = "C:/upload/"; // 실제 경로
+				Path path = Paths.get(uploadDir + newFileName);
 
-	            try {
-	                Files.write(path, imageFile.getBytes()); // 파일 저장
-	                params.put("image", newFileName); // params에 이미지 파일 이름 추가
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	                model.addAttribute("msg", "파일 저장 중 오류가 발생했습니다.");
-	                return "mypage/createExerciseProfile"; // 에러 페이지로 리다이렉트
-	            }
-	        }
+				try {
+					Files.write(path, imageFile.getBytes()); // 파일 저장
+					params.put("image", newFileName); // params에 이미지 파일 이름 추가
+				} catch (IOException e) {
+					e.printStackTrace();
+					model.addAttribute("msg", "파일 저장 중 오류가 발생했습니다.");
+					return "mypage/createExerciseProfile"; // 에러 페이지로 리다이렉트
+				}
+			}
 
-	        // 프로필 정보 업데이트
-	        mypageService.profileUpdate(params); // 업데이트 호출
-	        mypageService.ExerciseProfileUpdate(params);
-	        String profileVisibility = params.get("profileVisibility");
-	        String mateSearch = params.get("mateSearch");
-	        mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
-	        mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
-	        
-	        model.addAttribute("msg", "프로필이 성공적으로 업데이트되었습니다.");
-	    } else {
-	        model.addAttribute("msg", "로그인이 필요합니다.");
-	        return "member/login"; // 로그인 페이지로 리다이렉트
-	    }
+			// 프로필 정보 업데이트
+			mypageService.profileUpdate(params); // 업데이트 호출
+			mypageService.ExerciseProfileUpdate(params);
+			String profileVisibility = params.get("profileVisibility");
+			String mateSearch = params.get("mateSearch");
+			mypageService.updateProfileVisibility(id, "Y".equals(profileVisibility) ? "Y" : "N");
+			mypageService.updateMateSearch(id, "Y".equals(mateSearch) ? "Y" : "N");
 
-	    return "redirect:/ExerciseProfile"; // 업데이트 후 프로필 페이지로 리다이렉트
+			model.addAttribute("msg", "프로필이 성공적으로 업데이트되었습니다.");
+		} else {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+
+		return "redirect:/ExerciseProfile"; // 업데이트 후 프로필 페이지로 리다이렉트
 	}
 	
 	@GetMapping(value = "/pointHistoryListView")
-	public String pointHistoryListView() {
-		return "pointHistoryList";
+	public String pointHistoryListView(HttpSession session, Model model) {
+	    logger.info("pointHistoryListView called");
+
+	    // 세션에서 사용자 ID를 가져오기
+	    String id = (String) session.getAttribute("loginId");
+	    if (id == null) {
+	        logger.warn("User not logged in. Redirecting to login page.");
+	        model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+	        return "member/login"; // 로그인 페이지로 리다이렉트
+	    }
+
+	    return "mypage/pointHistoryList"; // 로그인된 경우 리스트 페이지로 이동
 	}
-	
+
 	@GetMapping(value = "/pointHistoryList.ajax")
 	@ResponseBody
-	public Map<String, Object> list(String page,String cnt){
-		
-		int page_ = Integer.parseInt(page);
-		int cnt_ = Integer.parseInt(cnt);
-		return mypageService.list(page_, cnt_);
+	public Map<String, Object> list(String page, String cnt, HttpSession session, Model model) {
+	    logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+	    // 세션에서 사용자 ID를 가져오기
+	    String id = (String) session.getAttribute("loginId");
+	    if (id == null) {
+	        logger.warn("User not logged in. Redirecting to login page.");
+	        model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+	        return null; // AJAX 요청에 대한 적절한 응답을 반환
+	    }
+
+	    // 페이지와 항목 수 변환
+	    int page_ = Integer.parseInt(page);
+	    int cnt_ = Integer.parseInt(cnt);
+
+	    // 서비스 호출 시 ID 전달
+	    Map<String, Object> result = mypageService.list(page_, cnt_, id);
+	    logger.info("Result from service: {}", result);
+
+	    return result;
 	}
 }

@@ -154,7 +154,7 @@ button:hover {
             <div class="form-group">
                 <label for="image">이미지</label>
                 <div class="image-container" style="position: relative;">
-                    <img id="previewImage" src="${profile.image != null && profile.image != '' ? '/photo/' + profile.image : '/resources/img/common/profile.png'}" alt="회원 이미지" />
+                    <img id="previewImage" src="${profile.image != null && profile.image != '' ? '/photo/' + profile.image : 'resources/img/common/profile.png'}" alt="회원 이미지" />
                     <span id="changeImage" class="edit-icon" style="cursor: pointer; color: #ff7f50;">✎</span>
                     <input type="file" name="imageFile" id="imageFile" style="display: none;" />
                 </div>

@@ -38,9 +38,14 @@ public interface MypageDAO {
 
 	void addPoint(String id, int point);
 
-	List<MypageDTO> list(int limit, int offset);
+	void updateTotalPoints(String id);
 
-	int count();
+	// List 메서드 정의
+	List<MypageDTO> list(int limit, int offset, String id);
+
+	// Count 메서드 정의
+	int count(String id, int cnt);
+
 
 	
 }

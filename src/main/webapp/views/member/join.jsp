@@ -6,172 +6,176 @@
 <meta charset="UTF-8">
 <title>회원가입</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/common.css">
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <style>
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #ffffff;
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	display: block; /* flex 대신 block으로 설정 */
+	justify-content: center;
+	align-items: center;
+	height: 140vh;
+	background-color: #ffffff;
 }
 
 .container {
-    background: white;
-    padding: 3	0px;
-    border-radius: 8px;
-    width: 500px;
-    margin-top: 250px; /* 헤더 높이만큼 아래로 이동 */
-    border: none; /* 테두리 추가 */
+	background: white;
+	padding: 3 0px;
+	border-radius: 8px;
+	width: 500px;
+	margin-top: 150px; /* 헤더 높이만큼 아래로 이동 */
+	margin-bottom: 100px; /* 헤더 높이만큼 아래로 이동 */
+	border: none; /* 테두리 추가 */
 }
 
 h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px; /* 폰트 크기 증가 */
-    font-weight: bold; /* 볼드 처리 */
+	text-align: center;
+	margin-bottom: 20px;
+	font-size: 24px; /* 폰트 크기 증가 */
+	font-weight: bold; /* 볼드 처리 */
 }
 
 .form-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column; /* 세로로 배치 */
+	margin-bottom: 15px;
+	display: flex;
+	flex-direction: column; /* 세로로 배치 */
 }
 
 .input-group {
-    display: flex; /* Flexbox로 수평 정렬 */
-    align-items: center; /* 수직 중앙 정렬 */
+	display: flex; /* Flexbox로 수평 정렬 */
+	align-items: center; /* 수직 중앙 정렬 */
 }
 
 label {
-    margin-bottom: 5px; /* 레이블과 입력칸 사이의 간격 조정 */
-    font-weight: bold;
-    font-size: 16px; /* 폰트 크기 증가 */
+	margin-bottom: 5px; /* 레이블과 입력칸 사이의 간격 조정 */
+	font-weight: bold;
+	font-size: 16px; /* 폰트 크기 증가 */
 }
 
-input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
-    flex: 1; /* 입력칸이 남은 공간을 차지하도록 설정 */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    width: calc(101% - 5px); /* 여기서 30px 값을 더 줄이거나 조정 */
-    
+input[type="text"], input[type="password"], input[type="email"], input[type="number"]
+	{
+	flex: 1; /* 입력칸이 남은 공간을 차지하도록 설정 */
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	width: calc(101% - 5px); /* 여기서 30px 값을 더 줄이거나 조정 */
 }
 
 button {
-    background-color: #ff7f50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 10px;
-    margin-left: 5px; /* 입력 칸과 버튼 사이의 간격 */
+	background-color: #ff7f50;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	padding: 10px;
+	margin-left: 5px; /* 입력 칸과 버튼 사이의 간격 */
 }
 
 button:hover {
-    background-color: #ff6347;
+	background-color: #ff6347;
 }
 
 .result {
-    margin-left: 10px; /* 버튼과 결과 사이의 간격 */
-    font-weight: bold;
-    display: inline-block; /* 수평 정렬 */
+	margin-left: 10px; /* 버튼과 결과 사이의 간격 */
+	font-weight: bold;
+	display: inline-block; /* 수평 정렬 */
 }
 
 .submit-group {
-    text-align: right; /* 버튼을 오른쪽으로 정렬 */
+	text-align: right; /* 버튼을 오른쪽으로 정렬 */
 }
 
 .gender-group {
-    display: flex; /* 수평 정렬을 위해 Flexbox 사용 */
-    align-items: center; /* 수직 중앙 정렬 */
-    gap: 20px; /* 남과 여 사이에 여유 공간 추가 */
+	display: flex; /* 수평 정렬을 위해 Flexbox 사용 */
+	align-items: center; /* 수직 중앙 정렬 */
+	gap: 20px; /* 남과 여 사이에 여유 공간 추가 */
 }
 
 .submit-button {
-    position: relative; /* 버튼 위치를 조정할 수 있도록 설정 */
-    width: 100%; /* 버튼을 전체 너비로 설정 */
-    top: 0; /* 필요 시 조정 */
-    right: 5; /* 필요 시 조정 */
+	position: relative; /* 버튼 위치를 조정할 수 있도록 설정 */
+	width: 100%; /* 버튼을 전체 너비로 설정 */
+	top: 0; /* 필요 시 조정 */
+	right: 5; /* 필요 시 조정 */
 }
 </style>
 </head>
 <body>
-    <jsp:include page="../header.jsp" />
-    <div class="container">
-        <h3>회원가입</h3>
-        <form id="joinForm" action="join" method="post">
-            <div class="form-group">
-                <label for="id">아이디 *</label>
-                <div class="input-group">
-                    <input type="text" name="id" required placeholder="예시) runrunrun" />
-                    <button type="button" id="idCheck">중복확인</button>
-                </div>
-                <span id="idResult" class="result"></span>
-            </div>
-            <div class="form-group">
-                <label for="pw">비밀번호 *</label> 
-                <input type="password" name="pw" required placeholder="특수문자, 영문, 숫자 8~16자" />
-            </div>
-            <div class="form-group">
-                <label for="pwConfirm">비밀번호 확인 *</label> 
-                <input type="password" name="pwConfirm" required />
-            </div>
-            <div class="form-group">
-                <label for="name">이름 *</label> 
-                <input type="text" name="name" required />
-            </div>
-            <div class="form-group">
-                <label for="nickName">닉네임 *</label> 
-                <div class="input-group">
-                    <input type="text" name="nickName" required placeholder="예시) 달려달려달려" />
-                    <button type="button" id="nickNameCheck">중복확인</button>
-                </div>
-                <span id="nickNameResult" class="result"></span>
-            </div>
-            <div class="form-group">
-                <label for="address">주소 *</label> 
-                <input type="text" name="address" required placeholder="예시) 서울시 금천구 가산동" />
-            </div>
-            <div class="form-group">
-                <label>성별 *</label> 
-                <div class="gender-group">
-                    <input type="radio" name="gender" value="남" required /> 남
-                    <input type="radio" name="gender" value="여" required /> 여
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="birth">생년월일 *</label> 
-                <input type="number" name="birth" required placeholder="생년월일 8자리 입력" />
-            </div>
-            <div class="form-group">
-                <label for="email">이메일 *</label> 
-                <div class="input-group">
-                    <input type="email" name="email" required placeholder="예시) run@naver.com" />
-                    <button type="button" id="emailCheck">중복확인</button>
-                </div>
-                <span id="emailResult" class="result"></span>
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber">휴대전화번호</label> 
-                <input type="text" name="phoneNumber" placeholder="예시) 010-1234-5678" />
-            </div>
-            <div class="submit-group">
-                <button type="submit" class="submit-button">가입하기</button>
-            </div>
-        </form>
-    </div>
+	<jsp:include page="../header.jsp" />
+	<div class="container">
+		<h3>회원가입</h3>
+		<form id="joinForm" action="join" method="post">
+			<div class="form-group">
+				<label for="id">아이디 *</label>
+				<div class="input-group">
+					<input type="text" name="id" required placeholder="예시) runrunrun" />
+					<button type="button" id="idCheck">중복확인</button>
+				</div>
+				<span id="idResult" class="result"></span>
+			</div>
+			<div class="form-group">
+				<label for="pw">비밀번호 *</label> <input type="password" name="pw"
+					required placeholder="특수문자, 영문, 숫자 8~16자" />
+			</div>
+			<div class="form-group">
+				<label for="pwConfirm">비밀번호 확인 *</label> <input type="password"
+					name="pwConfirm" required />
+			</div>
+			<div class="form-group">
+				<label for="name">이름 *</label> <input type="text" name="name"
+					required />
+			</div>
+			<div class="form-group">
+				<label for="nickName">닉네임 *</label>
+				<div class="input-group">
+					<input type="text" name="nickName" required
+						placeholder="예시) 달려달려달려" />
+					<button type="button" id="nickNameCheck">중복확인</button>
+				</div>
+				<span id="nickNameResult" class="result"></span>
+			</div>
+			<div class="form-group">
+				<label for="address">주소 *</label> <input type="text" name="address"
+					required placeholder="예시) 서울시 금천구 가산동" />
+			</div>
+			<div class="form-group">
+				<label>성별 *</label>
+				<div class="gender-group">
+					<input type="radio" name="gender" value="남" required /> 남 <input
+						type="radio" name="gender" value="여" required /> 여
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="birth">생년월일 *</label> <input type="number" name="birth"
+					required placeholder="생년월일 8자리 입력" />
+			</div>
+			<div class="form-group">
+				<label for="email">이메일 *</label>
+				<div class="input-group">
+					<input type="email" name="email" required
+						placeholder="예시) run@naver.com" />
+					<button type="button" id="emailCheck">중복확인</button>
+				</div>
+				<span id="emailResult" class="result"></span>
+			</div>
+			<div class="form-group">
+				<label for="phoneNumber">휴대전화번호</label> <input type="text"
+					name="phoneNumber" placeholder="예시) 010-1234-5678" />
+			</div>
+			<div class="submit-group">
+				<button type="submit" class="submit-button">가입하기</button>
+			</div>
+		</form>
+	</div>
+	<jsp:include page="../footer.jsp" />
+</body>
 
-
-	<script>
+<script>
 	var msg = '${msg}';
 	if (msg != '') {
 		alert(msg);
@@ -315,5 +319,4 @@ button:hover {
 		});
 		
     </script>
-</body>
 </html>

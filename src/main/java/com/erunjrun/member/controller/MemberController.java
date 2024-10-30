@@ -36,23 +36,25 @@ public class MemberController {
 	
 	@PostMapping(value = "/login")
 	public String login(Model model, HttpSession session, String id, String pw) {
-		MemberDTO member = memberService.findSessionId(id); // 회원 정보 조회
+	    // 대소문자를 구분하여 회원 조회
+	    MemberDTO member = memberService.findSessionId(id); // 대소문자 구분하여 조회
 
-		if (member == null) {
-			model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
-		} else if ("Y".equals(member.getUse_yn())) {
-			model.addAttribute("msg", "탈퇴된 회원입니다."); // 탈퇴 상태 체크
-		} else if (memberService.login(id, pw)) {
-			model.addAttribute("msg", "로그인 되었습니다!");
-			session.setAttribute("loginId", id);
-			session.setAttribute("profileImage", member.getImage()); // 프로필 이미지
-			session.setAttribute("iconImage", member.getIcon_image()); // 아이콘
-		} else {
-			model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
-		}
+	    if (member == null) {
+	        model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
+	    } else if ("Y".equals(member.getUse_yn())) {
+	        model.addAttribute("msg", "탈퇴된 회원입니다."); // 탈퇴 상태 체크
+	    } else if (member.getId().equals(id) && memberService.login(id, pw)) {
+	        model.addAttribute("msg", "로그인 되었습니다!");
+	        session.setAttribute("loginId", id);
+	        session.setAttribute("profileImage", member.getImage()); // 프로필 이미지
+	        session.setAttribute("iconImage", member.getIcon_image()); // 아이콘
+	    } else {
+	        model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
+	    }
 
-		return "main";
+	    return "main";
 	}
+
 
 	@GetMapping(value = "/joinView")
 	public String joinView() {

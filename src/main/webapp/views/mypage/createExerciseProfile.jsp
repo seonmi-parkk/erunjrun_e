@@ -73,11 +73,10 @@ body {
 	<div class="container">
 		<div class="profile-header">
 			<img
-				src="${profile.image != null && profile.image != '' ? '/photo/' + profile.image : '/resources/img/common/profile.png'}"
+				src="${profile.image != null && profile.image != '' ? '/photo/' + profile.image : 'resources/img/common/profile.png'}"
 				alt="회원 이미지" />
 			<h2>${sessionScope.loginId}</h2>
 		</div>
-
 		<div class="message">
 			아직 운동프로필이 작성되지 않았습니다.<br> 프로필 최초 작성 시, 10p가 지급되며 내성향에 맞는 운동메이트를
 			구할 확률이 높아집니다.

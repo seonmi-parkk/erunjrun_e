@@ -204,22 +204,33 @@
 		VALUES (#{id}, 'P100', 10)
 	</insert>
 
+	<update id="updateTotalPoints" parameterType="String">
+		UPDATE member
+		SET
+		point = (SELECT SUM(point) FROM member_point WHERE id = #{id})
+		WHERE id
+		= #{id}
+	</update>
+
 	<select id="list" resultType="com.erunjrun.mypage.dto.MypageDTO">
 		SELECT
 		member_point.create_date,
 		member_point.code_name,
-		SUM(member_point.point) AS total_points
+		member_point.point
 		FROM
-		member
-		LEFT JOIN
-		member_point ON member.id = member_point.member_id
-		GROUP BY
-		member_point.create_date,
-		member_point.code_name;
+		member_point
+		WHERE
+		member_point.id = #{id}  <!-- 특정 멤버 ID로 필터링 -->
+		ORDER BY member_point.create_date DESC
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 	<select id="count" resultType="int">
-		SELECT CEIL(COUNT(*) / #{param1}) AS pages FROM member_point
+		SELECT CEIL(COUNT(*) / #{cnt})
+		AS
+		pages
+		FROM member_point
+		WHERE member_point.id = #{id}
 	</select>
 
 </mapper>   	

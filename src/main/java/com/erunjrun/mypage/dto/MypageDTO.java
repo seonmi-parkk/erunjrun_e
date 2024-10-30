@@ -20,15 +20,15 @@ public class MypageDTO {
 	private String profile_use;
 	private String exercise_use;
 	
-	private Timestamp creat_date;
+	private Timestamp create_date;
 	private String code_name;
 	private int point;
 	
-	public Timestamp getCreat_date() {
-		return creat_date;
+	public Timestamp getCreate_date() {
+		return create_date;
 	}
-	public void setCreat_date(Timestamp creat_date) {
-		this.creat_date = creat_date;
+	public void setCreate_date(Timestamp create_date) {
+		this.create_date = create_date;
 	}
 	public String getCode_name() {
 		return code_name;

@@ -159,7 +159,7 @@ button:hover {
 							alt="회원 이미지" />
 					</c:when>
 					<c:otherwise>
-						<img class="profile-image" src="/resources/img/common/profile.png"
+						<img class="profile-image" src="resources/img/common/profile.png"
 							alt="기본 프로필 이미지" />
 					</c:otherwise>
 				</c:choose>

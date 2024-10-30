@@ -78,6 +78,7 @@ public class MypageService {
 	public void addPoint(String id, int point) {
 		logger.info("Adding points: {} to user: {}", point, id);
 		mypageDAO.addPoint(id, point);
+	    mypageDAO.updateTotalPoints(id); // member 테이블의 총 포인트 업데이트
 	}
 
 	public void ExerciseProfileUpdate(Map<String, String> params) {
@@ -85,17 +86,24 @@ public class MypageService {
 
 	}
 
-	public Map<String, Object> list(int page, int cnt) {
+	public Map<String, Object> list(int page, int cnt, String id) {
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
 
 		int limit = cnt;
 		int offset = (page - 1) * cnt;
-		int totalpage = mypageDAO.count();
 
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("totalpages", totalpage);
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.count(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
 		result.put("currPage", page);
-		result.put("list", mypageDAO.list(limit, offset));
+		result.put("list", mypageDAO.list(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
 
 		return result;
 	}
+
 }
