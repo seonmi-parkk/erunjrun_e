@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class ChatPersonalDTO {
-	//chat_content 테이블
 	private String content_idx;
 	private String chat_idx;
 	private String content;
@@ -15,7 +14,6 @@ public class ChatPersonalDTO {
 	private String recipient;
 	private String use_yn;
 	
-	// member 테이블
 	private String image;
 	private String icon_image;
 	private String nickname;
@@ -23,15 +21,6 @@ public class ChatPersonalDTO {
 	// chat 테이블
 	private String create_date;
 	
-	// chat_link 테이블
-	private String id;
-	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	public String getCreate_date() {
 		return create_date;
 	}

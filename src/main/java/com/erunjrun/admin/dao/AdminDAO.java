@@ -1,4 +1,4 @@
-/*package com.erunjrun.admin.dao;
+package com.erunjrun.admin.dao;
 
 import java.sql.Date;
 import java.util.List;
@@ -122,4 +122,3 @@ public interface AdminDAO {
 
 }
 
-*/
