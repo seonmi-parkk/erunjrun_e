@@ -1,6 +1,9 @@
 package com.erunjrun.crew.dto;
 
 import java.sql.Date;
+import java.util.List;
+
+import com.erunjrun.image.dto.ImageDTO;
 
 public class CrewNoticeDTO {
     
@@ -13,11 +16,19 @@ public class CrewNoticeDTO {
     private Date udate_date; // crew_notice_comment
     private int hit;
     private String nickname; // crew_notice_comment
-    private int priority;
+    private String priority;
     
     // crew_notice_comment
     private int comment_idx;
     private String use_yn;
+    
+    
+    private List<ImageDTO> imgs;
+    
+    private String id;
+    
+    private int count;
+    
 	public int getNotice_idx() {
 		return notice_idx;
 	}
@@ -66,10 +77,10 @@ public class CrewNoticeDTO {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	public int getPriority() {
+	public String getPriority() {
 		return priority;
 	}
-	public void setPriority(int priority) {
+	public void setPriority(String priority) {
 		this.priority = priority;
 	}
 	public int getComment_idx() {
@@ -85,14 +96,46 @@ public class CrewNoticeDTO {
 		this.use_yn = use_yn;
 	}
 	
+	
+	
+	public List<ImageDTO> getImgs() {
+		return imgs;
+	}
+	public void setImgs(List<ImageDTO> imgs) {
+		this.imgs = imgs;
+	}
+	
+	
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	
+	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	@Override
 	public String toString() {
 		return "CrewNoticeDTO [notice_idx=" + notice_idx + ", crew_idx=" + crew_idx + ", subject=" + subject
 				+ ", content=" + content + ", create_date=" + create_date + ", udate_date=" + udate_date + ", hit="
 				+ hit + ", nickname=" + nickname + ", priority=" + priority + ", comment_idx=" + comment_idx
-				+ ", use_yn=" + use_yn + "]";
+				+ ", use_yn=" + use_yn + ", imgs=" + imgs.toString() + ", id=" + id + ", count=" + count + "]";
 	}
-    
-    
+
+	
+	
+	
+	
+	
+	
+	
 
 }

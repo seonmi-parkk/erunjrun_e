@@ -83,54 +83,50 @@
 <body>
     <jsp:include page="../header.jsp" />
     
-    
-    <div class="crewWriteView"> <!-- 체크박스 순위 올리기 위함 -->
-
-        <div class="inner">
-            <form enctype="multipart/form-data">
-                <p class="title1">크루 공지사항 등록</p>
-
-                <div id="dori">
-                    <div class="firstbox"> <!-- 레이아웃 구성을 위한 div -->
-
-                        <div class="boxheigth">
-                            <span class="title2">제목 </span>
-                            <input type="text" name="subject" required />
-                        </div> <br>
-
-
-                        <div class="boxheigth">
-                            <span class="title2">필독</span>
-                            <input type="radio" name="priority" value=""  id="priorityChack"/><span class="basictex">필독</span>
-                            <input type="radio" name="priority" value=""  checked/><span class="basictex">일반</span>
-                            <select id="priorityOption" style='visibility : hidden'>
-                            	<option value="">순위선택</option>
-						        <option value="pr1">1순위</option>
-						        <option value="pr2">2순위</option>
-						        <option value="pr3">3순위</option>
-					    	</select>
-					    	<span id="priorityOverlay" style='visibility : hidden'></span>
-                        </div> <br>
-
-
-                    </div> <!-- 레이아웃 구성을 위한 div --> <br>
-
-                    <div class="content_layout"> <!-- 레이아웃 구성을 위한 div -->
-                        <p class="title2">공지 내용</p> <br><br>
-                        <div class="post-form">
-                            <textarea name="postContent" id="summernote" maxlength="10000"></textarea>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="btn-parent">
-                    <button type="button" class="btn03-l">등록 취소하기</button>
-                    <button type="button" class="btn01-l" onclick="sendSubmitPost()">공지사항 등록하기</button>
-                </div>
-            </form>
-        </div>
-    </div>
+	<div class="inner">
+	    <form enctype="multipart/form-data">
+	        <p class="title1">크루 공지사항 수정</p>
+	
+	        <div id="dori">
+	            <div class="firstbox"> <!-- 레이아웃 구성을 위한 div -->
+	
+	                <div class="boxheigth">
+	                    <span class="title2" id="subject"></span>
+	                    <input type="text" name="subject" required />
+	                </div> <br>
+	
+	
+	                <div class="boxheigth">
+	                    <span class="title2">필독</span>
+	                    <input type="radio" name="priority" value=""  id="priorityChack"/><span class="basictex">필독</span>
+	                    <input type="radio" name="priority" value=""  checked/><span class="basictex">일반</span>
+	                    <select id="priorityOption" style='visibility : hidden'>
+	                    	<option value="">순위선택</option>
+					        <option value="pr1">1순위</option>
+					        <option value="pr2">2순위</option>
+					        <option value="pr3">3순위</option>
+				    	</select>
+				    	<span id="priorityOverlay" style='visibility : hidden'></span>
+	                </div> <br>
+	
+	
+	            </div> <!-- 레이아웃 구성을 위한 div --> <br>
+	
+	            <div class="content_layout"> <!-- 레이아웃 구성을 위한 div -->
+	                <p class="title2">공지 내용</p> <br><br>
+	                <div class="post-form">
+	                    <textarea name="postContent" id="summernote" maxlength="10000"></textarea>
+	                </div>
+	            </div>
+	
+	        </div>
+	
+	        <div class="btn-parent">
+	            <button type="button" class="btn03-l">수정 취소하기</button>
+	            <button type="button" class="btn01-l" onclick="sendUpdatePost()">공지사항 수정하기</button>
+	        </div>
+	    </form>
+	</div>
     
     <div class="layoutbox"></div>
     
@@ -145,9 +141,9 @@
 	var overlayCheck = 'Y';
 	var notice_idx = '';
 
-	function sendSubmitPost(){
+	function sendUpdatePost(){
 		if(overlayCheck === 'Y'){
-			layerPopup('공지사항을 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act);
+			layerPopup('공지사항을 수정하시겠습니까?', '확인', '취소', updatePost, applBtn2Act);
 		}else{
 			layerPopup('기존 공지 순위를 변경하시겠습니까?', '확인', '취소', updatePost, applBtn2Act);
 		}
@@ -155,7 +151,7 @@
 	
 	
 	// 크루 넘버! 
-    function submitPost() {
+    function updatePost() {
         var formData = new FormData($('form')[0]); // radio 값 받아오는지 체크 필요
 
         var content = $('#summernote').summernote('code');
@@ -200,7 +196,7 @@
 	            if(response.success){
 	            	console.log('왜?');
 	            	removeAlert();
-	            	layerPopup('공지사항 등록이 완료되었습니다.', '확인',false, function(){locationHref(response.notice_idx)} ,locationHref);
+	            	layerPopup('공지사항 수정이 완료되었습니다.', '확인',false, locationHref ,locationHref);
 	            }
 	        },
 	        error: function (e) {
@@ -208,6 +204,7 @@
 	        }
 	    });
        
+        
     }
 	
 	function updatePost(){
@@ -281,9 +278,8 @@
     	 }
     });
     
-    function locationHref(notice_idx){
-    	/* console.log('notice_idx =>', notice_idx); */
-     	location.href = "/crewNoticeDetail/" +notice_idx; 
+    function locationHref(){
+    	location.href = '/crewNoticeList';
     }
     
 	// 팝업 취소

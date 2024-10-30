@@ -361,6 +361,7 @@
 				var content = '';
 				var btn_style = '';
 				
+				
 				if(result.length > 0){
 					result.forEach(function(item, idx){
 						
@@ -394,7 +395,7 @@
 		                    displayedTags += '<span class="tag ' + styleClass + '">' + tag + '</span>';
 		                });
 	
-						content += '<div class="crewBox" onclick="crewDetail()">';
+						content += '<div class="crewBox" onclick="crewDetail('+item.crew_idx+')">';
 						content += '<div class="crewImg"><img class="crew-img" id="crew-image" src="' + imgElem + '" onerror="this.src=\'/resources/img/crew/crewImg300.png\'"/>';
 	 					// 좋아요 이미지
 						content += '<div onclick="crew_like()"><img class="crew-like" src="resources/img/common/ico_heart_no_act.png"/></div></div>';
@@ -454,9 +455,9 @@
 		console.log('크루좋아요 누름');
 	}
 	
-	function crewDetail(){
-		console.log('크루 이동');
-		location.href='#'; // 해당 크루의 idx 를 통해 이동
+	function crewDetail(crew_idx){
+		console.log('이동 =>', crew_idx)
+		location.href="/crewDetail/"+crew_idx; 
 			
 	}
 	
