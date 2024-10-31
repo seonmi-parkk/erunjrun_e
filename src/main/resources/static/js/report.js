@@ -9,7 +9,7 @@
 		console.log('신고한', unlike_id);
 		console.log('신고받은', userId);
 		console.log('코드네임', code_name);
-		console.log('게시글 번호', board_idx);
+		console.log('설마이게...?', board_idx);
 		reportBoard();
 	});
 	
@@ -25,14 +25,15 @@
 		
 		
 		
-		
-		var code
-		
 		var subject = $("input[name='subject']").text();
         var content = $("input[name='content']").text();
         var unlike_id = $('.user').text();
 		var userId = $("input[name='reput']").val();
 		var board_idx = $("input[name='board_idx']").val();
+		
+		console.log('제목', subject);
+		console.log('내용', content);
+         
          
          
         formData.append('id',userId);  
@@ -57,14 +58,6 @@
         });
 		
 	}
-	
-	
-	
-
-	
-	
-	
-	
 	
 	
 	/* 취소하기 버튼 이벤트 */

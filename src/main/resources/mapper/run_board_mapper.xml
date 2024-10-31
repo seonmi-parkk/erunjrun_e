@@ -218,10 +218,15 @@
 	    WHERE img_no = #{board_idx}
 	</delete>
 	
+	<!-- 게시글 비활성화 -->
 	<update id="runBoardDelete">
 		UPDATE board SET use_yn = 'N' WHERE board_idx = #{param1}
 	</update>
     
+    <!-- 댓글수 -->
+    <select id="coun" resultType="int">
+    	SELECT COUNT(*) FROM comment WHERE board_idx = #{board_idx}
+    </select>
     
     
     

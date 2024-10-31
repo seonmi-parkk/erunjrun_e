@@ -69,7 +69,7 @@
     		margin-top: 45px;
     	}
     	.title2{
-			transform: translateY(0px);
+			transform: translateY(-25px);
     	}
     	.ori{
 
@@ -251,7 +251,7 @@
 					<div id="butt"class=btn03-s>비활성화</div>					
 					<p class="title3-2">${info.create_date}</p>
 					<span class="title3-3">조회수 ${info.bHit}</span>
-					<span class="title3-4"><img src="/resources/img/run/image 14.png" alt="댓글"> 댓글 2</span>
+					<span class="title3-4"><img src="/resources/img/run/image 14.png" alt="댓글"> 댓글 ${coun}</span>
 				</div>
 			</div>
 			<div class="ori">
@@ -502,6 +502,7 @@ function initializeMap() {
 	 	    var board_idx = "${info.board_idx}";
 	 	    
 	 	    console.log('두번째팝업 1번 버튼 동작');
+	 	    
 	 	   $.ajax({
                type: "POST",
                url: "/runBoardDelete/" + board_idx ,
@@ -583,6 +584,7 @@ function initializeMap() {
 		    document.getElementById("reportPopup").style.display = "none";
 		};
 		
+		// 댓글 리스트 부르는 함수
 		commentCall();
 		
 		// 댓글 리스트
@@ -613,13 +615,14 @@ function initializeMap() {
 				var nickName = '${nickname.nickname}';
 				var addName = view.nickname;
 				var comment_idx = view.comment_idx;
-
+				
+				
 				content +='<div id="sort-area">';
 				content +='<div class="sort" id="sort-update'+comment_idx+'">';
 				content +='<div>';
 				content +='<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+view.nickname+'</div>';
 				if(view.use_yn == 'N'){
-					content +='<p class="coco">(삭제된 댓글 입니다.)</p>';
+					content +='<p class="coco" style="color: #999;" >(삭제된 댓글 입니다.)</p>';
 				}else{
 					content +='<p class="coco">'+view.content+'</p>';
 				}
@@ -634,7 +637,7 @@ function initializeMap() {
 						content +='<div class="suj1 btn-popup" style=" cursor: pointer;" onclick="update('+comment_idx+')"  >수정</div>';
 						content +='<div class="suj2 btn-popup" style=" cursor: pointer;" onclick="del('+comment_idx+')">삭제</div>';
 					}else{
-						content +='<div id="sin" style="margin-top: 5px;" style=" cursor: pointer;" class="suj2 btn-popup"  >신고</div>';
+						content +='<div id="sin" style="margin-top: 5px;" data-comment_idx="'+comment_idx+'" onclick="report('+comment_idx+')" style=" cursor: pointer;" class="suj2 btn-popup"  >신고</div>';
 					}
 					
 				}
@@ -761,7 +764,56 @@ function initializeMap() {
 		            alert("오류가 발생했습니다.");
 		        }
 		    });
-		}    
+		}
+		
+		
+		function report(comment_idx) {
+			
+		 		layerPopup('정말 신고 하시겠습니까?','신고','취소' ,function (){secondBtn4Act(comment_idx)} , secondBtn2Act);
+		
+		}
+		
+		
+		
+		
+		function secondBtn4Act(comment_idx) {
+	 		// 두번째팝업 4번버튼 클릭시 수행할 내용
+	 	    console.log('두번째팝업 4번 버튼 동작');
+	 	   
+	 	    console.log('동작시 가ㅣ고외?',comment_idx);
+	 	    commentReport(comment_idx);
+	 	    removeAlert();
+	 	}
+		
+		
+		
+		
+		function commentReport(comment_idx){
+			
+			var modal = document.getElementById("reportPopup");
+		    var PopupBody = document.getElementById("reportPopupBody");
+		    var userId = '${sessionScope.loginId}';
+		    
+			console.log('가지고와번호?',comment_idx);
+			console.log('가지고와? 아이디',userId);
+		    // AJAX 요청 데이터 넣을때 해당 게시판 idx 값 넣기!!!!
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("GET", "/reportComment/"+comment_idx, true);
+		    xhr.onreadystatechange = function() {
+		        if (xhr.readyState === 4 && xhr.status === 200) {
+		            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+		            modal.style.display = "block"; // 모달 열기
+		            
+		         	// JS 파일을 동적으로 로드
+		         	
+		            var script = document.createElement('script');
+		            script.src = '/resources/js/reportComment.js'; 
+		            document.body.appendChild(script);
+		            
+		        }
+		    };
+		    xhr.send();
+		}
 		
 		
 		

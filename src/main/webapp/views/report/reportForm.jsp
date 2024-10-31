@@ -12,6 +12,7 @@
     <script src="/resources/js/layerPopup.js"></script>
     <script src="/resources/js/report.js"></script>
     <script src="/resources/js/reportSummernote.js"></script>
+    
 <style>
 	#duri {
    	   position: relative;
@@ -111,15 +112,28 @@
 <body>
 <form enctype="multipart/form-data">
 <div class="rel">
+	
 	<input type="hidden" value="${report.board_idx}" name="board_idx" readonly="readonly">
 	<input type="hidden" value="${report.id}" name="reput" readonly="readonly">
 	<input type="hidden" value="${report.code_name}" name="code_name" readonly="readonly">
+	 
+	<input type="hidden" value="${comment.comment_idx}" name="comment_idx" readonly="readonly">
+	<input type="hidden" value="${comment.id}" name="nick" readonly="readonly">
+	<input type="hidden" value="${comment.code_name}" name="code_comment" readonly="readonly">
 	<p class="title1" id="dari"><img style="height: 30;" src="/resources/img/run/진짜신고.png" alt="아이콘">
 		신고하기
 	<img style="height: 30;" src="/resources/img/run/진짜신고.png" alt="아이콘"></p>
 	<div id="duri">
 		<div class="reportTag">
-			<span id="span1" class="title2" style=" margin-left: 10;">카테고리 </span><div class="tag-m-gray">게시글</div>
+			<span id="span1" class="title2" style=" margin-left: 10;">카테고리 </span>
+			<c:choose>
+				<c:when test="${report.code_name != null}">
+					<div class="tag-m-gray">게시글</div>
+			    </c:when>
+			    <c:otherwise>
+			    	<div class="tag-m-gray">댓글</div>  			
+				</c:otherwise>
+		    </c:choose>
 		</div>
 		<div class="reportId">
 			<span id="span1" class="title2" style=" margin-left: 10;">작성자 </span>
@@ -140,16 +154,23 @@
 	</div>
 	<div class="reportBtn">
 		<button type="button" class="btn03-l" id="cancle">취소하기</button>
-	    <button type="button" class="btn01-l" id="reportBoard" >신고하기</button>
+			<c:choose>
+				<c:when test="${report.code_name != null}">
+					<button type="button" class="btn01-l" id="reportBoard" >신고하기</button>
+			    </c:when>
+			    <c:otherwise>
+			    	<button type="button" class="btn01-l" id="reportComment" >신고하기</button>  			
+				</c:otherwise>
+		    </c:choose>
+		   
 	</div>
 </div>	
 </form>
-<script>
-	
-</script>
-
 
 
 </body>
-
+<script>
+	
+</script>
+<script src="/resources/js/reportComment.js"></script>
 </html>

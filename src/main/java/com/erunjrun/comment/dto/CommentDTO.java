@@ -2,6 +2,8 @@ package com.erunjrun.comment.dto;
 
 import java.sql.Date;
 
+import com.erunjrun.member.dto.MemberDTO;
+
 public class CommentDTO {
 	
 	// 댓굴 테이블
@@ -14,8 +16,94 @@ public class CommentDTO {
 	private String use_yn;
 	private String nickname;
 	
+	private String id;
+	
+	private MemberDTO member;
 	
 	
+    private String pw;
+    private String name;
+    
+    private String address;
+    private Date birth;
+    private String gender;
+    private String email;
+    private String phone;
+    private int point;
+    
+    private String profile_use;
+	
+	
+	
+	
+	
+	
+	public String getPw() {
+		return pw;
+	}
+	public void setPw(String pw) {
+		this.pw = pw;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public Date getBirth() {
+		return birth;
+	}
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
+	}
+	public String getProfile_use() {
+		return profile_use;
+	}
+	public void setProfile_use(String profile_use) {
+		this.profile_use = profile_use;
+	}
+	public MemberDTO getMember() {
+		return member;
+	}
+	public void setMember(MemberDTO member) {
+		this.member = member;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public int getComment_idx() {
 		return comment_idx;
 	}

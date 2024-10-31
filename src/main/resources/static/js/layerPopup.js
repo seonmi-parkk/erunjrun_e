@@ -1,3 +1,4 @@
+
 // 팝업을 제거하는 함수
 var removeAlert = function(confirmBox) {
     document.body.removeChild($('.confirm-box')[0]);

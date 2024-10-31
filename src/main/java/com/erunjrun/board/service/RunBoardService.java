@@ -302,6 +302,12 @@ public class RunBoardService {
 	}
 
 
+	public int coun(int board_idx) {
+		
+		return runBoardDAO.coun(board_idx);
+	}
+
+
 
 
 

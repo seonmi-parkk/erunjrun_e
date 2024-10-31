@@ -23,6 +23,23 @@
 						VALUES(#{code_name}, #{img_ori}, #{img_new}, #{img_no})
 	</insert>
 	
+	<select id="comment" parameterType="int" resultType="com.erunjrun.comment.dto.CommentDTO">
+		SELECT * 
+			FROM comment c JOIN member m 
+			    ON c.nickname = m.nickname
+			    WHERE c.comment_idx = #{param1}
+	</select>
+	 
+	
+	<insert id="reportComment" 
+				useGeneratedKeys="true"
+				keyColumn="report_idx"
+				keyProperty="report_idx"
+				parameterType="com.erunjrun.report.dto.ReportDTO">
+		insert into report_write(id,code_name,content,unlike_id,subject)
+								values(#{id},'R101',#{content},#{unlike_id},#{subject})
+	</insert>
+	
 
 	
 </mapper>

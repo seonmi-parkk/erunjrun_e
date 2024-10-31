@@ -224,11 +224,14 @@ public class RunBoardController {
 			e.printStackTrace();
 		}
         
+        int countComment = runBoardService.coun(board_idx);
+        logger.info("댓글수 : "+countComment);
+        
     	model.addAttribute("isLike", isLike);
     	model.addAttribute("info", run);
     	model.addAttribute("mapData", mapDataJson);
     	model.addAttribute("nickname", nickname);
-    	
+    	model.addAttribute("coun", countComment);
     	
 
     	return "runBoard/runBoardDetail";

@@ -59,6 +59,8 @@ public interface RunBoardDAO {
 
 	MemberDTO nickName(String loginId);
 
+	int coun(int board_idx);
+
 
 
 

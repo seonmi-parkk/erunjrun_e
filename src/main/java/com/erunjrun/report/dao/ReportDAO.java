@@ -3,6 +3,7 @@ package com.erunjrun.report.dao;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.board.dto.RunBoardDTO;
+import com.erunjrun.comment.dto.CommentDTO;
 import com.erunjrun.image.dto.ImageDTO;
 import com.erunjrun.report.dto.ReportDTO;
 
@@ -14,6 +15,10 @@ public interface ReportDAO {
 	RunBoardDTO reput(int board_idx);
 
 	int fileWrite(ImageDTO imageDTO);
+
+	CommentDTO comment(int comment_idx);
+
+	int reportComment(ReportDTO reportDto);
 
 	
 

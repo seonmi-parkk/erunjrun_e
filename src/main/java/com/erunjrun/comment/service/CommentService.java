@@ -28,7 +28,7 @@ public class CommentService {
 		logger.info("받을 아이디? :"+userId);
 		
 		Map<String, Object> commPoint = new HashMap<String, Object>();
-		commPoint.put("code_name", "P101");
+		commPoint.put("code_name", "P102");
         commPoint.put("id", userId);
         commPoint.put("point", 2);
         
