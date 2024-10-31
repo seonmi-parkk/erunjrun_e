@@ -78,7 +78,7 @@ public class MypageService {
 	public void addPoint(String id, int point) {
 		logger.info("Adding points: {} to user: {}", point, id);
 		mypageDAO.addPoint(id, point);
-	    mypageDAO.updateTotalPoints(id); // member 테이블의 총 포인트 업데이트
+		mypageDAO.updateTotalPoints(id); // member 테이블의 총 포인트 업데이트
 	}
 
 	public void ExerciseProfileUpdate(Map<String, String> params) {
@@ -105,5 +105,90 @@ public class MypageService {
 
 		return result;
 	}
+
+	public Map<String, Object> getFriendRequests(int page, int cnt, String id) {
+		logger.info("Service getFriendRequests called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+	    int totalCount = mypageDAO.countFriendRequests(id, cnt); // ID를 이용해 전체 수 계산
+	    logger.info("Total friend requests count: {}", totalCount);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalCount", totalCount);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.getFriendRequests(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result from getFriendRequests: {}", result); // 데이터 확인
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+	
+	public Map<String, Object> getProfileData(String userId) {
+	    return mypageDAO.getProfileData(userId);
+	}
+
+	public void acceptFriendRequest(String id, String unlikeId) {
+	    mypageDAO.acceptFriendRequest(id, unlikeId); // 요청 수락 처리
+	    mypageDAO.insertMateHistory(id, "M101", unlikeId); // mate_history에 수락 기록 추가
+	    mypageDAO.deleteFriendRequest(id, unlikeId); // 요청 정보 삭제
+
+	}
+
+	public void rejectFriendRequest(String id, String unlikeId) {
+	    mypageDAO.rejectFriendRequest(id, unlikeId); // 요청 거절 처리
+	    mypageDAO.insertMateHistory(id, "M102", unlikeId); // mate_history에 거절 기록 추가
+	}
+
+	public Map<String, Object> getAppliedMates(int page, int cnt, String id) {
+		logger.info("Service getAppliedMates 호출됨: page={}, cnt={}, id={}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+	    int totalCount = mypageDAO.countFriendRequests(id, cnt); // ID를 이용해 전체 수 계산
+	    logger.info("Total friend requests count: {}", totalCount);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalCount", totalCount);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.getAppliedMates(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result from getAppliedMates: {}", result); // 데이터 확인
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+
+	public void cancelMateApplication(String id, String unlikeId) {
+	    logger.info("Cancelling mate application for user ID: {}, unlikeId: {}", id, unlikeId);
+		mypageDAO.cancelMateApplication(id, unlikeId);
+	}
+
+	public Map<String, Object> myIconList(int page, int cnt, String id) {
+		logger.info("Service getAppliedMates 호출됨: page={}, cnt={}, id={}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+	    int totalCount = mypageDAO.countMyIconList(id, cnt); // ID를 이용해 전체 수 계산
+	    logger.info("Total friend requests count: {}", totalCount);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalCount", totalCount);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.myIconList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result from getAppliedMates: {}", result); // 데이터 확인
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+
 
 }

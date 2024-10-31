@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -315,43 +317,186 @@ public class MypageController {
 
 		return "redirect:/ExerciseProfile"; // 업데이트 후 프로필 페이지로 리다이렉트
 	}
-	
+
 	@GetMapping(value = "/pointHistoryListView")
 	public String pointHistoryListView(HttpSession session, Model model) {
-	    logger.info("pointHistoryListView called");
+		logger.info("pointHistoryListView called");
 
-	    // 세션에서 사용자 ID를 가져오기
-	    String id = (String) session.getAttribute("loginId");
-	    if (id == null) {
-	        logger.warn("User not logged in. Redirecting to login page.");
-	        model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
-	        return "member/login"; // 로그인 페이지로 리다이렉트
-	    }
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
 
-	    return "mypage/pointHistoryList"; // 로그인된 경우 리스트 페이지로 이동
+		return "mypage/pointHistoryList"; // 로그인된 경우 리스트 페이지로 이동
 	}
 
 	@GetMapping(value = "/pointHistoryList.ajax")
 	@ResponseBody
 	public Map<String, Object> list(String page, String cnt, HttpSession session, Model model) {
-	    logger.info("list called with page: {}, cnt: {}", page, cnt);
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
 
-	    // 세션에서 사용자 ID를 가져오기
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.list(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
+	// 친구 요청 페이지로 이동
+	@GetMapping(value = "/requestedMateListView")
+	public String requestedMateList() {
+		return "mypage/requestedMateList"; // JSP 페이지 이름
+	}
+
+	@GetMapping("/friendRequests.ajax")
+	@ResponseBody // JSON 형식으로 응답
+	public Map<String, Object> getFriendRequests(String page, String cnt, HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // 에러 응답 반환
+		}
+
+		// 친구 요청 가져오기 (ID를 매개변수로 전달)
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.getFriendRequests(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+	
+	@GetMapping("/mypage/{userId}")
+	public String getProfile(@PathVariable String userId, HttpSession session, Model model) {
 	    String id = (String) session.getAttribute("loginId");
 	    if (id == null) {
-	        logger.warn("User not logged in. Redirecting to login page.");
-	        model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
-	        return null; // AJAX 요청에 대한 적절한 응답을 반환
+	        model.addAttribute("error", "로그인이 필요합니다."); // 모델에 에러 메시지 추가
+	        return "errorPage"; // 에러 페이지로 리다이렉트
 	    }
 
-	    // 페이지와 항목 수 변환
+	    Map<String, Object> profileData = mypageService.getProfileData(userId);
+	    model.addAttribute("profileDTO", profileData); // 프로필 데이터를 모델에 추가
+
+	    return "mypage/ProfileDetail"; // JSP 페이지 이름 반환
+	}
+
+	@PostMapping(value = "/handleFriendRequest.ajax")
+	@ResponseBody
+	public Map<String, Object> handleFriendRequest(String unlikeId, String action, HttpSession session) {
+		Map<String, Object> response = new HashMap<>();
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			response.put("success", false);
+			response.put("message", "로그인이 필요합니다.");
+			return response;
+		}
+
+		try {
+			if ("accept".equals(action)) {
+				// 수락 처리 로직
+				mypageService.acceptFriendRequest(id, unlikeId);
+			} else if ("reject".equals(action)) {
+				// 거절 처리 로직
+				mypageService.rejectFriendRequest(id, unlikeId);
+			}
+			response.put("success", true);
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("message", "처리 중 오류가 발생했습니다.");
+			logger.error("Error handling friend request: {}", e.getMessage());
+		}
+
+		return response;
+	}
+	
+	@GetMapping(value = "/requestingMateListView")
+	public String requestingMateListView() {
+		return "mypage/requestingMateList";
+	}
+	
+	@GetMapping(value = "/appliedMates.ajax")
+	@ResponseBody
+	public Map<String, Object> getAppliedMates(String page, String cnt, HttpSession session, Model model) {
+	    String id = (String) session.getAttribute("loginId");
+	    if (id == null) {
+	    	model.addAttribute("msg", "로그인이 필요합니다.");
+	        return null;
+	    }
+
 	    int page_ = Integer.parseInt(page);
 	    int cnt_ = Integer.parseInt(cnt);
-
-	    // 서비스 호출 시 ID 전달
-	    Map<String, Object> result = mypageService.list(page_, cnt_, id);
-	    logger.info("Result from service: {}", result);
-
+	    
+	    Map<String, Object> result = mypageService.getAppliedMates(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+	    
 	    return result;
 	}
+
+	@PostMapping(value = "/cancelMateApplication.ajax")
+	@ResponseBody
+	public Map<String, Object> cancelMateApplication(String unlikeId, HttpSession session) {
+	    Map<String, Object> response = new HashMap<>();
+	    String id = (String) session.getAttribute("loginId");
+
+	    // ID가 null인 경우 처리
+	    if (id == null) {
+	        response.put("success", false);
+	        response.put("message", "로그인이 필요합니다.");
+	        return response;
+	    }
+
+	    mypageService.cancelMateApplication(id, unlikeId);
+	    response.put("success", true);
+
+	    return response;
+	}
+	
+	@GetMapping(value = "/myIconListView")
+	public String myIconListView() {
+		return "mypage/myIconList";
+	}
+	
+	@GetMapping(value = "/myIconList.ajax")
+	@ResponseBody // JSON 형식으로 응답
+	public Map<String, Object> myIconList(String page, String cnt, HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // 에러 응답 반환
+		}
+
+		// 친구 요청 가져오기 (ID를 매개변수로 전달)
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.myIconList(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+	
 }

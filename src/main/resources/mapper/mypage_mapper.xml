@@ -220,9 +220,10 @@
 		FROM
 		member_point
 		WHERE
-		member_point.id = #{id}  <!-- 특정 멤버 ID로 필터링 -->
+		member_point.id = #{id}
 		ORDER BY member_point.create_date DESC
-		LIMIT #{limit} OFFSET #{offset}
+		LIMIT
+		#{limit} OFFSET #{offset}
 	</select>
 
 	<select id="count" resultType="int">
@@ -231,6 +232,75 @@
 		pages
 		FROM member_point
 		WHERE member_point.id = #{id}
+	</select>
+
+	<select id="getFriendRequests" resultType="map">
+		SELECT unlike_id,
+		create_date
+		FROM mate_application
+		WHERE id= #{id}
+		ORDER BY create_date
+		DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="countFriendRequests" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		mate_application
+		WHERE id = #{id}
+	</select>
+
+	<select id="getProfileData" parameterType="String"
+		resultType="map">
+		SELECT * FROM profile WHERE id = #{userId}
+	</select>
+	<insert id="acceptFriendRequest" parameterType="map">
+		INSERT INTO mate
+		(id, unlike_id, mate_date)
+		VALUES (#{id}, #{unlikeId}, NOW());
+	</insert>
+
+	<delete id="deleteFriendRequest" parameterType="map">
+		DELETE FROM
+		mate_application
+		WHERE id = #{id} AND unlike_id = #{unlikeId};
+	</delete>
+
+	<delete id="rejectFriendRequest" parameterType="map">
+		DELETE FROM
+		mate_application
+		WHERE id = #{id} AND unlike_id = #{unlikeId};
+	</delete>
+
+	<insert id="insertMateHistory" parameterType="map">
+		INSERT INTO
+		mate_history (id, code_name, unlike_id, create_date)
+		VALUES (#{id},
+		#{code_name}, #{unlikeId}, NOW());
+	</insert>
+
+	<select id="getAppliedMates" resultType="map">
+		SELECT id, create_date
+		FROM mate_application
+		WHERE unlike_id = #{id}
+		ORDER BY create_date DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<delete id="cancelMateApplication" parameterType="map">
+		DELETE FROM
+		mate_application
+		WHERE id = #{unlikeId} AND unlike_id = #{id};
+	</delete>
+
+	<select id="myIconList" resultType="map">
+		SELECT icon_idx, buy_date
+		FROM icon_buy
+		WHERE id = #{id}
+		ORDER BY buy_date DESC
+		LIMIT #{limit}
+		OFFSET #{offset}
 	</select>
 
 </mapper>   	
