@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erunjrun.chat.dao.ChatPersonalDAO;
+import com.erunjrun.chat.dto.ChatCrewLeaderDTO;
 import com.erunjrun.chat.dto.ChatPersonalDTO;
 
 @Service
@@ -26,7 +27,6 @@ public class ChatPersonalService {
 	
 	public Map<String, Object> getContent(String chatIdx, String baseUser) {
 		Map<String, Object> values = new HashMap<String, Object>();
-		
 		
 		List<ChatPersonalDTO> userList = chatPersonalDAO.getUserName(chatIdx);
 		//logger.info("userNames"+userNames[0]);
@@ -96,36 +96,35 @@ public class ChatPersonalService {
 		return chatPersonalDAO.exitRoom(chatIdx,user) > 0 ? true : false;
 	}
 
-
+	// 3년 지난 데이터 삭제
 	public void deleteChatData() {
 		chatPersonalDAO.deleteChatData();
 	}
 
 
-	public int getCrewLeaderChat(String crewIdx, String baseUser) {
+	public String getCrewLeaderChat(String crewIdx, String baseUser) {
 		logger.info("crewIdx : {}, baseUser: {}",crewIdx,baseUser);
 		return chatPersonalDAO.getCrewLeaderChat(crewIdx, baseUser);
 	}
 
 
+	// getContent()에서 baseUser도 지우기 check!!
 	public Map<String, Object> getCrewLeaderContent(String chatIdx, String baseUser) {
 		Map<String, Object> values = new HashMap<String, Object>();
 		
-		
-		List<ChatPersonalDTO> userList = chatPersonalDAO.getCrewLeaderUserName(chatIdx);
-		//logger.info("userNames"+userNames[0]);
-		// userNames들어오는지 check하고 위에 values에 아래 list랑 usernames넣어서 컨트롤러 보내기
-		// 컨트롤러도 수정해야함.
-		List<ChatPersonalDTO> msgList = chatPersonalDAO.getContent(chatIdx, baseUser);
+		List<ChatCrewLeaderDTO> userList = chatPersonalDAO.getCrewLeaderUserName(chatIdx);
+		logger.info("userNames"+userList.get(0).getNickname());
+
+		List<ChatCrewLeaderDTO> msgList = chatPersonalDAO.getCrewLeaderContent(chatIdx);
 		
 		// 날짜 비교 (날짜 바뀔경우 체크)
 		LocalDate previousDate = null;
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 	    
-        for(ChatPersonalDTO msg : msgList) {
-        	LocalDate msgDate = msg.getStart_date().toLocalDate();
-        	logger.info("msg.getStart_date(): "+msg.getStart_date());
+        for(ChatCrewLeaderDTO msg : msgList) {
+        	LocalDate msgDate = msg.getCreate_date().toLocalDate();
+        	logger.info("msg.getStart_date(): "+msg.getCreate_date());
         	logger.info("msgDate: "+msgDate);
         	
         	if(previousDate == null || !msgDate.equals(previousDate)) {
@@ -133,19 +132,40 @@ public class ChatPersonalService {
         		logger.info("msgDate: "+msgDate);
         		logger.info("msgDate.format(dateFormatter): "+msgDate.format(dateFormatter));
         		msg.setFirstOfDay(msgDate.format(dateFormatter));
-        		
         		previousDate = msgDate;
-
         	}
         }
-        
-       // logger.info("getFirstOfDay: "+ msgList.get(0).getFirstOfDay());
         
         values.put("userList", userList);
         values.put("msgList", msgList);
 		return values;
 		
 	
+	}
+
+
+	public String createCrewLeaderRoom(String crewIdx, String baseUser) {
+		ChatCrewLeaderDTO dto = new ChatCrewLeaderDTO();
+		dto.setCrew_idx(crewIdx);
+		String chatIdx = "";
+		// crew_chat 테이블 생성
+		if(chatPersonalDAO.createCrewLeaderRoom(dto) > 0 ) {
+			chatIdx = dto.getChat_idx();
+			String readerId = chatPersonalDAO.getLeaderId(crewIdx);
+			// crew_chat_link 테이블 생성
+			chatPersonalDAO.createCrewLinkTable(chatIdx,baseUser,readerId);
+		}
+		return chatIdx;
+	}
+
+
+	public Object sendCrewLeaderMessage(Map<String, Object> param) {
+		return chatPersonalDAO.sendCrewLeaderMessage(param)>0 ? true : false;
+	}
+
+
+	public Object exitCrewLeaderRoom(String chatIdx, String user) {
+		return chatPersonalDAO.exitCrewLeaderRoom(chatIdx, user) > 0 ? true : false;
 	}
 	
 	

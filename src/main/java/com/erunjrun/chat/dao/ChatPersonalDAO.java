@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.erunjrun.chat.dto.ChatCrewLeaderDTO;
 import com.erunjrun.chat.dto.ChatPersonalDTO;
 
 @Mapper
@@ -30,9 +31,20 @@ public interface ChatPersonalDAO {
 
 	void deleteChatData();
 
-	int getCrewLeaderChat(String crewIdx, String baseUser);
+	String getCrewLeaderChat(String crewIdx, String baseUser);
 
-	List<ChatPersonalDTO> getCrewLeaderUserName(String chatIdx);
+	int createCrewLeaderRoom(ChatCrewLeaderDTO dto);
 
+	String getLeaderId(String crewIdx);
+
+	int createCrewLinkTable(String chatIdx, String baseUser, String readerId);
+
+	List<ChatCrewLeaderDTO> getCrewLeaderUserName(String chatIdx);
+
+	List<ChatCrewLeaderDTO> getCrewLeaderContent(String chatIdx);
+
+	int sendCrewLeaderMessage(Map<String, Object> param);
+
+	int exitCrewLeaderRoom(String chatIdx, String user);
 
 }

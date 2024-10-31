@@ -1,8 +1,6 @@
 package com.erunjrun.chat.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -10,20 +8,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.erunjrun.chat.dto.ChatPersonalDTO;
 import com.erunjrun.chat.service.ChatPersonalService;
 import com.erunjrun.chat.service.SseService;
 
@@ -161,8 +154,14 @@ public class ChatPersonalController {
 			 Map<String, Object> data = new HashMap<String, Object>();
 			 String baseUser = (String) session.getAttribute("loginId");
 			 logger.info("crewIdx : {}, baseUser: {}",crewIdx,baseUser);
-			 data.put("roomNum", chatPersonalService.getCrewLeaderChat(crewIdx,baseUser));
-			
+			 // 채팅방 번호 조회
+			 String roomNum = chatPersonalService.getCrewLeaderChat(crewIdx,baseUser);
+			// 없으면 생성
+			if(roomNum == null) {
+				roomNum = chatPersonalService.createCrewLeaderRoom(crewIdx,baseUser);
+			}
+				
+			data.put("roomNum", roomNum);
 	        return data;
 	    }
 	    
@@ -182,6 +181,21 @@ public class ChatPersonalController {
 			 return values;
 		 }
 
-	    
+		 @PostMapping("/crewLdchat/send")
+		 @ResponseBody
+		 public Map<String, Object> sendCrewLeaderMessage(@RequestBody Map<String, Object> param){
+			 Map<String, Object> data = new HashMap<String, Object>();
+			 data.put("result", chatPersonalService.sendCrewLeaderMessage(param));
+			 return data;
+		 }
+		 
+		 @PostMapping("/crewLdchat/exit/{chatIdx}")
+		 @ResponseBody
+		 public Map<String, Object> exitCrewLeaderRoom(@PathVariable String chatIdx, HttpSession session){
+			 String user = (String) session.getAttribute("loginId");
+			 Map<String, Object> result = new HashMap<String, Object>();
+			 result.put("success", chatPersonalService.exitCrewLeaderRoom(chatIdx, user));
+			 return result;
+		 }
 	 
 }

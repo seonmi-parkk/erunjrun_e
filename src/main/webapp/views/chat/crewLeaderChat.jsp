@@ -222,8 +222,8 @@
 			dataType: 'JSON',
 			success: function(data){
 				console.log(data);
-				//drawContent(data.msgList);
-				//drawTitle(data.userList);
+				drawContent(data.msgList);
+				drawTitle(data.userList);
 				scrollBtm();
 			},
 			error: function(e){
@@ -234,7 +234,7 @@
 
 
 	// 채팅방제목(참여 유저닉네임)
-	/* function drawTitle(userList){
+	function drawTitle(userList){
 		var nameCont = '';
 		console.log("userList",userList);
 		userList.forEach(function(user,index){
@@ -253,14 +253,14 @@
 		$('.chat .top-bar .num').text(userList.length);
 		
 
-	} */
+	}
 	
-	/* function drawContent(list){
+	function drawContent(list){
 		var msgCont = '';
 		if(list.length>0){
 			list.forEach(function(cont){
 
-				var timestamp = cont.start_date;
+				var timestamp = cont.create_date;
 				var date = timestamp.split('T')[0];
 				var cvTime = convertHour(timestamp);
 				
@@ -322,20 +322,21 @@
 		
 		$('.msg-area').html(msgCont);		
 
-	} */
+	} 
 	
-	/* function sendMessage(){
+	function sendMessage(){
 		console.log("전송클릭");
 		//var message = $('.chat .msg').text();
 		var sendData = {};
 		sendData.message = $('.chat textarea[name="msg"]').val();
 		sendData.chatIdx = chatIdx;
 		sendData.baseUser = $('.chat input[name="baseUser"]').val();
-		sendData.otherUser = $('.chat input[name="otherUser"]').val();	
+		$('.chat textarea[name="msg"]').val('');
+		
 		
 		$.ajax({
 			type: 'POST',
-			url: '/chat/send/',
+			url: '/crewLdchat/send/',
 			contentType: 'application/json', 
 		    data: JSON.stringify(sendData),  
 			dataType: 'JSON',
@@ -350,18 +351,17 @@
 			}
 		});
 		
-	} */
+	}
 	
 	// 채팅방 나가기
-	/* $('.exit').on('click',function(){
+	$('.exit').on('click',function(){
 		layerPopup('채팅방을 나가시겠습니까?','나가기','취소',exitBtn1Act,exitBtn2Act);
-	}); */
+	});
 	
-	/* function exitBtn1Act(){
-		alert('나가기');
+	function exitBtn1Act(){
 		$.ajax({
 			type: 'POST',
-			url: '/chat/exit/'+chatIdx,
+			url: '/crewLdchat/exit/'+chatIdx,
 			dataType: 'JSON',
 			success: function(data){
 				console.log(data.success);
@@ -374,12 +374,11 @@
 			}
 		});
 		removeAlert();
-	} */
+	}
 	
-	/* function exitBtn2Act(){
-		alert('취소');
+	function exitBtn2Act(){
 		removeAlert();
-	} */
+	} 
 	
 	
 	// textarea 글자수 제한
