@@ -36,5 +36,13 @@ public class CommentService {
 		
 		return commentDao.addComment(board_idx,content,nickname);
 	}
+	public boolean update(CommentDTO commentDto) {
+		
+		return commentDao.update(commentDto) > 0;
+	}
+	public boolean delete(int comment_idx) {
+		
+		return commentDao.delete(comment_idx) > 0;
+	}
 	
 }

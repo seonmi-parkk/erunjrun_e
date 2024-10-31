@@ -209,7 +209,7 @@
                 content +='<td>'+view.board_idx+'</td>';
             }
 			
-			content +='<td ><a class="user" data-id="' + view.id + '">'+view.nickname+'</a></td>';
+			content +='<td ><a class="user" style=" cursor: pointer;"  data-id="' + view.id + '">'+view.nickname+'</a></td>';
 			content +='<td><a href="/runBoardDetail/'+view.board_idx+'">'+view.subject+'<a/></td>';
 			content +='<td>'+view.bHit+'</td>';
 			content +='<td>'+view.likes+'</td>';

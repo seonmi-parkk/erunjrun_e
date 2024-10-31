@@ -16,4 +16,8 @@ public interface CommentDAO {
 
 	int commPoint(Map<String, Object> commPoint);
 
+	int update(CommentDTO commentDto);
+
+	int delete(int comment_idx);
+
 }

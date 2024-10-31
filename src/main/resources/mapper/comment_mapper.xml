@@ -10,13 +10,21 @@
 	</select>
 	
 	<insert id="addComment" parameterType="com.erunjrun.comment.dto.CommentDTO">
-		insert into comment(code_name,board_idx,content,nickname)
-							values('B100',#{board_idx},#{content},#{nickname})
+		INSERT INTO comment(code_name,board_idx,content,nickname)
+							VALUES('B100',#{board_idx},#{content},#{nickname})
 	</insert>
 	
 	 <insert id="commPoint" parameterType="map">
     	INSERT INTO member_point (code_name, id, point)
     		VALUES (#{code_name}, #{id},#{point})
     </insert>
+    
+    <update id="update" parameterType="com.erunjrun.comment.dto.CommentDTO">
+    	UPDATE comment SET content = #{content} WHERE comment_idx = #{comment_idx}
+    </update>
+    
+    <update id="delete" parameterType="int">
+    	UPDATE comment SET use_yn = 'N' WHERE comment_idx = #{comment_idx}
+    </update>
 
 </mapper>

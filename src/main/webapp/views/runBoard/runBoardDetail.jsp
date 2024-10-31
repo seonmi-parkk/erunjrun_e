@@ -231,6 +231,7 @@
 	    	background: #fff;
 	    	border-radius: 10px;
 	    }
+
 		
     </style>
 </head>
@@ -308,7 +309,7 @@
 		    		<input type="text" class="tex">
 	    		</div>
 	    		<div>
-	    			<div id="ins" class=btn03-s onclick="comment()">등록</div>	    		
+	    			<div id="ins" class=btn01-s onclick="comment()">등록</div>	    		
 	    		</div>
 	    	</div>
 	    </div>
@@ -319,7 +320,7 @@
 				    <button type="button" class="btn03-l btn-popup" >삭제</button>	    	    	
 	    		</c:if>
 	    	</div>
-		    <button type="button" class="btn02-l"  onclick="location.href='/runBoard'">목록</button>
+		    <button type="button" class="btn02-l"  onclick="location.href='/runBoard'" >목록</button>
 	    </div>
 	    
 	    
@@ -613,22 +614,31 @@ function initializeMap() {
 				var addName = view.nickname;
 				var comment_idx = view.comment_idx;
 
-				content +='<div class="sort-area">';
-				content +='<div class="sort">';
+				content +='<div id="sort-area">';
+				content +='<div class="sort" id="sort-update'+comment_idx+'">';
 				content +='<div>';
 				content +='<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+view.nickname+'</div>';
-				content +='<p class="coco">'+view.content+'</p>';
+				if(view.use_yn == 'N'){
+					content +='<p class="coco">(삭제된 댓글 입니다.)</p>';
+				}else{
+					content +='<p class="coco">'+view.content+'</p>';
+				}
 				content +='<div class="date">'+view.create_date+'</div>';
 				content +='</div>';
-				content +='<div class="ard">';
-				content +='<div class="detail"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>'
-				content +='<div id ="bih" class=btn03-s>비활성화</div>';
-				if(nickName == addName){
-					content +='<div class="suj1 btn-popup" onclick="update('+comment_idx+')">수정</div>';
-					content +='<div class="suj2 btn-popup">삭제</div>';
-				}else{
-					content +='<div id="sin" style="margin-top: 5px;"  class="suj2 btn-popup">신고</div>';
+				if(view.use_yn == 'Y'){
+					content +='<div class="ard" id="dis">';					
+					content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
+					content +='<div id ="bih" class=btn03-s>비활성화</div>';
+					content += '<div class="action-buttons" style="display:none; cursor: pointer;" id="actions-' + comment_idx + '">';
+					if(nickName == addName){
+						content +='<div class="suj1 btn-popup" style=" cursor: pointer;" onclick="update('+comment_idx+')"  >수정</div>';
+						content +='<div class="suj2 btn-popup" style=" cursor: pointer;" onclick="del('+comment_idx+')">삭제</div>';
+					}else{
+						content +='<div id="sin" style="margin-top: 5px;" style=" cursor: pointer;" class="suj2 btn-popup"  >신고</div>';
+					}
+					
 				}
+				content += '</div>';
 				content +='</div>';
 				content +='</div>';
 				content +='</div>';
@@ -663,7 +673,23 @@ function initializeMap() {
 			
 			console.log('댓글no : ',comment_idx);
 			
+			var commentContent = $("#sort-update" + comment_idx + " .coco").text();
+			console.log('눌렀을때 나와?',commentContent);
+    		var commentAuthor = $("#sort-update" + comment_idx + " .nick").text();
+    		var commentDate = $("#sort-update" + comment_idx + " .date").text();
+    
+   			 // 댓글 내용, 작성자, 날짜를 포함한 편집 필드 생성
+    		var editField = '<div class="edit-container">';
+				  editField += '<input type="text" class="tex" value="' + commentContent + '" id="editContent' + comment_idx + '" style="width:800px;" />';
+				  editField += '<button class="btn01-s" onclick="saveComment(' + comment_idx + ')">저장</button>';
+				  editField += '<button class="btn03-s" onclick="commentCall();">취소</button>';
+				  editField += '</div>';
+
+		    // 기존 댓글을 숨기고 편집 필드를 삽입
+		    $("#sort-update" + comment_idx + " .coco").html(editField);
 			
+					
+			/*
 			$.ajax({
 				type:'POST',
 				url:'/updateComment/'+comment_idx,
@@ -677,8 +703,67 @@ function initializeMap() {
 					console.log('댓글 수정 오류',e);
 				}
 			})
+			*/
 			
 		}
+		
+		function toggleActions(comment_idx) {
+		    $('#actions-' + comment_idx).toggle(); // 버튼 표시/숨김 토글
+		}
+		
+		function saveComment(comment_idx) {
+			 // 수정된 댓글 내용 가져오기
+			 console.log('선택한 댓글번호 : ',comment_idx);
+		    var updatedContent = $("#editContent" + comment_idx).val();
+			 console.log('수정내용 : ',updatedContent);
+		    var nickname = '${nickname.nickname}';
+
+		    // AJAX 요청으로 수정된 내용 서버에 전송
+		    $.ajax({
+		        type: 'POST',
+		        url: '/updateComment',  // 서버의 댓글 수정 처리 경로
+		        data: JSON.stringify({ comment_idx: comment_idx, content: updatedContent ,nickname:nickname}),
+		        contentType: 'application/json',
+		        dataType: 'JSON',
+		        success: function(data) {
+		            if (data.success) {
+		            	// 불러오기
+		            	commentCall();
+		            }	               
+		        },
+		        error: function(error) {
+		            console.log("댓글 수정 오류:", error);
+		            alert("오류가 발생했습니다.");
+		        }
+		    });
+		}
+		 
+		function del(comment_idx) {
+			
+			console.log('삭제버튼 : ',comment_idx);
+			
+			$.ajax({
+		        type: 'POST',
+		        url: '/deleteComment/'+comment_idx,  // 서버의 댓글 삭제 처리 경로
+		        contentType: 'application/json',
+		        dataType: 'json',
+		        success: function(data) {
+		            if (data.success) {
+		                // 삭제 성공 시 댓글을 "삭제된 댓글입니다."로 업데이트
+		                $("#sort-update" + comment_idx + " .coco").text("(삭제된 댓글입니다.)");
+		                // 수정, 삭제, 신고 버튼 숨기기
+		                $("#sort-update" + comment_idx + " .ard").hide();
+		                
+		            } 
+		        },
+		        error: function(error) {
+		            console.log("댓글 삭제 오류:", error);
+		            alert("오류가 발생했습니다.");
+		        }
+		    });
+		}    
+		
+		
 		
 		
 		

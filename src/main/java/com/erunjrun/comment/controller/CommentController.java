@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erunjrun.comment.dto.CommentDTO;
@@ -52,6 +53,36 @@ public class CommentController {
 		return result;
 	}
 	
+	@PostMapping(value="/updateComment")
+	@ResponseBody
+	public Map<String, Object> update(@RequestBody CommentDTO commentDto){
+		
+		Map<String,Object> result = new HashMap<String, Object>();
+		  
+	    boolean success = commentService.update(commentDto);
+	    
+	    if(success) {
+	    	result.put("success", success);
+	    }
+	    
+		return result;
+	}
+	
+	@PostMapping(value="/deleteComment/{comment_idx}")
+	@ResponseBody
+	public Map<String, Object> delete(@PathVariable int comment_idx){
+		
+		Map<String,Object> result = new HashMap<String, Object>();
+		
+		
+	    boolean success = commentService.delete(comment_idx);
+	    
+	    if(success) {
+	    	result.put("success", success);
+	    }
+	    
+		return result;
+	}
 	
 	
 	
