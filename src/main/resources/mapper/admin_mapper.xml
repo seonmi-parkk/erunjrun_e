@@ -233,11 +233,11 @@
 		 WHERE rw.report_idx = #{param1}
    </select>
 	  
-	  <select id="image" resultType="com.erunjrun.admin.dto.AdminDTO">
+	  <select id="image" resultType="com.erunjrun.image.dto.ImageDTO">
 	  	select 
 	  	img_ori,
 	  	img_new,
-	  	img_no
+	  	img_no,
 	  	img_idx
 	  	from image 
 	  	 where img_no = #{report_idx}

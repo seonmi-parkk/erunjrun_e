@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.admin.dao.AdminDAO;
 import com.erunjrun.admin.dto.AdminDTO;
@@ -137,6 +138,7 @@ public class AdminService {
     }
 	
 	
+	
 //	신고 - 신고게시글 번호 누르면 신고 상세페이지로 이동해야함.
 	public List<AdminDTO> reportlist(int limit, int offset,String category) {
 		
@@ -150,9 +152,14 @@ public class AdminService {
 
 	public void reportdetail(String report_idx, Model model) {
 		AdminDTO dto = admin_dao.reportdetail(report_idx);
-		ImageDTO file = admin_dao.image(report_idx);
+		ImageDTO imageDTO = admin_dao.image(report_idx); // 이미지 정보 가져오기
+		logger.info(""+imageDTO);
+		model.addAttribute("file",imageDTO);
+		    
+	
+		
 		model.addAttribute("info",dto);
-		model.addAttribute("file",file);
+		
 		
 	}
 
@@ -258,10 +265,14 @@ public class AdminService {
 		return admin_dao.popuplist(limit,offset);
 	}
 
-	public void popupwrite(Map<String, String> param) {
+	
+	public void popupwrite(MultipartFile file, Map<String, String> param) {
 		admin_dao.popupwrite(param);
-		
 	}
+	
+	
+		
+	
 
 	public void popupdetail(String popup_idx, Model model) {
 		
@@ -274,6 +285,8 @@ public class AdminService {
 		admin_dao.popupupdate(param);
 		
 	}
+
+
 
 	
 

@@ -1,5 +1,6 @@
 package com.erunjrun.admin.controller;
 
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.admin.dto.AdminDTO;
 import com.erunjrun.admin.service.AdminService;
@@ -244,6 +246,8 @@ public class AdminController {
 	  @GetMapping(value = "/adminReportDetail")
 	  public String reportdetail(String report_idx,Model model) {
 		  admin_service.reportdetail(report_idx,model);
+		
+		  
 		  
 		  return "admin/adminReportDetail";
 	  }
@@ -435,15 +439,17 @@ public class AdminController {
 	  
 	  @GetMapping(value = "adminPopupWrite")
 	  public String popupwrite() {
+		  
+		  
 		  return "admin/adminPopupWrite";
 	  }
 	  
 	  
 	  @PostMapping(value = "adminPopupWrite")
-	  public String popupwrite(@RequestParam Map<String, String> param, Model model) {
+	  public String popupwrite(MultipartFile file,@RequestParam Map<String, String> param, Model model) {
       logger.info(param.get("tag_name"));
       logger.info(param.get("use_yn"));
-      admin_service.popupwrite(param);
+      admin_service.popupwrite(file,param);
 		  return "redirect:/adminPopup";
 	  }
 	  

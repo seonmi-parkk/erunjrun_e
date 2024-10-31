@@ -1,6 +1,7 @@
 package com.erunjrun.admin.dto;
 
 import java.sql.Date;
+import java.util.List;
 
 import com.erunjrun.image.dto.ImageDTO;
 
@@ -30,17 +31,25 @@ public class AdminDTO {
 	private String process;
 	private String report_idx;
 	private String ban_idx;
-	private ImageDTO image;
 	private String tag_idx;
 	private String tag_name;
 	private String code_use;
 	private PopupDTO popupdto;
+	private ImageDTO image;
 	
 	
 	
 	
 	
 	
+	
+	
+	public ImageDTO getImage() {
+		return image;
+	}
+	public void setImage(ImageDTO image) {
+		this.image = image;
+	}
 	public PopupDTO getPopupdto() {
 		return popupdto;
 	}
@@ -71,12 +80,7 @@ public class AdminDTO {
 	public void setTag_idx(String tag_idx) {
 		this.tag_idx = tag_idx;
 	}
-	public ImageDTO getImage() {
-		return image;
-	}
-	public void setImage(ImageDTO image) {
-		this.image = image;
-	}
+	
 	public String getBan_idx() {
 		return ban_idx;
 	}
