@@ -31,6 +31,8 @@ public class CrewNoticeDTO {
     private String crew_name;
     private int totalpage;
     
+    private String image;
+    
     
 	public int getNotice_idx() {
 		return notice_idx;
@@ -146,15 +148,27 @@ public class CrewNoticeDTO {
 	public void setTotalpage(int totalpage) {
 		this.totalpage = totalpage;
 	}
+	
+	
+	
+	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	@Override
 	public String toString() {
 		return "CrewNoticeDTO [notice_idx=" + notice_idx + ", crew_idx=" + crew_idx + ", subject=" + subject
 				+ ", content=" + content + ", create_date=" + create_date + ", udate_date=" + udate_date + ", hit="
 				+ hit + ", nickname=" + nickname + ", priority=" + priority + ", comment_idx=" + comment_idx
 				+ ", use_yn=" + use_yn + ", imgs=" + imgs.toString() + ", id=" + id + ", count=" + count + ", crew_name="
-				+ crew_name + ", totalpage=" + totalpage + "]";
+				+ crew_name + ", totalpage=" + totalpage + ", image=" + image + "]";
 	}
 
+	
+	
 	
 	
 

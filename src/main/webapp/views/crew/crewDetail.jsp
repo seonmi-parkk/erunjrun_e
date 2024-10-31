@@ -395,51 +395,31 @@
 <script>
 
 	var loginId = '${sessionScope.loginId}';
-	console.log('loginId => ', loginId);
-	
 	var code_name = '';
-	
 	var crewLeader = '';
-	
 	var application = '';
-
 	var crewone = [];
-	
 	var is_recruit = '';
-	
 	var likeCrew = 'N';
-	
 	var loginCheckLeader = '';
-	
-	
     var crew_idx = $('input[name="crew_idx"]').val();
 	
 
 	$(document).ready(function () {
-	    
-	    console.log('crew_idx =>', crew_idx);
-	    
 	    crewDetail();
-	    
 	    crewMemberList();
-	    
 	    likeList();
 	});
 	
 	    function crewDetail() {
-	        console.log('크루 데이터 요청');
-	        
 	        $.ajax({
 	            type: 'POST',
 	            url: '/crew/detail',
 	            data: { 'crew_idx': crew_idx },
 	            dataType: 'JSON',
 	            success: function (response) {
-	                console.log('데이터 받아옴 => ', response);
 	                if (response.success) {
-	                    // 받아온 데이터를 HTML에 반영
 	                    var result = response.result;
-	                    
 	                    
 	                    if(result.is_recruit === 'N'){
 	                    	is_recruit = result.is_recruit;
@@ -447,8 +427,6 @@
 	                    	$('#crew-btn-01').css({'border' : '1px solid var(--btn-bd-g)', 'color' : 'var(--btn-bd-g)', 'background' : '#fff'});
 	                    }
 	                    
-	                    
-	
 	                    // 이미지 업데이트
 	                    if (result.img_new) {
 	                        $('#crew-img').attr('src', '/photo/' + result.img_new);
@@ -473,8 +451,6 @@
 	                    $('#crew-minute').text(result.minute);
 	                    $('#crew-distance').text(result.distance);
 	                    $('#crew-location').text(result.shortsido + ' ' + result.sigungu);
-	                    
-	                    
 	                }
 	            },
 	            error: function (e) {
@@ -482,7 +458,6 @@
 	            }
 	        });
 	    }
-	    
 	    
 	    function crewMemberList(){
 			console.log('크루 회원 리스트 요청');
@@ -503,7 +478,13 @@
 	                    
 	                    // 프로필 이미지 '' 여부 확인해서 이미지 설정 if문 추가 필요
    	                   /*  var profileImg = '<img src="/photo/' + result.image + '"/>';  */
-	                    var profileImg = '<img src="/resources/img/common/profile.png" width="32px"/>';
+	                    var profileImg = '';
+	                    
+	                    if(result.image != null || result.image === ''){
+	                    	profileImg = '<img alt="profileImg" src="/photo/' + result.image + '" onerror="this.src=\'/resources/img/common/profile.png\'" id="profileImg" width="32px" />';
+	                    }else{
+	                    	profileImg = '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png\'" id="profileImg" width="32px" />';
+	                    }// '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png'" id=\"profileImg\" width = 32px;>\';
 	                    
 	                    var genderImg = '';
 	                    var content = '';

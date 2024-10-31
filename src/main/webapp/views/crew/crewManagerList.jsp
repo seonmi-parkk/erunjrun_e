@@ -5,13 +5,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Crew Manager</title>
-<link rel="stylesheet" href="/resources/css/crew.css">
+<link rel="stylesheet" href="/resources/css/common.css">
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <script src="/resources/js/layerPopup.js"></script>
+<script src="/resources/js/common.js"></script>
 <style>
 
 	.innerr {
@@ -107,12 +108,21 @@
         padding: 10px 0px 10px;
     }
     
+    
+    
     .title1-12 {
         color: var(--font-color);
         font-family: "GmarketSans", sans-serif;
         font-size: 25px;
         font-weight: 700;
         padding: 25px 25px 5px;
+    }
+    
+    .title1-12 a {
+        color: var(--font-color);
+        font-family: "GmarketSans", sans-serif;
+        font-size: 25px;
+        font-weight: 700;
     }
    
 	.scrollable-content {
@@ -137,6 +147,18 @@
 	}
 	
 	.btn02-s1 {
+    	 display: inline-block;
+         height: 32px;
+         padding: 8px 11px;
+         margin: 0 4px;
+         border-radius: 10px;
+         border: 1px solid #AAAAAA;
+         color: #AAAAAA;
+         background: #fff;
+         cursor: pointer;
+	}
+	
+	.btn02-s13 {
     	 display: inline-block;
          height: 32px;
          padding: 8px 11px;
@@ -210,7 +232,7 @@
 		margin-left: 10px;
 		display: flex;  /*수직 정렬 flex, center*/
     	align-items: center;  
-    	padding: 9px 0px 0px 0px;
+    	padding: 10px 0px 10px 0px;
 	}
 	
     #btn04-s{
@@ -225,6 +247,73 @@
         cursor: pointer;
         font-size: 14px;
     }
+    
+    .profileImg{
+    	margin-right: 10px;
+   		margin-left: 10px;
+   		margin-bottom: -10px;
+    }
+    
+    input[type="checkbox"]{
+        margin-top: 6px;
+    }
+    
+    a{
+    	text-decoration-line: none;
+    }
+    
+    .profileImg_01{
+    	margin-right: 15px;
+    }
+    
+    .imglayout{
+    	margin: 11px 14px -3px 9px;
+    }
+    
+    .genderImg{
+        margin: 0px 3px -3px 3px;
+    }
+    
+    .profileImg03{
+    	margin: 0px 13px 0px 2px;
+    }
+    
+    .testeee .btn-sty06{
+    	margin-left: auto;
+    }
+
+    /*운동프로필 레이어팝업*/
+	#profilePopup {
+	    width: fit-content;
+	    top: 185px;
+	    left: 50%;
+	    transform: translateX(-50%);
+		z-index: 996;
+		display: none;
+	}
+	#profilePopup .close {
+	    font-size: 40px;
+	    font-weight: 300;
+	    position: absolute;
+	    z-index: 996;
+	    top: 30px;
+	    right: 30px;
+	    display: inline-block;
+	    width: 30px;
+	    height: 30px;
+	    line-height: 27px;
+	    text-align: center;
+	}
+	#profilePopup .modal-content{
+	    padding: 20px 20px;
+	    background: #f8f8f8;
+	    border: none;
+    	border-radius: 0;
+    }
+    #PopupBody {
+    	background: #fff;
+    	border-radius: 10px;
+    }
 	 
 </style>
 </head>
@@ -233,19 +322,23 @@
 	
 	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
 	
+	
 	<div class="layoutbox"></div>
 	
+	
+	
 	<div class="innerr">
+	
 		<div class="one">
 			<div class="crew-info">
 				<div class="crewImg">
-					<img class="crew-img" id="crew-img" alt="크루 이미지" src="/resources/img/crew/crewImg300.png" onerror="this.src=/resources/img/crew/crewImg300.png" width="100%" height="100%">
+					<img class="crew-img" id="crew-img" alt="크루 이미지" src="/resources/img/crew/crewImg300.png" onerror="this.src='/resources/img/crew/crewImg300.png'" width="100%" height="100%">
 				</div>
 				<div class="crew-text-box">
 					<div class="title1-12" id="crew-name"></div>
 					<div class="contentbox">
 						<div id="leaderprofile">크루장 정보</div>
-						<p><img src="/resources/img/crew/img01.png" width="10px" class="imglayout" /> <span id="crew-address"></span></p>
+						<p><img src="/resources/img/crew/img01.png" width="10px" class="imglayout" /> <span class="crewText04" id="crew-address"></span></p>
 						<p><img src="/resources/img/crew/img02.png" width="13px" class="imglayout"/> <span id="crew-member"></span> 명</p>
 						<p><img src="/resources/img/crew/img03.png" width="14px" class="imglayout"/> 매주 <span id="crew-days"></span></p>
 						<p><img src="/resources/img/crew/img04.png" width="14px" class="imglayout"/> <span id="crew-minute"></span> 분 / <span id="crew-distance"></span> km</p>
@@ -274,11 +367,15 @@
 				<div class="content-box01">어쩌구 저쩌구</div>
 			</div>
 		</div>
+		
+		
+		
+		
 		<div class="two">
 			<div class="fixbox">
 				<div class="title1-1" id="crew-name">크루원 관리</div>
 				<div class="btn-layout">
-					<a href="/crewAuthorityList/${crew_idx}"><button class="btn02-s1">권한기록</button></a>
+					<a href="/crewAuthorityList/${crew_idx}"><button class="btn02-s13">권한기록</button></a>
 					<button class="btn04-s" onclick="crewAdminUpdate()">권한</button>
 					<button class="btn02-s" onclick="layerPopup('크루원을 퇴출하시겠습니까?', '확인', '취소', crewExpel, applBtn2Act)">퇴출</button>
 				</div>
@@ -288,7 +385,13 @@
 				<span class="profile-text" id="crew-member-profile"></span> <!-- 크루원 정보 -->
 		    </div>
 		</div>
-		
+		<!-- 모달 -->
+		<div id="profilePopup" class="modal">
+		    <div class="modal-content">
+		        <span class="close">&times;</span>
+		        <div id="PopupBody"></div>
+		    </div>
+		</div>
 		
 	</div>
 	
@@ -308,6 +411,7 @@
 	    console.log('crew_idx =>', crew_idx);
 	    crewDetail(); 
 	    crewMemberList();
+	    
 	});
 	
 	function crewMemberList() {
@@ -328,7 +432,7 @@
 	                crewApplicationMember(application);
 
 	                // 프로필 이미지 기본값 설정 (추가 조건이 있으면 적용 가능)
-	                var profileImg = '<img src="/resources/img/common/profile.png" width="32px"/>';
+	                var profileImg = '<img src="/resources/img/common/profile.png" class="profileImg" width="32px"/>';
 	                var genderImg = '';
 	                var content = '';
 
@@ -342,18 +446,16 @@
 	                    if (item.is_leader === 'Y') {
 	                        crewLeader = item.id;
 	                        console.log('반복문 안에서 리더 id 체크 =>', crewLeader);
-	                        $('#leaderprofile').html(
-	                            '<a href="#"><div class="leaderjb">' 
-	                            + profileImg + ' ' + item.nickname + ' / ' 
-	                            + genderImg + ' / ' + '크루장' 
-	                            + '</div></a>'
-	                        );
+	                        $('#leaderprofile').html('<div class="leaderjb">' + profileImg 
+	                        		+ '<a class="user" style="cursor: pointer;"  data-id="' + item.id + '">' 
+	                        		+ item.nickname + ' / ' 
+	                            + genderImg + ' / ' + '크루장' + '</div></a>');
+	                        $('.profileImg').attr('class', 'profileImg_01');
 	                    } else {
 	                        crewone.push(item.id); // 배열에 크루원 id 추가
-	                        content += '<div class="testeee"><input class="basictex" type="checkbox" name="crew_member" data-id="'+item.id+'"/><a href="#">' 
-	                            + profileImg + ' ' + item.nickname 
-	                            + ' / ' + genderImg + ' / ' 
-	                            + item.create_date + '</div></a>';
+	                        content += '<div class="testeee"><input class="basictex" type="checkbox" name="crew_member" data-id="'+item.id+'"/>' +
+	                        '<a class="user" style="cursor: pointer;"  data-id="' + item.id + '">' 
+	                            + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / '  + item.create_date + '</div></a>';
 	                    }
 	                });
 
@@ -396,7 +498,7 @@
 	                         .replace('sun', '일');
 
                     // 크루명, 소개, 안내사항 등 업데이트
-                    $('#crew-name').text(result.crew_name);
+                    $('#crew-name').html('<a href="/crewDetail/'+crew_idx+'">'+result.crew_name+'</a>');
                     $('#crew-content').html(result.content);
                     $('#crew-address').text(result.address);
                     $('#crew-member').text(result.member);
@@ -413,7 +515,7 @@
     }
     
 	function crewApplicationMember(application) {
-		var profileImg = '<img src="/resources/img/common/profile.png" width="32px"/>';
+		var profileImg = '<img src="/resources/img/common/profile.png" width="32px" class="profileImg03"/>';
         var genderImg = '';
         var content = '';
         
@@ -426,9 +528,9 @@
 	            : '<img src="/resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
 
 	        // 프로필 이미지와 닉네임, 성별 및 날짜 정보 추가
-	        content += '<div class="testeee"><a href="#">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + item.create_date + '</a>'
-	            + '<button class="btn02-s" onclick="layerPopup(\'' + item.nickname + '님을 승인 하시겠습니까?\', \'승인\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'Y\'); }, applBtn2Act)">승인</button>'
-	            + '<button class="btn02-s" id="btn04-s" onclick="layerPopup(\'' + item.nickname + '님을 거절 하시겠습니까?\', \'거절\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'N\'); }, applBtn2Act)">거절</button></div>';
+	        content += '<div class="testeee">' + profileImg + '<a class="user" style="cursor: pointer;"  data-id="' + item.id + '">' + item.nickname + ' / ' + genderImg + ' / ' + item.create_date + '</a>'
+	            + '<div class="btn-sty06"> <button class="btn02-s" onclick="layerPopup(\'' + item.nickname + '님을 승인 하시겠습니까?\', \'승인\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'Y\'); }, applBtn2Act)">승인</button>'
+	            + '<button class="btn02-s" id="btn04-s" onclick="layerPopup(\'' + item.nickname + '님을 거절 하시겠습니까?\', \'거절\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'N\'); }, applBtn2Act)">거절</button></div></div>';
 	    });
 
 	    $('#crewApplicationMemberList').html(content);
@@ -569,6 +671,41 @@
 	function applBtn2Act() {
 	    removeAlert(); 
 	}
+	
+	// 클릭시 운동프로필 레이어 팝업
+	$(document).on('click','.user',function(){
+	    var toUserId = $(this).data('id');
+	   // console.log('toUserId',toUserId);
+	    openProfile(toUserId);
+	});
+	
+	
+	// 운동프로필 레이어 팝업 열기
+	function openProfile(toUserId){
+		var modal = document.getElementById("profilePopup");
+	    var PopupBody = document.getElementById("PopupBody");
+		
+	    // AJAX 요청
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("GET", "/mate/"+toUserId, true);
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState === 4 && xhr.status === 200) {
+	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+	            modal.style.display = "block"; // 모달 열기
+	            
+	         	// JS 파일을 동적으로 로드
+	            var script = document.createElement('script');
+	            script.src = '/resources/js/profileDetail.js'; 
+	            document.body.appendChild(script);
+	        }
+	    };
+	    xhr.send();
+	}
+	
+	// 팝업 닫기
+	document.getElementsByClassName("close")[0].onclick = function() {
+	    document.getElementById("profilePopup").style.display = "none";
+	};	
 	
 </script>
 

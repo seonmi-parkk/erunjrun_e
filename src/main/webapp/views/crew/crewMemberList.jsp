@@ -132,7 +132,7 @@
 	<jsp:include page="../header.jsp"/>
 	
 	<div class="inner">
-	<p class="title1">크루 신청자 관리</p>
+	<p class="title1" onclick="location.href='/crewManagerList/${crew_idx}'">크루 신청자 관리</p>
 	<form id="searchForm">
     <select id="searchOption">
         <option value="subject">닉네임</option>
@@ -172,7 +172,6 @@
 		    </div>
 		</div>
 	</div>
-	
 	<div class="layoutbox-bt"></div>
 	
 	<jsp:include page="../footer.jsp"/>

@@ -274,7 +274,7 @@
             
             content += '<td>'+noticeBtn+'</td>';
             content += '<td class="subjectTable"><a href="/crewNoticeDetail/'+item.notice_idx+'">'+item.subject+'</a></td>';
-            content += '<td>'+item.nickname+'</td>';
+            content += '<td><a class="user" style=" cursor: pointer;"  data-id="' + item.id + '">'+item.nickname+'</a></td>';
             content += '<td>'+item.hit+'</td>';
             content += '<td>'+item.create_date+'</td>';
 	        content += '</tr>';
@@ -282,49 +282,46 @@
 		});
 		$('#list').html(content);
 	}
-	 	
-	 	
-/* 	 // 클릭시 운동프로필 레이어 팝업
-		$(document).on('click','.user',function(){
-		    var toUserId = $(this).data('id');
-		   // console.log('toUserId',toUserId);
-		    openProfile(toUserId);
-		});
+	
+	// 팝업 취소
+	function applBtn2Act() {
+	    removeAlert(); 
+	}
+	
+	// 클릭시 운동프로필 레이어 팝업
+	$(document).on('click','.user',function(){
+	    var toUserId = $(this).data('id');
+	   // console.log('toUserId',toUserId);
+	    openProfile(toUserId);
+	});
+	
+	
+	// 운동프로필 레이어 팝업 열기
+	function openProfile(toUserId){
+		var modal = document.getElementById("profilePopup");
+	    var PopupBody = document.getElementById("PopupBody");
 		
-		
-		// 운동프로필 레이어 팝업 열기
-		function openProfile(toUserId){
-			var modal = document.getElementById("profilePopup");
-		    var PopupBody = document.getElementById("PopupBody");
-			
-		    // AJAX 요청
-		    var xhr = new XMLHttpRequest();
-		    xhr.open("GET", "/mate/"+toUserId, true);
-		    xhr.onreadystatechange = function() {
-		        if (xhr.readyState === 4 && xhr.status === 200) {
-		            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
-		            modal.style.display = "block"; // 모달 열기
-		            
-		         	// JS 파일을 동적으로 로드
-		            var script = document.createElement('script');
-		            script.src = '/resources/js/profileDetail.js'; 
-		            document.body.appendChild(script);
-		        }
-		    };
-		    xhr.send();
-		}
-		
-		// 팝업 닫기
-		document.getElementsByClassName("close")[0].onclick = function() {
-		    document.getElementById("profilePopup").style.display = "none";
-		};  */
-		
-		
-		// 팝업 취소
-		function applBtn2Act() {
-		    removeAlert(); 
-		}
-		
+	    // AJAX 요청
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("GET", "/mate/"+toUserId, true);
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState === 4 && xhr.status === 200) {
+	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+	            modal.style.display = "block"; // 모달 열기
+	            
+	         	// JS 파일을 동적으로 로드
+	            var script = document.createElement('script');
+	            script.src = '/resources/js/profileDetail.js'; 
+	            document.body.appendChild(script);
+	        }
+	    };
+	    xhr.send();
+	}
+	
+	// 팝업 닫기
+	document.getElementsByClassName("close")[0].onclick = function() {
+	    document.getElementById("profilePopup").style.display = "none";
+	};
 
 
 </script>
