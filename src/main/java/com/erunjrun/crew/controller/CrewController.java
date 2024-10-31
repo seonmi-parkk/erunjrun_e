@@ -183,8 +183,8 @@ public class CrewController {
 		
 		List<CrewMemberDTO> crewMemberList = crew_service.crewMemberList(crew_idxs);
 		
-		int page = 0;
-		int cnt = 0;
+		int page = 1;
+		int cnt = 15;
 		String keyword = "";
 		
 		List<CrewMemberDTO> crewApplicationList = crew_service.crewApplicationList(crew_idxs, page, cnt, keyword);
@@ -529,7 +529,26 @@ public class CrewController {
 			resultMap.put("success", true);
 		}
 		
-//		return null;
+		return resultMap;
+	}
+	
+	@PostMapping(value="/noticeDetail")
+	public Map<String, Object> crewNoticeDetail(@RequestParam int notice_idx){
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("result", crew_service.crewNoticeDetail(notice_idx));
+		
+		return resultMap;
+	}
+	
+	@DeleteMapping(value="/noticeDelete")
+	public Map<String, Object> crewNoticeDelete(@RequestParam int notice_idx){
+		
+		logger.info("notice_idx => " + notice_idx);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("success", crew_service.crewNoticeDelete(notice_idx));
+		
 		return resultMap;
 	}
 	

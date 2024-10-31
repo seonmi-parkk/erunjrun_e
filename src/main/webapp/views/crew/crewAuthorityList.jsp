@@ -138,7 +138,7 @@
 	<jsp:include page="../header.jsp"/>
 	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
 	<div class="inner">
-	<p class="title1">크루장 권한 기록</p>
+	<p class="title1" onclick="location.href='/crewManagerList/${crew_idx}'">크루장 권한 기록</p>
 	<form id="searchForm">
     <select id="searchOption">
         <option value="subject">닉네임</option>
@@ -268,8 +268,12 @@
 	        
             content += '<tr>';
             // 프로필 + 닉네임 (나중에 연결 필요)
-            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.member_nickname+'</td>';
-            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.leader_nickname+'</td>';
+            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'
+            + '<a class="user" style="cursor: pointer;"  data-id="' + item.member_id + '">'
+            +item.member_nickname+'</a></td>';
+            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'
+            + '<a class="user" style="cursor: pointer;"  data-id="' + item.leader_id + '">'
+            +item.leader_nickname+'</a></td>';
             
 			content +='<td>'+item.create_date+'</td>'; // 신청일자
 			content +='<td>'+item.update_date+'</td>'; // 응답일자
@@ -280,67 +284,40 @@
 		$('#list').html(content);
 	}
 	
-/*  	// 체크
-	function secondBtn1Act() {
-		// 두번째팝업 2번버튼 클릭시 수행할 내용
-	 	console.log('두번째팝업 1번 버튼 동작');
-		// 로그인 페이지로 이동하기 넣어주기!!!!!!!!
-	 	removeAlert();
-	 	}
-	function secondBtn2Act() {
- 	    // 두번째팝업 2번버튼 클릭시 수행할 내용
- 	    console.log('두번째팝업 2번 버튼 동작');
- 	    removeAlert();
- 	}
-		
+	// 클릭시 운동프로필 레이어 팝업
+	$(document).on('click','.user',function(){
+	    var toUserId = $(this).data('id');
+	   // console.log('toUserId',toUserId);
+	    openProfile(toUserId);
+	});
 	
-	 	$('#loginPop').on('click',function(){
-	 		
-	 		var userId = "${sessionScope.loginId}";
-	 		
-	 		if(!userId){
-	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn1Act,secondBtn1Act);	
-	 		}else{
-	 			location.href='runBoardWrite';
-	 		}
-	 		
-	 	}); */
-	 	
-	 	
-/* 	 // 클릭시 운동프로필 레이어 팝업
-		$(document).on('click','.user',function(){
-		    var toUserId = $(this).data('id');
-		   // console.log('toUserId',toUserId);
-		    openProfile(toUserId);
-		});
+	
+	// 운동프로필 레이어 팝업 열기
+	function openProfile(toUserId){
+		var modal = document.getElementById("profilePopup");
+	    var PopupBody = document.getElementById("PopupBody");
 		
-		
-		// 운동프로필 레이어 팝업 열기
-		function openProfile(toUserId){
-			var modal = document.getElementById("profilePopup");
-		    var PopupBody = document.getElementById("PopupBody");
-			
-		    // AJAX 요청
-		    var xhr = new XMLHttpRequest();
-		    xhr.open("GET", "/mate/"+toUserId, true);
-		    xhr.onreadystatechange = function() {
-		        if (xhr.readyState === 4 && xhr.status === 200) {
-		            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
-		            modal.style.display = "block"; // 모달 열기
-		            
-		         	// JS 파일을 동적으로 로드
-		            var script = document.createElement('script');
-		            script.src = '/resources/js/profileDetail.js'; 
-		            document.body.appendChild(script);
-		        }
-		    };
-		    xhr.send();
-		}
-		
-		// 팝업 닫기
-		document.getElementsByClassName("close")[0].onclick = function() {
-		    document.getElementById("profilePopup").style.display = "none";
-		};  */
+	    // AJAX 요청
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("GET", "/mate/"+toUserId, true);
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState === 4 && xhr.status === 200) {
+	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+	            modal.style.display = "block"; // 모달 열기
+	            
+	         	// JS 파일을 동적으로 로드
+	            var script = document.createElement('script');
+	            script.src = '/resources/js/profileDetail.js'; 
+	            document.body.appendChild(script);
+	        }
+	    };
+	    xhr.send();
+	}
+	
+	// 팝업 닫기
+	document.getElementsByClassName("close")[0].onclick = function() {
+	    document.getElementById("profilePopup").style.display = "none";
+	};	
 
 </script>
 </html>

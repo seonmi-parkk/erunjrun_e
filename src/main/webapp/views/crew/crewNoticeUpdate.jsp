@@ -242,6 +242,7 @@
 	        },
 	        error: function (e) {
 	            console.log('글 전송 에러:', e);
+	            removeAlert();
 	        }
 	    });
        

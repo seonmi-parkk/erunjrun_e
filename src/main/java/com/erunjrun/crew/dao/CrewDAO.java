@@ -88,6 +88,14 @@ public interface CrewDAO {
 	CrewNoticeDTO crewNoticeUpdateView(int notice_idx);
 
 	int crewNoticeUpdate(CrewNoticeDTO crewNoticeDto);
+
+	CrewNoticeDTO crewNoticeDetail(int notice_idx);
+
+	int crewNoticeHit(int notice_idx);
+
+	int crewNoticeDelete(int notice_idx);
+
+	int crewCurrentMemberUpdate(int crew_idx);
 	
 	
 

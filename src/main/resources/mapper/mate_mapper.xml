@@ -40,7 +40,7 @@
 		SELECT 
 			image, icon_image, nickname, dong, shortsido, gender, birth, p.profile_use,
 			m.id, exercise_min, exercise_dis, exercise, mate, content 
-			FROM member m JOIN profile p ON m.id = p.id WHERE m.id = #{toUserId}
+			FROM member m LEFT JOIN profile p ON m.id = p.id WHERE m.id = #{toUserId}
 	</select>
 
 	<insert id="like">
