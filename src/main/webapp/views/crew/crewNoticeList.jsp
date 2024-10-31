@@ -35,7 +35,7 @@
     	color: #fff;
     }
     .title1{
-    	margin-top: 160px;
+    	margin-top: 00px;
     }
     
     /*운동프로필 레이어팝업*/
@@ -96,6 +96,19 @@
   	table thead tr th.thSize{
   		width: 550px;
   	}
+  	
+  	.headlayout{
+  		margin-top : 140px;
+  	}
+  	
+  	#crew_name{
+  		font-size: 14px;
+	    margin-bottom: 0px;
+  	}
+  	
+  	.btn01-l{
+	    margin-top: 31px;
+  	}
 	
 	
 </style>
@@ -103,41 +116,45 @@
 <body>
 	<jsp:include page="../header.jsp"/>
 	
+	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
 	<div class="inner">
-	<p class="title1">크루 공지사항</p>
-	<form id="searchForm">
-    <select id="searchOption">
-        <option value="subject">제목</option>
-        <option value="nickname">작성자</option>
-        <option value="content">내용</option>
-    </select>
-    <input class="input-txt-l01" type="text" id="searchKeyword" placeholder="검색어를 입력하세요"/>
-    <input class="btn-sch" type="submit" value="검색"/>
-</form>
-	<table>
-		<thead>
+		<div class="headlayout">
+			<p id="crew_name"></p>
+			<p class="title1">크루 공지사항</p>
+		</div>
+		<form id="searchForm">
+		    <select id="searchOption">
+		        <option value="subject">제목</option>
+		        <option value="nickname">작성자</option>
+		        <option value="content">내용</option>
+		    </select>
+		    <input class="input-txt-l01" type="text" id="searchKeyword" placeholder="검색어를 입력하세요"/>
+		    <input class="btn-sch" type="submit" value="검색"/>
+		</form>
+		<table>
+			<thead>
+				<tr>
+					<th>no</th>
+					<th class="thSize">제목</th>
+					<th>작성자</th>
+					<th>조회수</th>
+					<th>작성일</th>
+				</tr>
+			</thead>
+			<tbody id="list" >
+		
+			</tbody>
 			<tr>
-				<th>no</th>
-				<th class="thSize">제목</th>
-				<th>작성자</th>
-				<th>조회수</th>
-				<th>작성일</th>
+				<th colspan="5">
+					<div class="container">
+			    		<nav aria-label="Page navigation">
+			        		<ul class="pagination" id="pagination"></ul>
+			        		<a href="/crewNoticeWrite/${crew_idx}"><button class="btn01-l" style='visibility : hidden'>게시글 등록</button></a> 
+			    		</nav>
+					</div>
+				</th>
 			</tr>
-		</thead>
-		<tbody id="list" >
-	
-		</tbody>
-		<tr>
-			<th colspan="5">
-				<div class="container">
-		    		<nav aria-label="Page navigation">
-		        		<ul class="pagination" id="pagination"></ul>
-		        		<div class="btn01-l" style='visibility : hidden'>게시글 등록</div>
-		    		</nav>
-				</div>
-			</th>
-		</tr>
-	</table>
+		</table>
 	
 	<!-- 모달 -->
 		<div id="profilePopup" class="modal">
@@ -156,11 +173,15 @@
 	var firstPage = 1;
 	var paginationInitialized = false;
 	
-	pageCall(firstPage);
 	
 	var loginId = '${sessionScope.loginId}';
 	
+    var crew_idx = $('input[name="crew_idx"]').val();
 	
+	$(document).ready(function () {
+		pageCall(firstPage);
+	    console.log('crew_idx =>', crew_idx);
+	});
 	
 	// 검색 폼 제출 시 AJAX 호출
 	$('#searchForm').on('submit', function(event) {
@@ -174,8 +195,7 @@
 	function pageCall(page) {
 		var option = $('#searchOption').val();
 	    var keyword = $('#searchKeyword').val();  // 검색어
-	    var crew_idx = 52; // 나중에 변경 필요
-	
+	    
 	    $.ajax({
 	        type: 'POST',
 	        url: '/crew/noticeList',
@@ -190,22 +210,16 @@
 	        success: function(response) {
 	            console.log(response.result);
 	            
-	            console.log(response.result.totalpage);
+	            if (response.length > 0) {
+	                // response 배열로부터 데이터 리스트 접근
+	            }
 	            
 	            var result = response.result;
 	            
-	            // 리더인지 체크해서 버튼 숨기고, 보이기
-	            if(loginId === result.leader){
-	            	$('.btn03-s1').css('visibility', 'visible');
-	            }
-	            
-	            
-	            var totalCount = result.length;  // 총 게시글 수를 서버에서 가져옴
+	            var totalCount = response.result[0].totalpage;  // 총 게시글 수를 서버에서 가져옴
 	            var pageSize = 15;  // 한 페이지당 게시글 수
 	            var totalPages = Math.ceil(totalCount / pageSize);  // 총 페이지 수 계산
-	            console.log('총 페이지 수=> ', totalPages);
-	            
-	            
+	            console.log('총 페이지 수=> ', totalCount);
 	            drawList(result);
 	            
 	            if(!paginationInitialized || keyword !== ''){
@@ -234,9 +248,9 @@
 	// 게시글 리스트
 	function drawList(result) {
 		var content ='';
+		
+		
 		result.forEach(function(item,idx){
-			
-			// 공지넘버가 1~3이면 상단에 배치하는 로직 구현 필요
 			var priority = item.priority; // 순위
 			var noticeBtn = '';
 			
@@ -248,6 +262,13 @@
 				noticeBtn = item.notice_idx;
 			}
 			
+			// 리더인지 체크해서 버튼 숨기고, 보이기
+            if(loginId === item.id){
+            	console.log('id : id', loginId, item.id);
+            	$('.btn01-l').css('visibility', 'visible');
+            }
+			
+			$('#crew_name').html('<a href="/crewDetail/' + item.crew_idx + '">' + item.crew_name + '</a>');
 			
             content += '<tr>';
             

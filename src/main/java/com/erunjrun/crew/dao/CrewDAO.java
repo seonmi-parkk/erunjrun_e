@@ -84,6 +84,10 @@ public interface CrewDAO {
 	int crewNoticePriorityUpdate(String crew_idx, String priority);
 
 	List<CrewNoticeDTO> crewNoticeList(Map<String, Object> parmeterMap);
+
+	CrewNoticeDTO crewNoticeUpdateView(int notice_idx);
+
+	int crewNoticeUpdate(CrewNoticeDTO crewNoticeDto);
 	
 	
 

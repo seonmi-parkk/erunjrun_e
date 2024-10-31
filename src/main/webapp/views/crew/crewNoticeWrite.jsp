@@ -102,7 +102,7 @@
                         <div class="boxheigth">
                             <span class="title2">필독</span>
                             <input type="radio" name="priority" value=""  id="priorityChack"/><span class="basictex">필독</span>
-                            <input type="radio" name="priority" value=""  checked/><span class="basictex">일반</span>
+                            <input type="radio" name="priority" value=""  id="checkReturn" checked/><span class="basictex">일반</span>
                             <select id="priorityOption" style='visibility : hidden'>
                             	<option value="">순위선택</option>
 						        <option value="pr1">1순위</option>
@@ -149,14 +149,13 @@
 		if(overlayCheck === 'Y'){
 			layerPopup('공지사항을 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act);
 		}else{
-			layerPopup('기존 공지 순위를 변경하시겠습니까?', '확인', '취소', updatePost, applBtn2Act);
+			layerPopup('기존 공지 순위를 변경하시겠습니까?', '확인', '취소', updatePriority, applBtn2Act);
 		}
 	}
 	
 	
-	// 크루 넘버! 
     function submitPost() {
-        var formData = new FormData($('form')[0]); // radio 값 받아오는지 체크 필요
+        var formData = new FormData($('form')[0]); 
 
         var content = $('#summernote').summernote('code');
         
@@ -164,10 +163,10 @@
         priority = priority.replace(/^,|,$/g, '');
         
 
-        formData.append('id', loginId); // 세션값 체크해서 넣어줘야 함!
-        formData.append('content', content);  // summernote의 HTML 내용 추가 (이미지 포함)
-		formData.append('priority', priority); // 순위 -> 없을 경우 서버에서 defarult = 0으로 받기
-        formData.append('crew_idx', 52);
+        formData.append('id', loginId); 
+        formData.append('content', content);  
+		formData.append('priority', priority);
+        formData.append('crew_idx', 52); // todo - 받아온 값으로 수정 필요
 		
         var tempDom = $('<div>').html(content);
         var imgsInEditor = [];
@@ -183,8 +182,6 @@
         var finalImgs = tempImg.filter(function (temp) {
             return imgsInEditor.includes(temp.img_new);  
         });
-
-        /* console.log("최종 전송할 이미지 쌍:", finalImgs); */
 
         formData.append('imgsJson', JSON.stringify(finalImgs));  
 
@@ -210,13 +207,13 @@
        
     }
 	
-	function updatePost(){
+	function updatePriority(){
 		var priority = $('#priorityOption').val();
 		var crew_idx = 52;
 		var notice_idx = notice_idx;
 		
 		$.ajax({
-			type: 'POST',
+			type: 'PUT',
     		url: '/crew/noticePriorityUpdate',
     		data: {'crew_idx' : crew_idx,
     				'priority' : priority},
@@ -232,14 +229,14 @@
 		});
 		
 	}
-    
-	
-	
 	
     
-    // 기존에 작성된 순위인지 확인하고 체크 팝업 필요 (아이디 중복체크처럼)
     $('#priorityChack').on('change', function(){
 		$('#priorityOption').css('visibility', 'visible');
+    });
+    
+    $('#checkReturn').on('change', function(){
+		$('#priorityOption').css('visibility', 'hidden');
     });
     
     $('#priorityOption').on('change', function(){
@@ -247,7 +244,7 @@
     	 var priority = $('#priorityOption').val();
     	 console.log(priority);
     	 
-    	 var crew_idx = 52;
+    	 var crew_idx = $('input[name="crew_idx"]').val();
     	 console.log(crew_idx);
     	 
     	 if(priority === 'pr1' || priority === 'pr2' || priority === 'pr3'){
@@ -282,7 +279,6 @@
     });
     
     function locationHref(notice_idx){
-    	/* console.log('notice_idx =>', notice_idx); */
      	location.href = "/crewNoticeDetail/" +notice_idx; 
     }
     

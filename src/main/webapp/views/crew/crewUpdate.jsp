@@ -184,14 +184,14 @@
 
 <script>
 
-$(document).ready(function() {
-    // 서버에서 가져온 content 값을 에디터에 삽입
-    var content = '<c:out value="${result.content}" escapeXml="false" />';
-    if (content) {
-        // summernote가 초기화된 후에만 내용을 설정
-        $('#summernote').summernote('code', content);
-    }
-});
+	$(document).ready(function() {
+	    // 서버에서 가져온 content 값을 에디터에 삽입
+	    var content = '<c:out value="${result.content}" escapeXml="false" />';
+	    if (content) {
+	        // summernote가 초기화된 후에만 내용을 설정
+	        $('#summernote').summernote('code', content);
+	    }
+	});
 
 
 	// 크루 대표 이미지 미리보기

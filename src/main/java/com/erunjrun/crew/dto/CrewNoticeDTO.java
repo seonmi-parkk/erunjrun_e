@@ -1,6 +1,7 @@
 package com.erunjrun.crew.dto;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.erunjrun.image.dto.ImageDTO;
@@ -24,10 +25,12 @@ public class CrewNoticeDTO {
     
     
     private List<ImageDTO> imgs;
-    
     private String id;
     
     private int count;
+    private String crew_name;
+    private int totalpage;
+    
     
 	public int getNotice_idx() {
 		return notice_idx;
@@ -122,13 +125,38 @@ public class CrewNoticeDTO {
 	public void setCount(int count) {
 		this.count = count;
 	}
+	
+	
+	
+	
+	public String getCrew_name() {
+		return crew_name;
+	}
+	public void setCrew_name(String crew_name) {
+		this.crew_name = crew_name;
+	}
+	
+	
+	
+	
+	
+	public int getTotalpage() {
+		return totalpage;
+	}
+	public void setTotalpage(int totalpage) {
+		this.totalpage = totalpage;
+	}
 	@Override
 	public String toString() {
 		return "CrewNoticeDTO [notice_idx=" + notice_idx + ", crew_idx=" + crew_idx + ", subject=" + subject
 				+ ", content=" + content + ", create_date=" + create_date + ", udate_date=" + udate_date + ", hit="
 				+ hit + ", nickname=" + nickname + ", priority=" + priority + ", comment_idx=" + comment_idx
-				+ ", use_yn=" + use_yn + ", imgs=" + imgs.toString() + ", id=" + id + ", count=" + count + "]";
+				+ ", use_yn=" + use_yn + ", imgs=" + imgs.toString() + ", id=" + id + ", count=" + count + ", crew_name="
+				+ crew_name + ", totalpage=" + totalpage + "]";
 	}
+
+	
+	
 
 	
 	
