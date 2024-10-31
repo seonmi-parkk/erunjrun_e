@@ -308,6 +308,7 @@ public class CrewService {
 		return crew_dao.crewApplicationList(parmeterMap);
 	}
 
+	// 크루 신청
 	public boolean crewApplicationWrite(Map<String, Object> parmeterMap) {
 		
 		int row = crew_dao.crewApplicationWrite(parmeterMap);
@@ -322,6 +323,7 @@ public class CrewService {
 		return false;
 	}
 
+	// 크루 신청 취소
 	public boolean crewApplicationCancel(Map<String, Object> parmeterMap) {
 		
 		int row = crew_dao.crewApplicationCancel(parmeterMap);
@@ -336,6 +338,7 @@ public class CrewService {
 	}
 
 
+	// 기존 크루 탈퇴
 	public boolean crewMemberCencel(Map<String, Object> parmeterMap) {
 		
 		int row = crew_dao.crewMemberCencel(parmeterMap);
@@ -401,14 +404,17 @@ public class CrewService {
 		return crew_dao.applicationAdminList(parmeterMap);
 	}
 
+	// 크루 승인
 	public boolean crewMemberApproval(Map<String, Object> parmeterMap) {
 		int row = crew_dao.crewMemberApproval(parmeterMap);
+		int crew_idx = (int) parmeterMap.get("crew_idx");
 		
 		if(row>0) {
 			logger.info("크루 승인 =>" + row);
 			int deleteRow = crew_dao.crewApplicationCancel(parmeterMap);
 			logger.info("크루 승인 후 신청 리스트에서 삭제 =>" + deleteRow);
 			crewHistoryWrite(parmeterMap);
+			crew_dao.crewCurrentMemberUpdate(crew_idx);
 			return true;
 		}
 		
@@ -543,6 +549,26 @@ public class CrewService {
 			return true;
 		}
 		
+		return false;
+	}
+
+	@Transactional
+	public CrewNoticeDTO crewNoticeDetail(int notice_idx) {
+		
+		int row = crew_dao.crewNoticeHit(notice_idx);
+		
+		CrewNoticeDTO noticeDto = null;
+		
+		if(row>0) {
+			noticeDto = crew_dao.crewNoticeDetail(notice_idx);
+		}
+		return noticeDto;
+	}
+
+	public boolean crewNoticeDelete(int notice_idx) {
+		if(crew_dao.crewNoticeDelete(notice_idx) > 0) {
+			return true;
+		}
 		return false;
 	}
 
