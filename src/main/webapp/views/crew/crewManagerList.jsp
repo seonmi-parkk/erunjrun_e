@@ -278,7 +278,7 @@
 			<div class="fixbox">
 				<div class="title1-1" id="crew-name">크루원 관리</div>
 				<div class="btn-layout">
-					<button class="btn02-s1">권한기록</button>
+					<a href="/crewAuthorityList/${crew_idx}"><button class="btn02-s1">권한기록</button></a>
 					<button class="btn04-s" onclick="crewAdminUpdate()">권한</button>
 					<button class="btn02-s" onclick="layerPopup('크루원을 퇴출하시겠습니까?', '확인', '취소', crewExpel, applBtn2Act)">퇴출</button>
 				</div>

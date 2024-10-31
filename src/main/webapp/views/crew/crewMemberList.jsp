@@ -214,7 +214,7 @@
 	            var result = response.result;
 	            
 	            
-	            var totalCount = result.length;  // 총 게시글 수를 서버에서 가져옴
+	            var totalCount = response.result[0].totalpage;  // 총 게시글 수를 서버에서 가져옴
 	            var pageSize = 15;  // 한 페이지당 게시글 수
 	            var totalPages = Math.ceil(totalCount / pageSize);  // 총 페이지 수 계산
 	            console.log('총 페이지 수=> ', totalPages);

@@ -101,23 +101,23 @@
 	
 	<!-- 크루 신청자 리스트 -->
 	<select id="crewApplicationList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="map">
-		SELECT m.id, m.nickname, m.gender, m.birth, COALESCE(p.image, '') as image, ca.create_date,
-	       (SELECT COUNT(*) FROM crew_application WHERE crew_idx = #{crew_idx}) AS totalpage
-			FROM crew_application ca
-			JOIN member m ON ca.id = m.id
-			LEFT JOIN profile p ON m.id = p.id
-			WHERE ca.crew_idx = #{crew_idx}
-			
-			<if test="keyword != null and keyword != ''">
-		        AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
-		    </if>
-			
-			GROUP BY m.id, m.nickname, m.gender, m.birth, p.image
-			<if test="offset > 0">
-				LIMIT #{limit} OFFSET #{offset}
-			</if>
-			ORDER BY ca.create_date DESC
-	</select>
+    SELECT m.id, m.nickname, m.gender, m.birth,  COALESCE(p.image, '') AS image, ca.create_date,
+        (SELECT COUNT(*) FROM crew_application ca_inner JOIN member m_inner ON ca_inner.id = m_inner.id
+         WHERE ca_inner.crew_idx = #{crew_idx}
+           <if test="keyword != null and keyword != ''">
+               AND m_inner.nickname LIKE CONCAT('%', #{keyword}, '%')
+           </if>
+        ) AS totalpage
+    FROM crew_application ca
+    JOIN member m ON ca.id = m.id
+    LEFT JOIN profile p ON m.id = p.id
+    WHERE ca.crew_idx = #{crew_idx}
+    <if test="keyword != null and keyword != ''">
+        AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
+    </if>
+    ORDER BY ca.create_date DESC
+    LIMIT #{offset}, #{limit}
+</select>
 	
 	<!-- 크루 신청 -->
 	<insert id="crewApplicationWrite" parameterType="map">
@@ -292,38 +292,31 @@
 	
 	<!-- 크루 권한 기록 리스트 -->
 	<select id="applicationAdminList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="map">
-		SELECT 
-		    m.id AS member_id,
-		    m.nickname AS member_nickname,
-		    COALESCE(p.image, '') AS member_image,
-		    
-		    leader.id AS leader_id,
-		    leader.nickname AS leader_nickname,
-		    COALESCE(leader_profile.image, '') AS leader_image,
-		    
-		    cah.create_date,
-		    cah.update_date,
-		    cah.is_agree,
-		    
-		    (SELECT COUNT(*) FROM crew_application_history WHERE crew_idx = #{crew_idx}) AS totalpage
-		FROM 
-		    crew_application_history cah
-		    JOIN member m ON cah.id = m.id  
-		    LEFT JOIN profile p ON m.id = p.id
-		    JOIN member leader ON cah.leader = leader.id  
-		    LEFT JOIN profile leader_profile ON leader.id = leader_profile.id 
-		WHERE 
-		    cah.crew_idx = #{crew_idx}
-		    
-		<if test="keyword != null and keyword != ''">
-		    AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
-		</if>
-			
-		GROUP BY cah.history_idx;
-		
-		<if test="offset > 0">
-			LIMIT #{offset}, #{limit}
-		</if>
+	    SELECT 
+	        m.id AS member_id, m.nickname AS member_nickname, COALESCE(p.image, '') AS member_image,
+	        leader.id AS leader_id, leader.nickname AS leader_nickname,
+	        COALESCE(leader_profile.image, '') AS leader_image,
+	        cah.create_date, cah.update_date, cah.is_agree,
+	        (SELECT COUNT(*) FROM crew_application_history WHERE crew_idx = #{crew_idx} 
+	            <if test="keyword != null and keyword != ''">
+	                AND nickname LIKE CONCAT('%', #{keyword}, '%')
+	            </if>
+	        ) AS totalpage 
+	    FROM crew_application_history cah
+	    JOIN member m ON cah.id = m.id  
+	    LEFT JOIN profile p ON m.id = p.id
+	    JOIN member leader ON cah.leader = leader.id  
+	    LEFT JOIN profile leader_profile ON leader.id = leader_profile.id 
+	    WHERE cah.crew_idx = #{crew_idx}
+	    <if test="keyword != null and keyword != ''">
+	        AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+	    GROUP BY 
+	        cah.history_idx
+	    ORDER BY 
+	        cah.create_date DESC
+	    LIMIT 
+	        #{offset}, #{limit}
 	</select>
 	
 	<insert id="crewMemberApproval" parameterType="map">
@@ -412,60 +405,100 @@
 		
 	</insert>
 	
+	
 	<update id="crewNoticePriorityUpdate" parameterType="String">
-		UPDATE crew_notice SET priority = 0
-			
-        WHERE crew_idx = #{crew_idx} AND
-        <choose>
-	            <when test="priority != null and priority != ''">
-	                <choose>
-	                    <when test="priority.contains('pr1')">
-	                        1
-	                    </when>
-	                    <when test="priority.contains('pr2')">
-	                        2
-	                    </when>
-	                    <when test="priority.contains('pr3')">
-	                        3
-	                    </when>
-	                    <otherwise>
-	                        0
-	                    </otherwise>
-	                </choose>
+	    UPDATE crew_notice
+	    SET priority = 0
+	    WHERE crew_idx = #{crew_idx} 
+	    AND priority = 
+	        <choose>
+	            <when test="priority == 'pr1'">
+	                1
 	            </when>
-        	</choose>
+	            <when test="priority == 'pr2'">
+	                2
+	            </when>
+	            <when test="priority == 'pr3'">
+	                3
+	            </when>
+	            <otherwise>
+	                priority
+	            </otherwise>
+	        </choose>
 	</update>
 	
+	<!-- 크루 공지사항 리스트 -->
 	<select id="crewNoticeList" parameterType="map" resultType="com.erunjrun.crew.dto.CrewNoticeDTO">
-		SELECT cn.notice_idx, cn.crew_idx, cn.subject, cn.id, cn.hit, cn.create_date, cn.priority, m.nickname  
-			FROM crew_notice cn join `member` m on cn.id = m.id 
-			WHERE cn.crew_idx = #{crew_idx} AND cn.use_yn = 'Y'
-			
-			<choose>
-				<when test="keyword != null and keyword != ''">
-					AND
-					<choose>
-						<when test="option == 'subject'">
-							cn.subject LIKE CONCAT('%', #{keyword}, '%')
-						</when>
-						<when test="option == 'nickname'">
-							m.nickname LIKE CONCAT('%', #{keyword}, '%')
-						</when>
-						<when test="option == 'content'">
-							cn.content LIKE CONCAT('%', #{keyword}, '%')
-						</when>
-					</choose>
-				</when>
-			</choose>
-			
-			ORDER BY CASE 
-						WHEN cn.priority = 1 then 0
-						WHEN cn.priority = 2 then 1
-						when cn.priority = 3 then 2
-						ELSE 3
-					END,
-					cn.create_date DESC
-					LIMIT #{offset}, #{limit}
+	    SELECT cn.notice_idx, cn.crew_idx, cn.subject, cn.id, cn.hit, cn.create_date, cn.priority, m.nickname, c.crew_name,
+	        (SELECT COUNT(*) FROM crew_notice WHERE crew_idx = #{crew_idx} AND use_yn = 'Y'
+	           <if test="keyword != null and keyword != ''">
+	               AND (
+	               <choose>
+	                   <when test="option == 'subject'">
+	                       subject LIKE CONCAT('%', #{keyword}, '%')
+	                   </when>
+	                   <when test="option == 'nickname'">
+	                       (SELECT nickname FROM `member` WHERE id = cn.id) LIKE CONCAT('%', #{keyword}, '%')
+	                   </when>
+	                   <when test="option == 'content'">
+	                       content LIKE CONCAT('%', #{keyword}, '%')
+	                   </when>
+	               </choose>
+	               )
+	           </if>
+	        ) AS totalpage
+	    FROM crew_notice cn 
+	    JOIN  `member` m ON cn.id = m.id 
+	    JOIN crew c ON cn.crew_idx = c.crew_idx 
+	    WHERE cn.crew_idx = #{crew_idx}  AND cn.use_yn = 'Y'
+	    <if test="keyword != null and keyword != ''">
+	        AND (
+	        <choose>
+	            <when test="option == 'subject'">
+	                cn.subject LIKE CONCAT('%', #{keyword}, '%')
+	            </when>
+	            <when test="option == 'nickname'">
+	                m.nickname LIKE CONCAT('%', #{keyword}, '%')
+	            </when>
+	            <when test="option == 'content'">
+	                cn.content LIKE CONCAT('%', #{keyword}, '%')
+	            </when>
+	        </choose>
+	        )
+	    </if>
+	    ORDER BY 
+	        CASE 
+	            WHEN cn.priority = 1 THEN 0
+	            WHEN cn.priority = 2 THEN 1
+	            WHEN cn.priority = 3 THEN 2
+	            ELSE 3
+	        END,
+	        cn.create_date DESC
+	    LIMIT #{offset}, #{limit}
 	</select>
+	
+	<select id="crewNoticeUpdateView" parameterType="com.erunjrun.crew.dto.CrewNoticeDTO">
+		SELECT * FROM crew_notice WHERE notice_idx = #{notice_idx}			
+	</select>
+	
+	<update id="crewNoticeUpdate" parameterType="com.erunjrun.crew.dto.CrewNoticeDTO">
+	    UPDATE crew_notice 
+	    SET 
+	        subject = #{subject}, 
+	        content = #{content}, 
+	        priority = 
+	        <choose>
+	            <when test="priority != null and priority != ''">
+	                <choose>
+	                    <when test="priority == 'pr1'">1</when>
+	                    <when test="priority == 'pr2'">2</when>
+	                    <when test="priority == 'pr3'">3</when>
+	                    <otherwise>0</otherwise>
+	                </choose>
+	            </when>
+	            <otherwise>0</otherwise>
+	        </choose>
+	    WHERE notice_idx = #{notice_idx}
+	</update>
 	
 </mapper>

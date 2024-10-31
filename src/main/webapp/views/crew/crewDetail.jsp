@@ -313,7 +313,7 @@
 	<div class="innerr">
 		<div class="one">
 			<div id="imgbox">
-				<!-- <img id="crew-img" src="/resources/img/crew/crewImg800.png" onerror="this.src=/resources/img/crew/crewImg800.png" width="100%" height="100%"/> -->
+				<img id="crew-img" src="/resources/img/crew/crewImg800.png" onerror="this.src=/resources/img/crew/crewImg800.png" width="100%" height="100%"/>
 			</div>
 	
 			<button class="btn03-s1" style='visibility : hidden' onclick="crewUpdate()">수정하기</button>
@@ -337,7 +337,7 @@
 			<div class="title2-1">크루 공지사항</div>
 			<div class="right-x">
 				<img src="/resources/img/crew/img07.png" width="40px"/> 
-				<span class="right-x1"><a href="#" class="crewAccess">바로가기</a></span>
+				<span class="right-x1"><a class="crewAccess">바로가기</a></span>
 			</div>
 			<div class="contentbox">
 				<img src="/resources/img/crew/img05.png" width="17px" class="imglayout"/> 최근 공지사항 yyyy.mm.dd
@@ -554,7 +554,10 @@
 	                    
 					    // 로그인 안했거나 크루원이 아니면
 					    $('.crewAccess').click(function(){
-						    if(loginId == null || loginId != result.id){
+						    if(loginId != null || loginId === '' || loginId != result.id || loginId != crewLeader){
+						    	location.href="/crewNoticeList/" +crew_idx;
+						    }else{
+						    	
 						    	$('.crewAccess').attr('href', 'javascript:void(0);');
 						    	console.log('로그인 안했거나 크루원 아님');
 						    	alert('크루원만 접근 가능합니다.');
