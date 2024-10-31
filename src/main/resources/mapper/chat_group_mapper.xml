@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="com.erunjrun.chat.dao.ChatGroupDAO">
+	<select id="getCrewChat" resultType="String">
+		SELECT chat_idx FROM crew_chat WHERE crew_idx = #{crewIdx} AND code_cp = 'C'
+	</select>
+	
+	<select id="getCrewInfo" resultType="com.erunjrun.crew.dto.CrewDTO">
+		SELECT crew_name, current_member FROM crew WHERE crew_idx = #{chatIdx}
+	</select>
+
+	<select id="getCrewLeader" resultType="String">
+		SELECT id FROM crew_member WHERE crew_idx = #{chatIdx} AND is_leader = 'Y'
+	</select>
+	
+	<select id="getCrewContent" resultType="com.erunjrun.chat.dto.ChatCrewDTO">
+		SELECT create_date, sender, nickname, icon_image, image, c.content 
+			FROM crew_chat_content c 
+			JOIN member m ON c.sender = m.id 
+			JOIN profile p ON c.sender = p.id WHERE chat_idx = #{chatIdx}
+	</select>
+	
+</mapper>

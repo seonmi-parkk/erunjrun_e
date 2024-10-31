@@ -177,6 +177,7 @@
 </head>
 <body>
 	<div class="chat">
+		<input type="hidden" name="crewIdx" value="${crewIdx}"/>
 		<input type="hidden" name="chatIdx" value="${roomNum}"/>
 		<input type="hidden" name="crewLeader" value=""/>
 		<input type="hidden" name="baseUser" value=""/>
@@ -217,16 +218,17 @@
 		$('.chat .msg-area').scrollTop($('.chat .msg-area')[0].scrollHeight);
 	}
 
+	var crewIdx = $('input[name="crewIdx"]').val();
 	var chatIdx = $('input[name="chatIdx"]').val();
  	getChat(scrollBtm);
 	function getChat(callback){
 		$.ajax({
 			type: 'GET',
-			url: '/crewLdchat/data/'+chatIdx,
+			url: '/crewChat/data/'+chatIdx,
 			dataType: 'JSON',
 			success: function(data){
 				console.log(data);
-				drawTitle(data.userList);
+				drawTitle(data.crewInfo,data.crewLeader);
 				drawContent(data.msgList, callback);
 			},
 			error: function(e){
@@ -237,26 +239,14 @@
 
 
 	// 채팅방제목(참여 유저닉네임)
-	function drawTitle(userList){
+	function drawTitle(crewInfo,crewLeader){
 		var nameCont = '';
-		console.log("userList",userList);
-		userList.forEach(function(user,index){
-			nameCont+= user.nickname;
-			if(index != userList.length-1){
-				nameCont+= ', ';
-			}
-			// 유저 아이디 세팅
-			if(user.id == '${sessionScope.loginId}'){				
-				$('.chat input[name="baseUser"]').val(user.id);
-			}
-			
-			if(user.is_leader == 'Y'){				
-				$('.chat input[name="crewLeader"]').val(user.id);	
-				console.log('user.is_leader',index,"/", user.is_leader);
-			}
-		});
-		$('.chat .top-bar .title').text(nameCont);
-		$('.chat .top-bar .num').text(userList.length);
+		
+		$('.chat input[name="baseUser"]').val('${sessionScope.loginId}');			
+		$('.chat input[name="crewLeader"]').val(crewLeader);	
+		
+		$('.chat .top-bar .title').text(crewInfo.crew_name);
+		$('.chat .top-bar .num').text(crewInfo.current_member);
 		
 		var leaderId = $('.chat input[name="crewLeader"]').val();
 		console.log("leaderId :!!!!!",leaderId);
@@ -331,12 +321,11 @@
 			msgCont += '<div class="empty-msg"><img src="/resources/img/common/ico_chat.png" alt="[채팅]"><p>채팅을 시작해보세요!</p></div>';
 		}
 		
-		
 		$('.msg-area').html(msgCont);		
 		callback();
-	} 
+	}
 	
-	function sendMessage(){
+	/* function sendMessage(){
 		console.log("전송클릭");
 		//var message = $('.chat .msg').text();
 		var sendData = {};
@@ -360,12 +349,12 @@
 			error: function(e){
 				console.log(e);
 			}
-		});
+		}); 
 		
-	}
+	}*/
 	
 	// 채팅방 나가기
-	$('.exit').on('click',function(){
+	/* $('.exit').on('click',function(){
 		layerPopup('채팅방을 나가시겠습니까?','나가기','취소',exitBtn1Act,exitBtn2Act);
 	});
 	
@@ -389,7 +378,7 @@
 	
 	function exitBtn2Act(){
 		removeAlert();
-	} 
+	}  */
 	
 	
 	// textarea 글자수 제한
@@ -403,9 +392,9 @@
 	
 	
 	// 실시간 데이터 불러오기
- 	setInterval(function(){
+/*  	setInterval(function(){
 		getChat();
-	}, 3000);  
+	}, 3000);   */
 	
 	
 	// db변동 발생시 업데이트

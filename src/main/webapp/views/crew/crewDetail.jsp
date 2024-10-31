@@ -346,7 +346,7 @@
 			<div class="title2-1">크루 채팅방</div>
 			<div class="right-x">
 				<img src="/resources/img/crew/img07.png" width="40px" /> 
-				<span class="right-x1"><a href="#" class="crewAccess">바로가기</a></span>
+				<span class="right-x1"><a onclick="openCrewChat()" class="crewAccess">바로가기</a></span>
 			</div>
 			<div class="contentbox">
 				<span><img src="/resources/img/crew/img06.png" width="17px" class="imglayout"/> 마지막 대화 n 분 전</span>
@@ -555,7 +555,8 @@
 					    // 로그인 안했거나 크루원이 아니면
 					    $('.crewAccess').click(function(){
 						    if(loginId != null || loginId === '' || loginId != result.id || loginId != crewLeader){
-						    	location.href="/crewNoticeList/" +crew_idx;
+						    	//location.href="/crewNoticeList/" +crew_idx;
+								
 						    }else{
 						    	
 						    	$('.crewAccess').attr('href', 'javascript:void(0);');
@@ -571,6 +572,34 @@
 	            }
 	        });
 	    }
+	    
+	    function openCrewChat(){
+	    	$.ajax({
+	    		type: 'GET',
+	    		url: '/crewChat/'+crew_idx,
+	    		dataType: 'JSON',
+	    		success: function(data){
+	    			openChatWindow(crew_idx,data.roomNum);
+	    		},
+	    		error: function(e){
+	    			console.log(e);
+	    		}
+	    	});
+	    }
+	    
+	    function openChatWindow(crew_idx,roomNum) {
+		    // 새 창의 URL
+		    var url = '/crewChat/open/'+crew_idx+'/'+roomNum;
+		    // 새 창의 크기와 위치 설정
+		    var width = 400;
+		    var height = 700;
+		    var left = (screen.width - width) / 2;
+		    var top = (screen.height - height) / 2;
+		    // 새 창을 열고, 크기와 위치 설정
+		    window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+top+',resizable=no,scrollbars=no,status=no,menubar=no,location=no');
+		}
+	    
+	    
 	
 	function likeList(){
 		$.ajax({
@@ -723,10 +752,10 @@
 			
 			//location.href='#';
 			// 채팅방 열기
-			var crewIdx = $('input[name="crew_idx"]').val();
+			
 			$.ajax({
 				type:'GET',
-				url:'/crewLdchat/'+crewIdx,
+				url:'/crewLdchat/'+crew_idx,
 				data:{},
 				dataType:'JSON',
 				success:function(data){

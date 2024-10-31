@@ -130,38 +130,42 @@
 	               <img src="/resources/img/common/ico_map.png" alt="위치"/><span class="addr">${profileDto.shortsido} ${profileDto.dong}</span>
 	           </div>
            </div>
-	       <div class="buttons">
-	       		<c:choose>
-	       			<c:when test="${result.isBlocked eq false}">
-		       			<c:choose>
-		       				<c:when test="${result.MateAppl eq 'apply'}">
-					           <a class="btn01-s" >러닝메이트 신청중</a> <!-- check!! mypage로 이동 -->
-							</c:when>
-		       				<c:when test="${result.MateAppl eq 'recieve'}">
-					           <a class="btn01-s">러닝메이트 신청수락</a> <!-- check!! mypage로 이동 -->
-							</c:when>
-		       				<c:when test="${result.MateAppl eq 'none'}">
-					           <div class="btn-mate-appl btn01-s">러닝메이트 신청</div>
-							</c:when>
-						</c:choose>
-			           <div class="btn-chat btn02-s" onclick="chat('${sessionScope.loginId}','${profileDto.id}')">채팅하기</div>
-			           <div class="btn-like btn02-s" onclick="like()">
-			           		<c:choose>
-				           		<c:when test="${result.isLiked eq false}">
-				           			<img src="/resources/img/common/ico_heart_no_act.png" alt="좋아요비활성">
-			           			</c:when>
-			           			<c:otherwise>
-				           			<img src="/resources/img/common/ico_heart_act.png" alt="좋아요활성">				           			
-			           			</c:otherwise>
-		           			</c:choose>
-		           		</div>
-		           </c:when>
-		           <c:otherwise>
-		           		<div class="btn-unblock btn01-s"  onclick="layerPopup('${profileDto.nickname} 님을 차단해제 하시겠습니까?','차단해제','취소',unblockBtnAct,cancleBtnAct)">차단해제하기</div>
-	           		</c:otherwise>
-	           </c:choose>
+           <c:choose>
+           	<c:when test="${profileDto.id != sessionScope.loginId}">
+		       <div class="buttons">
+		       		<c:choose>
+		       			<c:when test="${result.isBlocked eq false}">
+			       			<c:choose>
+			       				<c:when test="${result.MateAppl eq 'apply'}">
+						           <a class="btn01-s" style="cursor: default;">러닝메이트 신청중</a> <!-- check!! mypage로 이동 -->
+								</c:when>
+			       				<c:when test="${result.MateAppl eq 'recieve'}">
+						           <a class="btn01-s">러닝메이트 신청수락</a> <!-- check!! mypage로 이동 -->
+								</c:when>
+			       				<c:when test="${result.MateAppl eq 'none'}">
+						           <div class="btn-mate-appl btn01-s">러닝메이트 신청</div>
+								</c:when>
+							</c:choose>
+				           <div class="btn-chat btn02-s" onclick="chat('${sessionScope.loginId}','${profileDto.id}')">채팅하기</div>
+				           <div class="btn-like btn02-s" onclick="like()">
+				           		<c:choose>
+					           		<c:when test="${result.isLiked eq false}">
+					           			<img src="/resources/img/common/ico_heart_no_act.png" alt="좋아요비활성">
+				           			</c:when>
+				           			<c:otherwise>
+					           			<img src="/resources/img/common/ico_heart_act.png" alt="좋아요활성">				           			
+				           			</c:otherwise>
+			           			</c:choose>
+			           		</div>
+			           </c:when>
+			           <c:otherwise>
+			           		<div class="btn-unblock btn01-s"  onclick="layerPopup('${profileDto.nickname} 님을 차단해제 하시겠습니까?','차단해제','취소',unblockBtnAct,cancleBtnAct)">차단해제하기</div>
+		           		</c:otherwise>
+		           </c:choose>
+		       </div>
+	       </c:when>
+	       </c:choose>
 	       </div>
-       </div>
 
 	   <div class="content">
 			<div class="line">
