@@ -51,21 +51,50 @@
 	
 	
 	
-	<select id="getCrewLeaderChat" resultType="int">
+	<select id="getCrewLeaderChat" resultType="String">
 		SELECT chat_idx FROM crew_chat_link 
 			WHERE chat_idx IN 
 				(SELECT chat_idx FROM crew_chat 
 				WHERE crew_idx = #{crewIdx} AND code_cp = 'P') 
 			AND id = #{baseUser}
 	</select>
-
-	<select id="getCrewLeaderUserName" resultType="String">
+	
+	<insert id="createCrewLeaderRoom" 
+		useGeneratedKeys="true"
+		keyColumn="chat_idx"
+		keyProperty="chat_idx"
+		parameterType="com.erunjrun.chat.dto.ChatCrewLeaderDTO">
+		INSERT INTO crew_chat (crew_idx, code_cp) VALUES (#{crew_idx},'P') 
+	</insert>
+	
+	<select id="getLeaderId" resultType="String">
+		SELECT id FROM crew_member WHERE crew_idx = #{crewIdx} AND is_leader = 'Y'
+	</select>
+	
+	<insert id="createCrewLinkTable">
+		INSERT INTO crew_chat_link (chat_idx, id, is_leader) 
+			VALUES (#{chatIdx},#{baseUser},'N'), (#{chatIdx},#{readerId},'Y') 
+	</insert>
+	
+	<select id="getCrewLeaderUserName" resultType="com.erunjrun.chat.dto.ChatCrewLeaderDTO">
 		SELECT c.id, nickname FROM crew_chat_link c JOIN member m ON c.id = m.id WHERE chat_idx = #{chatIdx}
 	</select>
 	
-	<!--크루챗방넘버 가져오기 	<select id="getCrewLeaderChat">
-		다시 작성해야함
-		SELECT chat_idx FROM crew_chat 
-			WHERE crew_idx = #{crewIdx} AND code_cp ='P'
-	</select> -->
+	<select id="getCrewLeaderContent" resultType="com.erunjrun.chat.dto.ChatCrewLeaderDTO">
+		SELECT create_date, sender, nickname, icon_image, image, c.content 
+			FROM crew_chat_content c 
+			JOIN member m ON c.sender = m.id 
+			JOIN profile p ON c.sender = p.id WHERE chat_idx = #{chatIdx}
+	</select>
+	
+	<insert id="sendCrewLeaderMessage" parameterType="map">
+		INSERT INTO crew_chat_content (chat_idx,sender,content) 
+			VALUES (#{chatIdx},#{baseUser},#{message})
+	</insert>
+	
+	<update id="exitCrewLeaderRoom">
+		UPDATE crew_chat_link SET use_yn = 'Y' WHERE chat_idx= #{chatIdx} AND id=#{user}
+	</update>
+	
+
 </mapper>

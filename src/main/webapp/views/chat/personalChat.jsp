@@ -206,11 +206,11 @@
         </div>
     </div>
 
-	<!-- 
+	
 	<input type="text" id="message-input">
     <button id="message-btn" onclick="sendMessage1()">Send</button>
     <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div>
- 	-->
+ 
 
 	<!-- <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div> -->
 </body>
@@ -346,6 +346,7 @@
 		sendData.chatIdx = chatIdx;
 		sendData.baseUser = $('.chat input[name="baseUser"]').val();
 		sendData.otherUser = $('.chat input[name="otherUser"]').val();	
+		$('.chat textarea[name="msg"]').val('');
 		
 		$.ajax({
 			type: 'POST',
@@ -372,7 +373,6 @@
 	});
 	
 	function exitBtn1Act(){
-		alert('나가기');
 		$.ajax({
 			type: 'POST',
 			url: '/chat/exit/'+chatIdx,
@@ -391,7 +391,6 @@
 	}
 	
 	function exitBtn2Act(){
-		alert('취소');
 		removeAlert();
 	}
 	
@@ -407,7 +406,7 @@
 	
 	
 	// db변동 발생시 업데이트
-	/*  function startSse() {
+	 function startSse() {
         if (!!window.EventSource) {
             const eventSource = new EventSource('/sse');
 
@@ -424,10 +423,10 @@
         } else {
             alert("Your browser does not support SSE.");
         }
-    } */
+    } 
   
     
-    /*
+    
  // 메시지 전송 함수
     function sendMessage1() {
     	const message = document.getElementById("message-input").value;
@@ -481,7 +480,7 @@
         }
     }
     
-    */
+    
     
     
 </script>
