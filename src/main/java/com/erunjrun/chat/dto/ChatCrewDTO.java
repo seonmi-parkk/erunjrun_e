@@ -2,7 +2,7 @@ package com.erunjrun.chat.dto;
 
 import java.time.LocalDateTime;
 
-public class ChatCrewLeaderDTO {
+public class ChatCrewDTO {
 	private String firstOfDay;
 
 	private String nickname;
@@ -23,7 +23,7 @@ public class ChatCrewLeaderDTO {
 	private LocalDateTime end_date;
 	private String sender;
 	private String content;
-
+	
 	public String getFirstOfDay() {
 		return firstOfDay;
 	}
@@ -48,12 +48,6 @@ public class ChatCrewLeaderDTO {
 	public void setCrew_idx(String crew_idx) {
 		this.crew_idx = crew_idx;
 	}
-	public LocalDateTime getCreate_date() {
-		return create_date;
-	}
-	public void setCreate_date(LocalDateTime create_date) {
-		this.create_date = create_date;
-	}
 	public String getCode_cp() {
 		return code_cp;
 	}
@@ -75,7 +69,7 @@ public class ChatCrewLeaderDTO {
 	public String getIs_leader() {
 		return is_leader;
 	}
-	public void setIs_reader(String is_leader) {
+	public void setIs_leader(String is_leader) {
 		this.is_leader = is_leader;
 	}
 	public String getContent_idx() {
@@ -83,6 +77,12 @@ public class ChatCrewLeaderDTO {
 	}
 	public void setContent_idx(String content_idx) {
 		this.content_idx = content_idx;
+	}
+	public LocalDateTime getCreate_date() {
+		return create_date;
+	}
+	public void setCreate_date(LocalDateTime create_date) {
+		this.create_date = create_date;
 	}
 	public LocalDateTime getEnd_date() {
 		return end_date;
@@ -102,5 +102,6 @@ public class ChatCrewLeaderDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	
 	
 }

@@ -184,7 +184,8 @@
 	
 </style>
 </head>
-<body onload="startSse()">
+<!-- <body onload="startSse()"> -->
+<body>
 	<div class="chat">
 		<input type="hidden" name="chatIdx" value="${roomNum}"/>
 		<input type="hidden" name="baseUser" value=""/>
@@ -207,9 +208,9 @@
     </div>
 
 	
-	<input type="text" id="message-input">
+<!-- 	<input type="text" id="message-input">
     <button id="message-btn" onclick="sendMessage1()">Send</button>
-    <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div>
+    <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div> -->
  
 
 	<!-- <div id="chat-box" style="border:1px solid black; height:200px; width:300px; overflow:auto;"></div> -->
@@ -314,7 +315,7 @@
 	               if(cont.image != null){
 		                   msgCont += '<div class="profile-img" style="background: url(/photo/'+cont.image+') center center / cover no-repeat;"></div>';
 	               }else{  
-		                   msgCont += '<div class="profile-img"  style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>';
+		                   msgCont += '<div class="profile-img"  style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>';
 	               }
 		            msgCont += '</div>';
 				}
@@ -405,7 +406,13 @@
 	});
 	
 	
-	// db변동 발생시 업데이트
+	// 실시간 데이터 불러오기
+	setInterval(function(){
+		getChat();
+	}, 3000);  
+	
+	
+	/* // db변동 발생시 업데이트
 	 function startSse() {
         if (!!window.EventSource) {
             const eventSource = new EventSource('/sse');
@@ -478,7 +485,7 @@
         } else {
             alert("Your browser does not support SSE.");
         }
-    }
+    } */
     
     
     

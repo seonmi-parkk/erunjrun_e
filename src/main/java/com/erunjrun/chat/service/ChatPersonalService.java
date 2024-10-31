@@ -114,6 +114,8 @@ public class ChatPersonalService {
 		
 		List<ChatCrewLeaderDTO> userList = chatPersonalDAO.getCrewLeaderUserName(chatIdx);
 		logger.info("userNames"+userList.get(0).getNickname());
+		logger.info("1user is leader"+userList.get(0).getIs_leader());
+		logger.info("2user is leader"+userList.get(1).getIs_leader());
 
 		List<ChatCrewLeaderDTO> msgList = chatPersonalDAO.getCrewLeaderContent(chatIdx);
 		
@@ -123,6 +125,8 @@ public class ChatPersonalService {
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 	    
         for(ChatCrewLeaderDTO msg : msgList) {
+        	
+
         	LocalDate msgDate = msg.getCreate_date().toLocalDate();
         	logger.info("msg.getStart_date(): "+msg.getCreate_date());
         	logger.info("msgDate: "+msgDate);
@@ -134,6 +138,7 @@ public class ChatPersonalService {
         		msg.setFirstOfDay(msgDate.format(dateFormatter));
         		previousDate = msgDate;
         	}
+        	
         }
         
         values.put("userList", userList);
@@ -167,14 +172,8 @@ public class ChatPersonalService {
 	public Object exitCrewLeaderRoom(String chatIdx, String user) {
 		return chatPersonalDAO.exitCrewLeaderRoom(chatIdx, user) > 0 ? true : false;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+
 	
 	
 	

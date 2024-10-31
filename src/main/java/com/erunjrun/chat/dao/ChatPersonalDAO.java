@@ -47,4 +47,5 @@ public interface ChatPersonalDAO {
 
 	int exitCrewLeaderRoom(String chatIdx, String user);
 
+
 }

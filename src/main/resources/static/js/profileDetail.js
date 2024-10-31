@@ -1,4 +1,6 @@
 
+	
+	
 	/* 메이트 신청하기 버튼 이벤트 */
 	$('.btn-mate-appl').on('click',function(){
 		var userName = $('.user-info .user-name').text();

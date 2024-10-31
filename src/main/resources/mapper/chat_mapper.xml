@@ -77,7 +77,7 @@
 	</insert>
 	
 	<select id="getCrewLeaderUserName" resultType="com.erunjrun.chat.dto.ChatCrewLeaderDTO">
-		SELECT c.id, nickname FROM crew_chat_link c JOIN member m ON c.id = m.id WHERE chat_idx = #{chatIdx}
+		SELECT c.id, nickname, is_leader FROM crew_chat_link c JOIN member m ON c.id = m.id WHERE chat_idx = #{chatIdx}
 	</select>
 	
 	<select id="getCrewLeaderContent" resultType="com.erunjrun.chat.dto.ChatCrewLeaderDTO">
@@ -94,7 +94,7 @@
 	
 	<update id="exitCrewLeaderRoom">
 		UPDATE crew_chat_link SET use_yn = 'Y' WHERE chat_idx= #{chatIdx} AND id=#{user}
-	</update>
+	</update>	
 	
 
 </mapper>

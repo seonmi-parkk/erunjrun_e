@@ -1,6 +1,7 @@
 package com.erunjrun.chat.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.erunjrun.chat.dto.ChatCrewLeaderDTO;
 import com.erunjrun.chat.service.ChatPersonalService;
 import com.erunjrun.chat.service.SseService;
 
@@ -178,6 +180,13 @@ public class ChatPersonalController {
 			 String baseUser = (String) session.getAttribute("loginId");
 			 Map<String, Object> values = chatPersonalService.getCrewLeaderContent(chatIdx, baseUser);
 			 
+			 
+			 
+			 List<ChatCrewLeaderDTO> list = (List<ChatCrewLeaderDTO>) values.get("msgList");
+			 for (int num = 0; num<list.size(); num++) {				
+				 logger.info("@@@@@@getSender : "+  list.get(num).getSender());
+			}
+			
 			 return values;
 		 }
 
@@ -197,5 +206,8 @@ public class ChatPersonalController {
 			 result.put("success", chatPersonalService.exitCrewLeaderRoom(chatIdx, user));
 			 return result;
 		 }
+		 
+		 
+		 
 	 
 }
