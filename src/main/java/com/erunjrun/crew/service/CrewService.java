@@ -292,11 +292,12 @@ public class CrewService {
 		
 		return crewMemberList;
 	}
-
+	
+	// 크루 신청자 리스트
 	public List<CrewMemberDTO> crewApplicationList(int crew_idxs, int page, int cnt, String keyword) {
 		
-		int limit = cnt;
-		int offset = (page -1) * cnt;
+		int limit = cnt; // 15
+		int offset = (page -1) * cnt; // 0
 		
 		Map<String, Object> parmeterMap = new HashMap<>();
 		parmeterMap.put("limit", limit);
@@ -502,8 +503,8 @@ public class CrewService {
 
 	public List<CrewNoticeDTO> crewNoticeList(int crew_idxs, int page, int cnt, String option, String keyword) {
 		
-		int limit = cnt;
-		int offset = (page -1) * cnt;
+		int limit = cnt; // 15
+		int offset = (page -1) * cnt; // 0
 		
 		Map<String, Object> parmeterMap = new HashMap<>();
 		parmeterMap.put("limit", limit);
@@ -514,12 +515,36 @@ public class CrewService {
 		
 		return crew_dao.crewNoticeList(parmeterMap);
 	}
-	
-	
-	
-	
-	
-	
-	
+
+	public CrewNoticeDTO crewNoticeUpdateView(int notice_idx) {
+		return crew_dao.crewNoticeUpdateView(notice_idx);
+	}
+
+	public boolean crewNoticeUpdate(CrewNoticeDTO crewNoticeDto) {
+		
+		
+//		logger.info(crewNoticeDto.getNotice_idx());
+		
+		int row = crew_dao.crewNoticeUpdate(crewNoticeDto);
+		
+		if(row > 0) {
+			int img_no = crewNoticeDto.getNotice_idx();
+			
+			List<ImageDTO> imgs = crewNoticeDto.getImgs();
+			if(imgs.size() > 0) {
+				for (ImageDTO img : imgs) {
+
+					img.setImg_no(img_no);
+					img.setCode_name("B104");
+					fileWrite(img); // 크루 공지사항
+					
+				}
+			}
+			return true;
+		}
+		
+		return false;
+	}
+
 	
 }

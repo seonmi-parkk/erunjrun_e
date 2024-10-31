@@ -347,8 +347,8 @@ public class CrewController {
 	@PostMapping(value="/applicationMemberList")
 	public Map<String, Object> ApplicationMemberList(
 			@RequestParam String crew_idx,
-			@RequestParam(value = "page") int page, 
-			@RequestParam(value = "cnt") int cnt,
+			@RequestParam(value = "page", defaultValue = "1") int page, 
+			@RequestParam(value = "cnt", defaultValue = "15") int cnt,
 			@RequestParam(defaultValue = "", value="keyword") String keyword){
 		
 		logger.info("crew_idx => " + crew_idx);
@@ -367,8 +367,8 @@ public class CrewController {
 	@PostMapping(value="/applicationAdminList")
 	public Map<String, Object> applicationAdminList(
 			@RequestParam String crew_idx,
-			@RequestParam(value = "page") int page, 
-			@RequestParam(value = "cnt") int cnt,
+			@RequestParam(value = "page", defaultValue = "1") int page, 
+			@RequestParam(value = "cnt", defaultValue = "15") int cnt,
 			@RequestParam(defaultValue = "", value="keyword") String keyword){
 		
 		logger.info("crew_idx => " + crew_idx);
@@ -466,10 +466,12 @@ public class CrewController {
 	}
 	
 	
-	@PostMapping(value="/noticePriorityUpdate")
+	@PutMapping(value="/noticePriorityUpdate")
 	public Map<String, Object> crewNoticePriorityUpdate(@RequestParam(value="crew_idx") String crew_idx, 
 			@RequestParam(value="priority") String priority){
 		
+		logger.info("crew_idx" + crew_idx);
+		logger.info("priority =>" + priority);
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("success", crew_service.crewNoticePriorityUpdate(crew_idx, priority));
 		return resultMap;
@@ -496,6 +498,39 @@ public class CrewController {
 		
 		return resultMap;
 		
+	}
+	
+	@PostMapping(value="/sendNoticeUpdate")
+	public Map<String, Object> crewNoticeUpdate(@ModelAttribute CrewNoticeDTO crewNoticeDto, @RequestParam("imgsJson") String imgsJson){
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		List<ImageDTO> imgs = null;
+		try {
+			// TypeFactory를 사용하여 제네릭 타입을 처리
+	        imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ImageDTO.class));
+	        crewNoticeDto.setImgs(imgs);  // 변환한 리스트를 DTO에 설정
+		} catch (Exception e) {
+			logger.error("파싱 오류 : {}", e.getMessage());
+			return Map.of("error", e.getMessage());
+		}
+		
+		if (imgs != null && !imgs.isEmpty()) {
+		    for (ImageDTO img : imgs) {
+		        logger.info("Original Filename: " + img.getImg_ori());
+		        logger.info("New Filename: " + img.getImg_new());
+		    }
+		}
+		
+		logger.info("crewNoticeDto => " + crewNoticeDto.toString());
+		
+		if(crew_service.crewNoticeUpdate(crewNoticeDto)) {
+			logger.info("공지사항 업로드 완료");
+			resultMap.put("success", true);
+		}
+		
+//		return null;
+		return resultMap;
 	}
 	
 }

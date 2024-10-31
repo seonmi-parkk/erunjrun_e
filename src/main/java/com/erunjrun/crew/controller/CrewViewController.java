@@ -38,7 +38,6 @@ public class CrewViewController {
 
     @GetMapping(value="/crewDetail/{crew_idx}")
     public String crewDetailView(@PathVariable int crew_idx, Model model, HttpSession session) {
-		session.setAttribute("loginId", "kimee01");
     	model.addAttribute("crew_idx", crew_idx);
     	
     	return "/crew/crewDetail";
@@ -67,13 +66,15 @@ public class CrewViewController {
     	return "/crew/crewManagerList";
     }
     
-    @GetMapping(value="/crewNoticeList")
-    public String crewNoticeListView() {
+    @GetMapping(value="/crewNoticeList/{crew_idx}")
+    public String crewNoticeListView(@PathVariable int crew_idx, Model model) {
+    	model.addAttribute("crew_idx", crew_idx);
     	return "/crew/crewNoticeList";
     }
     
-    @GetMapping(value="/crewNoticeWrite")
-    public String crewNoticeWrete() {
+    @GetMapping(value="/crewNoticeWrite/{crew_idx}")
+    public String crewNoticeWrete(@PathVariable int crew_idx, Model model) {
+    	model.addAttribute("crew_idx", crew_idx);
     	return "/crew/crewNoticeWrite";
     }
     
@@ -83,8 +84,10 @@ public class CrewViewController {
     	return "crew/crewNoticeDetail";
     }
 
-    @GetMapping(value="/crewNoticeUpdate")
-    public String crewNoticeUpdateView() {
+    @GetMapping(value="/crewNoticeUpdate/{notice_idx}")
+    public String crewNoticeUpdateView(@PathVariable int notice_idx, Model model) {
+    	model.addAttribute("result", crew_service.crewNoticeUpdateView(notice_idx));
+    	model.addAttribute("notice_idx", notice_idx);
     	return "crew/crewNoticeUpdate";
     }
     

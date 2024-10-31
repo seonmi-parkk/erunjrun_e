@@ -136,9 +136,9 @@
 </head>
 <body>
 	<jsp:include page="../header.jsp"/>
-	
+	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
 	<div class="inner">
-	<p class="title1">크루 신청자 관리</p>
+	<p class="title1">크루장 권한 기록</p>
 	<form id="searchForm">
     <select id="searchOption">
         <option value="subject">닉네임</option>
@@ -200,8 +200,8 @@
 
 	function pageCall(page) {
 	    var keyword = $('#searchKeyword').val();  // 검색어
-	    var crew_idx = 52; // 나중에 변경 필요
-	
+	    var crew_idx = $('input[name="crew_idx"]').val(); // 나중에 변경 필요
+		console.log('실행은?');
 	    $.ajax({
 	        type: 'POST',
 	        url: '/crew/applicationAdminList',
@@ -220,7 +220,7 @@
 	            var result = response.result;
 	            
 	            
-	            var totalCount = result.length;  // 총 게시글 수를 서버에서 가져옴
+	            var totalCount = response.result[0].totalpage; // 총 게시글 수를 서버에서 가져옴
 	            var pageSize = 15;  // 한 페이지당 게시글 수
 	            var totalPages = Math.ceil(totalCount / pageSize);  // 총 페이지 수 계산
 	            console.log('총 페이지 수=> ', totalPages);
@@ -268,8 +268,8 @@
 	        
             content += '<tr>';
             // 프로필 + 닉네임 (나중에 연결 필요)
-            content +='<td class="profileContainer"><img src="resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.member_nickname+'</td>';
-            content +='<td class="profileContainer"><img src="resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.leader_nickname+'</td>';
+            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.member_nickname+'</td>';
+            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.leader_nickname+'</td>';
             
 			content +='<td>'+item.create_date+'</td>'; // 신청일자
 			content +='<td>'+item.update_date+'</td>'; // 응답일자
