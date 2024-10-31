@@ -199,7 +199,7 @@
             } else {
             	content += '<td style="color: red;">미사용</td>';
             }
-            content +='<td><a  href="adminPopupUpdate?popup_idx='+view.popup_idx+'"style="color: orange;">수정</a></td>';
+            content +='<td><a  href="adminPopupUpdate?popup_idx='+view.popup_idx+'&code_name='+view.code_name+'"style="color: orange;">수정</a></td>';
             content += '<td>'+view.create_date+'</td>';
 			content +='</tr>';
 		  }

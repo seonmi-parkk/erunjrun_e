@@ -187,8 +187,8 @@ function pageCall(page, category) {
 		var content ='';
 		 for (var view of list) {
 			content +='<tr>';
-            content += '<td>'+view.category+'</td>';
-			content += '<td><a href="adminReportDetail?report_idx='+view.report_idx+'">'+view.unlike_id+'<a/></td>';
+            content += '<td>'+view.category+'</td>';              
+			content += '<td><a href="adminReportDetail?report_idx='+view.report_idx+'&code_name='+view.code_name+'">'+view.unlike_id+'<a/></td>';
 			 var admin_name = view.name ? view.name : '관리자';
 			content +='<td>'+admin_name+'</td>';
 			var processValue = view.process ? view.process : '미확인';

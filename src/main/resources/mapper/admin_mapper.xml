@@ -219,6 +219,7 @@
    <select id="reportdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
    		SELECT 
    		c.content as category,
+   		rw.code_name,
    		rw.report_idx,
    		rw.id,
    		rw.create_date,
@@ -240,7 +241,8 @@
 	  	img_no,
 	  	img_idx
 	  	from image 
-	  	 where img_no = #{report_idx}
+	  	 where img_no = #{param1}
+	  	 and code_name = #{param2}
 	  </select>
 	  
 	 	<insert id="reportupdate" parameterType="Map">
@@ -371,10 +373,35 @@
 			SELECT CEIL(count(popup_idx)/#{param1}) AS pages FROM popup
 		</select>
 		
-		<insert id="popupwrite" parameterType="Map">
-			insert into popup(subject,priority,use_yn,x,y,width,height,start_date,end_date,content)
-				values(#{subject},#{priority},#{use_yn},#{x},#{y},#{width},#{height},#{start_date},#{end_date},#{content})
+		<insert 
+			useGeneratedKeys="true"
+			keyColumn="popup_idx"
+			keyProperty="popup_idx"
+			id="popupwrite" parameterType="com.erunjrun.admin.dto.PopupDTO">
+			INSERT INTO popup(subject,priority,code_name,use_yn,x,y,width,height,start_date,end_date,content)
+			VALUES(#{subject},#{priority},#{code_name},#{use_yn},#{x},#{y},#{width},#{height},#{start_date},#{end_date},#{content})
 		</insert>
+		
+		<insert id="fileWrite">
+			INSERT INTO image(img_ori,img_new,img_no,code_name)VALUES(#{param1},#{param2},#{param3},#{param4})
+		</insert>
+		
+		<update id="fileupdate" parameterType="String">
+				update image <set>				
+  		 <if test= "img_ori != null">
+			img_ori = #{img_ori},
+		</if>
+		<if test="img_new != null">
+			img_new = #{img_new},
+		</if>
+		<if test="code_name != null">
+			code_name = #{code_name}
+		</if>
+		</set>
+		where img_no = #{popup_idx}
+		and code_name = #{code_name}
+		</update>
+		
   		
   		<select id="popupdetail" resultType="com.erunjrun.admin.dto.PopupDTO" >
   			select * from popup where popup_idx = #{popup_idx}

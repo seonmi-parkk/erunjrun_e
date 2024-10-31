@@ -116,12 +116,12 @@
             <p class="title3" onclick="location.href='adminTag'">태그</p>
             <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
         
         <main class="main-content">
-		<p class="title1" >회원정보</p>
+		<p class="title1" >신고</p>
  		<div class="input-container">
   			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">카테고리</p>
@@ -149,13 +149,7 @@
 		<div class="input-container">
 		<p class="title2" id="dot">•</p>
 		<p class="title2" id="text">이미지</p>
-	 		
-					<!-- /photo 라는 컨텍스트 요청이 있으면 C:/upload 로 연결하도록 설정 되어야 한다.(server.xml) -->
-					<!-- server 파일에서 server.xml - >   <Context docBase="C:/upload" path="/photo" /> -->
-				<c:forEach items="${file}" var="files">
-				<img alt="${files.img_ori}" src="/photo/${files.img_new}">
-				</c:forEach>	
-			
+	 	<img alt="${file.img_ori}" src="/photo/${file.img_new}">	
 		</div>
 		
  		<div class="input-container">
@@ -172,7 +166,7 @@
 		</div>	
 		
    	
-	<div class="btn01-l" onclick="location.href='adminReportUpdate?report_idx=${info.report_idx}'">처리하기</div> <!-- 클릭시 색깔변경 -->
+	<div class="btn01-l" onclick="location.href='adminReportUpdate?report_idx=${info.report_idx}&code_name=${info.code_name}'">처리하기</div> <!-- 클릭시 색깔변경 -->
 	<div class="btn02-l" onclick="location.href='adminReport'">취소</div> <!-- 클릭시 색깔변경 -->
 	
         

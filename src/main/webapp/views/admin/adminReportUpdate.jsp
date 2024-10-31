@@ -103,7 +103,7 @@
             <p class="title3" onclick="location.href='adminTag'">태그</p>
             <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
+            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
         
@@ -139,17 +139,10 @@
 			<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">이미지</p>
-		 		
+		 	<img alt="${file.img_ori}" src="/photo/${file.img_new}">	
 					<!-- /photo 라는 컨텍스트 요청이 있으면 C:/upload 로 연결하도록 설정 되어야 한다.(server.xml) -->
 					<!-- server 파일에서 server.xml - >   <Context docBase="C:/upload" path="/photo" /> -->
-						
-			
-			<img alt="${file.img_ori}" src="/photo/${file.img_new}">
-						
-						
-					
-			
-				
+	
 			</div>
 			
 	 		<div class="input-container">
@@ -162,7 +155,7 @@
 	 		<div class="input-container">
 	  			<p class="title2" id="dot">•</p>
 				<p class="title2" id="text">처리내용</p>
-				<input type="text" name="process" value="${info.process}" id="content"/>
+				<textarea class="title2" id="content" name="process">${info.process}</textarea>
 			</div>	
 			
 			<input type="text" name="report_idx" value="${info.report_idx}" hidden="hidden"/>

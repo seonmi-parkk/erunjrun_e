@@ -1,9 +1,14 @@
 package com.erunjrun.admin.service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -20,6 +25,8 @@ import com.erunjrun.admin.dao.AdminDAO;
 import com.erunjrun.admin.dto.AdminDTO;
 import com.erunjrun.admin.dto.PopupDTO;
 import com.erunjrun.image.dto.ImageDTO;
+
+
 
 @Service
 public class AdminService {
@@ -150,14 +157,11 @@ public class AdminService {
 		return admin_dao.reportcount(cnt_);
 	}
 
-	public void reportdetail(String report_idx, Model model) {
+	public void reportdetail(String report_idx, String code_name, Model model) {
 		AdminDTO dto = admin_dao.reportdetail(report_idx);
-		ImageDTO imageDTO = admin_dao.image(report_idx); // 이미지 정보 가져오기
+		ImageDTO imageDTO = admin_dao.image(report_idx,code_name); // 이미지 정보 가져오기
 		logger.info(""+imageDTO);
 		model.addAttribute("file",imageDTO);
-		    
-	
-		
 		model.addAttribute("info",dto);
 		
 		
@@ -266,30 +270,122 @@ public class AdminService {
 	}
 
 	
-	public void popupwrite(MultipartFile file, Map<String, String> param) {
-		admin_dao.popupwrite(param);
+	public String popupwrite(MultipartFile file, Map<String, String> param) {
+	
+		PopupDTO dto = new PopupDTO();
+		
+		dto.setSubject(param.get("subject"));
+		dto.setPriority(param.get("priority"));
+		dto.setUse_yn(param.get("use_yn"));
+		dto.setCode_name("code_name");
+		dto.setX(param.get("x"));
+		dto.setY(param.get("y"));
+		dto.setWidth(param.get("width"));
+		dto.setHeight(param.get("height"));
+		dto.setContent(param.get("content"));
+		dto.setCode_name(param.get("code_name"));
+		
+		logger.info(param.get("code_name"));
+		String start =  param.get("start_date");
+		String end =  param.get("end_date");
+            try {
+	           Date start_date = Date.valueOf(start);
+	           Date end_date = Date.valueOf(end);
+				dto.setStart_date(start_date);
+				dto.setEnd_date(end_date);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		
+		admin_dao.popupwrite(dto);
+		
+		int popup_idx = dto.getPopup_idx();
+		String code_name = dto.getCode_name();
+		logger.info("idx : "+popup_idx);
+		if (file != null) {
+			logger.info("파일");	
+		}else {
+			
+			logger.info("없음");	
+		}
+		if (popup_idx>0) {
+			fileSave(file,popup_idx,code_name);
+			
+		}
+		
+		return "redirect:/adminPopup";
 	}
 	
 	
 		
 	
 
-	public void popupdetail(String popup_idx, Model model) {
-		
-		model.addAttribute("info",admin_dao.popupdetail(popup_idx));
-		
+	public void fileSave(MultipartFile file, int popup_idx,String code_name) {
+			try {
+				String img_ori = file.getOriginalFilename();
+				int pos = img_ori.lastIndexOf(".");
+				if (pos>=0) {
+				String ext = img_ori.substring(pos);
+				String img_new = UUID.randomUUID()+ext;
+				byte[] arr = file.getBytes();
+				Path path = Paths.get("C:/upload/"+img_new);
+				Files.write(path, arr);
+				int row = admin_dao.fileWrite(img_ori,img_new,popup_idx,code_name);
+				logger.info(""+row);
+				}
+			}catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+			
 		
 	}
 
-	public void popupupdate(Map<String, String> param) {
-		admin_dao.popupupdate(param);
+	public void popupdetail(String popup_idx, String code_name, Model model) {
+		
+		model.addAttribute("info",admin_dao.popupdetail(popup_idx,code_name));
+		ImageDTO imageDTO = admin_dao.image(popup_idx,code_name);
+		model.addAttribute("file",imageDTO);
+	}
+
+	public void popupupdate(MultipartFile file, Map<String, String> param) {
+		int row = admin_dao.popupupdate(param);
+		
+		String code_name = param.get("code_name");
+		String popup_idx =param.get("popup_idx");
+		ImageDTO imageDTO = admin_dao.image(popup_idx,code_name);
+		
+		int idx = Integer.parseInt(param.get("popup_idx"));
+		if (row >0 && idx>0) {
+			fileupdate(file,popup_idx,code_name);
+		}
+		
 		
 	}
 
 
 
 	
-
+	public void fileupdate(MultipartFile file, String popup_idx,String code_name) {
+		try {
+			String img_ori = file.getOriginalFilename();
+			int pos = img_ori.lastIndexOf(".");
+			if (pos>=0) {
+			String ext = img_ori.substring(pos);
+			String img_new = UUID.randomUUID()+ext;
+			byte[] arr = file.getBytes();
+			Path path = Paths.get("C:/upload/"+img_new);
+			Files.write(path, arr);
+			int row = admin_dao.fileupdate(img_ori,img_new,popup_idx,code_name);
+			logger.info(""+row);
+			}
+		}catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+	
+}
 
 	
 

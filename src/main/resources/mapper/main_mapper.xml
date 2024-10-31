@@ -11,4 +11,16 @@
           AND end_date &gt;= #{today}
         ORDER BY `priority` ASC;
     </select>
+    
+    <select id="image" resultType="com.erunjrun.image.dto.ImageDTO">
+	  	select 
+	  	img_ori,
+	  	img_new,
+	  	img_no,
+	  	img_idx
+	  	from image 
+	  	 where img_no = #{param1}
+	  	 and code_name = #{param2}
+	  </select>
+    
 </mapper>

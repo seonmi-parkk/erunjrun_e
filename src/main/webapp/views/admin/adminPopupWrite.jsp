@@ -147,7 +147,7 @@
 		<p class="title1" >팝업</p>
 		
 		
-	  	<form action="adminPopupWrite" method="post" id="form">
+	  	<form action="adminPopupWrite" method="post" id="form" enctype="multipart/form-data">
 	  	
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
@@ -155,22 +155,15 @@
 			<input type="text" name="subject" id="text"/>
 		</div>
 		
+		<input type="text" name="code_name" id="text" value="PP100" hidden=""/>
+		
 		<div class="input-container">
 		<p class="title2" id="dot">•</p>
 		<p class="title2" id="text">이미지</p>
-	 		<c:if test="${file.size()>0}">
-			<tr>
-				<td>
-					<!-- /photo 라는 컨텍스트 요청이 있으면 C:/upload 로 연결하도록 설정 되어야 한다.(server.xml) -->
-					<!-- server 파일에서 server.xml - >   <Context docBase="C:/upload" path="/photo" /> -->
-						<c:forEach items = "${file}" var ="imgfile">
-							<a href="download?new_filename = ${imgfile.img_new}&ori_fileName=${imgfile.img_ori}">
-								<img alt="${imgfile.img_ori}" src="/photo/${imgfile.img_new}">
-							</a>
-						</c:forEach>
-				</td>
-			</tr>
-			</c:if>
+		<input type="file" name="file" multiple="multiple">
+		
+		
+			
 		</div>
 		<div class="input-container">
 		<p class="title2" id="dot">•</p>

@@ -66,7 +66,7 @@ public interface AdminDAO {
 
 	public AdminDTO reportdetail(String report_idx);
 
-	public ImageDTO image(String report_idx);
+	public ImageDTO image(String report_idx,String code_name);
 
 	public int reportupdate(Map<String, String> param);
 	
@@ -112,11 +112,16 @@ public interface AdminDAO {
 	
 	public int popupcount(int cnt_);
 	
-	public int popupwrite(Map<String, String> param);
-
-	public PopupDTO popupdetail(String popup_idx);
+	public int popupwrite(PopupDTO dto);
+	
+	public PopupDTO popupdetail(String popup_idx,String code_name);
 
 	public int popupupdate(Map<String, String> param);
+
+	public int fileWrite(String img_ori, String img_new, int popup_idx, String code_name);
+
+	public int fileupdate(String img_ori, String img_new, String popup_idx, String code_name);
+
 
 
 	

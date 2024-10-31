@@ -1,6 +1,5 @@
 package com.erunjrun.admin.controller;
 
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -244,8 +243,8 @@ public class AdminController {
 	  }
 	  
 	  @GetMapping(value = "/adminReportDetail")
-	  public String reportdetail(String report_idx,Model model) {
-		  admin_service.reportdetail(report_idx,model);
+	  public String reportdetail(String report_idx,String code_name,Model model) {
+		  admin_service.reportdetail(report_idx,code_name,model);
 		
 		  
 		  
@@ -253,8 +252,8 @@ public class AdminController {
 	  }
 
 	  @GetMapping(value = "/adminReportUpdate")
-	  public String reportupdate(String report_idx,Model model) {
-		  admin_service.reportdetail(report_idx,model);
+	  public String reportupdate(String report_idx,String code_name,Model model) {
+		  admin_service.reportdetail(report_idx,code_name,model);
 		  
 		  return "admin/adminReportUpdate";
 	  }
@@ -454,20 +453,20 @@ public class AdminController {
 	  }
 	  
 	  @GetMapping(value = "adminPopupUpdate")
-	  public String popupupdetail(String popup_idx,Model model) { 
-		  admin_service.popupdetail(popup_idx,model);
+	  public String popupupdetail(String popup_idx,String code_name,Model model) { 
+		  admin_service.popupdetail(popup_idx,code_name,model);
 		  return "admin/adminPopupUpdate";
 	  }
 	  
 	  @PostMapping(value = "adminPopupUpdate")
-	  public String popupupdate(@RequestParam Map<String, String> param) { 
-		  admin_service.popupupdate(param);
-		  logger.info(param.get("popup_idx"));
-		  logger.info(param.get("content"));
-		  logger.info(param.get("use_yn"));
-		  
-		  return "redirect:/adminPopup";
-	  }
+	  public String popupupdate(MultipartFile file,
+			  @RequestParam Map<String, String> param) { 
+		 admin_service.popupupdate(file,param);
+		
+			
+		return "redirect:/adminPopup";
+		}
+	  
 	  
 	  
 	  

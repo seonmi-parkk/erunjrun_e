@@ -4,11 +4,11 @@ import java.sql.Date;
 
 public class PopupDTO {
 
-	private String popup_idx;
+	private int popup_idx;
 	private String admin_idx;
 	private String subject;
 	private String content;
-	private String image;
+
 	private Date create_date;
 	private String use_yn;
 	private String x;
@@ -18,20 +18,21 @@ public class PopupDTO {
 	private Date start_date;
 	private Date end_date;
 	private String priority;
+	private String code_name;
 	
 	
 	
 	
 	
 	
-	public String getPopup_idx() {
-		return popup_idx;
-	}
-	public void setPopup_idx(String popup_idx) {
-		this.popup_idx = popup_idx;
-	}
 	public String getAdmin_idx() {
 		return admin_idx;
+	}
+	public int getPopup_idx() {
+		return popup_idx;
+	}
+	public void setPopup_idx(int popup_idx) {
+		this.popup_idx = popup_idx;
 	}
 	public void setAdmin_idx(String admin_idx) {
 		this.admin_idx = admin_idx;
@@ -48,11 +49,12 @@ public class PopupDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getImage() {
-		return image;
+
+	public String getCode_name() {
+		return code_name;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public void setCode_name(String code_name) {
+		this.code_name = code_name;
 	}
 	public Date getCreate_date() {
 		return create_date;
