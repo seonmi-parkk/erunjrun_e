@@ -14,6 +14,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="/resources/js/summernote.js"></script>
+	<script src="/resources/js/layerPopup.js"></script>
+	
 	
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -168,13 +170,11 @@
                 </div>
 
                 <div class="btn-parent">
-                    <button type="button" class="btn03-l">수정 취소하기</button>
-                    <button type="button" class="btn01-l" onclick="submitPost()">크루 수정하기</button>
+                    <button type="button" class="btn03-l" onclick="locationHrdf()">수정 취소하기</button>
+                    <button type="button" class="btn01-l" onclick="layerPopup('크루를 수정하시겠습니까?', '확인', '취소', submitPost, applBtn2Act)">크루 수정하기</button>
                 </div>
             </form>
-
         </div>
-        <button type="button" class="btn03-s" onclick="crewDelete()">크루 삭제하기</button>
     </div>
     <jsp:include page="../footer.jsp" />
 </body>
@@ -183,15 +183,44 @@
 <script src="/resources/js/daumapi.js"></script>
 
 <script>
+	var crew_idx = $('input[name="crew_idx"]').val();
+
+	$.ajax({
+		type: 'PUT',
+		url: '/crew/updateView',
+		data: {'crew_idx' : crew_idx},
+		dataType: 'JSON',
+		enctype: 'multipart/form-data',
+		success: function(response){
+			console.log('받아온 데이터 => ', response);
+		},error: function(e){
+			console.log('에러 => ', e);
+		}
+	});
+
+var dayCheckboxes = [];  // 선택된 요일 체크박스를 추적할 배열	
 
 	$(document).ready(function() {
+		console.log('실행됨');
+	
 	    // 서버에서 가져온 content 값을 에디터에 삽입
 	    var content = '<c:out value="${result.content}" escapeXml="false" />';
 	    if (content) {
 	        // summernote가 초기화된 후에만 내용을 설정
 	        $('#summernote').summernote('code', content);
 	    }
-	});
+	    
+	    $('input[name="days"]').each(function () {
+	        if ($(this).is(':checked')) {
+	            dayCheckboxes.push(this); // 서버로부터 받아온 값이 체크된 경우 dayCheckboxes에 추가
+	        }
+	    
+		});
+	
+	    console.log("초기 체크된 요일들:", dayCheckboxes.map(item => $(item).val()));
+
+	
+	var crew_idx = $('input[name="crew_idx"]').val();
 
 
 	// 크루 대표 이미지 미리보기
@@ -208,7 +237,7 @@
         }
     }
 
-    var dayCheckboxes = [];  // 선택된 요일 체크박스를 추적할 배열
+    
 
     // 모든 체크박스에 change 이벤트 리스너 추가
     $('input[name="days"]').on('change', function () {
@@ -250,7 +279,7 @@
             console.log(formData.crew_img);
         }
 
-        formData.append('id', 'test'); // 세션값 체크해서 넣어줘야 함!
+        formData.append('id', 'test'); // todo - 세션값 체크해서 넣어줘야 함!
         
         formData.append('content', content);  // summernote의 HTML 내용 추가 (이미지 포함)
 
@@ -300,20 +329,25 @@
             processData: false,  // formData 사용 시 false로 설정
             enctype: 'multipart/form-data',  // multipart/form-data 사용
             success: function (response) {
-                console.log('글 수정 성공:', response);
                 if(response.success){
-	                alert('수정 성공');
+	                removeAlert();
+	                layerPopup('크루 수정이 완료되었습니다.', '확인', false, locationHrdf, locationHrdf);
                 }
-        
-                
             },
             error: function (e) {
                 console.log('글 수정 에러:', e);
             }
         });
     }
+    
+    function locationHrdf(){
+    	location.href="/crewDetail/"+crew_idx;
+    }
 
-
+	// 팝업 취소
+	function applBtn2Act() {
+	    removeAlert(); 
+	}
     
 </script>
 

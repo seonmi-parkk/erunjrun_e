@@ -9,7 +9,7 @@ import com.erunjrun.image.dto.ImageDTO;
 public class CrewDTO {
     
     // crew 테이블
-    private Integer crew_idx=0; // crew_tag, crew_chat
+    private int crew_idx=0; // crew_tag, crew_chat
     private String crew_name;
     private Integer member = 0;
     private Integer current_member = 0;
