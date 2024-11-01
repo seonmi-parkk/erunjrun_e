@@ -321,6 +321,9 @@ public class AdminService {
 	
 
 	public void fileSave(MultipartFile file, int popup_idx,String code_name) {
+			
+		if (file != null) {
+			
 			try {
 				String img_ori = file.getOriginalFilename();
 				int pos = img_ori.lastIndexOf(".");
@@ -337,6 +340,9 @@ public class AdminService {
 				
 				e.printStackTrace();
 			}
+		}else {
+			admin_dao.filedelete(popup_idx,code_name);
+		}
 			
 		
 	}
@@ -349,15 +355,18 @@ public class AdminService {
 	}
 
 	public void popupupdate(MultipartFile file, Map<String, String> param) {
-		int row = admin_dao.popupupdate(param);
+		 admin_dao.popupupdate(param);
 		
 		String code_name = param.get("code_name");
 		String popup_idx =param.get("popup_idx");
+		int idx = Integer.parseInt(param.get("popup_idx"));
 		ImageDTO imageDTO = admin_dao.image(popup_idx,code_name);
 		
-		int idx = Integer.parseInt(param.get("popup_idx"));
-		if (row >0 && idx>0) {
+		
+		if (imageDTO != null) {
 			fileupdate(file,popup_idx,code_name);
+		}else {
+			fileSave(file,idx,code_name);
 		}
 		
 		
@@ -386,6 +395,28 @@ public class AdminService {
 		
 	
 }
+
+	public int filedelete(String code_name, int popup_idx) {
+		
+		return admin_dao.filedelete(popup_idx, code_name);
+	}
+
+	public void adminyn(String admin_id) {
+		admin_dao.adminyn(admin_id);
+		
+	}
+
+	public List<AdminDTO> iconbuylist(int limit, int offset) {
+	
+		return admin_dao.iconbuylist(limit,offset);
+	}
+
+	public int iconbuycount(int cnt_) {
+		// TODO Auto-generated method stub
+		return admin_dao.iconbuycount(cnt_);
+	}
+
+	
 
 	
 
