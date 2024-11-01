@@ -32,13 +32,11 @@ public interface CrewDAO {
 	
 	int crewImgDelete(int img_no);
 
-//	Map<String, Object> crewUpdateView(int crew_idx);
-	
-	CrewDTO crewUpdateView(int crew_idx);
+	Map<String, Object> crewUpdateView(int crew_idx);
 
 	int crewUpdate(CrewDTO crewDto);
 
-//	int tagUpdate(CrewDTO crewDto);
+	int tagUpdate(CrewDTO crewDto);
 
 	int fileUpdate(ImageDTO imageDto);
 
@@ -101,10 +99,6 @@ public interface CrewDAO {
 	int crewCurrentMemberUpdate(int crew_idx);
 
 	MemberDTO nickName(String loginId);
-
-	String crewLeaderCheck(int crew_idx);
-
-	List<CrewMemberDTO> crewLikeCrew(String id);
 	
 	
 

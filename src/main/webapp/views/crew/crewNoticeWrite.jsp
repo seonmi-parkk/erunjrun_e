@@ -89,7 +89,6 @@
         <div class="inner">
             <form enctype="multipart/form-data">
                 <p class="title1">크루 공지사항 등록</p>
-                <input type="hidden" name="crew_idx" value="${crew_idx}"/>
 
                 <div id="dori">
                     <div class="firstbox"> <!-- 레이아웃 구성을 위한 div -->
@@ -145,8 +144,7 @@
 	var loginId = '${sessionScope.loginId}';
 	var overlayCheck = 'Y';
 	var notice_idx = '';
-	var crew_idx = $('input[name="crew_idx"]').val();
-	
+
 	function sendSubmitPost(){
 		if(overlayCheck === 'Y'){
 			layerPopup('공지사항을 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act);
@@ -168,7 +166,7 @@
         formData.append('id', loginId); 
         formData.append('content', content);  
 		formData.append('priority', priority);
-        formData.append('crew_idx', crew_idx); // todo - 받아온 값으로 수정 필요
+        formData.append('crew_idx', 52); // todo - 받아온 값으로 수정 필요
 		
         var tempDom = $('<div>').html(content);
         var imgsInEditor = [];
@@ -211,6 +209,7 @@
 	
 	function updatePriority(){
 		var priority = $('#priorityOption').val();
+		var crew_idx = 52;
 		var notice_idx = notice_idx;
 		
 		$.ajax({

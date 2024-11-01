@@ -556,7 +556,7 @@
 					    // 로그인 안했거나 크루원이 아니면
 					    $('.crewAccess').click(function(){
 						    if(loginId != null || loginId === '' || loginId != result.id || loginId != crewLeader){
-						    	location.href="/crewNoticeList/" +crew_idx;
+						    	//location.href="/crewNoticeList/" +crew_idx;
 								
 						    }else{
 						    	
@@ -646,11 +646,7 @@
 	        
 	        } else if(loginId != null && loginId === crewLeader){ // 크루장 => 완료
 	        	$('#crew-btn-01').html('러닝크루 신청하기');
-	        	
-	        	$('#crew-btn-01').click(function(){
-	        		removeAlert();
-		        	layerPopup('크루장은 신청이 불가능합니다.', '확인', false,applBtn2Act ,applBtn2Act);
-	        	});
+	        	$('#crew-btn-01').attr('disabled', true); // 버튼 비활성화
 	        	
 	        	
 	        } else if (crewone.includes(loginId)) { // 로그인 o + 크루원 => 완료

@@ -3,7 +3,7 @@
      var roadAddr = '';
      var sigungu = '';
      var sido = '';
-     var shortsido = '';
+     var shotsido = '';
 
     
     function search(){

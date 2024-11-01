@@ -44,10 +44,6 @@
         .content_layout {
             padding: 20px;
         }
-        
-        .tagImg-01{
-			margin-right: 5px;
-		}
 
     </style>
 </head>
@@ -62,9 +58,16 @@
                 <div id="dori">
                     <div class="twobox">
                         <div id="img_miri"> <!-- 이미지 없을 경우 기본이미지 -->
-							<img id="crew_img" src="" onerror="this.src='/resources/img/crew/crewImg300.png'" alt="크루 이미지" width="300" height="200"/>
+                        	<c:choose>
+								<c:when test="${not empty result.img_new}">
+									<img src="/photo/${result.img_new}" width="300" height="200"/>
+								</c:when>
+								<c:otherwise>
+									<img src="/resources/img/crew/crewImg300.png" width="300" height="200"/>
+								</c:otherwise>                        	
+                        	</c:choose>
                         </div> 
-                        <span style='color:#d3d3d3'>※ 필수 : 권장 사이즈 800px / 400px</span>
+                        <span style='color:#d3d3d3'>※ 권장 사이즈 800px / 400px</span>
                         <input type="file" name="crew_img" onchange="readFile(this)" id="file" />
                         <label for="file">
                             <div class="btn03-m">이미지 업로드</div>
@@ -74,60 +77,78 @@
 						<input type="hidden" name="crew_idx" value="${crew_idx}"/>
                         <div class="boxheigth">
                             <span class="title2">크루명 </span>
-                            <input type="text" name="crew_name" value="" required />
+                            <input type="text" name="crew_name" value="${result.crew_name}" required />
                         </div> <br>
 
                         <span class="title2">태그</span>
                         <span id="tagFilters">
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="1"/>🏃‍♂️러닝에 집중</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="2" />🙋‍♀️ 친목도 중요</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="3" /><img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/> 남성만 가능</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="4" /><img src="/resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 여성만 가능</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="5" /><img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 혼성</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="6" /> <b style='color: FD6F22'  class="tagImg-01">E</b> 환영해요</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="7" /> <b style='color: 116DCA'  class="tagImg-01">I</b> 환영해요</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="8" />🐂 소규모 크루</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="9" />🏆 대회 목적</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="10" />💦 러닝 고수만</label>
-                            <label>
-                            	<input type="checkbox" name="tag_idx_list" value="11" />🥳 초보도 환영</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '1')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="1" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '1')}">checked</c:if>/>🏃‍♂️러닝에 집중</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '2')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="2" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '2')}">checked</c:if>/>🙋‍♀️ 친목도 중요</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '3')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="3" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '3')}">checked</c:if>/> 남성만 가능</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '4')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="4" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '4')}">checked</c:if>/> 여성만 가능</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '5')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="5" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '5')}">checked</c:if>/> 혼성</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '6')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="6" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '6')}">checked</c:if>/> <b style='color: FD6F22'>E</b> 환영해요</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '7')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="7" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '7')}">checked</c:if>/> <b style='color: 116DCA'>I</b> 환영해요</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '8')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="8" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '8')}">checked</c:if>/>🐂 소규모 크루</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '9')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="9" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '9')}">checked</c:if>/>🏆 대회 목적</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '10')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="10" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '10')}">checked</c:if>/>💦 러닝 고수만</label>
+                            <label <c:if test="${fn:contains(result.tag_idxs, '11')}">class="checked"</c:if>>
+                            	<input type="checkbox" name="tag_idx_list" value="11" 
+                            		<c:if test="${fn:contains(result.tag_idxs, '11')}">checked</c:if>/>🥳 초보도 환영</label>
                         </span> <br>
 
                         <div class="boxheigth">
                             <span class="title2">요일</span>
-                            <input type="checkbox" name="days" value="mon" /><span class="basictex" >월</span>
-                            <input type="checkbox" name="days" value="tue" /><span class="basictex">화</span>
-                            <input type="checkbox" name="days" value="wen" /><span class="basictex">수</span>
-                            <input type="checkbox" name="days" value="thu" /><span class="basictex" >목</span>
-                            <input type="checkbox" name="days" value="fri" /><span class="basictex" >금</span>
-                            <input type="checkbox" name="days" value="sat" /><span class="basictex" >토</span>
-                            <input type="checkbox" name="days" value="sun" /><span class="basictex">일</span>
+                            <input type="checkbox" name="days" value="mon" 
+                            	<c:if test="${fn:contains(result.days, 'mon')}">checked</c:if>/><span class="basictex" >월</span>
+                            <input type="checkbox" name="days" value="tue" 
+                            	<c:if test="${fn:contains(result.days, 'tue')}">checked</c:if>/><span class="basictex">화</span>
+                            <input type="checkbox" name="days" value="wen" 
+                            	<c:if test="${fn:contains(result.days, 'wen')}">checked</c:if>/><span class="basictex">수</span>
+                            <input type="checkbox" name="days" value="thu" 
+                            	<c:if test="${fn:contains(result.days, 'thu')}">checked</c:if>/><span class="basictex" >목</span>
+                            <input type="checkbox" name="days" value="fri" 
+                            	<c:if test="${fn:contains(result.days, 'fri')}">checked</c:if>/><span class="basictex" >금</span>
+                            <input type="checkbox" name="days" value="sat" 
+                            	<c:if test="${fn:contains(result.days, 'sat')}">checked</c:if>/><span class="basictex" >토</span>
+                            <input type="checkbox" name="days" value="sun" 
+                            	<c:if test="${fn:contains(result.days, 'sun')}">checked</c:if>/><span class="basictex">일</span>
                         </div> <br>
 
                         <div class="boxheigth">
                             <span class="title2">인원</span> 
-                            <input type="number" name="member" min="2" required value="" />
+                            <input type="number" name="member" min="2" required value="${result.member}" />
                         </div> <br>
 
                         <div class="boxheigth">
                             <span class="title2">운동강도</span>
-                            <input type="number" name="minute" min="1" required value=""/><span class="basictex" > 분 / </span>
-                            <input type="number" name="distance" min="1" required value=""/><span class="basictex"> km </span>
+                            <input type="number" name="minute" min="1" required value="${result.minute}"/><span class="basictex" > / </span>
+                            <input type="number" name="distance" min="1" required value="${result.distance}"/><span class="basictex"> km </span>
                         </div> <br>
 
                         <div class="boxheigth">
                             <span class="title2">지역</span>
-                            <input type="text" name="address" id="sample4_roadAddress" value="" required disabled />
+                            <input type="text" name="address" id="sample4_roadAddress" value="${result.address}" required disabled />
                             <input type="button" onclick="search()" class="btn02-m" value="검색">
                         </div>
                         
@@ -150,98 +171,58 @@
 
                 <div class="btn-parent">
                     <button type="button" class="btn03-l" onclick="locationHrdf()">수정 취소하기</button>
-                    <button type="button" class="btn01-l" onclick="layerPopup('크루를 수정하시겠습니까?', '확인', '취소', submitUpdatePost, applBtn2Act)">크루 수정하기</button>
+                    <button type="button" class="btn01-l" onclick="layerPopup('크루를 수정하시겠습니까?', '확인', '취소', submitPost, applBtn2Act)">크루 수정하기</button>
                 </div>
             </form>
         </div>
     </div>
-    <jsp:include page="../footer.jsp" /> 
+    <jsp:include page="../footer.jsp" />
 </body>
 
 <script src="/resources/js/common.js"></script>
 <script src="/resources/js/daumapi.js"></script>
 
 <script>
-	var dayCheckboxes = [];
-	var tagCheckboxes = [];
 	var crew_idx = $('input[name="crew_idx"]').val();
-	$(document).ready(function(){
-		if(crew_idx != null && crew_idx !== ''){
-			crewUpdateView();
-			
+
+	$.ajax({
+		type: 'PUT',
+		url: '/crew/updateView',
+		data: {'crew_idx' : crew_idx},
+		dataType: 'JSON',
+		enctype: 'multipart/form-data',
+		success: function(response){
+			console.log('받아온 데이터 => ', response);
+		},error: function(e){
+			console.log('에러 => ', e);
 		}
-	}); // document
-	
-	// 크루 정보 불러오기
-	function crewUpdateView(){
-		var crew_idx = $('input[name="crew_idx"]').val();
+	});
+
+var dayCheckboxes = [];  // 선택된 요일 체크박스를 추적할 배열	
+
+	$(document).ready(function() {
 		console.log('실행됨');
-		console.log('idx?? => ', crew_idx);
-		$.ajax({
-			type: 'POST',
-			url: '/crew/updateView',
-			data: {'crew_idx' : crew_idx}, // todo - 변경 필요
-			dataType: 'JSON',
-			enctype: 'multipart/form-data',
-			success: function(response){
-				var result = response.result;
-				console.log('받아온 데이터 => ', response);
-				
-				// 크루 이미지
-				if(result.img_new != null && result.img_new !== ''){
-					$('#crew_img').attr('src', '/photo/'+result.img_new);
-				}else{
-					$('#crew_img').attr('src', '/resources/img/crew/crewImg300.png');
-				}
-				
-				// 크루 이름
-				$('input[name="crew_name"]').val(result.crew_name);
-				
-				// 태그
-				if (result.tag_idxs) {
-		            initializeTags(result.tag_idxs); // 서버에서 받은 태그 데이터로 초기 설정
-		        }
-				
-				// 요일
-				var days = result.days.split(',');
-				$('input[name="days"]').each(function(){
-					var dayValue = $(this).val();
-					if(days.includes(dayValue)){
-						$(this).prop('checked', true);
-						dayCheckboxes.push(this); // 요일 체크 배열에 데이터 넣어줌
-					}
-				});
-				
-				// 인원
-				$('input[name="member"]').val(result.member);
-				// 운동 강도 (분/km)
-				$('input[name="minute"]').val(result.minute);
-				$('input[name="distance"]').val(result.distance);
-				// 지역
-				$('input[name="address"]').val(result.address);
-				// 크루설명
-				var content = result.content;
-				$('#summernote').summernote('code', content);
-				
-			},error: function(e){
-				console.log('에러 => ', e);
-			}
-		});
-	}
 	
-	function initializeTags(tag_idxs) {
-	    var tags = tag_idxs.split(','); // 서버에서 받은 태그 목록을 배열로 변환
-
-	    $('input[name="tag_idx_list"]').each(function() {
-	        if (tags.includes($(this).val())) {
-	            $(this).prop('checked', true); // 체크박스에 체크 설정
-	            $(this).parent().addClass('checked'); // 부모 label에 checked 클래스 추가
-	            tagCheckboxes.push(this); // 배열에 추가하여 추적
+	    // 서버에서 가져온 content 값을 에디터에 삽입
+	    var content = '<c:out value="${result.content}" escapeXml="false" />';
+	    if (content) {
+	        // summernote가 초기화된 후에만 내용을 설정
+	        $('#summernote').summernote('code', content);
+	    }
+	    
+	    $('input[name="days"]').each(function () {
+	        if ($(this).is(':checked')) {
+	            dayCheckboxes.push(this); // 서버로부터 받아온 값이 체크된 경우 dayCheckboxes에 추가
 	        }
-	    });
-	}
+	    
+		});
+	
+	    console.log("초기 체크된 요일들:", dayCheckboxes.map(item => $(item).val()));
 
 	
+	var crew_idx = $('input[name="crew_idx"]').val();
+
+
 	// 크루 대표 이미지 미리보기
     function readFile(input) {
         var reader;
@@ -255,9 +236,11 @@
             }
         }
     }
-	
-	// 요일 체크
-	$('input[name="days"]').on('change', function () {
+
+    
+
+    // 모든 체크박스에 change 이벤트 리스너 추가
+    $('input[name="days"]').on('change', function () {
         if ($(this).is(':checked')) {
             if (dayCheckboxes.length >= 2) {
                 var firstChecked = dayCheckboxes.shift();
@@ -268,42 +251,25 @@
             dayCheckboxes = dayCheckboxes.filter(item => item !== this);
         }
     });
-	
-	
-/*     $('input[name="tag_idx_list"]').on('change', function () {
-        var $label = $(this).parent(); // 부모 label 요소를 참조
-		if(tagCheckboxes.length  >= 3){
-	        if ($(this).is(':checked')) {
-	            tagCheckboxes.push(this); // 새로운 체크박스를 배열에 추가
-	            $label.addClass('checked'); // 현재 체크박스의 부모 label에 checked 클래스 추가
-	        } else {
-	            tagCheckboxes = tagCheckboxes.filter(item => item !== this); // 선택 해제된 체크박스를 배열에서 제거
-	            $label.removeClass('checked'); // 부모 label에서 checked 클래스 제거
-	        }
-		}
-    }); */
-    
-    $('input[name="tag_idx_list"]').on('change', function () {
-        var $label = $(this).parent(); // 부모 label 요소 참조
+    var tagCheckboxes = [];  // 선택된 태그 체크박스를 추적할 배열
 
+    // 모든 체크박스에 change 이벤트 리스너 추가
+    $('input[name="tag_idx_list"]').on('change', function () {
         if ($(this).is(':checked')) {
             if (tagCheckboxes.length >= 3) {
-                // 이미 3개가 선택된 경우, 배열의 첫 번째 항목을 해제
-                var firstChecked = tagCheckboxes.shift(); // 배열에서 첫 번째 항목 제거
-                $(firstChecked).prop('checked', false); // 체크 해제
-                $(firstChecked).parent().removeClass('checked'); // checked 클래스 제거
+                var firstChecked = tagCheckboxes.shift(); // 배열에서 첫 번째 체크박스를 제거
+                $(firstChecked).prop('checked', false); // 첫 번째 체크박스 해제
+                $(firstChecked).parent().removeClass('checked'); // 해당 체크박스의 label에서 'checked' 클래스 제거
             }
             tagCheckboxes.push(this); // 새로운 체크박스를 배열에 추가
-            $label.addClass('checked'); // 현재 체크박스의 부모 label에 checked 클래스 추가
+            $(this).parent().addClass('checked'); // 현재 체크박스의 label에 'checked' 클래스 추가
         } else {
-            // 체크 해제된 경우 배열에서 해당 항목 제거
-            tagCheckboxes = tagCheckboxes.filter(item => item !== this);
-            $label.removeClass('checked'); // 부모 label에서 checked 클래스 제거
+            tagCheckboxes = tagCheckboxes.filter(item => item !== this); // 선택 해제된 체크박스를 배열에서 제거
+            $(this).parent().removeClass('checked'); // label에서 'checked' 클래스 제거
         }
     });
-	
-	// 수정 데이터 전송
-    function submitUpdatePost() {
+
+    function submitPost() {
         var formData = new FormData($('form')[0]);
         var content = $('#summernote').summernote('code'); // summernote 코드
 
@@ -316,30 +282,21 @@
         formData.append('id', 'test'); // todo - 세션값 체크해서 넣어줘야 함!
         
         formData.append('content', content);  // summernote의 HTML 내용 추가 (이미지 포함)
-		
-        if(roadAddr != null && roadAddr !== ''){
-	        formData.append('address', roadAddr); // 화면에 출력
-	        formData.append('sigungu', sigungu);
-	        formData.append('sido', sido);
-        }
-        if(shortsido != null && shortsido !== ''){
-        	formData.append('shortsido', shortsido);
-        }
-        
-        var selectedTags = "";
 
-        tagCheckboxes.forEach(function(checkbox) {
-            selectedTags += $(checkbox).val() + ",";
+        formData.append('address', roadAddr); // 화면에 출력
+        formData.append('sigungu', sigungu);
+        formData.append('sido', sido);
+        formData.append('shortsido', shortsido);
+
+        var selectedTags = "";
+        $('input[name="tag_idx_list"]:checked').each(function () {
+            selectedTags += $(this).val() + ",";
         });
 
-        selectedTags = selectedTags.slice(0, -1); // 마지막 콤마 제거
+        selectedTags = selectedTags.slice(0, -1);
 
-        // formData에 tag_idx_list 값을 설정
+        // tag_idx_list 다시 set
         formData.set('tag_idx_list', selectedTags);
-        console.log('전송할 태그들 =>', selectedTags);
-        
-        
-        
 
         // 게시글 에디터 이미지 검증을 위한 코드
         var tempDom = $('<div>').html(content);
@@ -384,17 +341,14 @@
     }
     
     function locationHrdf(){
-    	location.href="/crewDetail/"+crew_idx; // todo - 수정 필요
+    	location.href="/crewDetail/"+crew_idx;
     }
 
 	// 팝업 취소
 	function applBtn2Act() {
 	    removeAlert(); 
 	}
-	
-
-
-
+    
 </script>
 
 </html>

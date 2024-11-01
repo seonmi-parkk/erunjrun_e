@@ -174,14 +174,13 @@
 	var paginationInitialized = false;
 	
 	
-	var loginId = 'test'; //${sessionScope.loginId}
+	var loginId = '${sessionScope.loginId}';
 	
     var crew_idx = $('input[name="crew_idx"]').val();
 	
 	$(document).ready(function () {
 		pageCall(firstPage);
 	    console.log('crew_idx =>', crew_idx);
-	    leaderCheck();
 	});
 	
 	// 검색 폼 제출 시 AJAX 호출
@@ -216,15 +215,8 @@
 	            }
 	            
 	            var result = response.result;
-	            var totalCount = 15;
-	            if(response.result){
-	            	if(response.result.totalpage){
-	            	}if(response.result.totalpage  >= 15){
-		            	totalCount = response.result[0].totalpage;  // 총 게시글 수를 서버에서 가져옴
-	            	}
-	            	
-	            }
 	            
+	            var totalCount = response.result[0].totalpage;  // 총 게시글 수를 서버에서 가져옴
 	            var pageSize = 15;  // 한 페이지당 게시글 수
 	            var totalPages = Math.ceil(totalCount / pageSize);  // 총 페이지 수 계산
 	            console.log('총 페이지 수=> ', totalCount);
@@ -270,6 +262,12 @@
 				noticeBtn = item.notice_idx;
 			}
 			
+			// 리더인지 체크해서 버튼 숨기고, 보이기
+            if(loginId === item.id){
+            	console.log('id : id', loginId, item.id);
+            	$('.btn01-l').css('visibility', 'visible');
+            }
+			
 			$('#crew_name').html('<a href="/crewDetail/' + item.crew_idx + '">' + item.crew_name + '</a>');
 			
             content += '<tr>';
@@ -283,27 +281,6 @@
 
 		});
 		$('#list').html(content);
-	}
-	
-	function leaderCheck(){
-		$.ajax({
-			type: 'POST',
-			url: '/crew/leaderCheck',
-			data: {'crew_idx' : crew_idx},
-			dataType: 'JSON',
-			success: function(response){
-				// 리더인지 체크해서 버튼 숨기고, 보이기
-				
-				console.log(response);
-	            if(loginId === response.leaderId){
-	            	console.log('id : id', loginId, response.leaderId);
-	            	$('.btn01-l').css('visibility', 'visible');
-	            }
-			},error: function(e){
-				console.log('크루장 가져오는 중 에러 => ', e);
-			}
-		});
-		
 	}
 	
 	// 팝업 취소
