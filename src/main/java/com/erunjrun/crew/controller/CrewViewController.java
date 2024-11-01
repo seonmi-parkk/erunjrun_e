@@ -24,6 +24,7 @@ public class CrewViewController {
         return "/crew/crewWrite";
     }
     
+    // 크루 수정!
     @GetMapping(value="/crewUpdate/{crew_idx}")
     public String crewUpdateView(@PathVariable int crew_idx, Model model) {
     	

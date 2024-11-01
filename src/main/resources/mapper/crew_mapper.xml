@@ -85,7 +85,7 @@
 	
 	<!-- 크루 멤버 리스트 (프로필 이미지 포함) -->
 	<select id="crewMemberList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="int">
-		SELECT m.id, m.nickname, m.gender, COALESCE(p.image, '') as image, cm.is_leader, cm.create_date
+		SELECT m.id, m.nickname, m.gender, COALESCE(p.image, '') as image, cm.is_leader, cm.create_date, cm.crew_idx
 			FROM crew_member cm JOIN member m ON cm.id = m.id
 			LEFT JOIN profile p ON m.id = p.id WHERE cm.crew_idx = #{crew_idx};
 			

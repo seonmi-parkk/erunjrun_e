@@ -301,9 +301,22 @@
 	    margin-top: 50px;
  	}
  	
+
  	a.crewAccess {
  		cursor: pointer;
  	}
+
+ 	#profileImg{
+ 		border-radius: 70%;
+   		overflow: hidden;
+   		margin-right : 13px;
+ 	}
+ 	
+ 	a{
+		color: #333;
+		text-decoration-line : none;
+	}
+
   
 </style>
 </head>
@@ -484,16 +497,19 @@
    	                   /*  var profileImg = '<img src="/photo/' + result.image + '"/>';  */
 	                    var profileImg = '';
 	                    
-	                    if(result.image != null || result.image === ''){
-	                    	profileImg = '<img alt="profileImg" src="/photo/' + result.image + '" onerror="this.src=\'/resources/img/common/profile.png\'" id="profileImg" width="32px" />';
-	                    }else{
-	                    	profileImg = '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png\'" id="profileImg" width="32px" />';
-	                    }// '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png'" id=\"profileImg\" width = 32px;>\';
+	                    // '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png'" id=\"profileImg\" width = 32px;>\';
 	                    
 	                    var genderImg = '';
 	                    var content = '';
 
 	                    result.forEach(function(item, idx){
+	                    	
+	                    	if(item.image){
+		                    	profileImg = '<img alt="profileImg" src="/photo/' + item.image + '" onerror="this.src=\'/resources/img/common/profile.png\'" id="profileImg" width="32px" />';
+		                    }else{
+		                    	profileImg = '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png\'" id="profileImg" width="32px" />';
+		                    }
+	                    	
 	                    	// 성별 체크 -> 이미지 변환
 	                    	if(item.gender === '남'){
 	                    		genderImg = '<img src="/resources/img/common/ico_male.png" width="9px" class="genderImg"/>';

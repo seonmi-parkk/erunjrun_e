@@ -91,8 +91,6 @@ public class CrewController {
 			logger.info("글 업로드 완료");
 			
 			resultMap.put("success", true);
-			resultMap.put("page", "crewUpdate");
-			
 		}
 
 		return resultMap;
