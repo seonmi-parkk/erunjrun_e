@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.comment.dto.CommentDTO;
+import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.report.dto.ReportDTO;
 import com.erunjrun.report.service.ReportService;
 
@@ -75,6 +76,27 @@ public class ReportController {
 		Map<String,Object> result = new HashMap<String, Object>();
 				
 		if(reportService.reportComment(reportDto,report_img)) {
+			logger.info("글 업로드 완료");
+			result.put("result", true);
+		}
+	
+		return result;
+	}
+	
+	@GetMapping(value="/notice/{comment_idx}")
+	public String noticeComment(@PathVariable int comment_idx) {
+	
+		return "report/reportForm";
+	}
+	
+	@PostMapping(value="/reportNoticeComment")
+	@ResponseBody
+	public Map<String,Object> reportNoticeComment(@RequestParam("report_img")MultipartFile report_img,@ModelAttribute ReportDTO reportDto){
+				
+		
+		Map<String,Object> result = new HashMap<String, Object>();
+				
+		if(reportService.reportNoticeComment(reportDto,report_img)) {
 			logger.info("글 업로드 완료");
 			result.put("result", true);
 		}

@@ -262,6 +262,40 @@
    			overflow: hidden;
    			margin-right : 13px;
 		}
+		
+		
+		/*신고 레이어팝업*/
+		#reportPopup {
+		    width: fit-content;
+		    top: 130px;
+		    left: 50%;
+		    transform: translateX(-50%);
+			z-index: 996;
+			
+		}
+		#reportPopup .dis {
+		    font-size: 40px;
+		    font-weight: 300;
+		    position: absolute;
+		    z-index: 996;
+		    top: 30px;
+		    right: 30px;
+		    display: inline-block;
+		    width: 30px;
+		    height: 30px;
+		    line-height: 27px;
+		    text-align: center;
+		}
+		#reportPopup .modal-content{
+		    padding: 20px 20px;
+		    background: #f8f8f8;
+		    border: none;
+	    	border-radius: 0;
+	    }
+	    #reportPopupBody {
+	    	background: #fff;
+	    	border-radius: 10px;
+	    }
 
 		
     </style>
@@ -304,7 +338,8 @@
 	   		
 	    	<div class="com">
 	    		<div>
-	    			<img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘"><div class="nick" id="name"></div>
+	    			<input type="hidden" name="unlike_id" value="${sessionScope.loginId}"/>
+	    			<div class="nick" id="name"></div>
 		    		<input type="text" class="tex">
 	    		</div>
 	    		<div>
@@ -328,6 +363,17 @@
 		        <div id="PopupBody"></div>
 		    </div>
 		</div>
+		
+		<!-- 신고페이지 모달 -->
+		<div id="reportPopup" class="modal">
+		    <div class="modal-content">
+		        <span class="dis">&times;</span>
+		        <div id="reportPopupBody"></div>
+		    </div>
+		</div>
+		
+		
+		
 		
 	</div>
 	<div class="layoutbox-bt"></div>
@@ -366,7 +412,7 @@
 			$('#hit').html(result.hit);
 			$('#create_date').html(result.create_date);
 			
-			$('#name').html(nickName.nickname);
+			$('#name').html('<img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+nickName.nickname);
 			
 			if(loginId === result.id){
 				console.log('같은데?');
@@ -478,10 +524,13 @@
 		list.forEach(function(view,idx){
 			var nickName = $('#name').text();
 			var addName = view.nickname;
+			var id = view.id
+			console.log('아이디나오냐',id);
 			var comment_idx = view.comment_idx;
 			
 			
 			content +='<div id="sort-area">';
+			content +='<input type="hidden" name="user_id" value="'+id+'"/>';
 			content +='<div class="sort" id="sort-update'+comment_idx+'">';
 			content +='<div>';
 			content +='<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+view.nickname+'</div>';
@@ -591,11 +640,11 @@
 	
 	function del(comment_idx) {
 		
-		console.log('삭제버튼 : ',comment_idx);
+		console.log('크루댓글삭제버튼 : ',comment_idx);
 		
 		$.ajax({
 	        type: 'POST',
-	        url: '/deleteComment/'+comment_idx,  // 서버의 댓글 삭제 처리 경로
+	        url: '/noticeCommentDel/'+comment_idx,  // 서버의 댓글 삭제 처리 경로
 	        contentType: 'application/json',
 	        dataType: 'json',
 	        success: function(data) {
@@ -616,7 +665,7 @@
 	
 	// 크루 댓글 신고
 	function report(comment_idx) {
-	 		layerPopup('정말 신고 하시겠습니까?','신고','취소' ,function (){secondBtn4Act(comment_idx)} , secondBtn2Act);
+	 		layerPopup('정말 신고 하시겠습니까?','신고','취소' ,function (){secondBtn4Act(comment_idx)} , applBtn2Act);
 	}
 	
 	
@@ -627,14 +676,14 @@
  	    console.log('두번째팝업 4번 버튼 동작');
  	   
  	    console.log('동작시 가ㅣ고외?',comment_idx);
- 	    commentReport(comment_idx);
+ 	   	notice(comment_idx);
  	    removeAlert();
  	}
 	
 	
 	
 	
-	function commentReport(comment_idx){
+	function notice(comment_idx){
 		
 		var modal = document.getElementById("reportPopup");
 	    var PopupBody = document.getElementById("reportPopupBody");
@@ -644,7 +693,7 @@
 		console.log('가지고와? 아이디',userId);
 	    // AJAX 요청 데이터 넣을때 해당 게시판 idx 값 넣기!!!!
 	    var xhr = new XMLHttpRequest();
-	    xhr.open("GET", "/reportComment/"+comment_idx, true);
+	    xhr.open("GET", "/notice/"+comment_idx, true);
 	    xhr.onreadystatechange = function() {
 	        if (xhr.readyState === 4 && xhr.status === 200) {
 	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
@@ -653,13 +702,18 @@
 	         	// JS 파일을 동적으로 로드
 	         	
 	            var script = document.createElement('script');
-	            script.src = '/resources/js/reportComment.js'; 
+	            script.src = '/resources/js/reportNoticeComment.js'; 
 	            document.body.appendChild(script);
 	            
 	        }
 	    };
 	    xhr.send();
 	}
+	
+	// 팝업 닫기
+	document.getElementsByClassName("dis")[0].onclick = function() {
+	    document.getElementById("reportPopup").style.display = "none";
+	};	
 	
 	
 	

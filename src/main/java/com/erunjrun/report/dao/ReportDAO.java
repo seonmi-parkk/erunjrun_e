@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.comment.dto.CommentDTO;
+import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.image.dto.ImageDTO;
 import com.erunjrun.report.dto.ReportDTO;
 
@@ -19,6 +20,12 @@ public interface ReportDAO {
 	CommentDTO comment(int comment_idx);
 
 	int reportComment(ReportDTO reportDto);
+
+	int reportNoticeComment(ReportDTO reportDto);
+
+
+
+	
 
 	
 

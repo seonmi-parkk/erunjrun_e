@@ -1,6 +1,7 @@
 package com.erunjrun.board.dto;
 
-import java.util.Date;
+
+import java.sql.Date;
 import java.util.List;
 
 import com.erunjrun.image.dto.ImageDTO;
@@ -40,9 +41,27 @@ public class RunBoardDTO {
     private int point_idx;
     private int point;
     
+    //문의하기 테이블
+    private int ask_idx;
+    private String is_ask;
+    
+    
+    
     
 
-    public int getPoint_idx() {
+    public int getAsk_idx() {
+		return ask_idx;
+	}
+	public void setAsk_idx(int ask_idx) {
+		this.ask_idx = ask_idx;
+	}
+	public String getIs_ask() {
+		return is_ask;
+	}
+	public void setIs_ask(String is_ask) {
+		this.is_ask = is_ask;
+	}
+	public int getPoint_idx() {
 		return point_idx;
 	}
 	public void setPoint_idx(int point_idx) {

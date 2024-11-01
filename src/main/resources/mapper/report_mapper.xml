@@ -39,6 +39,16 @@
 		insert into report_write(id,code_name,content,unlike_id,subject)
 								values(#{id},'R101',#{content},#{unlike_id},#{subject})
 	</insert>
+		
+	<insert id="reportNoticeComment" 
+				useGeneratedKeys="true"
+				keyColumn="report_idx"
+				keyProperty="report_idx"
+				parameterType="com.erunjrun.report.dto.ReportDTO">
+		insert into report_write(id,code_name,content,unlike_id,subject)
+								values(#{id},'R101',#{content},#{unlike_id},#{subject})
+	</insert>
+	
 	
 
 	

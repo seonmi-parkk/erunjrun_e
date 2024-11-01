@@ -518,7 +518,7 @@
 	
 	<!-- 로그인한 유저 닉네임 추출 -->
 	<select id="nickName" resultType="com.erunjrun.member.dto.MemberDTO">
-    	select * from member where id = #{param1}
+    	select nickname from member where id = #{param1}
     </select>
 	
 	

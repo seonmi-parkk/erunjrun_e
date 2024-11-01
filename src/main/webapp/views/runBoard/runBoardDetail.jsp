@@ -64,11 +64,12 @@
 		.title1{
     		margin-top: 160px;
     		margin-left: 10px;
+    		
     	}
     	.dari{
     		margin-top: 45px;
     	}
-    	.title2{
+    	.title2-3{
 			transform: translateY(-25px);
     	}
     	.ori{
@@ -244,7 +245,7 @@
 		<div id="dori">
 			<div class="rectangle-250">
 				<div class="dari">
-					<p class="title2">${info.subject}</p>
+					<p class="title2-3">${info.subject}</p>
 					<p class="title3-1"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">  ${info.nickname}</p>
 				</div>
 				<div style="text-align: right;" class="duri">

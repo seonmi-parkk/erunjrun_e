@@ -30,4 +30,6 @@ public interface CommentDAO {
 
 	int updateNoticeComment(CrewNoticeDTO crewNoticeDto);
 
+	int nocoDel(int comment_idx);
+
 }

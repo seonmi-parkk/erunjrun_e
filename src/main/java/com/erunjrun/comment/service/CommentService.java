@@ -62,5 +62,9 @@ public class CommentService {
 		
 		return commentDao.updateNoticeComment(crewNoticeDto) > 0;
 	}
+	public boolean nocoDel(int comment_idx) {
+		
+		return commentDao.nocoDel(comment_idx) >0;
+	}
 	
 }

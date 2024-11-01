@@ -142,6 +142,19 @@ public class CommentController {
 		return result;
 	}
 	
+	@PostMapping(value="/noticeCommentDel/{comment_idx}")
+	@ResponseBody
+	public Map<String, Object> nocoDel(@PathVariable int comment_idx){
+		
+		logger.info("삭제할 번호 : "+comment_idx);
+		boolean success = commentService.nocoDel(comment_idx);
+		logger.info("받아 왔어? : "+success);
+		Map<String,Object> result = new HashMap<String, Object>();
+		
+		result.put("success", success);
+		
+		return result;
+	}
 	
 	
 	
