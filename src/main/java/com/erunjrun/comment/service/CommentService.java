@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.erunjrun.comment.dao.CommentDAO;
 import com.erunjrun.comment.dto.CommentDTO;
+import com.erunjrun.crew.dto.CrewNoticeDTO;
+import com.erunjrun.member.dto.MemberDTO;
 
 @Service
 public class CommentService {
@@ -43,6 +45,22 @@ public class CommentService {
 	public boolean delete(int comment_idx) {
 		
 		return commentDao.delete(comment_idx) > 0;
+	}
+	public List<CommentDTO> commentList(int notice_idx) {
+		
+		return commentDao.commentList(notice_idx);
+	}
+	public MemberDTO nickName(String loginId) {
+		
+		return commentDao.nickName(loginId);
+	}
+	public int noticeComment(int notice_idx, String content, String loginId) {
+		
+		return commentDao.noticeComment(notice_idx,content,loginId);
+	}
+	public boolean updateNoticeComment(CrewNoticeDTO crewNoticeDto) {
+		
+		return commentDao.updateNoticeComment(crewNoticeDto) > 0;
 	}
 	
 }

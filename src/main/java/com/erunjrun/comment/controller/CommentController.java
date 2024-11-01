@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erunjrun.comment.dto.CommentDTO;
 import com.erunjrun.comment.service.CommentService;
+import com.erunjrun.crew.dto.CrewNoticeDTO;
+import com.erunjrun.member.dto.MemberDTO;
 
 @Controller
 public class CommentController {
@@ -76,6 +78,62 @@ public class CommentController {
 		
 		
 	    boolean success = commentService.delete(comment_idx);
+	    
+	    if(success) {
+	    	result.put("success", success);
+	    }
+	    
+		return result;
+	}
+	
+	// 크루 공지사항 댓글
+	@PostMapping(value="/crewComment/{notice_idx}")
+	@ResponseBody
+	public Map<String,Object> crewComment(@PathVariable int notice_idx,HttpSession session){
+		
+		String loginId = (String) session.getAttribute("loginId");
+		MemberDTO nickname = null;
+    	if(loginId != null) {
+    		nickname = commentService.nickName(loginId);
+    		logger.info("닉네임 맞냐 :"+nickname);
+    	}
+		
+		logger.info("글번호 : "+notice_idx);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		List<CommentDTO> list = commentService.commentList(notice_idx);
+		
+		result.put("list", list);
+		result.put("nickname", nickname);
+		
+		return result;
+	}
+	
+	@PostMapping(value="/noticeComment")
+	@ResponseBody
+	public Map<String, Object> noticeComment(int notice_idx,String content,HttpSession session,String nickname){
+			
+		Map<String,Object> result = new HashMap<String, Object>();
+		
+		String loginId = (String) session.getAttribute("loginId");
+		
+		int add = commentService.noticeComment(notice_idx,content, loginId);
+		
+		result.put("add", add);
+		
+		
+		return result;
+	}
+	
+	@PostMapping(value="/updateNoticeComment")
+	@ResponseBody
+	public Map<String, Object> updateNoticeComment(@RequestBody CrewNoticeDTO crewNoticeDto){
+		
+		Map<String,Object> result = new HashMap<String, Object>();
+		  
+	    boolean success = commentService.updateNoticeComment(crewNoticeDto);
+	    logger.info("했어? : "+success);
 	    
 	    if(success) {
 	    	result.put("success", success);
