@@ -25,7 +25,7 @@
 	</insert>
 	
 	<insert id="tagUpload" parameterType="com.erunjrun.crew.dto.CrewMemberDTO">
-		INSERT INTO crew_tag VALUES(#{crew_idx}, #{tag_idx})
+		INSERT INTO crew_tag(crew_idx, tag_idx) VALUES(#{crew_idx}, #{tag_idx})
 	</insert>
 	
 	<insert id="fileUpload" parameterType="com.erunjrun.image.dto.ImageDTO">
@@ -50,11 +50,21 @@
 	</delete>
 	
 	<!-- 수정form 이동 -->
-	<select id="crewUpdateView" resultType="map" parameterType="int">
+	<!-- <select id="crewUpdateView" resultType="map" parameterType="int">
 	    SELECT c.*, i.img_ori, i.img_new, 
 	        GROUP_CONCAT(DISTINCT ct.tag_idx) AS tag_idxs 
 	    FROM crew c
 	    LEFT JOIN  image i ON c.crew_idx = i.img_no AND i.code_name in ('I101', 'I100')
+	    LEFT JOIN crew_tag ct ON c.crew_idx = ct.crew_idx
+	    WHERE c.crew_idx = #{crew_idx}
+	    GROUP BY c.crew_idx
+	</select> -->
+	
+	<select id="crewUpdateView" resultType="com.erunjrun.crew.dto.CrewDTO" parameterType="int">
+		SELECT c.*, i.img_ori, i.img_new, 
+	        GROUP_CONCAT(DISTINCT ct.tag_idx) AS tag_idxs
+	    FROM crew c
+	    LEFT JOIN  image i ON c.crew_idx = i.img_no AND i.code_name in ('I101')
 	    LEFT JOIN crew_tag ct ON c.crew_idx = ct.crew_idx
 	    WHERE c.crew_idx = #{crew_idx}
 	    GROUP BY c.crew_idx
@@ -64,14 +74,20 @@
 	<update id="crewUpdate" parameterType="com.erunjrun.crew.dto.CrewDTO">
 		UPDATE crew 
 			SET crew_name = #{crew_name}, member = #{member}, minute = #{minute}, distance = #{distance}, content = #{content}, 
-				days = #{days}, address = #{address}, sido = #{sido}, sigungu = #{sigungu}, shortsido = #{shortsido}, is_recruit = #{is_recruit} 
+				days = #{days}, is_recruit = #{is_recruit}
+				<if test="address != null and address != ''">
+					,address = #{address}, sido = #{sido}, sigungu = #{sigungu}
+				</if>
+				<if test="shortsido != null and shortsido != ''">
+					, shortsido = #{shortsido}
+				</if> 
 			WHERE crew_idx = #{crew_idx}
 	</update>
 	
 	
 	<!-- 크루 대표 이미지 업데이트 -->
 	<update id="fileUpdate" parameterType="com.erunjrun.image.dto.ImageDTO">
-		UPDATE image SET img_ori = #{img_ori}, img_new = #{img_new}, code_name = #{code_name} WHERE img_no = ${img_no}
+		UPDATE image SET img_ori = #{img_ori}, img_new = #{img_new}, code_name = #{code_name} WHERE img_no = ${img_no} AND code_name = #{code_name}
 	</update>
 	
 	<update id="fileTemUpdate" parameterType="com.erunjrun.image.dto.ImageDTO">
@@ -520,6 +536,15 @@
 	<select id="nickName" resultType="com.erunjrun.member.dto.MemberDTO">
     	select * from member where id = #{param1}
     </select>
+    
+    <!-- 크루장 정보 가져오기 -->
+	<select id="crewLeaderCheck" resultType="String" parameterType="int">
+		SELECT id FROM crew_member WHERE crew_idx = #{crew_idx} AND is_leader = 'Y'
+	</select>
 	
+	<!-- 관심 크루 목록 -->
+	<select id="crewLikeCrew" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="String">
+		select crew_idx from crew_like where id = #{id}
+	</select>
 	
 </mapper>
