@@ -126,9 +126,9 @@ public interface AdminDAO {
 
 	public int adminyn(String admin_id);
 
-	public int iconbuycount(int cnt_);
+	public void ExistingPopupPriority(String newPriority);
+	
 
-	public List<AdminDTO> iconbuylist(int limit, int offset);
 
 
 

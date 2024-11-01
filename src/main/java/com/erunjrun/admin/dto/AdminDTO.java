@@ -1,8 +1,8 @@
 package com.erunjrun.admin.dto;
 
 import java.sql.Date;
-import java.util.List;
 
+import com.erunjrun.icon.dto.IconDTO;
 import com.erunjrun.image.dto.ImageDTO;
 
 public class AdminDTO {
@@ -36,7 +36,7 @@ public class AdminDTO {
 	private String code_use;
 	private PopupDTO popupdto;
 	private ImageDTO image;
-	
+	private IconDTO icondto;
 	
 	
 	
@@ -236,6 +236,12 @@ public class AdminDTO {
 	}
 	public void setJoin_date(Date join_date) {
 		this.join_date = join_date;
+	}
+	public IconDTO getIcondto() {
+		return icondto;
+	}
+	public void setIcondto(IconDTO icondto) {
+		this.icondto = icondto;
 	}
 	
 	

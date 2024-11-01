@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+
+<mapper namespace="com.erunjrun.icon.dao.IconDAO">
+
+	<select id="iconbuylist" resultType="com.erunjrun.icon.dto.IconDTO"> <!-- 아이콘 패키지 따로 뺄거인가?? 인터페이스 설계서에는 그렇게 나와있는데 -->
+		SELECT m.birth,m.gender,m.id,ib.buy_date
+	    FROM icon_buy ib
+	    JOIN member m ON ib.id = m.id
+	    where ib.icon_idx = #{icon_idx}
+	    ORDER BY icon_idx DESC LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="iconbuycount" resultType="int">
+		SELECT CEIL(count(buy_idx)/#{param1}) AS pages FROM icon_buy
+	</select>
+	
+	<select id="iconchart" resultType="com.erunjrun.icon.dto.IconDTO">
+		 SELECT 
+	       i.icon_name,
+	       i.image,
+	       CASE m.gender
+	           WHEN '남' THEN 'MALE'
+	           WHEN '여' THEN 'FEMALE'
+	           ELSE 'UNKNOWN' 
+	       END AS gender,
+	       COUNT(b.buy_idx) AS purchase_count,
+	       ROUND(COUNT(b.buy_idx) / (SELECT COUNT(buy_idx) FROM icon_buy b JOIN member m ON b.id = m.id WHERE m.birth BETWEEN #{startAge} AND #{endAge}) * 100, 2) AS sales_percentage
+	   FROM 
+	       icon i
+	   JOIN 
+	       icon_buy b ON i.icon_idx = b.icon_idx
+	   JOIN 
+	       member m ON b.id = m.id
+	   WHERE 
+	       m.birth BETWEEN #{startAge} AND #{endAge}
+	   GROUP BY 
+	       i.icon_name, i.image, gender
+	    ORDER BY icon_idx DESC LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="iconchartcount" resultType="int">
+		SELECT CEIL(count(icon_idx)/#{param1}) AS pages FROM icon
+	</select>
+
+	
+</mapper> 

@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -297,24 +296,25 @@ public class AdminService {
 				e.printStackTrace();
 			} 
 		
-		admin_dao.popupwrite(dto);
-		
-		int popup_idx = dto.getPopup_idx();
-		String code_name = dto.getCode_name();
-		logger.info("idx : "+popup_idx);
-		if (file != null) {
-			logger.info("파일");	
-		}else {
-			
-			logger.info("없음");	
-		}
-		if (popup_idx>0) {
-			fileSave(file,popup_idx,code_name);
-			
-		}
-		
-		return "redirect:/adminPopup";
-	}
+            String newPriority = param.get("priority");
+            admin_dao.ExistingPopupPriority(newPriority);
+
+            // 새 팝업 등록
+            admin_dao.popupwrite(dto);
+
+            int popup_idx = dto.getPopup_idx();
+            String code_name = dto.getCode_name();
+            if (file != null) {
+                logger.info("파일");
+            } else {
+                logger.info("없음");
+            }
+            if (popup_idx > 0) {
+                fileSave(file, popup_idx, code_name);
+            }
+
+            return "redirect:/adminPopup";
+        }
 	
 	
 		
@@ -360,14 +360,29 @@ public class AdminService {
 		String code_name = param.get("code_name");
 		String popup_idx =param.get("popup_idx");
 		int idx = Integer.parseInt(param.get("popup_idx"));
-		ImageDTO imageDTO = admin_dao.image(popup_idx,code_name);
-		
-		
-		if (imageDTO != null) {
-			fileupdate(file,popup_idx,code_name);
-		}else {
-			fileSave(file,idx,code_name);
-		}
+		 String deleteImageFlag = param.get("deleteImage");
+		    if ("Y".equals(deleteImageFlag)) {
+		        admin_dao.filedelete(idx, code_name);
+		    }
+		    String newPriority = param.get("priority");
+            admin_dao.ExistingPopupPriority(newPriority);
+
+		    
+		    // 2. 팝업 정보 업데이트
+		    admin_dao.popupupdate(param);
+		    
+		    // 3. 새 이미지가 있는 경우 파일 업데이트
+		    if (file != null && !file.isEmpty()) {
+		        ImageDTO imageDTO = admin_dao.image(popup_idx, code_name);
+		        if (imageDTO != null) {
+		            // 기존 이미지가 있으면 업데이트
+		            fileupdate(file, popup_idx, code_name);
+		        } else {
+		            // 기존 이미지가 없으면 새로 저장
+		            fileSave(file, idx, code_name);
+		        }
+		    }
+		  
 		
 		
 	}
@@ -405,17 +420,10 @@ public class AdminService {
 		admin_dao.adminyn(admin_id);
 		
 	}
-
-	public List<AdminDTO> iconbuylist(int limit, int offset) {
 	
-		return admin_dao.iconbuylist(limit,offset);
-	}
+	
 
-	public int iconbuycount(int cnt_) {
-		// TODO Auto-generated method stub
-		return admin_dao.iconbuycount(cnt_);
-	}
-
+	
 	
 
 	

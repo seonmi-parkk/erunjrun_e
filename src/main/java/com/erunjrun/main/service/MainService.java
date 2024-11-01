@@ -3,7 +3,6 @@ package com.erunjrun.main.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.apache.jasper.tagplugins.jstl.core.If;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -109,7 +109,14 @@
 				<th>카테고리</th>
 				<th>작성자</th>
 				<th>처리자</th>
-				<th>처리여부</th>
+				<th>
+				<select>
+					<option value="D100">처리전</option>
+					<option value="D101">미확인</option>
+					<option value="D102">처리중</option>
+					<option value="D103">처리완료</option>
+				</select>
+				</th>
 				<th>작성일자</th>
 			</tr>
 		

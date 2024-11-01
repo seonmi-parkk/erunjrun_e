@@ -491,41 +491,6 @@ public class AdminController {
 	  
 	  
 	  
-	  @GetMapping(value = "adminIconChart")
-	  public String iconchart() {
-		  
-		  return "admin/adminIconChart";
-	  }
-	  
-	  @GetMapping(value = "adminIconCharList")
-	  public String iconchartlist() {
-		  
-		  return "";
-	  }
-	  
-	  
-	  @GetMapping(value = "adminIconBuy")
-	  public String iconbuy() {
-		  return "admin/adminIconBuyList";
-	  }
-	  
-	  @GetMapping(value = "adminIconBuyList")
-	  @ResponseBody
-	  public Map<String, Object> iconbuylist(String page, String cnt) {
-		int page_ = Integer.parseInt(page);
-		int cnt_ = Integer.parseInt(cnt);
-		int limit = cnt_;
-		int offset = (page_ - 1) * cnt_;
-		int totalPages = admin_service.iconbuycount(cnt_);
-		
-		Map<String,Object> result = new HashMap<String, Object>();
-		result.put("totalPages", totalPages);
-		result.put("currpage", page);
-		result.put("list", admin_service.iconbuylist(limit, offset));
-	  
-		  
-		  return result;
-	  }
 	  
 	  
 	  

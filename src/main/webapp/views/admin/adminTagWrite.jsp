@@ -137,6 +137,7 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">사용여부</p>
+			<!-- <img class="profile-img" src="/resources/img/icon/icon1.png" alt="알림"/> -->
 			<input type="radio" name="use_yn" value="Y" class="raido" id="radio"/>사용
 		
 			<input type="radio" name="use_yn" value="N" class="raido" id="radio"/>미사용

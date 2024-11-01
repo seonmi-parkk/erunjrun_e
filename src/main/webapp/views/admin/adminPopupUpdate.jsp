@@ -144,27 +144,35 @@
 			<input type="text" name="code_name" id="text" value="PP100" hidden=""/>
 		
 		<div class="input-container">
-		<p class="title2" id="dot">•</p>
-		<p class="title2" id="text">이미지</p>
-		<input type="file" name="file" id="fileInput" multiple="multiple">		
-
-		<div class="input-container">
-		  
-		       
-		<img alt="${file.img_ori}" src="/photo/${file.img_new}" id="image">
-		<button type="button" class="btn01-m" id="delete">삭제</button>
-		 <p id="result"></p>    
-		         
+	    <p class="title2" id="dot">•</p>
+	    <p class="title2" id="text">이미지</p>
+	    <input type="file" name="file" id="fileInput" multiple="multiple" onchange="previewImage(event)">      
+	
+	    <!-- 기존 이미지 미리보기 (수정 페이지에서만 사용) -->
+	    <c:if test="${not empty file}">
+	        <div id="currentImageContainer">
+	            <img alt="${file.img_ori}" src="/photo/${file.img_new}" id="currentImage" style="max-width: 200px;">
+	            <button type="button" class="btn01-m" id="deleteImageBtn">이미지 삭제</button>
+	        </div>
+	    </c:if>
+	
+	    <!-- 새 이미지 미리보기 -->
+	    <div id="newImageContainer" style="display: none;">
+	        <img id="newImagePreview" style="max-width: 200px;">
+	    </div>
+		<div>
+		    <input type="hidden" name="deleteImage" value="N" id="deleteImageFlag"/>
 		</div>
+
 					
 		</div>
 		<div class="input-container">
 		<p class="title2" id="dot">•</p>
 		<p class="title2" id="text">순서</p>
 		<select id="searchOption" name="priority">
-               <option value="1">1</option>
-               <option value="2">2</option>
-               <option value="3">3</option>
+            <option value="1" <c:if test="${info.priority eq 1}">selected</c:if>>1</option>
+		    <option value="2" <c:if test="${info.priority eq 2}">selected</c:if>>2</option>
+		    <option value="3" <c:if test="${info.priority eq 3}">selected</c:if>>3</option>
         </select>
 		</div>
 		
@@ -231,36 +239,24 @@
 
 
 <script>
+    // 이미지 삭제 버튼 클릭 시
+    $('#deleteImageBtn').on('click', function() {
+        $('#deleteImageFlag').val('Y'); // 이미지 삭제 플래그 설정
+        $('#currentImageContainer').hide(); // 기존 이미지 숨기기
+    });
 
-
-$('#delete').on('click',function(){
-	var code_name = $('input[name="code_name"]').val();
-	var popup_idx = $('input[name="popup_idx"]').val();
-	console.log(code_name);
-	console.log(popup_idx);
-	$.ajax({
-		type:'POST',
-		url:'adminFileDelete',
-		data:{
-			'code_name':code_name,
-			'popup_idx': popup_idx
-		},
-		dataType:'JSON',
-		success:function(data){
-			console.log(data);
-			if (data.del>0) {
-				$('#result').html('삭제성공');
-				$('#result').css({'color':'green'});
-			}else{
-				$('#result').html('삭제실패');
-				$('#result').css({'color':'red'});
-			}
-		},
-		error:function(e){
-			console.log(e);
-		}
-	});
-});
+    // 새 이미지 선택 시 미리보기 기능
+    function previewImage(event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#newImagePreview').attr('src', e.target.result);
+                $('#newImageContainer').show(); // 새 이미지 컨테이너 표시
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 </script>
 
 <script src="resources/js/common.js" type="text/javascript"></script>

@@ -112,6 +112,8 @@
         <main class="main-content">
 		<p class="title1" >아이콘</p>
 	    
+	    <input id="icon_idx" name="icon_idx" value="${info.icon_idx} " hidden="">
+	    
 	    
 		 <table>
 			<colgroup>
@@ -157,14 +159,16 @@
 	pageCall(show);
 
 	function pageCall(page) {
-		
+	var icon_idx = $('#icon_idx').val();	
+	console.log(idx);
+	console.log('페이지',page);
 		$.ajax({
 			type:'GET',
 			url:'adminIconBuyList',
 			data:{
 				'page':page,
-				'cnt':15
-				
+				'cnt':15,
+				'icon_idx':icon_idx
 			},
 			datatype:'JSON',
 			success:function(data){

@@ -92,7 +92,7 @@
 	<jsp:include page="../header.jsp"/> 
 	
 	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
-	
+		
 		<div class="content-wrapper">
 		<aside class="fixed-left">
             <div class="image">
@@ -127,7 +127,15 @@
 			<tr>
 				<th>아이콘 이름</th>
 				<th>이미지</th>
-				<th>연령대</th>
+				<th>
+					<select id="ageGroup">
+						<option value="">전체</option>		
+						<option value="20">20</option>		
+						<option value="30">30</option>		
+						<option value="40">40</option>		
+						<option value="50">50</option>		
+					</select>
+				</th>
 				<th>남</th>
 				<th>여</th>
 				<th>판매(%)</th>
@@ -139,7 +147,7 @@
 
 		 	</tbody>
 		 	<tr>
-	         <th colspan="6">
+	         <th colspan="7">
 	            <div class="container">
 	             <nav aria-label="Page navigation">
 	              <ul class="pagination" id="pagination"></ul>
@@ -163,14 +171,15 @@
 	pageCall(show);
 
 	function pageCall(page) {
-		
+	var agegroup = $('#ageGroup').val();
+		console.log(agegroup);
 		$.ajax({
 			type:'GET',
 			url:'adminIconBuyList',
 			data:{
 				'page':page,
-				'cnt':15
-				
+				'cnt':15,
+				'agegroup':agegroup
 			},
 			datatype:'JSON',
 			success:function(data){
@@ -193,15 +202,22 @@
 			}
 		});
 	}
+	
+	$('#ageGroup').on('change',function(){
+		pageCall(1);
+		
+	})
+	
 
 	function drawList(list) {
 		var content ='';
 		 for (var view of list) {
 			content +='<tr>';
-            content += '<td>'+view.icon_name+'</td>';
+            content += '<td><a href="adminIconBuyList?icon_idx='view.icon_idx'">'+view.icon_name+'</td>';
             content += '<td>'+view.image+'</td>';
-            content += '<td>'+view.male+'</td>';
-            content += '<td>'+view.female+'</td>';            
+            content += '<td>'+view.birth+'</td>';
+            content += '<td>'+view.gender+'</td>';
+            content += '<td>'+view.gender+'</td>';            
             content += '<td>'+view.sell+'</td>';            
             content += '<td>'+view.entiresell+'</td>';            
 			content +='</tr>';
