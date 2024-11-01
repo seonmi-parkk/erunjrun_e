@@ -9,6 +9,7 @@
 		resultType="com.erunjrun.member.dto.MemberDTO">
 		SELECT
 		member.id,
+		member.nickname,
 		member.email,
 		member.pw,
 		member.profile_use,

@@ -123,6 +123,7 @@ public class MypageController {
 		if (id != null) {
 			// 회원 정보 조회
 			MemberDTO member = mypageService.findSessionId(id);
+
 			if ("Y".equals(member.getProfile_use())) {
 				MypageDTO mypage = mypageService.mypageDetail(id);
 				model.addAttribute("mypage", mypage); // 모델에 MypageDTO 추가
@@ -130,7 +131,7 @@ public class MypageController {
 				return "redirect:/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
 			}
 			model.addAttribute("loginId", id);
-
+			model.addAttribute("member", member); // 모델에 MypageDTO 추가
 			String profileImage = (String) session.getAttribute("profileImage");
 			model.addAttribute("profileImage", profileImage);
 		} else {

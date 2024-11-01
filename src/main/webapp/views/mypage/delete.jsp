@@ -6,6 +6,11 @@
 <meta charset="UTF-8">
 <title>회원탈퇴</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="resources/css/common.css">
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -26,8 +31,10 @@ body {
 }
 
 h3 {
-	text-align: center;
-	margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px; /* 폰트 크기 키우기 */
+    font-weight: bold; /* 볼드 처리 */
 }
 
 .form-group {
@@ -68,23 +75,35 @@ button:hover {
 	font-weight: bold;
 	display: inline-block; /* 수평 정렬 */
 }
+
+.info {
+    margin: 15px 0; /* 위아래 여백 추가 */
+    font-size: 14px;
+    color: #555;
+    text-align: center; /* 중앙 정렬 */
+    background-color: #f0f0f0; /* 회색 배경 */
+    padding: 10px; /* 안쪽 여백 추가 */
+    border-radius: 4px; /* 모서리 둥글게 */
+}
 </style>
 </head>
 <body>
+	<jsp:include page="../header.jsp" />
 	<div class="container">
 		<h3>회원탈퇴</h3>
+		<div class="info">회원가입 시 입력한 아이디, 비밀번호, 이메일을 입력해주세요.</div>
 		<form id="withdrawalForm" action="memberDelete" method="post">
 			<div class="form-group">
-				<label for="id">아이디</label> 
-				<input type="text" name="id" required placeholder="아이디" />
+				<label for="id">아이디</label> <input type="text" name="id" required
+					placeholder="아이디" />
 			</div>
 			<div class="form-group">
-				<label for="pw">비밀번호</label> 
-				<input type="password" name="pw" required placeholder="비밀번호" />
+				<label for="pw">비밀번호</label> <input type="password" name="pw"
+					required placeholder="비밀번호" />
 			</div>
 			<div class="form-group">
-				<label for="email">이메일</label> 
-				<input type="email" name="email" required placeholder="이메일" />
+				<label for="email">이메일</label> <input type="email" name="email"
+					required placeholder="이메일" />
 			</div>
 			<div class="submit-group">
 				<button type="submit">탈퇴하기</button>
@@ -93,6 +112,7 @@ button:hover {
 	</div>
 
 	<script>
+		
 	</script>
 </body>
 </html>

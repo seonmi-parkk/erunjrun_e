@@ -4,92 +4,225 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>운동 프로필 작성</title>
+<title>회원 상세 보기</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="resources/css/common.css">
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <style>
 body {
 	font-family: Arial, sans-serif;
-	background-color: #f4f4f4;
 	margin: 0;
+	padding: 0;
+	background-color: #f0f0f0; /* 회색 배경 */
+}
+
+.main-container {
+	display: flex; /* 사이드바와 컨테이너를 가로로 배치 */
+	width: 80%; /* 전체 너비의 80%로 조정 */
+	max-width: 1100px; /* 최대 너비 설정 */
+	margin: 120px auto; /* 상하 여백 추가, 중앙 정렬 */
+}
+
+aside {
+	width: 250px; /* 사이드바 너비 조정 */
 	padding: 20px;
+	background: #fff; /* 필요에 따라 배경색 추가 */
+	border-top-left-radius: 8px; /* 왼쪽 위 모서리 둥글게 */
+	border-bottom-left-radius: 8px; /* 왼쪽 아래 모서리 둥글게 */
 }
 
 .container {
-	max-width: 600px;
-	margin: 0 auto;
-	background: #fff;
-	padding: 20px;
-	border-radius: 8px;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	flex: 1; /* 남은 공간을 차지 */
+	padding: 20px; /* 여백 추가 */
+	background: white; /* 흰색 배경 */
+	border-top-right-radius: 8px; /* 오른쪽 위 모서리 둥글게 */
+	border-bottom-right-radius: 8px; /* 오른쪽 아래 모서리 둥글게 */
+	height: 600px;
 }
 
-.profile-header {
-	text-align: center;
+.image {
+	text-align: center; /* 이미지 중앙 정렬 */
+}
+
+.title2 {
+	font-weight: bold; /* 제목 강조 */
+	font-size: 20px;
+	margin-left: -6px;
+	text-align: left;
+}
+
+.title3 {
+	cursor: pointer; /* 클릭 가능 표시 */
+	color: black; /* 링크 색상 */
+	margin: 10px 24; /* 여백 추가 */
+	margin-top: 10px;
+	position: relative; /* 상대 위치 설정 */
+	top: 30px;
+}
+
+.username {
+	font-weight: bold; /* 사용자 이름을 강조 */
+	font-size: 20px; /* 글자 크기 조정 */
+	color: #333; /* 글자 색상 */
+	margin-left: 25px; /* 기존과 동일한 여백 */
+	margin-top: 10px;
+}
+
+.div, .div * {
+	box-sizing: border-box;
+}
+
+h3 {
+	text-align: left;
 	margin-bottom: 20px;
+	color: dark; /* 주황색 */
+	font-size: 40px;
 }
 
-.profile-header img {
-	width: 100px; /* 프로필 이미지 크기 */
-	height: 100px; /* 프로필 이미지 크기 */
-	border-radius: 50%;
-	object-fit: cover;
+.form-group {
+	margin-bottom: -16px;
+	padding: 10px;
+	border-radius: 8px; /* 모서리 둥글게 */
 }
 
-.profile-header h2 {
-	margin: 10px 0 0;
-	font-size: 24px;
-	color: #333;
+label {
+	display: inline-block;
+	margin-bottom: -5px;
+	color: #555;
+	background-color: #f9f9f9;
+	padding: 4px 10px;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.point-label {
+	margin-bottom: 5px; /* 아래 여백을 추가 */
+	margin-left: -12px;
+	font-weight: normal; /* 볼드체 제거 */
+	font-size: 14px; /* 다른 라벨과 같은 크기로 설정 */
+}
+
+input[type="text"], input[type="email"], input[type="number"] {
+	width: calc(100% - 20px);
+	padding: 10px;
+	border: none; /* 테두리 제거 */
+	border-radius: 4px; /* 모서리 둥글게 */
+	background-color: white; /* 흰색 배경 */
+}
+
+input[readonly] {
+	background-color: transparent; /* 읽기 전용일 경우 투명 배경 */
+}
+
+.button-group {
+	display: flex;
+	justify-content: center; /* 버튼 그룹을 중앙 정렬 */
+	margin-top: 20px; /* 버튼 상단 여백 추가 */
+}
+
+.profile-image {
+	max-width: 100px; /* 원하는 최대 너비 */
+	max-height: 100px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
+}
+
+.profile-img1 {
+	max-width: 100px; /* 원하는 최대 너비 */
+	max-height: 100px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
+	margin-left: -60px;
+}
+
+.image-info {
+	display: flex; /* 수평 정렬 */
+	align-items: center; /* 세로 중앙 정렬 */
+	gap: 15px; /* 이미지와 정보 간의 간격을 조정 */
+	margin-top: 40px; /* h3와의 간격을 조정 (20px으로 설정) */
+}
+
+.info {
+	display: flex;
+	flex-direction: column; /* 텍스트 세로 정렬 */
+	align-items: center; /* 가운데 정렬 */
+	text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.divider {
+	width: 2px; /* 선의 두께 */
+	background-color: #ccc; /* 선의 색상 */
+	margin: 10px 0; /* 위아래 여백 */
+}
+
+.horizontal-divider {
+	height: 2px; /* 선의 두께 */
+	background-color: #ccc; /* 선의 색상 */
+	margin: 10px 0; /* 위아래 여백 */
 }
 
 .message {
-	text-align: center;
-	margin: 20px 0;
-	font-size: 18px;
-	color: #555;
-}
-
-.button-container {
-	text-align: center;
-}
-
-.btn {
-	background-color: #007bff;
-	color: white;
-	padding: 10px 20px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 16px;
-	transition: background-color 0.3s;
-}
-
-.btn:hover {
-	background-color: #0056b3;
+	text-align: center; /* 가운데 정렬 */
+	margin: 130px 0; /* 위아래 여백 추가 */
 }
 </style>
 </head>
 <body>
-	<div class="container">
-		<div class="profile-header">
-			<img
-				src="${profile.image != null && profile.image != '' ? '/photo/' + profile.image : 'resources/img/common/profile.png'}"
-				alt="회원 이미지" />
-			<h2>${sessionScope.loginId}</h2>
-		</div>
-		<div class="message">
-			아직 운동프로필이 작성되지 않았습니다.<br> 프로필 최초 작성 시, 10p가 지급되며 내성향에 맞는 운동메이트를
-			구할 확률이 높아집니다.
-		</div>
-
-		<div class="button-container">
-			<button class="btn"
-				onclick="location.href='firstExerciseProfileView'">최초 작성하기</button>
+	<jsp:include page="../header.jsp" />
+	<div class="main-container">
+		<aside>
+			<div class="image">
+				<img class="profile-img1" src="resources/img/common/profile.png"
+					alt="프로필 이미지" />
+			</div>
+			<p class="username" id="name">사용자</p>
+			<p class="title3" onclick="location.href='profileDetail'">회원정보</p>
+			<p class="title3" onclick="location.href='createExerciseProfile'">운동프로필</p>
+			<p class="title3" onclick="location.href='pointHistoryList'">포인트
+				내역</p>
+			<p class="title3" onclick="location.href='memberCrewList'">크루 리스트</p>
+			<p class="title3" onclick="location.href='myMateList'">내 운동 메이트</p>
+			<p class="title3" onclick="location.href='likedMemberList'">내
+				관심/차단 회원</p>
+			<p class="title3" onclick="location.href='messageList'">쪽지</p>
+			<p class="title3" onclick="location.href='myIconList'">아이콘</p>
+			<p class="title3" onclick="location.href='myboardList'">내 게시글/댓글</p>
+			<p class="title3" onclick="location.href='likedBoardList'">좋아요
+				게시글</p>
+		</aside>
+		<div class="divider"></div>
+		<div class="container">
+			<h3>운동 프로필</h3>
+			<input type="hidden" name="id" value="${member.id}" />
+			<div class="image-info">
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-image" src="/photo/${profile.image}"
+							alt="회원 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-image" src="resources/img/common/profile.png"
+							alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
+				<div class="info">
+					<p class="title2" id="nickname">${member.nickname}</p>
+				</div>
+			</div>
+			<div class="horizontal-divider"></div>
+			<div class="message">
+				아직 운동프로필이 작성되지 않았습니다.<br> 프로필 최초 작성 시, 10p가 지급되며 내성향에 맞는 운동메이트를
+				구할 확률이 높아집니다.
+			</div>
+			<div class="button-group">
+				<a href="firstExerciseProfileView" class="btn"
+					style="padding: 10px; background-color: #ff7f50; color: white; border-radius: 4px; text-decoration: none;">최초
+					작성하기</a>
+			</div>
 		</div>
 	</div>
+	<jsp:include page="../footer.jsp" />
 
-	<script>
-		
-	</script>
 </body>
 </html>
