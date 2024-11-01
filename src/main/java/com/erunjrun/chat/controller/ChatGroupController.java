@@ -51,11 +51,11 @@ public class ChatGroupController {
         return "chat/crewChat";
     }
 	 
-	 @GetMapping("/crewChat/data/{chatIdx}")
+	 @GetMapping("/crewChat/data/{crewIdx}/{chatIdx}")
 	 @ResponseBody
-	 public Map<String, Object> getCrewContent(@PathVariable String chatIdx, HttpSession session){
+	 public Map<String, Object> getCrewContent(@PathVariable String crewIdx,@PathVariable String chatIdx, HttpSession session){
 		 //String baseUser = (String) session.getAttribute("loginId");
-		 Map<String, Object> values = chatGroupService.getCrewContent(chatIdx);
+		 Map<String, Object> values = chatGroupService.getCrewContent(crewIdx,chatIdx);
 		 
 		 
 		 
@@ -67,5 +67,16 @@ public class ChatGroupController {
 		 return values;
 	 }
 		 
+	 @PostMapping("/crewChat/send")
+	 @ResponseBody
+	 public Map<String, Object> sendCrewMessage(@RequestBody Map<String, Object> param){
+		 Map<String, Object> data = new HashMap<String, Object>();
+		 data.put("result", chatGroupService.sendCrewMessage(param));
+		 return data;
+	 }
+	
+
+	 
+	 
 	 
 }

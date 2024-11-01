@@ -185,7 +185,6 @@
             <div class="title-box">
                 <span class="title"></span><img src="/resources/img/common/ico_user.png" alt="인원수"/><span class="num"></span>
             </div>
-            <span class="exit"></span>
         </div>
         <div class="msg-area">
         </div>
@@ -213,7 +212,7 @@
 <script>
 	console.log("sessionScope.loginId", "${sessionScope.loginId}");
 	console.log("roomNum", "${roomNum}");
-	//없으면 채팅방을 만들고채팅방 넘버를 전달해줘야함.
+
 	function scrollBtm(){
 		$('.chat .msg-area').scrollTop($('.chat .msg-area')[0].scrollHeight);
 	}
@@ -224,7 +223,7 @@
 	function getChat(callback){
 		$.ajax({
 			type: 'GET',
-			url: '/crewChat/data/'+chatIdx,
+			url: '/crewChat/data/'+crewIdx+'/'+chatIdx,
 			dataType: 'JSON',
 			success: function(data){
 				console.log(data);
@@ -325,7 +324,7 @@
 		callback();
 	}
 	
-	/* function sendMessage(){
+	function sendMessage(){
 		console.log("전송클릭");
 		//var message = $('.chat .msg').text();
 		var sendData = {};
@@ -337,7 +336,7 @@
 		
 		$.ajax({
 			type: 'POST',
-			url: '/crewLdchat/send/',
+			url: '/crewChat/send/',
 			contentType: 'application/json', 
 		    data: JSON.stringify(sendData),  
 			dataType: 'JSON',
@@ -351,34 +350,8 @@
 			}
 		}); 
 		
-	}*/
-	
-	// 채팅방 나가기
-	/* $('.exit').on('click',function(){
-		layerPopup('채팅방을 나가시겠습니까?','나가기','취소',exitBtn1Act,exitBtn2Act);
-	});
-	
-	function exitBtn1Act(){
-		$.ajax({
-			type: 'POST',
-			url: '/crewLdchat/exit/'+chatIdx,
-			dataType: 'JSON',
-			success: function(data){
-				console.log(data.success);
-				if(data.success){
-					window.close();
-				}
-			},
-			error: function(e){
-				console.log(e);
-			}
-		});
-		removeAlert();
 	}
 	
-	function exitBtn2Act(){
-		removeAlert();
-	}  */
 	
 	
 	// textarea 글자수 제한
@@ -392,9 +365,9 @@
 	
 	
 	// 실시간 데이터 불러오기
-/*  	setInterval(function(){
+  	setInterval(function(){
 		getChat();
-	}, 3000);   */
+	}, 3000);   
 	
 	
 	// db변동 발생시 업데이트
