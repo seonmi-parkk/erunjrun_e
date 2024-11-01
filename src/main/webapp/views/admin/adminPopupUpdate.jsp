@@ -149,14 +149,12 @@
 		<input type="file" name="file" id="fileInput" multiple="multiple">		
 
 		<div class="input-container">
-		    <c:choose>
-		        <c:when test="${file != null}">
-		            <img alt="${file.img_ori}" src="/photo/${file.img_new}">
-		        </c:when>
-		        <c:otherwise>
-		           <img alt="${file.img_ori}" src="/photo/${file.img_new}">
-		        </c:otherwise>
-		    </c:choose>
+		  
+		       
+		<img alt="${file.img_ori}" src="/photo/${file.img_new}" id="image">
+		<button type="button" class="btn01-m" id="delete">삭제</button>
+		 <p id="result"></p>    
+		         
 		</div>
 					
 		</div>
@@ -234,6 +232,35 @@
 
 <script>
 
+
+$('#delete').on('click',function(){
+	var code_name = $('input[name="code_name"]').val();
+	var popup_idx = $('input[name="popup_idx"]').val();
+	console.log(code_name);
+	console.log(popup_idx);
+	$.ajax({
+		type:'POST',
+		url:'adminFileDelete',
+		data:{
+			'code_name':code_name,
+			'popup_idx': popup_idx
+		},
+		dataType:'JSON',
+		success:function(data){
+			console.log(data);
+			if (data.del>0) {
+				$('#result').html('삭제성공');
+				$('#result').css({'color':'green'});
+			}else{
+				$('#result').html('삭제실패');
+				$('#result').css({'color':'red'});
+			}
+		},
+		error:function(e){
+			console.log(e);
+		}
+	});
+});
 </script>
 
 <script src="resources/js/common.js" type="text/javascript"></script>

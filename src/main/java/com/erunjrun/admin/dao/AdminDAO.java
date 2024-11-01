@@ -122,10 +122,18 @@ public interface AdminDAO {
 
 	public int fileupdate(String img_ori, String img_new, String popup_idx, String code_name);
 
+	public int filedelete(int popup_idx, String code_name);
+
+	public int adminyn(String admin_id);
+
+	public int iconbuycount(int cnt_);
+
+	public List<AdminDTO> iconbuylist(int limit, int offset);
+
 
 
 	
-	
+
 
 
 

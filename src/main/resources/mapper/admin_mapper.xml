@@ -34,7 +34,34 @@
       admin_id = #{id}
    </select>
   	
-  <select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+
+  	<select id="adminlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+  		SELECT * FROM admin  
+  		<where>
+  		is_admin IN ('s', 'a','A','S')
+  		<if test="keyword != null and !keyword.equals('') and opt.equals('id')">
+            admin_id LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="keyword != null and !keyword.equals('') and opt.equals('name')">         
+            name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+  		</where>
+  		ORDER BY admin_id DESC LIMIT #{limit} OFFSET #{offset}
+  	</select>
+  
+  	<select id="admincount" resultType="int">
+		SELECT CEIL(count(admin_id)/#{param1}) AS pages FROM admin
+	</select>
+	
+	
+	<update id="adminyn" parameterType="String">
+		update admin set is_admin = 'n' where admin_id = #{admin_id}
+	</update>
+	
+	
+	
+	
+	  <select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
     WITH ranked_ban AS (
         SELECT 
             b.id,
@@ -88,22 +115,6 @@
 		SELECT CEIL(count(id)/#{param1}) AS pages FROM member
 	</select>
 	
-  	<select id="adminlist" resultType="com.erunjrun.admin.dto.AdminDTO">
-  		SELECT admin_id,name,join_date FROM admin 
-  		<where>
-  		<if test="keyword != null and !keyword.equals('') and opt.equals('id')">
-            admin_id LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-        <if test="keyword != null and !keyword.equals('') and opt.equals('name')">         
-            name LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-  		</where>
-  		ORDER BY admin_id DESC LIMIT #{limit} OFFSET #{offset}
-  	</select>
-  
-  	<select id="admincount" resultType="int">
-		SELECT CEIL(count(admin_id)/#{param1}) AS pages FROM admin
-	</select>
 	
 	<select id="memberdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
 		SELECT id,nickname,email,address,gender,birth,phone 
@@ -442,4 +453,21 @@
   		</set>
 			where popup_idx = #{popup_idx}	
   		</update>
+  		
+  		<delete id="filedelete">
+  			delete from image where img_no = #{param1} and code_name = #{param2}
+  		</delete>
+  		
+  		
+  		<select id="iconbuylist" resultType="com.erunjrun.admin.dto.AdminDTO"> <!-- 아이콘 패키지 따로 뺄거인가?? 인터페이스 설계서에는 그렇게 나와있는데 -->
+  			SELECT m.birth_date,m.gender,m.id,ib.buy_date
+		    FROM icon_buy ib
+		    JOIN member m ON ib.id = m.id
+  		</select>
+  		
+  		<select id="iconbuycount" resultType="int">
+  			SELECT CEIL(count(buy_idx)/#{param1}) AS pages FROM icon_buy
+  		</select>
+  		
+  		
   </mapper>
