@@ -589,6 +589,87 @@
 	}
 	
 	
+	function del(comment_idx) {
+		
+		console.log('삭제버튼 : ',comment_idx);
+		
+		$.ajax({
+	        type: 'POST',
+	        url: '/deleteComment/'+comment_idx,  // 서버의 댓글 삭제 처리 경로
+	        contentType: 'application/json',
+	        dataType: 'json',
+	        success: function(data) {
+	            if (data.success) {
+	                // 삭제 성공 시 댓글을 "삭제된 댓글입니다."로 업데이트
+	                $("#sort-update" + comment_idx + " .coco").text("(삭제된 댓글입니다.)");
+	                // 수정, 삭제, 신고 버튼 숨기기
+	                $("#sort-update" + comment_idx + " .ard").hide();
+	                
+	            } 
+	        },
+	        error: function(error) {
+	            console.log("댓글 삭제 오류:", error);
+	            alert("오류가 발생했습니다.");
+	        }
+	    });
+	}
+	
+	// 크루 댓글 신고
+	function report(comment_idx) {
+	 		layerPopup('정말 신고 하시겠습니까?','신고','취소' ,function (){secondBtn4Act(comment_idx)} , secondBtn2Act);
+	}
+	
+	
+	
+	
+	function secondBtn4Act(comment_idx) {
+ 		// 두번째팝업 4번버튼 클릭시 수행할 내용
+ 	    console.log('두번째팝업 4번 버튼 동작');
+ 	   
+ 	    console.log('동작시 가ㅣ고외?',comment_idx);
+ 	    commentReport(comment_idx);
+ 	    removeAlert();
+ 	}
+	
+	
+	
+	
+	function commentReport(comment_idx){
+		
+		var modal = document.getElementById("reportPopup");
+	    var PopupBody = document.getElementById("reportPopupBody");
+	    var userId = '${sessionScope.loginId}';
+	    
+		console.log('가지고와번호?',comment_idx);
+		console.log('가지고와? 아이디',userId);
+	    // AJAX 요청 데이터 넣을때 해당 게시판 idx 값 넣기!!!!
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("GET", "/reportComment/"+comment_idx, true);
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState === 4 && xhr.status === 200) {
+	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+	            modal.style.display = "block"; // 모달 열기
+	            
+	         	// JS 파일을 동적으로 로드
+	         	
+	            var script = document.createElement('script');
+	            script.src = '/resources/js/reportComment.js'; 
+	            document.body.appendChild(script);
+	            
+	        }
+	    };
+	    xhr.send();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
