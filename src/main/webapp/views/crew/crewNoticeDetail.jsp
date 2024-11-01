@@ -396,6 +396,7 @@
 		success: function(response){
 			console.log('데이터 잘 받아옴 => ', response);
 			console.log('닉네임 잘 받아옴 => ', response.nickname);
+			
 			var result = response.result;
 			crew_idx = result.crew_idx;
 			var nickName = response.nickname

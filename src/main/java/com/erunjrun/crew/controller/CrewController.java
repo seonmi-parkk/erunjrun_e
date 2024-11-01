@@ -541,7 +541,7 @@ public class CrewController {
 		MemberDTO nickname = null;
     	if(loginId != null) {
     		nickname = crew_service.nickName(loginId);
-    		logger.info("닉네임 맞냐 :"+nickname);
+    		logger.info("닉네임 맞냐 :"+nickname.toString());
     	}
 		
 		Map<String, Object> resultMap = new HashMap<>();
@@ -563,9 +563,44 @@ public class CrewController {
 	}
 	
 
+	@PostMapping(value="/updateView")
+	public Map<String, Object> crewUpdateView(@RequestParam int crew_idx){
+		logger.info("crew_idx... =>" + crew_idx);
+		try {
+			logger.info("crew_idx?? =>" + crew_idx);
+			Map<String, Object> resultMap = new HashMap<>();
+			resultMap.put("result", crew_service.crewUpdateView(crew_idx));
+			return resultMap;
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+		return null;
+	}
 	
+	@PostMapping(value="/leaderCheck")
+	public Map<String, Object> crewLeaderCheck(@RequestParam int crew_idx){
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("leaderId", crew_service.crewLeaderCheck(crew_idx));
+		
+		return resultMap;
+	}
 	
-	
-	
+	@PostMapping(value="/likeCrew")
+	public Map<String, Object> crewLikeCrew(@RequestParam String id){
+		try {
+			Map<String, Object> resultMap = new HashMap<>();
+			
+			resultMap.put("result", crew_service.crewLikeCrew(id));
+			
+			return resultMap;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	
 }

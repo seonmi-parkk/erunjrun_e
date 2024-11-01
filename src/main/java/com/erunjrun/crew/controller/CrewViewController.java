@@ -28,10 +28,10 @@ public class CrewViewController {
     @GetMapping(value="/crewUpdate/{crew_idx}")
     public String crewUpdateView(@PathVariable int crew_idx, Model model) {
     	
-    	Map<String, Object> resultMap = crew_service.crewUpdateView(crew_idx);
+//    	Map<String, Object> resultMap = crew_service.crewUpdateView(crew_idx);
     	
     	model.addAttribute("crew_idx", crew_idx);
-    	model.addAttribute("result", resultMap);
+//    	model.addAttribute("result", resultMap);
     	
         return "/crew/crewUpdate";
     }
