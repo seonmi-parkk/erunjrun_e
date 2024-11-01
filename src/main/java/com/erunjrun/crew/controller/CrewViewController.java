@@ -92,6 +92,11 @@ public class CrewViewController {
     	return "crew/crewNoticeUpdate";
     }
     
+    @RequestMapping(value="/crewChatListView/{crew_idx}")
+    public String crewChatListView(@PathVariable String crew_idx) {
+    	
+    	return "crew/crewChatList";
+    }
 
     
 }

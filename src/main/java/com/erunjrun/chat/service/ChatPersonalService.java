@@ -114,10 +114,11 @@ public class ChatPersonalService {
 		
 		List<ChatCrewLeaderDTO> userList = chatPersonalDAO.getCrewLeaderUserName(chatIdx);
 		logger.info("userNames"+userList.get(0).getNickname());
-		logger.info("1user is leader"+userList.get(0).getIs_leader());
-		logger.info("2user is leader"+userList.get(1).getIs_leader());
+		//logger.info("1user is leader"+userList.get(0).getIs_leader());
+		//logger.info("2user is leader"+userList.get(1).getIs_leader());
 
 		List<ChatCrewLeaderDTO> msgList = chatPersonalDAO.getCrewLeaderContent(chatIdx);
+		logger.info("메세지 내용: " + msgList.get(0).getContent());
 		
 		// 날짜 비교 (날짜 바뀔경우 체크)
 		LocalDate previousDate = null;
@@ -125,7 +126,7 @@ public class ChatPersonalService {
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 	    
         for(ChatCrewLeaderDTO msg : msgList) {
-        	
+        	logger.info("msg.getContent() : "+msg.getContent());
 
         	LocalDate msgDate = msg.getCreate_date().toLocalDate();
         	logger.info("msg.getStart_date(): "+msg.getCreate_date());
@@ -176,6 +177,20 @@ public class ChatPersonalService {
 
 	public List<ChatCrewLeaderDTO> crewLeaderChatList(String crew_idx) {
 		return chatPersonalDAO.crewLeaderChatList(crew_idx);
+	}
+
+
+	public List<ChatCrewLeaderDTO> crewLeaderChatListFull(int crew_idx, int page, int cnt, String keyword) {
+		int limit = cnt; // 15
+		int offset = (page -1) * cnt; // 0
+		
+		Map<String, Object> parmeterMap = new HashMap<>();
+		parmeterMap.put("limit", limit);
+		parmeterMap.put("offset", offset);
+		parmeterMap.put("keyword", keyword);
+		parmeterMap.put("crew_idx", crew_idx);
+		
+		return chatPersonalDAO.crewLeaderChatListFull(parmeterMap);
 	}
 
 

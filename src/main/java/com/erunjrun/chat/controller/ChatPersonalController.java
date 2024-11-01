@@ -149,6 +149,18 @@ public class ChatPersonalController {
 	    
 	    
 	    /////////////////////크루장 채팅
+	    @GetMapping("/crewMgchat/{crewIdx}/{userId}")
+		 @ResponseBody
+	     public Map<String, Object> getCrewLeaderChat(@PathVariable String crewIdx, @PathVariable String userId){
+			 Map<String, Object> data = new HashMap<String, Object>();
+			 //logger.info("crewIdx : {}, baseUser: {}",crewIdx,userId);
+			 // 채팅방 번호 조회
+			 String roomNum = chatPersonalService.getCrewLeaderChat(crewIdx,userId);
+
+				
+			data.put("roomNum", roomNum);
+	        return data;
+	    }
 	    
 		 @GetMapping("/crewLdchat/{crewIdx}")
 		 @ResponseBody
@@ -179,8 +191,6 @@ public class ChatPersonalController {
 		 public Map<String, Object> getCrewLeaderContent(@PathVariable String chatIdx, HttpSession session){
 			 String baseUser = (String) session.getAttribute("loginId");
 			 Map<String, Object> values = chatPersonalService.getCrewLeaderContent(chatIdx, baseUser);
-			 
-			 
 			 
 			 List<ChatCrewLeaderDTO> list = (List<ChatCrewLeaderDTO>) values.get("msgList");
 			 for (int num = 0; num<list.size(); num++) {				
@@ -214,7 +224,25 @@ public class ChatPersonalController {
 			 return chatPersonalService.crewLeaderChatList(crew_idx);
 		 }
 		 
-		 
+		 @GetMapping("/crewLdchatList/full")
+		 @ResponseBody
+		 public List<ChatCrewLeaderDTO> crewLeaderChatListFull(
+			@RequestParam String crew_idx,
+			@RequestParam(value = "page", defaultValue = "1") int page, 
+			@RequestParam(value = "cnt", defaultValue = "15") int cnt,
+			@RequestParam(defaultValue = "", value="keyword") String keyword){
+			
+			logger.info("crew_idx => " + crew_idx);
+			logger.info("page : cnt => " + page + " : " + cnt);
+			logger.info("keyword=>" + keyword);
+			
+			int crew_idxs = Integer.parseInt(crew_idx);
+			
+			//Map<String, Object> resultMap = new HashMap<>();
+			
+			return chatPersonalService.crewLeaderChatListFull(crew_idxs ,page, cnt, keyword);
+			
+		 }
 		 
 		 
 	 
