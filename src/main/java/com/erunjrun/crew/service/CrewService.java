@@ -192,10 +192,14 @@ public class CrewService {
 
 	
 	// crewUpdate 페이지 데이터 전달 (select)
-	public Map<String, Object> crewUpdateView(int crew_idx) {
-		
-		return crew_dao.crewUpdateView(crew_idx);
-	}
+//	public Map<String, Object> crewUpdateView(int crew_idx) {
+//		
+//		return crew_dao.crewUpdateView(crew_idx);
+//	}
+	
+//	public CrewDTO crewUpdateView(int crew_idx) {
+//		return crew_dao.crewUpdateView(crew_idx);
+//	}
 
 	// 크루 수정 내용 update
 	@Transactional

@@ -550,4 +550,11 @@ public class CrewController {
 		return resultMap;
 	}
 	
+	@PostMapping(value="/updateView")
+	public Map<String, Object> crewUpdateView(int crew_idx){
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("result", crew_service.crewUpdateView(crew_idx));
+		return resultMap;
+	}
+	
 }
