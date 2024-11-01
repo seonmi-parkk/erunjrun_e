@@ -38,6 +38,7 @@ public class CrewDTO {
     private int tag_idx; // crew_tag
     private String tag_idx_list;
     private String tag_name;
+    private String tag_idxs;
 
     // crew_chat 테이블
     private int chat_idx = 0; // crew_chat_content 
@@ -232,6 +233,15 @@ public class CrewDTO {
 	}
 	public void setImg_new(String img_new) {
 		this.img_new = img_new;
+	}
+	
+	
+	
+	public String getTag_idxs() {
+		return tag_idxs;
+	}
+	public void setTag_idxs(String tag_idxs) {
+		this.tag_idxs = tag_idxs;
 	}
 	@Override
 	public String toString() {

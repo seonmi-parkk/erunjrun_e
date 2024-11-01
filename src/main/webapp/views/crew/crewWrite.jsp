@@ -45,6 +45,9 @@
         	font-size: 12px;
         	color: #d3d3d3;
         }
+   		.tagImg-01{
+			margin-right: 5px;
+		}
 
     </style>
 </head>
@@ -79,11 +82,11 @@
                         <span id="tagFilters">
                             <label><input type="checkbox" name="tag_idx_list" value="1">🏃‍♂️러닝에 집중</label>
                             <label><input type="checkbox" name="tag_idx_list" value="2">🙋‍♀️ 친목도 중요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="3"> 남성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="4"> 여성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="5"> 혼성</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="6"> <b style='color: FD6F22'>E</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="7"> <b style='color: 116DCA'>I</b> 환영해요</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="3"><img src="resources/img/common/ico_male.png" width="9px" class="tagImg-01"/>  남성만 가능</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="4"><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 여성만 가능</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="5"><img src="resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 혼성</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="6"> <b style='color: FD6F22' class="tagImg-01">E</b> 환영해요</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="7"> <b style='color: 116DCA' class="tagImg-01">I</b> 환영해요</label>
                             <label><input type="checkbox" name="tag_idx_list" value="8">🐂 소규모 크루</label>
                             <label><input type="checkbox" name="tag_idx_list" value="9">🏆 대회 목적</label>
                             <label><input type="checkbox" name="tag_idx_list" value="10">💦 러닝 고수만</label>
@@ -230,7 +233,7 @@
         console.log('roadAddr =>', roadAddr);
         console.log('sigungu =>', sigungu);
         console.log('sido =>', sido);
-        console.log('shotssido =>', shortsido);
+        console.log('shortsido =>', shortsido);
 
         var selectedTags = "";
         $('input[name="tag_idx_list"]:checked').each(function () {

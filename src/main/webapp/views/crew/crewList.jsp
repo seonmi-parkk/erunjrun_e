@@ -300,6 +300,14 @@
 	var isLoading = false;
 	var hasMoreData = true;
 	var filtering = [];
+	
+	var loginId = '${sessionScope.loginId}';
+	console.log(loginId, '');
+	if(loginId != null || login !== ''){
+		likeCrew();
+	}
+	
+	
 	// 크루가 홀수일 때 마지막 crowBox 왼쪽 정렬
 	$(document).ready(function() {
 		
@@ -358,88 +366,8 @@
 				var result = response.result;
 				console.log('오는값 => ',result);
 				
-				var content = '';
-				var btn_style = '';
-				
-				
-				if(result.length > 0){
-					result.forEach(function(item, idx){
-						
-						var day = item.days.replace(/mon|tue|wen|thu|fri|sat|sun/gi, function(match) {
-	                        return { mon: '월', tue: '화', wen: '수', thu: '목', fri: '금', sat: '토', sun: '일' }[match.toLowerCase()];
-	                    });
-							
-						var is_recruit = '';
-						
-						if(item.is_recruit === 'Y'){
-							is_recruit = '모집중';
-							btn_style = '<div class="crewStatus01"><span id="is_recruit">'+is_recruit+'</span></div>';
-						}else{
-							is_recruit = '모집완료';
-							btn_style = '<div class="crewStatus02"><span id="is_recruit">'+is_recruit+'</span></div>';
-						}
-						
-						var imgElem = '';
-						if(item.img_new === null || item.img_new === ''){
-							imgElem = '/resources/img/crew/crewImg300.png';
-						}else{
-							imgElem = '/photo/'+item.img_new;
-						}
-						
-		                // 태그 처리
-		                var tagNamesArray = item.tag_names ? item.tag_names.split(',') : [];
-		                var displayedTags = '';
-		                
-		                tagNamesArray.slice(0, 3).forEach(function(tag, index) {
-		                    var styleClass = index === 1 ? 'highlight-tag' : 'normal-tag';
-		                    displayedTags += '<span class="tag ' + styleClass + '">' + tag + '</span>';
-		                });
-	
-						content += '<div class="crewBox" onclick="crewDetail('+item.crew_idx+')">';
-						content += '<div class="crewImg"><img class="crew-img" id="crew-image" src="' + imgElem + '" onerror="this.src=\'/resources/img/crew/crewImg300.png\'"/>';
-	 					// 좋아요 이미지
-						content += '<div onclick="crew_like()"><img class="crew-like" src="resources/img/common/ico_heart_no_act.png"/></div></div>';
-						// 크루 tag
-						content += '<div class="crewContentBox"><div class="tagBox2">' + displayedTags + '</div>';
-						
-						content += '<div class="crewName" id="crew-name">'+item.crew_name+'</div>';
-						content += '<div class="crewInfo-01">';
-						content += '<img src="/resources/img/crew/img01.png" width="10px" class="imglayout"/>';
-						content += '<span id="crew-location">'+ item.shortsido + '&nbsp;' +item.sigungu +'</span>  &nbsp; &nbsp; &nbsp;';
-						content += '<img src="/resources/img/crew/img03.png" width="14px" class="imglayout"/>';
-						content += '<span id="crew-days">'+day+'</span>';
-						content += '</div>';
-						content += '<div class="crewInfo-02">';
-						content += '<div class="inone">';
-						content += '<img src="/resources/img/crew/img02.png" width="13px" class="imglayout"/>';
-						content += '<span class="current_member" id="current_member">'+ item.current_member +'</span> / <span class="member" id="member">'+ item.member +'</span></div>';
-						content += btn_style;
-						content += '</div>';
-						content += '</div>';
-						content += '</div>';
-						
-						var is_recruit = item.is_recruit;
-					});
-					
-					$('.crewListBox').append(content);
-					$('#loading').css('opacity', '0'); // loading 요소를 투명하게 설정
-		            isLoading = false; // 로딩 상태 해제
-		            
-		            
-		    	    var crewBoxes = $('.crewListBox .crewBox');
-		    	    var crewListBox = $('.crewListBox');
-		    	    // crewBox가 홀수일 때 마지막 요소에 left-align-last 클래스를 추가하고, 전체 왼쪽 정렬
-		    	    if (crewBoxes.length % 2 !== 0) {
-		    	        crewBoxes.last().addClass('left-align-last');
-		    	        crewListBox.css('justify-content', 'flex-start'); // 전체를 왼쪽 정렬
-		    	    } else {
-		    	        crewListBox.css('justify-content', 'center'); // 짝수일 때는 중앙 정렬 유지
-		    	    }
-					
-				}else{
-					hasMoreData = false;
-					$('#loading').text('모든 크루 정보를 불러왔습니다.').css('opacity', '1');
-				}
+				crewListPrint(result);
+	            updateHeartIcon(result);  // 하트 아이콘 수정 함수 실행
 				
 				
 			},error: function(e){
@@ -451,9 +379,91 @@
 		
 	}
 	
-	function crew_like(){
-		console.log('크루좋아요 누름');
+	function crewListPrint(result){
+		
+		var content = '';
+		var btn_style = '';
+		
+		if(result.length > 0){
+			result.forEach(function(item, idx){
+				
+				var day = item.days.replace(/mon|tue|wen|thu|fri|sat|sun/gi, function(match) {
+                    return { mon: '월', tue: '화', wen: '수', thu: '목', fri: '금', sat: '토', sun: '일' }[match.toLowerCase()];
+                });
+					
+				var is_recruit = '';
+				
+				if(item.is_recruit === 'Y'){
+					is_recruit = '모집중';
+					btn_style = '<div class="crewStatus01"><span id="is_recruit">'+is_recruit+'</span></div>';
+				}else{
+					is_recruit = '모집완료';
+					btn_style = '<div class="crewStatus02"><span id="is_recruit">'+is_recruit+'</span></div>';
+				}
+				
+				var imgElem = '';
+				if(item.img_new === null || item.img_new === ''){
+					imgElem = '/resources/img/crew/crewImg300.png';
+				}else{
+					imgElem = '/photo/'+item.img_new;
+				}
+				
+                // 태그 처리
+                var tagNamesArray = item.tag_names ? item.tag_names.split(',') : [];
+                var displayedTags = '';
+                
+                tagNamesArray.slice(0, 3).forEach(function(tag, index) {
+                    var styleClass = index === 1 ? 'highlight-tag' : 'normal-tag';
+                    displayedTags += '<span class="tag ' + styleClass + '">' + tag + '</span>';
+                });
+
+				content += '<div class="crewBox" onclick="crewDetail('+item.crew_idx+')">';
+				content += '<div class="crewImg"><img class="crew-img" id="crew-image" src="' + imgElem + '" onerror="this.src=\'/resources/img/crew/crewImg300.png\'"/>';
+					// 좋아요 이미지
+				content += '<div onclick="crew_like()"><img class="crew-like" src="/resources/img/common/ico_heart_no_act.png"/></div></div>';
+				// 크루 tag
+				content += '<div class="crewContentBox"><div class="tagBox2">' + displayedTags + '</div>';
+				
+				content += '<div class="crewName" id="crew-name">'+item.crew_name+'</div>';
+				content += '<div class="crewInfo-01">';
+				content += '<img src="/resources/img/crew/img01.png" width="10px" class="imglayout"/>';
+				content += '<span id="crew-location">'+ item.shortsido + '&nbsp;' +item.sigungu +'</span>  &nbsp; &nbsp; &nbsp;';
+				content += '<img src="/resources/img/crew/img03.png" width="14px" class="imglayout"/>';
+				content += '<span id="crew-days">'+day+'</span>';
+				content += '</div>';
+				content += '<div class="crewInfo-02">';
+				content += '<div class="inone">';
+				content += '<img src="/resources/img/crew/img02.png" width="13px" class="imglayout"/>';
+				content += '<span class="current_member" id="current_member">'+ item.current_member +'</span> / <span class="member" id="member">'+ item.member +'</span></div>';
+				content += btn_style;
+				content += '</div>';
+				content += '</div>';
+				content += '</div>';
+				
+				var is_recruit = item.is_recruit;
+			});
+			
+			$('.crewListBox').append(content);
+			$('#loading').css('opacity', '0'); // loading 요소를 투명하게 설정
+            isLoading = false; // 로딩 상태 해제
+            
+            
+    	    var crewBoxes = $('.crewListBox .crewBox');
+    	    var crewListBox = $('.crewListBox');
+    	    // crewBox가 홀수일 때 마지막 요소에 left-align-last 클래스를 추가하고, 전체 왼쪽 정렬
+    	    if (crewBoxes.length % 2 !== 0) {
+    	        crewBoxes.last().addClass('left-align-last');
+    	        crewListBox.css('justify-content', 'flex-start'); // 전체를 왼쪽 정렬
+    	    } else {
+    	        crewListBox.css('justify-content', 'center'); // 짝수일 때는 중앙 정렬 유지
+    	    }
+			
+		}else{
+			hasMoreData = false;
+			$('#loading').text('모든 크루 정보를 불러왔습니다.').css('opacity', '1');
+		}
 	}
+
 	
 	function crewDetail(crew_idx){
 		console.log('이동 =>', crew_idx)
@@ -472,8 +482,35 @@
 	    }
 	  });
 	});
+	
+	var likeCrew = [];
+	
+	function likeCrew(){
+		$.ajax({
+			type: 'POST',
+			url: 'crew/likeCrew',
+			data: {'id' : loginId},
+			dataType: 'JSON',
+			success: function(response){
+				console.log(response);
+				likeCrew = response.result;
+				
+				updateHeartIcon(); 
+				
+			},error: function(e){
+				console.log('관심 크루 에러 => ', e);
+			}
+		});
+	}
 
-	 
+	function updateHeartIcon(result){
+		
+		result.forEach(function(item, idx){
+			if(likeCtew.includes(item.crew_idx)){
+				$('.crew-like').attr('src', '/resources/img/common/ico_heart_act.png');
+			}
+		});
+	}	 
 	
 </script>
 </html>
