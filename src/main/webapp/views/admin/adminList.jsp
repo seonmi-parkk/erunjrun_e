@@ -194,7 +194,7 @@ function pageCall(page) {
 			content +='<td>'+view.admin_id+'</td>';
 			content += '<td>'+view.name+'</td>';
 			content +='<td>'+view.join_date+'</td>';
-			content +='<td><a href="adminDel?admin_id='+view.admin_id+'"style="color: orange;">삭제</a></td>';
+			content +='<td><a href="adminYn?admin_id='+view.admin_id+'"style="color: orange;">삭제</a></td>';
 			content +='</tr>';
 		  }
 	      $('#list').html(content);
