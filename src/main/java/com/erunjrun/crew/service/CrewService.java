@@ -117,6 +117,8 @@ public class CrewService {
 	// 크루 대표 이미지 
 	private void fileUpload(int img_no, MultipartFile crew_img) {
 		
+		logger.info("fileUpload => " + "여기는");
+		
 		String img_ori = crew_img.getOriginalFilename();
 		String ext = img_ori.substring(img_ori.lastIndexOf("."));
 		String img_new = UUID.randomUUID().toString() + ext;
@@ -201,6 +203,11 @@ public class CrewService {
 //	public CrewDTO crewUpdateView(int crew_idx) {
 //		return crew_dao.crewUpdateView(crew_idx);
 //	}
+	
+	public CrewDTO crewUpdateView(int crew_idx) {
+		logger.info("crew_idx?? =>" + crew_idx);
+		return crew_dao.crewUpdateView(crew_idx);
+	}
 
 	// 크루 수정 내용 update
 	@Transactional
@@ -213,13 +220,16 @@ public class CrewService {
 		int row = crew_dao.crewUpdate(crewDto); // 크루 정보 update
 		
 		if(row>0) {
+			
 			int img_no = crewDto.getCrew_idx();
 			logger.info("idx 값은 ? => " + img_no);
 			
+			// 크루 설명 이미지
 			List<ImageDTO> imgs = crewDto.getImgs();
-			logger.info("imgs =>", imgs); // x
-			if(imgs.size() > 0) {
-				crew_dao.crewImgDelete(img_no);
+			logger.info("imgs =>" + imgs.toString()); // x
+			if(imgs.size() > 0 || imgs != null) {
+				logger.info("여기인가");
+				/* crew_dao.crewImgDelete(img_no); */
 				for (ImageDTO img : imgs) {
 					img.setImg_no(img_no);
 					img.setCode_name("I100"); // 게시글 이미지
@@ -227,26 +237,28 @@ public class CrewService {
 				}
 			}
 			
-			
+			// 크루 태크
 			String[] tag_idx_list = crewDto.getTag_idx_list().split(",");
+			int tagDelete = crew_dao.crewTagDelete(crewDto.getCrew_idx());
 			
 			for(String tag_idx : tag_idx_list) {
 				crewDto.setTag_idx(Integer.parseInt(tag_idx));
+				logger.info("tag.. => "+tag_idx);
 				
-				int tagDelete = crew_dao.crewTagDelete(crewDto.getCrew_idx());
-				// 삭제 성공 시 insert
+				logger.info("tagDelete=> " + tagDelete);
 				if(tagDelete > 0) {
 					int tagUploadRow = crew_dao.tagUpload(crewDto);
-					logger.info("tag insert =>" + tagUploadRow);
+					logger.info("tag insert 행 수 =>" + tagUploadRow);
 				}
-				
-				
-//				int tag_row = crew_dao.tagUpdate(crewDto); // 태그 정보 업데이트
-//				logger.info("tag_row =>" + tag_row);
-//				logger.info("tag_idx ==>" + tag_idx);
+
+			}
+			// 크루 대표 이미지
+			logger.info("크루 대표 이미지 => " + crew_img.getOriginalFilename());
+			if(!crew_img.isEmpty()) {
+				logger.info("이미지 널 아님");
+				fileUpdate(img_no, crew_img);
 			}
 			
-			fileUpdate(img_no, crew_img);
 			
 			success = true;
 		}
@@ -279,7 +291,7 @@ public class CrewService {
 			arr = crew_img.getBytes();
 			Path path = Paths.get("C:/upload/"+img_new);
 			Files.write(path, arr);
-			int file_row = crew_dao.fileUpload(imageDto);
+			int file_row = crew_dao.fileUpdate(imageDto);
 			logger.info("file_row =>" + file_row);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -580,6 +592,14 @@ public class CrewService {
 	public MemberDTO nickName(String loginId) {
 		
 		return crew_dao.nickName(loginId);
+	}
+
+	public String crewLeaderCheck(int crew_idx) {
+		return crew_dao.crewLeaderCheck(crew_idx);
+	}
+
+	public List<CrewMemberDTO> crewLikeCrew(String id) {
+		return crew_dao.crewLikeCrew(id);
 	}
 
 	

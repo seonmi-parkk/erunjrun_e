@@ -225,14 +225,15 @@
 	}
 	
 	.firstbox {
-	    width: 70%;                     /* 첫 번째 박스의 너비를 70%로 설정 */
+	    width: 78%;                     /* 첫 번째 박스의 너비를 70%로 설정 */
 	    padding: 20px;                  /* 내부 여백 추가 */
 	    box-sizing: border-box;          /* padding이 박스 크기에 포함되도록 설정 */
+	    align-items: baseline;
 	}
 	
 	/*옆으로 보내고 싶은게 위에 있어야 함!!*/
 	.twobox {
-	    width: 28%;                     /* 두 번째 박스의 너비를 28%로 설정 */
+	    width: 27%;                     /* 두 번째 박스의 너비를 28%로 설정 */
 	    padding: 20px;                  /* 내부 여백 추가 */
 	    box-sizing: border-box;   
 	    float: inline-end;       /* padding이 박스 크기에 포함되도록 설정 */
