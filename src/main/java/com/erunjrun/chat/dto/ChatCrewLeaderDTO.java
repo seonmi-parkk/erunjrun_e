@@ -1,5 +1,6 @@
 package com.erunjrun.chat.dto;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class ChatCrewLeaderDTO {
@@ -28,9 +29,22 @@ public class ChatCrewLeaderDTO {
 	private String icon_image;
 	private String image;
 	private String gender;
+	private Date birth;
 	
-	
+	private int totalpage;
 
+	public Date getBirth() {
+		return birth;
+	}
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+	public int getTotalpage() {
+		return totalpage;
+	}
+	public void setTotalpage(int totalpage) {
+		this.totalpage = totalpage;
+	}
 	public String getIcon_image() {
 		return icon_image;
 	}

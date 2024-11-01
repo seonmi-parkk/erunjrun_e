@@ -403,9 +403,9 @@
 	
 	
 	// 실시간 데이터 불러오기
- 	setInterval(function(){
-		getChat();
-	}, 3000);  
+ 	//setInterval(function(){
+	//	getChat();
+	//}, 3000);  
 	
 	
 	// db변동 발생시 업데이트

@@ -49,5 +49,7 @@ public interface ChatPersonalDAO {
 
 	List<ChatCrewLeaderDTO> crewLeaderChatList(String crew_idx);
 
+	List<ChatCrewLeaderDTO> crewLeaderChatListFull(Map<String, Object> parmeterMap);
+
 
 }

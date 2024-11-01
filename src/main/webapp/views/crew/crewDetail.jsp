@@ -409,6 +409,7 @@
 	
 	<jsp:include page="../footer.jsp"/>
 </body>
+<script src="/resources/js/chatting.js" type="text/javascript"></script>
 <script>
 
 	var loginId = '${sessionScope.loginId}';
@@ -574,31 +575,7 @@
 	        });
 	    }
 	    
-	    function openCrewChat(){
-	    	$.ajax({
-	    		type: 'GET',
-	    		url: '/crewChat/'+crew_idx,
-	    		dataType: 'JSON',
-	    		success: function(data){
-	    			openChatWindow(crew_idx,data.roomNum);
-	    		},
-	    		error: function(e){
-	    			console.log(e);
-	    		}
-	    	});
-	    }
-	    
-	    function openChatWindow(crew_idx,roomNum) {
-		    // 새 창의 URL
-		    var url = '/crewChat/open/'+crew_idx+'/'+roomNum;
-		    // 새 창의 크기와 위치 설정
-		    var width = 400;
-		    var height = 700;
-		    var left = (screen.width - width) / 2;
-		    var top = (screen.height - height) / 2;
-		    // 새 창을 열고, 크기와 위치 설정
-		    window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+top+',resizable=no,scrollbars=no,status=no,menubar=no,location=no');
-		}
+	  
 	    
 	    
 	
@@ -753,40 +730,12 @@
 			
 			//location.href='#';
 			// 채팅방 열기
-			
-			$.ajax({
-				type:'GET',
-				url:'/crewLdchat/'+crew_idx,
-				data:{},
-				dataType:'JSON',
-				success:function(data){
-					console.log(data.roomNum);
-					openChat(data.roomNum);
-				},
-				error:function(e){
-					console.log(e);
-				}
-			});
-	
-			console.log('크루 1:1 채팅');
+			openCrewLeaderChat();
+
 		}else{
 			location.href="/crewManagerList/"+$('input[name="crew_idx"]').val();
 			console.log('크루장 관리 페이지 이동');
 		}
-	}
-	
-	function openChat(roomNum){
-		 // 새 창의 URL
-	    var url = '/crewLdchat/open/'+roomNum;
-	
-	    // 새 창의 크기와 위치 설정
-	    var width = 400;
-	    var height = 700;
-	    var left = (screen.width - width) / 2;
-	    var top = (screen.height - height) / 2;
-	
-	    // 새 창을 열고, 크기와 위치 설정
-	    window.open(url, '_blank', 'width='+width+',height='+height+',left='+left+',top='+top+',resizable=no,scrollbars=no,status=no,menubar=no,location=no');
 	}
 	
 	

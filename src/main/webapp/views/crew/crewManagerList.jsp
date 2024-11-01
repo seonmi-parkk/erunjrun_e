@@ -55,6 +55,38 @@
 		height: 350px;
 		position: relative;
 	}
+	.crew-chat-list .line {
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;
+	    gap: 4px;
+		padding: 12px 4px 0 25px;
+	}
+	.crew-chat-list .bar {
+		color: #ccc;
+	}
+	.crew-chat-list .ico-gender {
+		width: 9px;
+	}
+	.crew-chat-list .btn-chat {
+		margin-left: 12px;
+	}
+	.crew-chat-list .profile-area{
+    	width: 44px; height: 44px;
+    	position: relative;
+    }
+    .crew-chat-list .profile-box {
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 44px; height: 44px;
+		margin-right: 2px;
+	}
+	.crew-chat-list .profile-img {
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 33px; height: 33px;
+		border-radius: 50%;
+	}
+	
 	
 	.one {
 	    width: 70%;                     
@@ -314,6 +346,10 @@
     	background: #fff;
     	border-radius: 10px;
     }
+    
+  
+	
+	
 	 
 </style>
 </head>
@@ -358,13 +394,9 @@
 			<div class="crew-chat-list">
 				<div class="title-layout">
 					<div class="title1-12">크루장 문의하기 채팅</div>
-					<button class="btn02-s1">모두보기</button>
+					<button class="btn02-s1" onclick="location.href='/crewChatListView/${crew_idx}'">모두보기</button>
 				</div>
-				<div class="content-box01">어쩌구 저쩌구</div>
-				<div class="content-box01">어쩌구 저쩌구</div>
-				<div class="content-box01">어쩌구 저쩌구</div>
-				<div class="content-box01">어쩌구 저쩌구</div>
-				<div class="content-box01">어쩌구 저쩌구</div>
+				
 			</div>
 		</div>
 		
@@ -399,6 +431,7 @@
 	<jsp:include page="../footer.jsp"/>
 	
 </body>
+<script src="/resources/js/chatting.js" type="text/javascript"></script>
 <script>
 
 	var loginId = '${sessionScope.loginId}';
@@ -714,11 +747,50 @@
 		dataType: 'JSON',
 		success: function(data){	
 			console.log(data);
+			drawChatList(data);
 		},
 		error: function(e){
 			console.log(e);
 		}
 	});
+	
+	function drawChatList(list){
+		var chatCont = '';
+		list.forEach(function(item,idx){
+			
+			if(idx<5){
+
+				var createDateTime = item.create_date;
+				var createDate = createDateTime.split('T')[0];
+				var createDateList = createDate.split('-');
+				var createDateForm = createDateList[0]+'. '+createDateList[1]+'. '+createDateList[2];
+
+				chatCont += '<div class="chat-list">';
+				chatCont += '<div class="line">';      	
+			 	chatCont += '<div class="profile-area">'; 	  	
+               if(item.image != null){
+            	   chatCont += '<div class="profile-img" style="background: url(/photo/'+item.image+') center center / cover no-repeat;"></div>';
+               }else{  
+            	   chatCont += '<div class="profile-img"  style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>';
+               }
+		        chatCont += '<div class="profile-box" style="background: url(/resources/img/icon/'+item.icon_image+') center center / 100% 100% no-repeat;"></div>';
+               chatCont += '</div>';
+        	
+               chatCont += '<span class="name">'+item.nickname+'</span><span class="bar">/</span>';
+               if(item.genger == '남'){            	   
+	               chatCont += '<img class="ico-gender" src="/resources/img/common/ico_male.png" alt="남성"/>';
+               }else{
+	               chatCont += '<img class="ico-gender" src="/resources/img/common/ico_female.png" alt="남성"/>';	            	   
+               }
+               chatCont += '<span class="bar">/</span><span>'+createDateForm+'</span>';
+               chatCont += '<div class="btn-chat btn02-s" onclick="openCrewManagerChat(\'' + item.id + '\')">채팅하기</div>';
+	            
+               chatCont += '</div></div>';
+			}
+		    
+		});
+		$('.crew-chat-list').append(chatCont);
+	}
 	
 </script>
 

@@ -6,8 +6,9 @@
 <mapper namespace="com.erunjrun.chat.dao.ChatPersonalDAO">
 	<select id="getContent" resultType="com.erunjrun.chat.dto.ChatPersonalDTO">
 		SELECT content_idx, c.content , start_date, sender, recipient, image, icon_image, nickname
-			FROM chat_content c JOIN profile p ON c.sender = p.id 
+			FROM chat_content c 
 			JOIN member m ON c.sender = m.id 
+			LEFT JOIN profile p ON c.sender = p.id 
 			WHERE chat_idx = #{chatIdx} AND c.use_yn = 'Y'
 	</select>
 	
@@ -84,7 +85,7 @@
 		SELECT create_date, sender, nickname, icon_image, image, c.content 
 			FROM crew_chat_content c 
 			JOIN member m ON c.sender = m.id 
-			JOIN profile p ON c.sender = p.id WHERE chat_idx = #{chatIdx}
+			LEFT JOIN profile p ON c.sender = p.id WHERE chat_idx = #{chatIdx}
 	</select>
 	
 	<insert id="sendCrewLeaderMessage" parameterType="map">
@@ -103,12 +104,10 @@
 			(SELECT create_date FROM crew_chat_content WHERE chat_idx = gg.chat_idx ORDER BY content_idx DESC LIMIT 1) AS create_date,
 			nickname,
 			gender,
+			birth,
 			icon_image,
 			image
 		FROM (
-			SELECT
-				ccc.id, ccc.chat_idx
-			FROM (
 				SELECT cc.id, cc.chat_idx 
 				FROM crew_chat_link AS cc
 				WHERE chat_idx IN (
@@ -117,18 +116,59 @@
 					WHERE chat_idx IN (
 						SELECT chat_idx
 						FROM crew_chat
-						WHERE crew_idx = 60
+						WHERE crew_idx = #{crew_idx}
 						AND code_cp ='P'
 					)
 					AND is_leader = 'Y'
 					AND c.use_yn = 'N'
 				)
 				AND is_leader = 'N'
-			) AS ccc
 		) AS gg
 		JOIN member AS m ON gg.id = m.id
-		JOIN profile p ON gg.id = p.id
+		LEFT JOIN profile p ON gg.id = p.id
+		ORDER BY create_date DESC
 
+	</select>
+	
+	
+	<select id="crewLeaderChatListFull" resultType="com.erunjrun.chat.dto.ChatCrewLeaderDTO" parameterType="map">
+		
+		WITH chat_data AS (	
+			SELECT 
+				gg.id,
+				gg.chat_idx,
+				(SELECT create_date FROM crew_chat_content WHERE chat_idx = gg.chat_idx ORDER BY content_idx DESC LIMIT 1) AS create_date,
+				nickname,
+				gender,
+				birth,
+				icon_image,
+				image,
+				COUNT(*) OVER() AS total_count
+			FROM (
+					SELECT cc.id, cc.chat_idx 
+					FROM crew_chat_link AS cc
+					WHERE chat_idx IN (
+						SELECT chat_idx
+						FROM crew_chat_link AS c 
+						WHERE chat_idx IN (
+							SELECT chat_idx
+							FROM crew_chat
+							WHERE crew_idx = #{crew_idx}
+							AND code_cp ='P'
+						)
+						AND is_leader = 'Y'
+						AND c.use_yn = 'N'
+					)
+					AND is_leader = 'N'
+			) AS gg
+			JOIN member AS m ON gg.id = m.id
+			LEFT JOIN profile p ON gg.id = p.id
+		)
+		SELECT *
+		FROM chat_data
+		WHERE create_date IS NOT NULL
+		ORDER BY create_date DESC ;
+		
 	</select>
 	
 
