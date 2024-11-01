@@ -23,7 +23,35 @@ public class ChatCrewLeaderDTO {
 	private LocalDateTime end_date;
 	private String sender;
 	private String content;
+	
+	// member테이블, profile테이블
+	private String icon_image;
+	private String image;
+	private String gender;
+	
+	
 
+	public String getIcon_image() {
+		return icon_image;
+	}
+	public void setIcon_image(String icon_image) {
+		this.icon_image = icon_image;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public void setIs_leader(String is_leader) {
+		this.is_leader = is_leader;
+	}
 	public String getFirstOfDay() {
 		return firstOfDay;
 	}

@@ -9,11 +9,11 @@
 	</select>
 	
 	<select id="getCrewInfo" resultType="com.erunjrun.crew.dto.CrewDTO">
-		SELECT crew_name, current_member FROM crew WHERE crew_idx = #{chatIdx}
+		SELECT crew_name, current_member FROM crew WHERE crew_idx = #{crewIdx}
 	</select>
 
 	<select id="getCrewLeader" resultType="String">
-		SELECT id FROM crew_member WHERE crew_idx = #{chatIdx} AND is_leader = 'Y'
+		SELECT id FROM crew_member WHERE crew_idx = #{crewIdx} AND is_leader = 'Y'
 	</select>
 	
 	<select id="getCrewContent" resultType="com.erunjrun.chat.dto.ChatCrewDTO">
@@ -22,5 +22,12 @@
 			JOIN member m ON c.sender = m.id 
 			JOIN profile p ON c.sender = p.id WHERE chat_idx = #{chatIdx}
 	</select>
+	
+	<insert id="sendCrewMessage" parameterType="map">
+		INSERT INTO crew_chat_content (chat_idx,sender,content) 
+			VALUES (#{chatIdx},#{baseUser},#{message})
+	</insert>
+	
+
 	
 </mapper>

@@ -207,6 +207,14 @@ public class ChatPersonalController {
 			 return result;
 		 }
 		 
+		 @GetMapping("/crewLdchatList/{crew_idx}")
+		 @ResponseBody
+		 public List<ChatCrewLeaderDTO> crewLeaderChatList(@PathVariable String crew_idx){
+			 
+			 return chatPersonalService.crewLeaderChatList(crew_idx);
+		 }
+		 
+		 
 		 
 		 
 	 

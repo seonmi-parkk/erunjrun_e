@@ -27,12 +27,12 @@ public class ChatGroupService {
 		return chatGroupDAO.getCrewChat(crewIdx);
 	}
 
-	public Map<String, Object> getCrewContent(String chatIdx) {
+	public Map<String, Object> getCrewContent(String crewIdx, String chatIdx) {
 		Map<String, Object> values = new HashMap<String, Object>();
 		
-		CrewDTO crewInfo = chatGroupDAO.getCrewInfo(chatIdx);
+		CrewDTO crewInfo = chatGroupDAO.getCrewInfo(crewIdx);
 
-		String crewLeader = chatGroupDAO.getCrewLeader(chatIdx);
+		String crewLeader = chatGroupDAO.getCrewLeader(crewIdx);
 
 		List<ChatCrewDTO> msgList = chatGroupDAO.getCrewContent(chatIdx);
 		
@@ -61,6 +61,11 @@ public class ChatGroupService {
 		return values;
 		
 	}
+
+	public Object sendCrewMessage(Map<String, Object> param) {
+		return chatGroupDAO.sendCrewMessage(param)>0 ? true : false;
+	}
+
 
 
 

@@ -1,6 +1,7 @@
 package com.erunjrun.chat.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,6 +19,9 @@ public interface ChatGroupDAO {
 	String getCrewLeader(String chatIdx);
 
 	List<ChatCrewDTO> getCrewContent(String chatIdx);
+
+	int sendCrewMessage(Map<String, Object> param);
+
 
 
 }

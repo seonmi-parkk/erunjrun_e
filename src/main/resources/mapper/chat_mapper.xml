@@ -96,5 +96,40 @@
 		UPDATE crew_chat_link SET use_yn = 'Y' WHERE chat_idx= #{chatIdx} AND id=#{user}
 	</update>	
 	
+	<select id="crewLeaderChatList" resultType="com.erunjrun.chat.dto.ChatCrewLeaderDTO">
+		SELECT 
+			gg.id,
+			gg.chat_idx,
+			(SELECT create_date FROM crew_chat_content WHERE chat_idx = gg.chat_idx ORDER BY content_idx DESC LIMIT 1) AS create_date,
+			nickname,
+			gender,
+			icon_image,
+			image
+		FROM (
+			SELECT
+				ccc.id, ccc.chat_idx
+			FROM (
+				SELECT cc.id, cc.chat_idx 
+				FROM crew_chat_link AS cc
+				WHERE chat_idx IN (
+					SELECT chat_idx
+					FROM crew_chat_link AS c 
+					WHERE chat_idx IN (
+						SELECT chat_idx
+						FROM crew_chat
+						WHERE crew_idx = 60
+						AND code_cp ='P'
+					)
+					AND is_leader = 'Y'
+					AND c.use_yn = 'N'
+				)
+				AND is_leader = 'N'
+			) AS ccc
+		) AS gg
+		JOIN member AS m ON gg.id = m.id
+		JOIN profile p ON gg.id = p.id
+
+	</select>
+	
 
 </mapper>

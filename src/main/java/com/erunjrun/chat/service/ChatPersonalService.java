@@ -174,6 +174,11 @@ public class ChatPersonalService {
 	}
 
 
+	public List<ChatCrewLeaderDTO> crewLeaderChatList(String crew_idx) {
+		return chatPersonalDAO.crewLeaderChatList(crew_idx);
+	}
+
+
 	
 	
 	

@@ -707,6 +707,19 @@
 	    document.getElementById("profilePopup").style.display = "none";
 	};	
 	
+	// 크루장 채팅리스트
+	$.ajax({
+		type: 'GET',
+		url: '/crewLdchatList/'+crew_idx,
+		dataType: 'JSON',
+		success: function(data){	
+			console.log(data);
+		},
+		error: function(e){
+			console.log(e);
+		}
+	});
+	
 </script>
 
 </html>

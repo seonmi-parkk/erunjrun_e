@@ -40,6 +40,11 @@
         .content_layout {
             padding: 20px;
         }
+        
+        .requiredText{
+        	font-size: 12px;
+        	color: #d3d3d3;
+        }
 
     </style>
 </head>
@@ -57,7 +62,7 @@
                 <div id="dori">
                     <div class="twobox">
                         <div id="img_miri"></div>
-                        <span style='color:#d3d3d3'>※ 권장 사이즈 800px / 400px</span>
+                        <span style='color:#d3d3d3'>※ 필수 : 권장 사이즈 800px / 400px</span>
                         <input type="file" name="crew_img" onchange="readFile(this)" id="file" />
                         <label for="file">
                             <div class="btn03-m">이미지 업로드</div>
@@ -66,11 +71,11 @@
                     <div class="firstbox"> <!-- 레이아웃 구성을 위한 div -->
 
                         <div class="boxheigth">
-                            <span class="title2">크루명 </span>
+                            <span class="title2">크루명 <span class="requiredText">※ 필수</span></span>
                             <input type="text" name="crew_name" required />
                         </div> <br>
 
-                        <span class="title2">태그</span>
+                        <span class="title2">태그 <span class="requiredText">※ 필수</span></span>
                         <span id="tagFilters">
                             <label><input type="checkbox" name="tag_idx_list" value="1">🏃‍♂️러닝에 집중</label>
                             <label><input type="checkbox" name="tag_idx_list" value="2">🙋‍♀️ 친목도 중요</label>
@@ -86,7 +91,7 @@
                         </span> <br>
 
                         <div class="boxheigth">
-                            <span class="title2">요일</span>
+                            <span class="title2">요일 <span class="requiredText">※ 필수</span></span>
                             <input type="checkbox" name="days" value="mon" /><span class="basictex">월</span>
                             <input type="checkbox" name="days" value="tue" /><span class="basictex">화</span>
                             <input type="checkbox" name="days" value="wen" /><span class="basictex">수</span>
@@ -97,18 +102,18 @@
                         </div> <br>
 
                         <div class="boxheigth">
-                            <span class="title2">인원</span> 
+                            <span class="title2">인원 <span class="requiredText">※ 필수</span></span> 
                             <input type="number" name="member" min="2" required />
                         </div> <br>
 
                         <div class="boxheigth">
-                            <span class="title2">운동강도</span>
-                            <input type="number" name="minute" min="1" required /><span class="basictex"> / </span>
+                            <span class="title2">운동강도 <span class="requiredText">※ 필수</span></span>
+                            <input type="number" name="minute" min="1" required /><span class="basictex"> 분 / </span>
                             <input type="number" name="distance" min="1" required /><span class="basictex"> km </span>
                         </div> <br>
 
                         <div class="boxheigth">
-                            <span class="title2">지역</span>
+                            <span class="title2">지역 <span class="requiredText">※ 필수</span></span>
                             <input type="text" name="address" id="sample4_roadAddress" required disabled />
                             <input type="button" onclick="search()" class="btn02-m" value="검색">
                         </div>
@@ -125,9 +130,9 @@
                 </div>
 
                 <div class="btn-parent">
-                    <button type="button" class="btn03-l">등록 취소하기</button>
+                    <button type="button" class="btn03-l" onclick="location.href='/crewList'">등록 취소하기</button>
                     <!-- 등록 팝업 추가 필요 -->
-                    <button type="button" class="btn01-l" onclick="submitPost()">크루 등록하기</button>
+                    <button type="button" class="btn01-l" onclick="writeCheck()">크루 등록하기</button>
                 </div>
             </form>
         </div>
@@ -139,6 +144,8 @@
 <script src="/resources/js/daumapi.js"></script>
 
 <script>
+
+	var crew_idx = '';
 
 	// 크루 대표 이미지 미리보기
     function readFile(input) {
@@ -185,6 +192,19 @@
             $(this).parent().removeClass('checked'); // label에서 'checked' 클래스 제거
         }
     });
+    
+    function writeCheck(){
+    	
+    	if($('input[name="crew_name"]').val !== '' && $('input[name="crew_img"]').val() !== '' && dayCheckboxes.length >= 1 && tagCheckboxes.length >= 1 && $('input[name="member"]').val() !== '' && $('input[name="minute"]').val() !== '' && $('input[name="distance"]').val() !== '' && $('input[name="address"]').val() !== ''){
+    		layerPopup('크루를 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act)
+    		console.log('글 전송 함수 실행');
+    	}else{
+    		layerPopup('필수 정보를 입력해주세요', '확인', false, applBtn2Act, applBtn2Act);
+    	}
+    	
+    }
+    
+    
 
     function submitPost() {
         // formData 생성
@@ -253,10 +273,10 @@
             processData: false,  // formData 사용 시 false로 설정
             enctype: 'multipart/form-data',  // multipart/form-data 사용
             success: function (response) {
-                console.log('글 전송 성공:', response);
                 if(response.success){
-                	console.log(response.page);
-                 	/* location.href=response.page;  */
+                	console.log('크루 생성 성공');
+                	removeAlert();
+                	layerPopup('크루 등록이 완료되었습니다.', '확인', false, locationCrewList, locationCrewList); 
                 }
             },
             error: function (e) {
@@ -265,8 +285,16 @@
         });
     }
     
+    function locationCrewList(){
+    	removeAlert(); 
+    	location.href="/crewList";
+    }
     
-
+    
+	// 팝업 취소
+	function applBtn2Act() {
+	    removeAlert(); 
+	}
     
     
     
