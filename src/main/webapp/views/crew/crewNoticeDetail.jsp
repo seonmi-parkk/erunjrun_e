@@ -160,6 +160,7 @@
 		.nick{
 			margin-left: 18;
    		 	margin-bottom: 7px;
+   		 	transform: translate(10px, -2px);
 		}
 
 		.date{
@@ -303,7 +304,7 @@
 	   		
 	    	<div class="com">
 	    		<div>
-	    			<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘"></div>
+	    			<img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘"><div class="nick" id="name"></div>
 		    		<input type="text" class="tex">
 	    		</div>
 	    		<div>
@@ -348,9 +349,10 @@
 		dataType: 'JSON',
 		success: function(response){
 			console.log('데이터 잘 받아옴 => ', response);
-			
+			console.log('닉네임 잘 받아옴 => ', response.nickname);
 			var result = response.result;
 			crew_idx = result.crew_idx;
+			var nickName = response.nickname
 			
 			$('#subject').html(result.subject);
 			
@@ -363,6 +365,8 @@
 			$('#content').html(result.content);
 			$('#hit').html(result.hit);
 			$('#create_date').html(result.create_date);
+			
+			$('#name').html(nickName.nickname);
 			
 			if(loginId === result.id){
 				console.log('같은데?');
@@ -444,6 +448,152 @@
 	document.getElementsByClassName("close")[0].onclick = function() {
 	    document.getElementById("profilePopup").style.display = "none";
 	};	
+	
+	commentCall();
+	
+	function commentCall() {
+		
+		var notice_idx = $('input[name="notice_idx"]').val();
+		console.log("공지사항 no :",notice_idx);
+		
+		$.ajax({
+        	type: "POST",
+            url: "/crewComment/" + notice_idx ,
+            data: { 'notice_idx': notice_idx },
+            datatype: 'JSON',
+            success: function(data) {
+                console.log('댓글 불러오기');
+                commentDraw(data.list);
+            },
+            error: function(error) {
+               console.log('댓글 못 불러오기');    
+            }
+        });
+		
+	}
+ 	
+	function commentDraw(list) {
+		
+		var content ='';
+		list.forEach(function(view,idx){
+			var nickName = $('#name').text();
+			var addName = view.nickname;
+			var comment_idx = view.comment_idx;
+			
+			
+			content +='<div id="sort-area">';
+			content +='<div class="sort" id="sort-update'+comment_idx+'">';
+			content +='<div>';
+			content +='<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+view.nickname+'</div>';
+			if(view.use_yn == 'N'){
+				content +='<p class="coco" style="color: #999;" >(삭제된 댓글 입니다.)</p>';
+			}else{
+				content +='<p class="coco">'+view.content+'</p>';
+			}
+			content +='<div class="date">'+view.create_date+'</div>';
+			content +='</div>';
+			if(view.use_yn == 'Y'){
+				content +='<div class="ard" id="dis">';					
+				content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
+				content +='<div id ="bih" class=btn03-s>비활성화</div>';
+				content += '<div class="action-buttons" style="display:none; cursor: pointer;" id="actions-' + comment_idx + '">';
+				if(nickName == addName){
+					content +='<div class="suj1 btn-popup" style=" cursor: pointer;" onclick="update('+comment_idx+')"  >수정</div>';
+					content +='<div class="suj2 btn-popup" style=" cursor: pointer;" onclick="del('+comment_idx+')">삭제</div>';
+				}else{
+					content +='<div id="sin" style="margin-top: 5px;" data-comment_idx="'+comment_idx+'" onclick="report('+comment_idx+')" style=" cursor: pointer;" class="suj2 btn-popup"  >신고</div>';
+				}
+				
+			}
+			content += '</div>';
+			content +='</div>';
+			content +='</div>';
+			content +='</div>';
+		});
+		$('#list').html(content);
+	}
+	
+	function toggleActions(comment_idx) {
+	    $('#actions-' + comment_idx).toggle(); // 버튼 표시/숨김 토글
+	}
+	
+	function comment() {
+		
+		var content = $('input[class="tex"]').val();
+		console.log('댓굴 내용 : ',content);
+		var notice_idx = $('input[name="notice_idx"]').val();
+		var nickname = $('#name').text();
+		
+		$.ajax({
+			type:'POST',
+			url:'/noticeComment',
+			data:{'notice_idx':notice_idx, 'content':content, 'nickname':nickname},
+			dataType:'JSON',
+			success:function(data){
+				console.log('댓글 등록',data);
+				commentCall();
+			},
+			error:function(e){
+				console.log('댓글 등록 오류',e);
+			}
+		})
+		
+	}
+	
+	function update(comment_idx) {
+		
+		console.log('댓글no : ',comment_idx);
+		
+		var commentContent = $("#sort-update" + comment_idx + " .coco").text();
+		console.log('눌렀을때 나와?',commentContent);
+		var commentAuthor = $("#sort-update" + comment_idx + " .nick").text();
+		var commentDate = $("#sort-update" + comment_idx + " .date").text();
+
+			 // 댓글 내용, 작성자, 날짜를 포함한 편집 필드 생성
+		var editField = '<div class="edit-container">';
+			  editField += '<input type="text" class="tex" value="' + commentContent + '" id="editContent' + comment_idx + '" style="width:800px;" />';
+			  editField += '<button class="btn01-s" onclick="saveComment(' + comment_idx + ')">저장</button>';
+			  editField += '<button class="btn03-s" onclick="commentCall();">취소</button>';
+			  editField += '</div>';
+
+	    // 기존 댓글을 숨기고 편집 필드를 삽입
+	    $("#sort-update" + comment_idx + " .coco").html(editField);
+				
+	}
+	
+	function saveComment(comment_idx) {
+		 // 수정된 댓글 내용 가져오기
+		 console.log('선택한 댓글번호 : ',comment_idx);
+	    var updatedContent = $("#editContent" + comment_idx).val();
+		 console.log('수정내용 : ',updatedContent);
+		 var nickname = $('.nick').text();
+
+	    // AJAX 요청으로 수정된 내용 서버에 전송
+	    $.ajax({
+	        type: 'POST',
+	        url: '/updateNoticeComment',  // 서버의 댓글 수정 처리 경로
+	        data: JSON.stringify({ comment_idx: comment_idx, content: updatedContent ,nickname:nickname}),
+	        contentType: 'application/json',
+	        dataType: 'JSON',
+	        success: function(data) {
+	            if (data.success) {
+	            	// 불러오기
+	            	commentCall();
+	            }	               
+	        },
+	        error: function(error) {
+	            console.log("댓글 수정 오류:", error);
+	            alert("오류가 발생했습니다.");
+	        }
+	    });
+	}
+	
+	
+	
+	
+	
+	
+	
 
 
 </script>

@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +27,7 @@ import com.erunjrun.crew.dto.CrewMemberDTO;
 import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.crew.service.CrewService;
 import com.erunjrun.image.dto.ImageDTO;
+import com.erunjrun.member.dto.MemberDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -531,10 +535,18 @@ public class CrewController {
 	}
 	
 	@PostMapping(value="/noticeDetail")
-	public Map<String, Object> crewNoticeDetail(@RequestParam int notice_idx){
+	public Map<String, Object> crewNoticeDetail(@RequestParam int notice_idx,HttpSession session){
+		
+		String loginId = (String) session.getAttribute("loginId");
+		MemberDTO nickname = null;
+    	if(loginId != null) {
+//    		nickname = crew_service.nickName(loginId);
+    		logger.info("닉네임 맞냐 :"+nickname);
+    	}
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", crew_service.crewNoticeDetail(notice_idx));
+		resultMap.put("nickname", nickname);
 		
 		return resultMap;
 	}
@@ -550,11 +562,13 @@ public class CrewController {
 		return resultMap;
 	}
 	
+
 	@PostMapping(value="/updateView")
 	public Map<String, Object> crewUpdateView(int crew_idx){
 		Map<String, Object> resultMap = new HashMap<>();
-		resultMap.put("result", crew_service.crewUpdateView(crew_idx));
+//		resultMap.put("result", crew_service.crewUpdateView(crew_idx));
 		return resultMap;
 	}
+
 	
 }

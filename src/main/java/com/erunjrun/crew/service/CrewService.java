@@ -23,6 +23,7 @@ import com.erunjrun.crew.dto.CrewDTO;
 import com.erunjrun.crew.dto.CrewMemberDTO;
 import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.image.dto.ImageDTO;
+import com.erunjrun.member.dto.MemberDTO;
 
 
 
@@ -574,6 +575,11 @@ public class CrewService {
 			return true;
 		}
 		return false;
+	}
+
+	public MemberDTO nickName(String loginId) {
+		
+		return crew_dao.nickName(loginId);
 	}
 
 	

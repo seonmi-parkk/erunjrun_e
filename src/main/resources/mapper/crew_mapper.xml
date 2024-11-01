@@ -515,4 +515,11 @@
 	<update id="crewCurrentMemberUpdate" parameterType="int">
 		UPDATE crew SET current_member = current_member + 1 WHERE crew_idx = #{crew_idx}
 	</update>
+	
+	<!-- 로그인한 유저 닉네임 추출 -->
+	<select id="nickName" resultType="com.erunjrun.member.dto.MemberDTO">
+    	select * from member where id = #{param1}
+    </select>
+	
+	
 </mapper>

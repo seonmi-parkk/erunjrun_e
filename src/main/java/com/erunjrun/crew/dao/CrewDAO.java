@@ -9,6 +9,7 @@ import com.erunjrun.crew.dto.CrewDTO;
 import com.erunjrun.crew.dto.CrewMemberDTO;
 import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.image.dto.ImageDTO;
+import com.erunjrun.member.dto.MemberDTO;
 
 @Mapper
 public interface CrewDAO {
@@ -96,6 +97,8 @@ public interface CrewDAO {
 	int crewNoticeDelete(int notice_idx);
 
 	int crewCurrentMemberUpdate(int crew_idx);
+
+	MemberDTO nickName(String loginId);
 	
 	
 

@@ -26,5 +26,25 @@
     <update id="delete" parameterType="int">
     	UPDATE comment SET use_yn = 'N' WHERE comment_idx = #{comment_idx}
     </update>
+    
+    <select id="commentList" resultType="com.erunjrun.crew.dto.CrewNoticeDTO">
+		SELECT cnc.*, m.nickname
+			FROM crew_notice_comment cnc
+			JOIN member m ON cnc.id = m.id
+			WHERE cnc.notice_idx = #{notice_idx}
+	</select>
+	
+	<select id="nickName" resultType="com.erunjrun.member.dto.MemberDTO">
+    	select * from member where id = #{param1}
+    </select>
+    
+    <insert id="noticeComment" parameterType="com.erunjrun.crew.dto.CrewNoticeDTO">
+		INSERT INTO crew_notice_comment(notice_idx,content,id)
+							VALUES(#{notice_idx},#{content},#{loginId})
+	</insert>
+	
+	 <update id="updateNoticeComment" parameterType="com.erunjrun.crew.dto.CrewNoticeDTO">
+    	UPDATE crew_notice_comment SET content = #{content} WHERE comment_idx = #{comment_idx}
+    </update>
 
 </mapper>
