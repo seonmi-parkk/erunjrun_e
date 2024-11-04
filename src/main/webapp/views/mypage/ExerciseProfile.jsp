@@ -5,10 +5,13 @@
 <meta charset="UTF-8">
 <title>운동프로필</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/common.css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=26c56d5b3e89329f848d1188b85f2e3d&libraries=services&autoload=false"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=26c56d5b3e89329f848d1188b85f2e3d&libraries=services&autoload=false"></script>
 
 <style>
 body {
@@ -225,132 +228,178 @@ button:hover {
 .edit-icon:hover {
 	background-color: #0056b3;
 }
+
+textarea {
+	width: 100%; /* 전체 너비 */
+	height: 100px; /* 원하는 높이 */
+	padding: 10px; /* 패딩 제거 */
+	margin: 0; /* 마진 제거 */
+	border: none; /* 테두리 */
+	border-radius: 4px; /* 모서리 둥글게 */
+	resize: none; /* 크기 조정 비활성화 */
+	box-sizing: border-box; /* 테두리와 패딩을 포함한 전체 너비 */
+}
+
+.title3.active {
+    color: #black; /* 활성화된 메뉴 항목의 색상 */
+    font-weight: bold; /* 강조 효과 */
+    background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
+}
 </style>
 </head>
 <body>
-    <jsp:include page="../header.jsp" />
-    <div class="main-container">
-        <aside>
-            <div class="image">
-                <img class="profile-img1" src="resources/img/common/profile.png" alt="프로필 이미지" />
-            </div>
-            <p class="username" id="name">사용자</p>
-            <p class="title3" onclick="location.href='profileDetail'">회원정보</p>
-            <p class="title3" onclick="location.href='createExerciseProfile'">운동프로필</p>
-            <p class="title3" onclick="location.href='pointHistoryList'">포인트 내역</p>
-            <p class="title3" onclick="location.href='memberCrewList'">크루 리스트</p>
-            <p class="title3" onclick="location.href='myMateList'">내 운동 메이트</p>
-            <p class="title3" onclick="location.href='likedMemberList'">내 관심/차단 회원</p>
-            <p class="title3" onclick="location.href='messageList'">쪽지</p>
-            <p class="title3" onclick="location.href='myIconList'">아이콘</p>
-            <p class="title3" onclick="location.href='myboardList'">내 게시글/댓글</p>
-            <p class="title3" onclick="location.href='likedBoardList'">좋아요 게시글</p>
-        </aside>
-        <div class="divider"></div>
-        <div class="container">
-            <h3>운동 프로필</h3>
-            <form id="profileCreate" action="firstExerciseProfile" method="get" enctype="multipart/form-data">
-                <input type="hidden" name="id" value="${member.id}" />
-                <div class="image-info">
-                    <c:choose>
-                        <c:when test="${not empty profile.image}">
-                            <img class="profile-image" src="/photo/${profile.image}" alt="회원 이미지" id="previewImage" />
-                        </c:when>
-                        <c:otherwise>
-                            <img class="profile-image" src="resources/img/common/profile.png" alt="기본 프로필 이미지" id="previewImage" />
-                        </c:otherwise>
-                    </c:choose>
-                    <div class="info">
-                        <p class="title2" id="name">${member.nickname}</p>
-                    </div>
-                </div>
-                <div class="horizontal-divider"></div>
-                <hr class="divider">
+	<jsp:include page="../header.jsp" />
+	<div class="main-container">
+		<aside>
+			<div class="image">
+				<img class="profile-img1" src="resources/img/common/profile.png"
+					alt="프로필 이미지" />
+			</div>
+			<p class="username" id="name">${member.id}</p>
+			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
+				onclick="location.href='profileDetail'">회원정보</p>
+			<p
+				class="title3 ${pageName == 'createExerciseProfile' || pageName == 'ExerciseProfile' ? 'active' : ''}"
+				onclick="location.href='createExerciseProfile'">운동프로필</p>
+			<p
+				class="title3 ${pageName == 'pointHistoryListView' ? 'active' : ''}"
+				onclick="location.href='pointHistoryListView'">포인트 내역</p>
+			<p class="title3 ${pageName == 'memberCrewListView' ? 'active' : ''}"
+				onclick="location.href='memberCrewListView'">크루 리스트</p>
+			<p class="title3 ${pageName == 'myMateListView' ? 'active' : ''}"
+				onclick="location.href='myMateListView'">내 운동 메이트</p>
+			<p class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
+				onclick="location.href='likedMemberListView'">내 관심/차단 회원</p>
+			<p class="title3 ${pageName == 'messageListView' ? 'active' : ''}"
+				onclick="location.href='messageListView'">쪽지</p>
+			<p class="title3 ${pageName == 'myIconListView' ? 'active' : ''}"
+				onclick="location.href='myIconListView'">아이콘</p>
+			<p class="title3 ${pageName == 'myboardListView' ? 'active' : ''}"
+				onclick="location.href='myboardListView'">내 게시글/댓글</p>
+			<p class="title3 ${pageName == 'likedBoardListView' ? 'active' : ''}"
+				onclick="location.href='likedBoardListView'">좋아요 게시글</p>
+		</aside>
+		<div class="divider"></div>
+		<div class="container">
+			<h3>운동 프로필</h3>
+			<form id="profileCreate" action="firstExerciseProfile" method="get"
+				enctype="multipart/form-data">
+				<input type="hidden" name="id" value="${member.id}" />
+				<div class="image-info">
+					<c:choose>
+						<c:when test="${not empty profile.image}">
+							<img class="profile-image" src="/photo/${profile.image}"
+								alt="회원 이미지" id="previewImage" />
+						</c:when>
+						<c:otherwise>
+							<img class="profile-image" src="resources/img/common/profile.png"
+								alt="기본 프로필 이미지" id="previewImage" />
+						</c:otherwise>
+					</c:choose>
+					<div class="info">
+						<p class="title2" id="name">${member.nickname}</p>
+					</div>
+				</div>
+				<div class="horizontal-divider"></div>
+				<hr class="divider">
 
-                <div class="form-group">
-                    <label>성별</label>
-                    <input type="text" name="gender" id="gender" readonly />
-                </div>
-                <div class="form-group">
-                    <label>연령대</label>
-                    <input type="text" id="ageGroup" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="exercise">운동 시간 (분) / 운동 거리 (km)</label>
-                    <div style="display: flex; align-items: center;">
-                        <input type="number" name="exercise_min" id="exercise_min" placeholder="분" style="width: 10%; margin-right: 5px;" value="${mypage.exercise_min}" readonly />
-                        <span>분</span>
-                        <input type="number" name="exercise_dis" id="exercise_dis" placeholder="km" style="width: 10%; margin-left: 5px;" value="${mypage.exercise_dis}" readonly />
-                        <span>km</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="exercise">나의 성향</label>
-                    <input type="text" name="exercise" id="exercise" style="width: 100%; height: 100px;" value="${mypage.exercise}" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="mate">원하는 메이트 성향</label>
-                    <input type="text" name="mate" id="mate" style="width: 100%; height: 100px;" value="${mypage.mate}" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="content">소개글</label>
-                    <input type="text" name="content" id="content" style="width: 100%; height: 100px;" value="${mypage.content}" readonly />
-                </div>
-                 <div class="form-group">
-                    <button type="button" class="check-button" onclick="location.href='ExerciseProfileUpdateView'">수정하기</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <jsp:include page="../footer.jsp" />
+				<div class="form-group">
+					<label>성별</label> <input type="text" name="gender" id="gender"
+						readonly />
+				</div>
+				<div class="form-group">
+					<label>연령대</label> <input type="text" id="ageGroup" readonly />
+				</div>
+				<div class="form-group">
+					<label for="exercise">운동 시간 (분) / 운동 거리 (km)</label>
+					<div style="display: flex; align-items: center;">
+						<input type="number" name="exercise_min" id="exercise_min"
+							placeholder="분"
+							style="width: 10%; margin-right: -40px; margin-top: 2px;"
+							value="${mypage.exercise_min}" readonly /> <span
+							style="margin-right: 30px;">분</span> <input type="number"
+							name="exercise_dis" id="exercise_dis" placeholder="km"
+							style="width: 10%; margin-right: -40px; margin-top: 2px;"
+							value="${mypage.exercise_dis}" readonly /> <span>km</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="exercise">나의 성향</label>
+					<textarea name="exercise" id="exercise">${mypage.exercise}</textarea>
+				</div>
 
-    <script>
-    $(document).ready(function() {
-        var birthString = "${birthString}"; // JSP에서 JavaScript로 변수 전달
-        console.log("생년월일:", birthString); // 값 확인
+				<div class="form-group">
+					<label for="mate">원하는 메이트 성향</label>
+					<textarea name="mate" id="mate">${mypage.mate}</textarea>
+				</div>
 
-        // 나이 계산 로직
-        if (birthString.length === 8 && !isNaN(birthString)) {
-            const birthYear = parseInt(birthString.substring(0, 4), 10);
-            const birthMonth = parseInt(birthString.substring(4, 6), 10);
-            const birthDay = parseInt(birthString.substring(6, 8), 10);
+				<div class="form-group">
+					<label for="content">소개글</label>
+					<textarea name="content" id="content">${mypage.content}</textarea>
+				</div>
+				<div class="form-group">
+					<button type="button" class="check-button"
+						onclick="location.href='ExerciseProfileUpdateView'">수정하기</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<jsp:include page="../footer.jsp" />
 
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear();
-            const currentMonth = currentDate.getMonth() + 1; // 0부터 시작하므로 +1
-            const currentDay = currentDate.getDate();
+	<script>
+		$(document)
+				.ready(
+						function() {
+							var birthString = "${birthString}"; // JSP에서 JavaScript로 변수 전달
+							console.log("생년월일:", birthString); // 값 확인
 
-            let age = currentYear - birthYear;
+							// 나이 계산 로직
+							if (birthString.length === 8 && !isNaN(birthString)) {
+								const birthYear = parseInt(birthString
+										.substring(0, 4), 10);
+								const birthMonth = parseInt(birthString
+										.substring(4, 6), 10);
+								const birthDay = parseInt(birthString
+										.substring(6, 8), 10);
 
-            // 생일이 지나지 않았다면 나이 하나 감소
-            if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
-                age--;
-            }
+								const currentDate = new Date();
+								const currentYear = currentDate.getFullYear();
+								const currentMonth = currentDate.getMonth() + 1; // 0부터 시작하므로 +1
+								const currentDay = currentDate.getDate();
 
-            let ageGroup;
-            if (age < 20) {
-                ageGroup = "10대";
-            } else if (age < 25) {
-                ageGroup = "20~25대";
-            } else if (age < 30) {
-                ageGroup = "26~30대";
-            } else if (age < 35) {
-                ageGroup = "31~35대";
-            } else if (age < 40) {
-                ageGroup = "36~40대";
-            } else {
-                ageGroup = "41대 이상";
-            }
+								let age = currentYear - birthYear;
 
-            $('#ageGroup').val(ageGroup);
-        } else {
-            $('#ageGroup').val("정보 없음");
-        }
+								// 생일이 지나지 않았다면 나이 하나 감소
+								if (currentMonth < birthMonth
+										|| (currentMonth === birthMonth && currentDay < birthDay)) {
+									age--;
+								}
 
-        // 성별 정보 설정 (예: '남성', '여성' 등)
-        var genderValue = "${member.gender}"; // JSP에서 성별 정보 가져오기
-        $('#gender').val(genderValue ? genderValue : "정보 없음");
-    });
-    </script>
+								let ageGroup;
+								if (age < 20) {
+									ageGroup = "10대";
+								} else if (age < 25) {
+									ageGroup = "20~25대";
+								} else if (age < 30) {
+									ageGroup = "26~30대";
+								} else if (age < 35) {
+									ageGroup = "31~35대";
+								} else if (age < 40) {
+									ageGroup = "36~40대";
+								} else {
+									ageGroup = "41대 이상";
+								}
+
+								$('#ageGroup').val(ageGroup);
+							} else {
+								$('#ageGroup').val("정보 없음");
+							}
+
+							// 성별 정보 설정 (예: '남성', '여성' 등)
+							var genderValue = "${member.gender}"; // JSP에서 성별 정보 가져오기
+							$('#gender').val(
+									genderValue ? genderValue : "정보 없음");
+						});
+	</script>
 </body>
 </html>

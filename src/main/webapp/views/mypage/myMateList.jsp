@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>신청받은 운동메이트 리스트</title>
+<title>운동 메이트 리스트</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
@@ -198,14 +198,12 @@ h3 {
 	background-color: #f0f0f0;
 }
 
-.action-buttons {
-    display: flex;
-    justify-content: space-between; /* 버튼 간격을 자동으로 조절 */
-    margin-top: 10px; /* 버튼과 카드 간의 간격 추가 */
-}
-
-.action-buttons button {
-    margin: 0 5px; /* 좌우로 5px 간격 추가 */
+#profilePopup {
+    width: fit-content;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 996;
 }
 </style>
 </head>
@@ -246,19 +244,35 @@ h3 {
 		<div class="container">
 			<h3>내 운동 메이트 리스트</h3>
 			<div class="mate-options">
-				<p class="title3" onclick="location.href='myMateListView'">(내 운동
-					메이트)</p>
 				<p class="title3 ${pageName == 'myMateListView' ? 'active' : ''}"
-					onclick="location.href='requestedMateListView'">(신청받은 메이트)</p>
+					onclick="location.href='myMateListView'">(내 운동 메이트)</p>
+				<p class="title3" onclick="location.href='requestedMateListView'">(신청받은
+					메이트)</p>
 				<p class="title3" onclick="location.href='requestingMateListView'">(신청한
 					메이트)</p>
 			</div>
 			<div class="friend-list">
-				<!-- 친구 리스트는 AJAX로 동적으로 추가됩니다 -->
+				<c:forEach var="friend" items="${friendList}">
+					<div class="card" data-id="${friend.unlike_id}">
+						<img class="friend-image" src="${friend.image != null && !friend.image.trim().isEmpty() ? '/photo/' + friend.image : 'resources/img/common/profile.png'}" alt="친구 이미지" />
+						<p class="friend-name user">
+							<c:choose>
+								 <c:when test="${sessionScope.loginId == friend.id}">
+                        <!-- 사용자의 ID가 friend.id인 경우 -->
+                        ${friend.unlike_id} <!-- 상대방의 ID 출력 -->
+                    </c:when>
+                    <c:otherwise>
+                        <!-- 사용자의 ID가 friend.unlike_id인 경우 -->
+                        ${friend.id} <!-- 상대방의 ID 출력 -->
+								</c:otherwise>
+							</c:choose>
+						</p>
+					</div>
+				</c:forEach>
 			</div>
 			<div class="no-friends-message"
 				style="display: none; text-align: center; margin-top: -100px;">
-				요청이 들어온 메이트가 없습니다.</div>
+				메이트가 없어요 ㅜ_ㅜ.</div>
 			<div class="pagination-container">
 				<nav aria-label="Page navigation">
 					<ul class="pagination" id="pagination"></ul>
@@ -282,10 +296,10 @@ $(document).ready(function() {
     loadFriendList(1); // 첫 페이지 로드
 
     // 친구 리스트를 불러오는 AJAX 호출
-   function loadFriendList(page) {
+    function loadFriendList(page) {
     $.ajax({
         type: 'GET',
-        url: 'friendRequests.ajax',
+        url: 'myMateList.ajax',
         data: { page: page, cnt: 8 },
         dataType: 'JSON',
         success: function(data) {
@@ -298,106 +312,96 @@ $(document).ready(function() {
                 if (data.list.length === 0) {
                     $('.no-friends-message').show(); // 데이터가 없을 경우 메시지 표시
                 } else {
-                	 $.each(data.list, function(index, friend) {
-                         console.log("unlike_id:", friend.unlike_id); // 각 친구의 unlike_id 로그 찍기
-                         console.log("friend.id:", friend.id); // 각 친구의 id 로그 찍기
-                         var imageSrc = (friend.image && friend.image.trim()) ? '/photo/' + friend.image : 'resources/img/common/profile.png';
+                	$.each(data.list, function(index, friend) {
+                	    var imageSrc = (friend.image && friend.image.trim()) ? '/photo/' + friend.image : 'resources/img/common/profile.png';
+                	    
+                	    // 로그인한 사용자 ID를 세션에서 가져옵니다 (예: JavaScript에서 직접 접근 가능하도록 변수를 선언)
+                	    var currentUserId = '${sessionScope.loginId}'; // JSP에서 세션 변수 가져오기
+                	    
+                	    var friendName;
+                	    if (currentUserId === friend.id) {
+                	        // 사용자가 friend.id인 경우 (상대방이 신청한 경우)
+                	        friendName = friend.unlike_id; // 상대방의 ID
+                	    } else {
+                	        // 사용자가 friend.unlike_id인 경우 (사용자가 신청한 경우)
+                	        friendName = friend.id; // 상대방의 ID
+                	    }
 
-                         // 크루 카드 HTML 구조 수정
-                         var friendCard = '<div class="card" data-id="' + friend.unlike_id + '">' + // unlike_id 사용
-                             '<img class="friend-image" src="' + imageSrc + '" alt="친구 이미지" />' +
-                             '<p class="friend-name user">' + (friend.unlike_id || '이름 없음') + '</p>' +
-                             '<div class="action-buttons">' +
-                             '<button class="accept-btn">수락</button>' +
-                             '<button class="reject-btn">거절</button>' +
-                             '</div>' +
-                             '</div>';
-                             
-                         $('.friend-list').append(friendCard);
-                     });
-                     $('.no-friends-message').hide(); // 데이터가 있을 경우 메시지 숨김
+                	    var friendCard = '<div class="card" data-id="' + friend.unlike_id + '">' +
+                        '<input type="hidden" name="toUserId" value="' + friend.unlike_id + '" />' +
+                        '<img class="friend-image" src="' + imageSrc + '" alt="친구 이미지" />' +
+                        '<p class="friend-name user">' + (friendName ? friendName : '이름 없음') + '</p>' +
+                     '</div>';
+
+                	    $('.friend-list').append(friendCard);
+                	});
+                    $('.no-friends-message').hide(); // 데이터가 있을 경우 메시지 숨김
                     // 페이지네이션 생성
                     setupPagination(data.totalCount, page);
-                    $('.pagination-container').show(); // 데이터가 있을 경우 페이지네이션 표시
+                    $('.pagination-container').show(); // 데이터가 있을 때 페이지네이션 표시           
                 }
-
-                    // 수락 및 거절 버튼 이벤트 처리
-                    $('.accept-btn, .reject-btn').on('click', function() {
-                        var unlikeId = $(this).closest('.card').data('id');
-                        var action = $(this).hasClass('accept-btn') ? 'accept' : 'reject';
-                        handleFriendRequest(unlikeId, action);
-                    });
-
-                }
-            },
-            error: function(e) {
-                console.error('친구 리스트를 불러오는 중 오류 발생:', e);
             }
-        });
-    }
-
-    // 수락/거절 처리 함수
-    function handleFriendRequest(unlikeId, action) {
-        $.ajax({
-            type: 'POST',
-            url: 'handleFriendRequest.ajax',
-            data: { unlikeId: unlikeId, action: action },
-            success: function(response) {
-                if (response.success) {
-                    alert(action === 'accept' ? '친구 요청을 수락했습니다.' : '친구 요청을 거절했습니다.');
-                    $('.card[data-id="' + unlikeId + '"]').remove(); // 카드 제거
-                } else {
-                    alert('처리 중 오류가 발생했습니다.');
-                }
-            },
-            error: function(e) {
-                console.error('오류 발생:', e);
-            }
-        });
-    }
+        },
+        error: function(e) {
+            console.error('친구 리스트를 불러오는 중 오류 발생:', e);
+        }
+    });
+}
 
     // 페이지네이션 설정
     function setupPagination(totalCount, currentPage) {
-        var totalPages = Math.ceil(totalCount / 8);
-        if (totalPages === 0) {
-            totalPages = 1;
-        }
+    	var totalPages = Math.ceil(totalCount / 8); // 페이지 수 계산
 
-        $('#pagination').twbsPagination({
-            totalPages: totalPages,
-            startPage: currentPage,
-            visiblePages: 5,
-            onPageClick: function(evt, page) {
-                loadFriendList(page); // 선택한 페이지의 친구 리스트 로드
-            }
-        });
+    // totalPages가 0이라도 1페이지 버튼을 표시
+    if (totalPages === 0) {
+        totalPages = 1; // 기본적으로 1페이지 설정
     }
 
-    // 친구 이름 클릭 시 프로필 열기
-    $(document).on('click', '.friend-name', function() {
-        var toUserId = $(this).closest('.card').data('id');
-        openProfile(toUserId);
-    });
-
-    // 프로필 레이어 팝업 열기
-    function openProfile(toUserId) {
-        var modal = $("#profilePopup");
-        var PopupBody = $("#PopupBody");
-        PopupBody.html("친구 " + toUserId + "의 프로필 내용"); // 예시 내용
-        modal.show(); // 모달 열기
-    }
-
-    // 팝업 닫기
-    $(document).on('click', '.close', function() {
-        $("#profilePopup").hide();
-    });
-
-    // 모달 외부 클릭 시 닫기
-    $(window).on('click', function(event) {
-        if ($(event.target).is("#profilePopup")) {
-            $("#profilePopup").hide();
+    $('#pagination').twbsPagination({
+        totalPages: totalPages,
+        startPage: currentPage,
+        visiblePages: 5,
+        onPageClick: function(evt, page) {
+            loadFriendList(page); // 선택한 페이지의 친구 리스트 로드
         }
     });
+}
+
+ // 클릭시 운동프로필 레이어 팝업
+	$(document).on('click', '.user', function() {
+    var toUserId = $(this).closest('.card').find('input[name="toUserId"]').val();
+    console.log('toUserId', toUserId);
+    openProfile(toUserId);
 });
+	
+	
+	// 운동프로필 레이어 팝업 열기
+	function openProfile(toUserId){
+		var modal = document.getElementById("profilePopup");
+	    var PopupBody = document.getElementById("PopupBody");
+		
+	    // AJAX 요청
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("GET", "/mate/"+toUserId, true);
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState === 4 && xhr.status === 200) {
+	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+	            modal.style.display = "block"; // 모달 열기
+	            
+	         	// JS 파일을 동적으로 로드
+	            var script = document.createElement('script');
+	            script.src = '/resources/js/profileDetail.js'; 
+	            document.body.appendChild(script);
+	        }
+	    };
+	    xhr.send();
+	}
+	
+	// 팝업 닫기
+	document.getElementsByClassName("close")[0].onclick = function() {
+	    document.getElementById("profilePopup").style.display = "none";
+	};
+});
+	
 </script>
 </html>

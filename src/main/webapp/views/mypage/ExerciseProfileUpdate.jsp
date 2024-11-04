@@ -76,6 +76,18 @@ aside {
 	margin-bottom: -16px;
 	padding: 10px;
 	border-radius: 8px; /* 모서리 둥글게 */
+	
+}
+
+textarea {
+    width: 100%; /* 전체 너비 */
+    height: 100px; /* 원하는 높이 */
+    padding: 10px; /* 패딩 제거 */
+    margin: 0; /* 마진 제거 */
+    border: 1px solid #ccc; /* 테두리 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    resize: none; /* 크기 조정 비활성화 */
+    box-sizing: border-box; /* 테두리와 패딩을 포함한 전체 너비 */
 }
 
 h3 {
@@ -227,6 +239,16 @@ button:hover {
 .edit-icon:hover {
 	background-color: #0056b3;
 }
+
+.exercise-label {
+    margin-left: 5px; /* "km" 텍스트와 간격 조정 */
+}
+
+.title3.active {
+    color: #black; /* 활성화된 메뉴 항목의 색상 */
+    font-weight: bold; /* 강조 효과 */
+    background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
+}
 </style>
 </head>
 <body>
@@ -237,20 +259,29 @@ button:hover {
 				<img class="profile-img1" src="resources/img/common/profile.png"
 					alt="프로필 이미지" />
 			</div>
-			<p class="username" id="name">사용자</p>
-			<p class="title3" onclick="location.href='profileDetail'">회원정보</p>
-			<p class="title3" onclick="location.href='createExerciseProfile'">운동프로필</p>
-			<p class="title3" onclick="location.href='pointHistoryListView'">포인트
-				내역</p>
-			<p class="title3" onclick="location.href='memberCrewList'">크루 리스트</p>
-			<p class="title3" onclick="location.href='myMateList'">내 운동 메이트</p>
-			<p class="title3" onclick="location.href='likedMemberList'">내
-				관심/차단 회원</p>
-			<p class="title3" onclick="location.href='messageList'">쪽지</p>
-			<p class="title3" onclick="location.href='myIconList'">아이콘</p>
-			<p class="title3" onclick="location.href='myboardList'">내 게시글/댓글</p>
-			<p class="title3" onclick="location.href='likedBoardList'">좋아요
-				게시글</p>
+			<p class="username" id="name">${member.id}</p>
+			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
+				onclick="location.href='profileDetail'">회원정보</p>
+			<p
+				class="title3 ${pageName == 'createExerciseProfile' || pageName == 'ExerciseProfile' ? 'active' : ''}"
+				onclick="location.href='createExerciseProfile'">운동프로필</p>
+			<p
+				class="title3 ${pageName == 'pointHistoryListView' ? 'active' : ''}"
+				onclick="location.href='pointHistoryListView'">포인트 내역</p>
+			<p class="title3 ${pageName == 'memberCrewListView' ? 'active' : ''}"
+				onclick="location.href='memberCrewListView'">크루 리스트</p>
+			<p class="title3 ${pageName == 'myMateListView' ? 'active' : ''}"
+				onclick="location.href='myMateListView'">내 운동 메이트</p>
+			<p class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
+				onclick="location.href='likedMemberListView'">내 관심/차단 회원</p>
+			<p class="title3 ${pageName == 'messageListView' ? 'active' : ''}"
+				onclick="location.href='messageListView'">쪽지</p>
+			<p class="title3 ${pageName == 'myIconListView' ? 'active' : ''}"
+				onclick="location.href='myIconListView'">아이콘</p>
+			<p class="title3 ${pageName == 'myboardListView' ? 'active' : ''}"
+				onclick="location.href='myboardListView'">내 게시글/댓글</p>
+			<p class="title3 ${pageName == 'likedBoardListView' ? 'active' : ''}"
+				onclick="location.href='likedBoardListView'">좋아요 게시글</p>
 		</aside>
 		<div class="divider"></div>
 		<div class="container">
@@ -293,19 +324,21 @@ button:hover {
 					<label>연령대</label> <input type="text" id="ageGroup" readonly />
 				</div>
 				<div class="form-group">
-					<label for="exercise">나의 성향</label> <input type="text"
-						name="exercise" id="exercise" style="width: 100%; height: 100px;"
-						value="${mypage.exercise}" required />
+					<label for="exercise">나의 성향</label>
+					<textarea name="exercise" id="exercise"
+						required>${mypage.exercise}</textarea>
 				</div>
+
 				<div class="form-group">
-					<label for="mate">원하는 메이트 성향</label> <input type="text" name="mate"
-						id="mate" style="width: 100%; height: 100px;"
-						value="${mypage.mate}" required />
+					<label for="mate">원하는 메이트 성향</label>
+					<textarea name="mate" id="mate"
+						required>${mypage.mate}</textarea>
 				</div>
+
 				<div class="form-group">
-					<label for="content">소개글</label> <input type="text" name="content"
-						id="content" style="width: 100%; height: 100px;"
-						value="${mypage.content}" required />
+					<label for="content">소개글</label>
+					<textarea name="content" id="content"
+						required>${mypage.content}</textarea>
 				</div>
 				<div class="form-group">
 					<label for="exercise">운동 시간 (분) / 운동 거리 (km)</label>
@@ -315,7 +348,7 @@ button:hover {
 							value="${mypage.exercise_min}" required /> <span>분</span> <input
 							type="number" name="exercise_dis" id="exercise_dis"
 							placeholder="km" style="width: 10%; margin-left: 5px;"
-							value="${mypage.exercise_dis}" required /> <span>km</span>
+							value="${mypage.exercise_dis}" required /> <span class="exercise-label">km</span>
 					</div>
 				</div>
 				<div class="form-group">

@@ -66,6 +66,52 @@ public interface MypageDAO {
 
 	List<Map<String, Object>> myIconList(int limit, int offset, String id);
 
-	Map<String, Object> getProfileData(String userId);
+	Map<String, Object> getProfileData(String toUserId);
+
+	List<Map<String, Object>> myMateList(int limit, int offset, String id);
+
+	int countFriends(String id, int cnt);
+
+	List<Map<String, Object>> myBoardList(int limit, int offset, String id);
+
+	int countBoard(String id, int cnt);
+	
+	List<Map<String, Object>> myCommentList(int limit, int offset, String id);
+
+	int countComment(String id, int cnt);
+
+	List<Map<String, Object>> likedBoardList(int limit, int offset, String id);
+
+	int countLike(String id, int cnt);
+	
+	List<Map<String, Object>> messageList(int limit, int offset, String id);
+
+	int countMessage(String id, int cnt);
+	
+	List<Map<String, Object>> crewMasterMessageList(int limit, int offset, String id);
+
+	int countCrewMessage(String id, int cnt);
+
+	List<Map<String, Object>> memberCrewList(int limit, int offset, String id);
+
+	int countMemberCrewList(String id, int cnt);
+
+	List<Map<String, Object>> requestedCrewList(int limit, int offset, String id);
+
+	int countRequestedCrewList(String id, int cnt);
+
+	List<Map<String, Object>> likedCrewList(int limit, int offset, String id);
+	
+	int countLikedCrewList(String id, int cnt);
+
+	List<Map<String, Object>> likedMemberList(int limit, int offset, String id);
+
+	int countLikedMemberList(String id, int cnt);
+
+	List<Map<String, Object>> blockMemberList(int limit, int offset, String id);
+
+	int countBlockMemberList(String id, int cnt);
+
+
 
 }

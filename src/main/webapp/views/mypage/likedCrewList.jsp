@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>보유 아이콘 리스트</title>
+<title>크루 리스트</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
@@ -13,6 +13,7 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js"
 	type="text/javascript"></script>
+
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -55,16 +56,48 @@ aside {
 
 .card {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	align-items: flex-start; /* 아이템을 위쪽으로 정렬 */
 	padding: 10px;
-	border: 1px solid #ddd;
-	border-radius: 5px;
 	background-color: white;
 	transition: background-color 0.3s;
 	cursor: pointer;
-	height: 200px;
-	width: 170px;
+	height: 120px;
+	width: 590px;
+	margin-bottom: 10px; /* 카드 간의 간격 */
+}
+
+.crew-image {
+	width: 115px; /* 이미지 너비 조정 */
+	height: 115px; /* 이미지 높이 조정 */
+	margin-right: 20px; /* 이미지와 텍스트 간의 간격 */
+	margin-top: -9px;
+}
+
+.crew-details {
+	margin-left: 150px; /* 왼쪽 여백 추가 (기본으로 시작하도록) */
+	margin-top: -116px;
+}
+
+.card::after {
+	content: ''; /* 가상의 요소 생성 */
+	display: block;
+	height: 1px; /* 선의 두께 */
+	background-color: #ddd; /* 선 색상 */
+	position: absolute;
+	bottom: 0; /* 카드 하단에 위치 */
+	left: 0;
+	right: 0; /* 양쪽 끝으로 확장 */
+}
+
+.crew-list {
+	padding: 0; /* 리스트의 기본 패딩 없애기 */
+	margin: 0; /* 리스트의 기본 마진 없애기 */
+}
+
+.no-friends-message {
+	display: none; /* 메시지 기본값을 숨김 */
+	text-align: center;
+	margin-top: 20px; /* 적절한 여백 */
 }
 
 .card:hover {
@@ -169,13 +202,13 @@ h3 {
 	margin: 10px 0;
 }
 
-.mate-options {
+.crew-options {
 	display: flex;
 	justify-content: flex-start;
 	margin-bottom: 50px;
 }
 
-.mate-options .title3 {
+.crew-options .title3 {
 	margin-right: 5px;
 	cursor: pointer;
 	color: black;
@@ -183,7 +216,7 @@ h3 {
 	margin-left: 0;
 }
 
-.mate-options .title3:hover {
+.crew-options .title3:hover {
 	color: #0056b3;
 }
 
@@ -196,16 +229,6 @@ h3 {
 	color: black;
 	font-weight: bold;
 	background-color: #f0f0f0;
-}
-
-.action-buttons {
-    display: flex;
-    justify-content: space-between; /* 버튼 간격을 자동으로 조절 */
-    margin-top: 10px; /* 버튼과 카드 간의 간격 추가 */
-}
-
-.action-buttons button {
-    margin: 0 5px; /* 좌우로 5px 간격 추가 */
 }
 </style>
 </head>
@@ -244,13 +267,22 @@ h3 {
 		</aside>
 		<div class="divider"></div>
 		<div class="container">
-			<h3>내 아이콘 리스트</h3>
-			<div class="icon-list">
-				<!-- 아이콘 리스트는 AJAX로 동적으로 추가됩니다 -->
+			<h3>크루 리스트</h3>
+			<div class="crew-options">
+				<p class="title3" onclick="location.href='memberCrewListView'">(소속
+					크루)</p>
+				<p class="title3" onclick="location.href='requestedCrewListView'">(신청
+					크루)</p>
+				<p
+					class="title3 ${pageName == 'memberCrewListView' ? 'active' : ''}"
+					onclick="location.href='likedCrewListView'">(좋아요 크루)</p>
 			</div>
-			<div class="no-icon-message"
-				style="display: none; text-align: center; margin-top: -100px;">
-				구매한 아이콘이 없습니다.</div>
+			<div class="crew-list">
+				<!-- 리스트가 여기에 동적으로 추가됩니다. -->
+			</div>
+			<div class="no-crew-message"
+				style="display: none; text-align: center; margin-top: 150px;">
+				좋아요 크루가 없습니다.</div>
 			<div class="pagination-container">
 				<nav aria-label="Page navigation">
 					<ul class="pagination" id="pagination"></ul>
@@ -260,49 +292,60 @@ h3 {
 	</div>
 	<jsp:include page="../footer.jsp" />
 </body>
+
 <script>
 $(document).ready(function() {
-    loadIconList(1); // 첫 페이지 로드
+    loadCrewList(1); // 첫 페이지 로드
 
-    function loadIconList(page) {
-        $.ajax({
-            type: 'GET',
-            url: 'myIconList.ajax',
-            data: { page: page, cnt: 8 },
-            dataType: 'JSON',
-            success: function(data) {
-                console.log("AJAX 요청 성공:", data);
-                if (data.error) {
-                    alert(data.error);
+    // 크루 리스트를 불러오는 AJAX 호출
+    function loadCrewList(page) {
+    $.ajax({
+        type: 'GET',
+        url: 'likedCrewList.ajax',
+        data: { page: page, cnt: 4 },
+        dataType: 'JSON',
+        success: function(data) {
+            console.log("AJAX 요청 성공:", data);
+            if (data.error) {
+                alert(data.error);
+            } else {
+                $('.crew-list').empty(); // 기존 리스트 초기화
+                $('.no-crew-message').hide(); // 초기에는 메시지 숨김
+                if (data.list.length === 0) {
+                    $('.no-crew-message').show(); // 데이터가 없을 경우 메시지 표시
+                    setupPagination(0, 1); // 페이지네이션을 0으로 설정
                 } else {
-                    $('.icon-list').empty(); // 기존 리스트 초기화
-                    $('.no-icon-message').hide(); // 초기에는 메시지 숨김
-                    if (data.list.length === 0) {
-                        $('.no-icon-message').show(); // 데이터가 없을 경우 메시지 표시
-                    } else {
-                        $.each(data.list, function(index, icon) {
-                            var imageSrc = (icon.image && icon.image.trim()) ? '/photo/' + icon.image : 'resources/img/common/profile.png';
-                            var iconCard = '<div class="card" data-id="' + icon.icon_idx + '">' +
-                                '<img class="friend-image" src="' + imageSrc + '" alt="아이콘 이미지" />' +
-                                '<p class="friend-name">' + (icon.name || '이름 없음') + '</p>' +
-                                '</div>';
-                            $('.icon-list').append(iconCard);
-                        });
-                        $('.no-icon-message').hide(); // 데이터가 있을 경우 메시지 숨김
-                        setupPagination(data.totalCount, page); // 페이지네이션 생성
-                        $('.pagination-container').show(); // 데이터가 있을 경우 페이지네이션 표시
-                    }
+                    $.each(data.list, function(index, crew) {
+                        // 크루 카드 HTML 구조 수정
+							var crewCard = '<div class="card" onclick="location.href=\'/crewDetail/' + crew.crew_idx + '\'">' + // 상세 페이지로 이동
+                            '<img src="' + (crew.crew_image || 'default-image.png') + '" class="crew-image" alt="크루 이미지" />' + // 크루 이미지 추가
+                            '<div class="crew-details">' +
+                            '<p class="title2">' + (crew.crew_name || '크루 이름 없음') + '</p>' +
+                            '<p>총 인원: ' + (crew.member || '정보 없음') + '명</p>' +
+                            '<p>가입 인원: ' + (crew.current_member || '정보 없음') + '명</p>' +
+                            '<p>요일: ' + (crew.days || '정보 없음') + '</p>' +
+                            '<p>주소: ' + (crew.address || '정보 없음') + '</p>' +
+                            '</div>' +
+                            '</div>';
+                        $('.crew-list').append(crewCard);
+                    });
+                    setupPagination(data.totalpages, page); // 수정된 변수명 사용
                 }
-            },
-            error: function(e) {
-                console.error('아이콘 리스트를 불러오는 중 오류 발생:', e);
             }
-        });
-    }
+        },
+        error: function(e) {
+            console.error('크루 리스트를 불러오는 중 오류 발생:', e);
+        }
+    });
+}
 
-    function setupPagination(totalCount, currentPage) {
-        var totalPages = Math.ceil(totalCount / 8);
-        if (totalPages === 0) {
+    // 페이지네이션 설정
+    function setupPagination(totalPages, currentPage) {
+        totalPages = parseInt(totalPages, 10) || 0; // NaN일 경우 0으로 처리
+        var itemsPerPage = 4; // 페이지당 항목 수를 4로 설정
+
+        // totalPages가 0일 경우 최소 1페이지로 설정
+        if (totalPages < 1) {
             totalPages = 1;
         }
 
@@ -311,7 +354,7 @@ $(document).ready(function() {
             startPage: currentPage,
             visiblePages: 5,
             onPageClick: function(evt, page) {
-                loadIconList(page); // 선택한 페이지의 아이콘 리스트 로드
+                loadCrewList(page); // 선택한 페이지의 크루 리스트 로드
             }
         });
     }

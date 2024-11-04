@@ -166,6 +166,12 @@ input[readonly] {
 	text-align: center; /* 가운데 정렬 */
 	margin: 130px 0; /* 위아래 여백 추가 */
 }
+
+.title3.active {
+    color: #black; /* 활성화된 메뉴 항목의 색상 */
+    font-weight: bold; /* 강조 효과 */
+    background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
+}
 </style>
 </head>
 <body>
@@ -176,20 +182,29 @@ input[readonly] {
 				<img class="profile-img1" src="resources/img/common/profile.png"
 					alt="프로필 이미지" />
 			</div>
-			<p class="username" id="name">사용자</p>
-			<p class="title3" onclick="location.href='profileDetail'">회원정보</p>
-			<p class="title3" onclick="location.href='createExerciseProfile'">운동프로필</p>
-			<p class="title3" onclick="location.href='pointHistoryList'">포인트
-				내역</p>
-			<p class="title3" onclick="location.href='memberCrewList'">크루 리스트</p>
-			<p class="title3" onclick="location.href='myMateList'">내 운동 메이트</p>
-			<p class="title3" onclick="location.href='likedMemberList'">내
-				관심/차단 회원</p>
-			<p class="title3" onclick="location.href='messageList'">쪽지</p>
-			<p class="title3" onclick="location.href='myIconList'">아이콘</p>
-			<p class="title3" onclick="location.href='myboardList'">내 게시글/댓글</p>
-			<p class="title3" onclick="location.href='likedBoardList'">좋아요
-				게시글</p>
+			<p class="username" id="name">${member.id}</p>
+			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
+				onclick="location.href='profileDetail'">회원정보</p>
+			<p
+				class="title3 ${pageName == 'createExerciseProfile' || pageName == 'ExerciseProfile' ? 'active' : ''}"
+				onclick="location.href='createExerciseProfile'">운동프로필</p>
+			<p
+				class="title3 ${pageName == 'pointHistoryListView' ? 'active' : ''}"
+				onclick="location.href='pointHistoryListView'">포인트 내역</p>
+			<p class="title3 ${pageName == 'memberCrewListView' ? 'active' : ''}"
+				onclick="location.href='memberCrewListView'">크루 리스트</p>
+			<p class="title3 ${pageName == 'myMateListView' ? 'active' : ''}"
+				onclick="location.href='myMateListView'">내 운동 메이트</p>
+			<p class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
+				onclick="location.href='likedMemberListView'">내 관심/차단 회원</p>
+			<p class="title3 ${pageName == 'messageListView' ? 'active' : ''}"
+				onclick="location.href='messageListView'">쪽지</p>
+			<p class="title3 ${pageName == 'myIconListView' ? 'active' : ''}"
+				onclick="location.href='myIconListView'">아이콘</p>
+			<p class="title3 ${pageName == 'myboardListView' ? 'active' : ''}"
+				onclick="location.href='myboardListView'">내 게시글/댓글</p>
+			<p class="title3 ${pageName == 'likedBoardListView' ? 'active' : ''}"
+				onclick="location.href='likedBoardListView'">좋아요 게시글</p>
 		</aside>
 		<div class="divider"></div>
 		<div class="container">

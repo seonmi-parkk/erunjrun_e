@@ -18,10 +18,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.erunjrun.mate.dto.MateProfileDTO;
+import com.erunjrun.mate.service.MateService;
 import com.erunjrun.member.dto.MemberDTO;
 import com.erunjrun.member.dto.ProfileDTO;
 import com.erunjrun.mypage.dto.MypageDTO;
@@ -47,6 +50,7 @@ public class MypageController {
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			return "member/login"; // 로그인 페이지로 이동
 		}
+		model.addAttribute("pageName", "profileDetail");
 		return "mypage/profile";
 	}
 
@@ -59,6 +63,7 @@ public class MypageController {
 			ProfileDTO profile = mypageService.ProfileImage(id);
 			model.addAttribute("member", member);
 			model.addAttribute("profile", profile);
+			model.addAttribute("pageName", "profileDetail");
 			return "mypage/profileUpdate"; // 수정 페이지로 이동
 		} else {
 			return "main"; // 로그인 페이지로 리다이렉트
@@ -138,7 +143,7 @@ public class MypageController {
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
-
+		model.addAttribute("pageName", "ExerciseProfile");
 		return "mypage/createExerciseProfile"; // 최초 프로필 작성 안내 페이지로 이동
 	}
 
@@ -165,7 +170,7 @@ public class MypageController {
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
-
+		model.addAttribute("pageName", "ExerciseProfile");
 		return "mypage/firstExerciseProfile"; // 최초 프로필 작성 안내 페이지로 이동
 	}
 
@@ -250,6 +255,7 @@ public class MypageController {
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			return "member/login"; // 로그인 페이지로 이동
 		}
+		model.addAttribute("pageName", "ExerciseProfile");
 		return "mypage/ExerciseProfile";
 	}
 
@@ -272,6 +278,7 @@ public class MypageController {
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			return "member/login";
 		}
+		model.addAttribute("pageName", "ExerciseProfile");
 		return "mypage/ExerciseProfileUpdate";
 	}
 
@@ -321,16 +328,16 @@ public class MypageController {
 
 	@GetMapping(value = "/pointHistoryListView")
 	public String pointHistoryListView(HttpSession session, Model model) {
-		logger.info("pointHistoryListView called");
 
 		// 세션에서 사용자 ID를 가져오기
 		String id = (String) session.getAttribute("loginId");
 		if (id == null) {
-			logger.warn("User not logged in. Redirecting to login page.");
 			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
-
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "pointHistoryListView");
 		return "mypage/pointHistoryList"; // 로그인된 경우 리스트 페이지로 이동
 	}
 
@@ -358,9 +365,50 @@ public class MypageController {
 		return result;
 	}
 
+	@GetMapping(value = "/myMateListView")
+	public String myMateListView(HttpSession session, Model model) {
+		logger.info("myMateListView 요청 수신됨"); // 로그 추가
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return "member/login";
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "myMateListView");
+		return "mypage/myMateList";
+	}
+
+	@GetMapping(value = "/myMateList.ajax")
+	@ResponseBody
+	public Map<String, Object> myMateList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("myMateList.ajax 요청 수신됨, 페이지: {}, 카운트: {}", page, cnt); // 로그 추가
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return null; // 에러 응답 반환
+		}
+
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+		Map<String, Object> result = mypageService.myMateList(page_, cnt_, id);
+		logger.info("Service에서 반환된 결과: {}", result); // 로그 추가
+		return result;
+	}
+
 	// 친구 요청 페이지로 이동
 	@GetMapping(value = "/requestedMateListView")
-	public String requestedMateList() {
+	public String requestedMateListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "myMateListView");
 		return "mypage/requestedMateList"; // JSP 페이지 이름
 	}
 
@@ -385,20 +433,35 @@ public class MypageController {
 
 		return result;
 	}
-	
-	@GetMapping("/mypage/{userId}")
-	public String getProfile(@PathVariable String userId, HttpSession session, Model model) {
-	    String id = (String) session.getAttribute("loginId");
-	    if (id == null) {
-	        model.addAttribute("error", "로그인이 필요합니다."); // 모델에 에러 메시지 추가
-	        return "errorPage"; // 에러 페이지로 리다이렉트
-	    }
 
-	    Map<String, Object> profileData = mypageService.getProfileData(userId);
-	    model.addAttribute("profileDTO", profileData); // 프로필 데이터를 모델에 추가
+	@Autowired
+    private MateService mateService; // MateService는 적절한 서비스로..
 
-	    return "mypage/ProfileDetail"; // JSP 페이지 이름 반환
-	}
+    @RequestMapping(value="mypage/mate/{toUserId}")
+    public String getMateProfile(@PathVariable String toUserId, HttpSession session, Model model) {
+        // 세션에서 사용자 ID 가져오기
+        String fromUserId = (String) session.getAttribute("loginId");
+
+        // 운동메이트 신청 여부 체크
+        Map<String, Object> result = new HashMap<>();
+        result.put("MateAppl", mateService.checkMateAppl(fromUserId, toUserId));
+
+        // 차단 여부 체크
+        result.put("isBlocked", mateService.checkBlock(fromUserId, toUserId));
+
+        // 좋아요 여부 체크
+        result.put("isLiked", mateService.checkLike(fromUserId, toUserId));
+
+        // 프로필 데이터 가져오기
+        MateProfileDTO profileDto = mateService.getProfile(toUserId);
+
+        // 모델에 데이터 추가
+        model.addAttribute("profileDto", profileDto);
+        model.addAttribute("result", result);
+
+        // 반환할 JSP 페이지 경로 (mate/profileDetail.jsp)
+        return "mypage/mate/profileDetail"; // 경로는 실제 JSP 위치에 맞게 수정
+    }
 
 	@PostMapping(value = "/handleFriendRequest.ajax")
 	@ResponseBody
@@ -430,54 +493,72 @@ public class MypageController {
 
 		return response;
 	}
-	
+
 	@GetMapping(value = "/requestingMateListView")
-	public String requestingMateListView() {
+	public String requestingMateListView(HttpSession session, Model model) {
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "myMateListView");
 		return "mypage/requestingMateList";
 	}
-	
+
 	@GetMapping(value = "/appliedMates.ajax")
 	@ResponseBody
 	public Map<String, Object> getAppliedMates(String page, String cnt, HttpSession session, Model model) {
-	    String id = (String) session.getAttribute("loginId");
-	    if (id == null) {
-	    	model.addAttribute("msg", "로그인이 필요합니다.");
-	        return null;
-	    }
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			return null;
+		}
 
-	    int page_ = Integer.parseInt(page);
-	    int cnt_ = Integer.parseInt(cnt);
-	    
-	    Map<String, Object> result = mypageService.getAppliedMates(page_, cnt_, id);
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		Map<String, Object> result = mypageService.getAppliedMates(page_, cnt_, id);
 		logger.info("Result from service: {}", result);
-	    
-	    return result;
+
+		return result;
 	}
 
 	@PostMapping(value = "/cancelMateApplication.ajax")
 	@ResponseBody
 	public Map<String, Object> cancelMateApplication(String unlikeId, HttpSession session) {
-	    Map<String, Object> response = new HashMap<>();
-	    String id = (String) session.getAttribute("loginId");
+		Map<String, Object> response = new HashMap<>();
+		String id = (String) session.getAttribute("loginId");
 
-	    // ID가 null인 경우 처리
-	    if (id == null) {
-	        response.put("success", false);
-	        response.put("message", "로그인이 필요합니다.");
-	        return response;
-	    }
+		// ID가 null인 경우 처리
+		if (id == null) {
+			response.put("success", false);
+			response.put("message", "로그인이 필요합니다.");
+			return response;
+		}
 
-	    mypageService.cancelMateApplication(id, unlikeId);
-	    response.put("success", true);
+		mypageService.cancelMateApplication(id, unlikeId);
+		response.put("success", true);
 
-	    return response;
+		return response;
 	}
-	
+
 	@GetMapping(value = "/myIconListView")
-	public String myIconListView() {
+	public String myIconListView(HttpSession session, Model model) {
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "myIconListView");
 		return "mypage/myIconList";
 	}
-	
+
 	@GetMapping(value = "/myIconList.ajax")
 	@ResponseBody // JSON 형식으로 응답
 	public Map<String, Object> myIconList(String page, String cnt, HttpSession session, Model model) {
@@ -499,5 +580,405 @@ public class MypageController {
 
 		return result;
 	}
-	
+
+	@GetMapping(value = "/myBoardListView")
+	public String myBoardListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "myBoardListView");
+		return "mypage/myBoardList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/myBoardListView.ajax")
+	@ResponseBody
+	public Map<String, Object> myBoardList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.myBoardList(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
+	@GetMapping(value = "/myCommentListView")
+	public String myCommentListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "myBoardListView");
+		return "mypage/myCommentList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/myCommentList.ajax")
+	@ResponseBody
+	public Map<String, Object> myCommentList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.myCommentList(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
+	@GetMapping(value = "/likedBoardListView")
+	public String likedBoardListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "likedBoardListView");
+		return "mypage/likedBoardList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/likedBoardList.ajax")
+	@ResponseBody
+	public Map<String, Object> likedBoardList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.likedBoardList(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
+	@GetMapping(value = "/messageListView")
+	public String messageListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "messageListView");
+		return "mypage/messageList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/messageList.ajax")
+	@ResponseBody
+	public Map<String, Object> messageList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> params = new HashMap<>();
+		params.put("page", page_);
+		params.put("cnt", cnt_);
+		params.put("id", id);
+
+		// 서비스 호출
+		Map<String, Object> result = mypageService.messageList(params);
+		logger.info("Result from service: {}", result);
+		return result;
+	}
+
+	@GetMapping(value = "/crewMasterMessageListView")
+	public String crewMasterMessageListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "messageListView");
+		return "mypage/crewMasterMessageList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/crewMasterMessageList.ajax")
+	@ResponseBody
+	public Map<String, Object> crewMasterMessageList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+			
+		Map<String, Object> params = new HashMap<>();
+		params.put("page", page_);
+		params.put("cnt", cnt_);
+		params.put("id", id);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.crewMasterMessageList(params);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
+	@GetMapping(value = "/memberCrewListView")
+	public String memberCrewListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "memberCrewListView");
+		return "mypage/memberCrewList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/memberCrewList.ajax")
+	@ResponseBody
+	public Map<String, Object> memberCrewList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.memberCrewList(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
+	@GetMapping(value = "/requestedCrewListView")
+	public String requestedCrewListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "memberCrewListView");
+		return "mypage/requestedCrewList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/requestedCrewList.ajax")
+	@ResponseBody
+	public Map<String, Object> requestedCrewList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.requestedCrewList(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
+	@GetMapping(value = "/likedCrewListView")
+	public String likedCrewListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "memberCrewListView");
+		return "mypage/likedCrewList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/likedCrewList.ajax")
+	@ResponseBody
+	public Map<String, Object> likedCrewList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.likedCrewList(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
+	@GetMapping(value = "/likedMemberListView")
+	public String likedMemberListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "likedMemberListView");
+		return "mypage/likedMemberList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/likedMemberList.ajax")
+	@ResponseBody
+	public Map<String, Object> likedMemberList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.likedMemberList(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
+	@GetMapping(value = "/blockMemberListView")
+	public String blockMemberListView(HttpSession session, Model model) {
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return "member/login"; // 로그인 페이지로 리다이렉트
+		}
+		MemberDTO member = mypageService.profileDetail(id);
+		model.addAttribute("member", member);
+		model.addAttribute("pageName", "likedMemberListView");
+		return "mypage/blockMemberList"; // 로그인된 경우 리스트 페이지로 이동
+	}
+
+	@GetMapping(value = "/blockMemberList.ajax")
+	@ResponseBody
+	public Map<String, Object> blockMemberList(String page, String cnt, HttpSession session, Model model) {
+		logger.info("list called with page: {}, cnt: {}", page, cnt);
+
+		// 세션에서 사용자 ID를 가져오기
+		String id = (String) session.getAttribute("loginId");
+		if (id == null) {
+			logger.warn("User not logged in. Redirecting to login page.");
+			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
+			return null; // AJAX 요청에 대한 적절한 응답을 반환
+		}
+
+		// 페이지와 항목 수 변환
+		int page_ = Integer.parseInt(page);
+		int cnt_ = Integer.parseInt(cnt);
+
+		// 서비스 호출 시 ID 전달
+		Map<String, Object> result = mypageService.blockMemberList(page_, cnt_, id);
+		logger.info("Result from service: {}", result);
+
+		return result;
+	}
+
 }

@@ -23,7 +23,8 @@
 		member.id =
 		profile.id
 		WHERE
-		member.id = #{id} LIMIT 1;
+		member.id = #{id} LIMIT
+		1;
 
 	</select>
 
@@ -86,7 +87,6 @@
 	</update>
 
 	<insert id="firstExerciseProfile" parameterType="map">
-		<!-- 프로필 정보 삽입 -->
 		INSERT INTO profile (
 		id,
 		image,
@@ -236,7 +236,7 @@
 	</select>
 
 	<select id="getFriendRequests" resultType="map">
-		SELECT unlike_id,
+		SELECT id, unlike_id,
 		create_date
 		FROM mate_application
 		WHERE id= #{id}
@@ -246,16 +246,19 @@
 	</select>
 
 	<select id="countFriendRequests" resultType="int">
-		SELECT COUNT(*)
-		FROM
-		mate_application
+		SELECT CEIL(COUNT(*)
+		/ #{cnt})
+		AS
+		pages
+		FROM mate_application
 		WHERE id = #{id}
 	</select>
 
 	<select id="getProfileData" parameterType="String"
 		resultType="map">
-		SELECT * FROM profile WHERE id = #{userId}
+		SELECT * FROM profile WHERE id = #{toUserId}
 	</select>
+
 	<insert id="acceptFriendRequest" parameterType="map">
 		INSERT INTO mate
 		(id, unlike_id, mate_date)
@@ -296,12 +299,304 @@
 	</delete>
 
 	<select id="myIconList" resultType="map">
-		SELECT icon_idx, buy_date
+		SELECT icon_idx, buy_date, buy_idx
 		FROM icon_buy
 		WHERE id = #{id}
 		ORDER BY buy_date DESC
 		LIMIT #{limit}
 		OFFSET #{offset}
+	</select>
+	
+	<select id="countMyIconList" resultType="int">
+		SELECT CEIL(COUNT(*)
+		/#{cnt})
+		AS
+		pages FROM
+		icon_buy
+		WHERE id = #{id}
+	</select>
+
+	<select id="myMateList" resultType="map">
+		SELECT id, unlike_id,
+		mate_date
+		FROM mate
+		WHERE id = #{id} OR unlike_id = #{id}
+		ORDER BY
+		mate_date DESC
+		LIMIT
+		#{limit}
+		OFFSET #{offset}
+	</select>
+
+	<select id="countFriends" resultType="int">
+		SELECT CEIL(COUNT(*)
+		/#{cnt})
+		AS
+		pages FROM
+		mate
+		WHERE id = #{id}
+	</select>
+
+	<select id="myBoardList" resultType="map">
+		SELECT board_idx, id,
+		subject, create_date
+		FROM board
+		WHERE id = #{id}
+		ORDER BY create_date
+		DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="countBoard" resultType="int">
+		SELECT CEIL(COUNT(*) /
+		#{cnt})
+		AS
+		pages
+		FROM board
+		WHERE id = #{id}
+	</select>
+
+	<select id="myCommentList" resultType="map">
+		SELECT c.comment_idx,
+		c.board_idx, c.content, c.create_date, c.nickname,
+		b.id
+		FROM comment c
+		JOIN board b ON c.board_idx = b.board_idx
+		WHERE b.id = #{id}
+		ORDER BY
+		c.create_date DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="countComment" resultType="int">
+		SELECT CEIL(COUNT(*) /
+		#{cnt}) AS pages
+		FROM comment c
+		JOIN board b ON c.board_idx =
+		b.board_idx
+		WHERE b.id = #{id}
+	</select>
+
+	<select id="likedBoardList" resultType="map">
+		SELECT l.board_idx, l.id,
+		b.create_date, b.subject
+		FROM likes l
+		JOIN board b ON l.board_idx =
+		b.board_idx
+		WHERE l.id = #{id}
+		ORDER BY l.board_idx DESC
+		LIMIT #{limit}
+		OFFSET #{offset}
+	</select>
+
+	<select id="countLike" resultType="int">
+		SELECT CEIL(COUNT(*) /
+		#{cnt})
+		AS
+		pages
+		FROM likes
+		WHERE id = #{id}
+	</select>
+
+	<select id="messageList" resultType="map">
+		SELECT DISTINCT cl.chat_idx,
+		CASE
+		WHEN cl.id = u1.id THEN u2.id
+		ELSE u1.id
+		END AS other_id,
+		c.create_date
+		FROM chat_link cl
+		JOIN chat c ON cl.chat_idx = c.chat_idx
+		JOIN chat_link u1 ON u1.chat_idx = cl.chat_idx
+		JOIN chat_link u2 ON
+		u2.chat_idx = cl.chat_idx
+		WHERE cl.id = #{id} AND u1.id != #{id}
+		ORDER
+		BY c.create_date DESC LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="countMessage" resultType="int">
+		SELECT CEIL(COUNT(*) /
+		#{cnt})
+		AS
+		pages
+		FROM chat_link
+		WHERE id = #{id}
+	</select>
+
+	<select id="crewMasterMessageList" resultType="map">
+		SELECT ccl.chat_idx,
+		CASE
+		WHEN ccl.id = u1.id THEN u2.id
+		ELSE u1.id
+		END AS other_id,
+		MAX(ccc.create_date) AS message_date
+		FROM crew_chat_link ccl
+		JOIN crew_chat cc ON ccl.chat_idx = cc.chat_idx
+		JOIN crew_chat_content ccc ON ccl.chat_idx = ccc.chat_idx
+		JOIN crew_chat_link u1 ON u1.chat_idx = cc.chat_idx
+		JOIN crew_chat_link u2 ON u2.chat_idx = cc.chat_idx AND u2.id != ccl.id
+		WHERE ccl.id = #{id}
+		GROUP BY ccl.chat_idx, other_id
+		ORDER BY message_date DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="countCrewMessage" resultType="int">
+		SELECT CEIL(COUNT(*) /
+		#{cnt})
+		AS
+		pages
+		FROM crew_chat_link
+		WHERE id = #{id}
+	</select>
+
+	<select id="memberCrewList" resultType="map">
+		SELECT
+		c.crew_name,
+		c.member,
+		c.current_member,
+		c.days,
+		c.address,
+		c.crew_idx
+		FROM
+		crew_member
+		cm
+		JOIN
+		crew c ON cm.crew_idx =
+		c.crew_idx
+		WHERE
+		cm.id = #{id}
+		ORDER BY
+		cm.create_date DESC
+		LIMIT #{limit}
+		OFFSET #{offset}
+	</select>
+
+	<select id="countMemberCrewList" resultType="int">
+		SELECT CEIL(COUNT(*)
+		/ #{cnt})
+		AS
+		pages
+		FROM crew_member
+		WHERE crew_member.id = #{id}
+	</select>
+
+	<select id="requestedCrewList" resultType="map">
+		SELECT
+		ca.application_idx,
+		c.crew_name,
+		c.member,
+		c.current_member,
+		c.days,
+		c.address,
+		c.crew_idx
+		FROM
+		crew_application ca
+		JOIN
+		crew c ON ca.crew_idx =
+		c.crew_idx
+		WHERE
+		ca.id = #{id}
+		ORDER BY
+		ca.create_date DESC
+		LIMIT #{limit}
+		OFFSET #{offset}
+	</select>
+
+	<select id="countRequestedCrewList" resultType="int">
+		SELECT
+		CEIL(COUNT(*) / #{cnt})
+		AS
+		pages
+		FROM crew_application
+		WHERE
+		crew_application.id = #{id}
+	</select>
+
+	<select id="likedCrewList" resultType="map">
+		SELECT
+		c.crew_name,
+		c.member,
+		c.current_member,
+		c.days,
+		c.address,
+		cl.crew_idx
+		FROM
+		crew_like cl
+		JOIN
+		crew c ON cl.crew_idx = c.crew_idx
+		WHERE
+		cl.id = #{id}
+		ORDER BY
+		c.create_date DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="countLikedCrewList" resultType="int">
+		SELECT CEIL(COUNT(*)
+		/ #{cnt})
+		AS
+		pages
+		FROM crew_like
+		WHERE crew_like.id = #{id}
+	</select>
+
+	<select id="likedMemberList" resultType="map">
+		SELECT
+		im.id,
+		im.request_date,
+		im.unlike_id,
+		m.nickname,
+		m.address,
+		m.birth,
+		m.gender
+		FROM
+		interest_member im
+		JOIN
+		member m ON im.unlike_id = m.id 
+		WHERE
+		im.id = #{id}
+		ORDER BY
+		request_date DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="countLikedMemberList" resultType="int">
+		SELECT
+		CEIL(COUNT(*) / #{cnt}) AS pages
+		FROM interest_member
+		WHERE
+		interest_member.id = #{id}
+	</select>
+
+	<select id="blockMemberList" resultType="map">
+		SELECT
+		bm.id,
+		bm.block_date,
+		bm.unlike_id,
+		m.nickname,
+		m.address,
+		m.birth,
+		m.gender
+		FROM
+		block_member bm
+		JOIN
+		member m ON bm.unlike_id = m.id 
+		WHERE
+		bm.id = #{id} 
+		ORDER BY
+		block_date
+		DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="countBlockMemberList" resultType="int">
+		SELECT
+		CEIL(COUNT(*) / #{cnt}) AS pages
+		FROM block_member
+		WHERE block_member.id
+		= #{id}
 	</select>
 
 </mapper>   	

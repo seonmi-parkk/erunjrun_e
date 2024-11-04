@@ -127,8 +127,8 @@ public class MypageService {
 		return result;
 	}
 	
-	public Map<String, Object> getProfileData(String userId) {
-	    return mypageDAO.getProfileData(userId);
+	public Map<String, Object> getProfileData(String toUserId) {
+	    return mypageDAO.getProfileData(toUserId);
 	}
 
 	public void acceptFriendRequest(String id, String unlikeId) {
@@ -190,5 +190,234 @@ public class MypageService {
 		return result;
 	}
 
+	public Map<String, Object> myMateList(int page, int cnt, String id) {
+		logger.info("Service getAppliedMates 호출됨: page={}, cnt={}, id={}", page, cnt, id);
 
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+	    int totalCount = mypageDAO.countFriends(id, cnt); // ID를 이용해 전체 수 계산
+	    logger.info("Total friend requests count: {}", totalCount);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalCount", totalCount);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.myMateList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result from getAppliedMates: {}", result); // 데이터 확인
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+	
+	public Map<String, Object> myBoardList(int page, int cnt, String id) {
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countBoard(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.myBoardList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+
+	public Map<String, Object> myCommentList(int page, int cnt, String id) {
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countComment(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.myCommentList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+	
+	public Map<String, Object> likedBoardList(int page, int cnt, String id) {
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countLike(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.likedBoardList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+	
+	public Map<String, Object> messageList(Map<String, Object> params) {
+		logger.info("Params: {}", params);
+		 // Map에서 필요한 값 추출
+	    int page = (Integer) params.get("page");
+	    int cnt = (Integer) params.get("cnt");
+	    String id = (String) params.get("id"); // userId를 params에서 가져옴
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countMessage(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.messageList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+
+	public Map<String, Object> crewMasterMessageList(Map<String, Object> params) {
+		logger.info("Params: {}", params);
+		 // Map에서 필요한 값 추출
+	    int page = (Integer) params.get("page");
+	    int cnt = (Integer) params.get("cnt");
+	    String id = (String) params.get("id"); // userId를 params에서 가져옴
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countCrewMessage(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.crewMasterMessageList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+	
+	public Map<String, Object> memberCrewList(int page, int cnt, String id) {
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countMemberCrewList(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.memberCrewList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+	
+	public Map<String, Object> requestedCrewList(int page, int cnt, String id) {
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countRequestedCrewList(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.requestedCrewList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+	
+	public Map<String, Object> likedCrewList(int page, int cnt, String id) {
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countLikedCrewList(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.likedCrewList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+
+		return result;
+	}
+	
+	public Map<String, Object> likedMemberList(int page, int cnt, String id) {
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+		
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+		
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countLikedMemberList(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+		
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.likedMemberList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+		
+		return result;
+	}
+	
+	public Map<String, Object> blockMemberList(int page, int cnt, String id) {
+		logger.info("Service list called with page: {}, cnt: {}, memberId: {}", page, cnt, id);
+		
+		int limit = cnt;
+		int offset = (page - 1) * cnt;
+		
+		// 전체 페이지 수 계산
+		int totalPages = mypageDAO.countBlockMemberList(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalPages);
+		
+		// 결과 맵 생성
+		Map<String, Object> result = new HashMap<>();
+		result.put("totalpages", totalPages);
+		result.put("currPage", page);
+		result.put("list", mypageDAO.blockMemberList(limit, offset, id)); // ID를 이용해 리스트 가져오기
+		logger.info("Result map: {}", result);
+		
+		return result;
+	}
 }

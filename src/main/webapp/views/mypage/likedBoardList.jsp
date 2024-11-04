@@ -177,15 +177,15 @@ h3 {
 		</aside>
 		<div class="divider"></div>
 		<div class="container">
-			<h3>포인트 내역</h3>
+			<h3>좋아요 게시글</h3>
 
 			<table>
 				<thead>
 					<tr>
-						<th>구분</th>
-						<th>내용</th>
-						<th>적립일</th>
-						<th>적립 포인트</th>
+						<th>글번호</th>
+						<th>제목</th>
+						<th>글쓴이</th>
+						<th>작성일자</th>
 					</tr>
 				</thead>
 				<tbody id="list">
@@ -214,107 +214,86 @@ h3 {
 <jsp:include page="../footer.jsp" />
 
 <script>
-	var show = 1;
-	const itemsPerPage = 15; // 페이지당 항목 수 고정
+    var show = 1;
+    const itemsPerPage = 15; // 페이지당 항목 수
 
-	// 초기 리스트 불러오기
-	pageCall(show);
+    // 초기 리스트 불러오기
+    pageCall(show);
 
-	// 페이지 호출 함수
-	function pageCall(page) {
-		$.ajax({
-			type : 'GET',
-			url : 'pointHistoryList.ajax',
-			data : {
-				'page' : page,
-				'cnt' : itemsPerPage
-			// 고정된 값 사용
-			},
-			dataType : 'JSON',
-			success : function(data) {
-				console.log("AJAX call successful: ", data);
+ // 페이지 호출 함수
+    function pageCall(page) {
+        $.ajax({
+            type: 'GET',
+            url: 'likedBoardList.ajax',
+            data: {
+                'page': page,
+                'cnt': itemsPerPage
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                console.log("AJAX call successful: ", data);
 
-				if (data.error) {
-					alert(data.error); // 로그인 필요 메시지 표시
-					window.location.href = 'member/login'; // 로그인 페이지로 리다이렉트
-				} else {
-					drawList(data.list);
-					$('#pagination').twbsPagination({ // 페이징 객체 만들기
-						startPage : 1,
-						totalPages : data.totalpages,
-						visiblePages : 5,
-						onPageClick : function(evt, page) {
-							pageCall(page);
-						}
-					});
-				}
-			},
-			error : function(e) {
-				console.error("AJAX call failed: ", e);
-			}
-		});
-	}
-
-	// 리스트 그리기 함수
-	// 리스트 그리기 함수
-function drawList(list) {
-    var content = '';
-    
-    // Check if the list is empty
-    if (list.length === 0) {
-        content = '<tr><td colspan="4" style="text-align: center;">포인트 내역이 없습니다.</td></tr>';
-    } else {
-        list.forEach(function(view) {
-            if (view) {
-                // 타임스탬프를 Date 객체로 변환 후 포맷팅
-                var date = new Date(view.create_date);
-                var formattedDate = date.toLocaleString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                });
-
-                // 구분 설정
-                var category = view.point >= 0 ? '적립' : '소모';
-                // 내용 설정
-                var contentDescription = '';
-                switch (view.code_name) {
-                    case 'P100':
-                        contentDescription = '최초 프로필 등록 + 10';
-                        break;
-                    case 'P101':
-                        contentDescription = '게시판 작성 + 5';
-                        break;
-                    case 'P102':
-                        contentDescription = '댓글 작성 + 2';
-                        break;
-                    case 'P103':
-                        contentDescription = '좋아요 +2 ';
-                        break;
-                    case 'P104':
-                        contentDescription = '아이콘 구매 - 100';
-                        break;
-                    default:
-                        contentDescription = view.code_name; // 기본적으로 코드 그대로 출력
+                if (data.error) {
+                    alert(data.error);
+                    window.location.href = 'member/login';
+                } else {
+                    drawList(data.list); // 리스트 그리기
+                    setupPagination(data.totalpages, page); // 페이지네이션 설정
                 }
-
-                content += '<tr>';
-                content += '<td>' + category + '</td>'; // 구분 추가
-                content += '<td>' + contentDescription + '</td>'; // 내용 추가
-                content += '<td>' + formattedDate + '</td>'; // 포맷된 날짜 사용
-                content += '<td>' + view.point + '</td>'; // 포인트 추가
-                content += '</tr>';
-            } else {
-                console.warn('View is null or undefined', view);
+            },
+            error: function(e) {
+                console.error("AJAX call failed: ", e);
             }
         });
     }
-    
-    $('#list').html(content);
-}
+
+    // 리스트 그리기 함수
+    function drawList(list) {
+        var content = '';
+
+        // 데이터가 없을 경우 빈 행 추가
+        if (list.length === 0) {
+            content += '<tr><td colspan="4" class="text-center">좋아요한 게시글이 없습니다.</td></tr>';
+        } else {
+            list.forEach(function(view) {
+                if (view) {
+                    // 타임스탬프를 Date 객체로 변환 후 포맷팅
+                    var date = new Date(view.create_date);
+                    var formattedDate = date.toLocaleString('ko-KR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    });
+
+                    content += '<tr>';
+                    content += '<td>' + view.board_idx + '</td>'; // 글번호
+                    content += '<td>' + view.subject + '</td>'; // 제목
+                    content += '<td>' + view.id + '</td>'; // 글쓴이
+                    content += '<td>' + formattedDate + '</td>'; // 작성일자
+                    content += '</tr>';
+                } else {
+                    console.warn('View is null or undefined', view);
+                }
+            });
+        }
+
+        $('#list').html(content);
+    }
+
+    // 페이지네이션 설정 함수
+    function setupPagination(totalPages, currentPage) {
+        $('#pagination').twbsPagination({
+            startPage: currentPage,
+            totalPages: totalPages > 0 ? totalPages : 1, // 항상 1페이지로 설정
+            visiblePages: 5,
+            onPageClick: function(evt, page) {
+                pageCall(page);
+            }
+        });
+    }
 </script>
 </html>
