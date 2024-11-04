@@ -150,7 +150,7 @@ public class ChatPersonalController {
 	    
 	    /////////////////////크루장 채팅
 	    @GetMapping("/crewMgchat/{crewIdx}/{userId}")
-		 @ResponseBody
+		@ResponseBody
 	     public Map<String, Object> getCrewLeaderChat(@PathVariable String crewIdx, @PathVariable String userId){
 			 Map<String, Object> data = new HashMap<String, Object>();
 			 //logger.info("crewIdx : {}, baseUser: {}",crewIdx,userId);
