@@ -65,7 +65,6 @@ public class IconService {
 		iconDAO.updateMemberTable(userId);
 		iconDAO.buyIcon(iconIdx, userId);
 		success = true;
-		logger.info("success"+success);
 		return success;
 	}
 
@@ -77,25 +76,36 @@ public class IconService {
 		return iconDAO.adminIconList(limit,offset);
 	}
 
-	public void adminIconWrite(MultipartFile file, Map<String, String> param) {
+	
+	public void FileSave(MultipartFile file, Map<String, String> param) {
 		String fileName = file.getOriginalFilename();
 		String ext = fileName.substring(fileName.lastIndexOf("."));
 		String newFileName = UUID.randomUUID().toString()+ext;
 		
 		try {
-//			byte[] arr = file.getBytes();
-//			Path path = Paths.get("/resources/img/icon/");
-			String path = "/resources/img/icon/"+ newFileName;
-			file.transferTo(new File(path));
-			//Path path = Paths.get("C:/upload/"+newFileName);
-			//Files.write(path, arr);
+			byte[] arr = file.getBytes();
+
+			Path path = Paths.get("C:/upload/"+newFileName);
+			Files.write(path, arr);
 			param.put("newFileName", newFileName);
-			param.put("path", path);
-			iconDAO.adminIconWrite(param);
+			param.put("path", newFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+	}
+	
+	public void adminIconWrite(MultipartFile file, Map<String, String> param) {
+		FileSave(file,param);
+		iconDAO.adminIconWrite(param);
+	}
+
+	public IconDTO adminIconData(String icon_idx) {
+		return iconDAO.adminIconData(icon_idx);
+	}
+
+	public void adminIconUpdate(MultipartFile file, Map<String, String> param) {
+		FileSave(file,param);
+		iconDAO.adminIconUpdate(param);
 	}
 
 	

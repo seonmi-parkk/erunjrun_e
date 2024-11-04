@@ -34,6 +34,10 @@ public interface IconDAO {
 
 	public int adminIconWrite(Map<String, String> param);
 
+	public IconDTO adminIconData(String icon_idx);
+
+	public int adminIconUpdate(Map<String, String> param);
+
 
 	
 	

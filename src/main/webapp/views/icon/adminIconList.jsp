@@ -92,13 +92,13 @@
     	margin: 0 auto;
     	position: relative;
     }
-    .admin-icon-list .profile-box {
+    .admin-icon-list .profile-area .profile-box {
 		position: absolute; top: 50%; left: 50%;
 		transform: translate(-50%, -50%);
 		width: 44px; height: 44px;
 		margin-right: 2px;
 	}
-	.admin-icon-list .profile-img {
+	.admin-icon-list .profile-area .profile-img {
 		position: absolute; top: 50%; left: 50%;
 		transform: translate(-50%, -50%);
 		width: 33px; height: 33px;
@@ -197,9 +197,15 @@
 			success:function(data){
 				console.log(data);
 				drawList(data.iconList);
+				
+				var totalCount = data.iconList[0].total_count;  // 총 게시글 수
+	            var pageSize = 15;  // 한 페이지당 게시글 수
+	            var totalPages = Math.ceil(totalCount / pageSize);  // 총 페이지 수 계산
+				console.log("totalCount",totalCount,"totalPages",totalPages);
+	            
 				$('#pagination').twbsPagination({ // 페이징 객체 만들기
 				startPage:1, 
-           		totalPages:data.total_count, 
+           		totalPages: totalPages, 
            		visiblePages:10,
            
            		onPageClick:function(evt,page){
@@ -220,15 +226,16 @@
 		 for (var view of list) {
 			content +='<tr>';
             content += '<td>'+view.icon_name+'</td>';
-            content += '<td><div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url('+view.image+') center center / 100% 100% no-repeat;"></div></div></td>';
+            content += '<td><div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/photo/'+view.image+') center center / 100% 100% no-repeat;"></div></div></td>';
             content += '<td>'+view.cost+'p</td>';
             if (view.use_yn == 'Y') {
                 content += '<td style="color: green;">사용중</td>';
             } else {
             	content += '<td style="color: red;">미사용</td>';
             }
-			content +='<td><a  href="/adminIconUpdate"style="color: orange;">수정</a></td>';
+			content +='<td><a  href="/adminIconData/'+view.icon_idx+'" style="color: orange;">수정</a></td>';
 			content +='</tr>';
+			console.log("view.icon_idx",view.icon_idx);
 		  }
 	      $('#list').html(content);
 	   }

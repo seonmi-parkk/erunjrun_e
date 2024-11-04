@@ -3,29 +3,28 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>이런저런</title>
+<title>아이콘 수정</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="resources/css/common.css">
+<link rel="stylesheet" href="/resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 
 	.input-container {
-    display: flex;        /* Flexbox 사용 */
-    align-items: center; /* 수직 중앙 정렬 */
-    margin-bottom: 20px;
-    margin-top: 20px;
+	    display: flex;        /* Flexbox 사용 */
+	    align-items: center; /* 수직 중앙 정렬 */
+	    margin-bottom: 20px;
+	    margin-top: 20px;
 	}
 	#text{
-   
-    margin-right: 15px
+	    margin-right: 15px
 	}
 	body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
+	    display: flex;
+	    flex-direction: column;
+	    min-height: 100vh;
+	    margin: 0;
 	}
 
 /* 헤더 스타일 */
@@ -72,11 +71,10 @@
 	    overflow: auto;
 	}
     .radio{
-    	
     	 transform: scale(1.5);
     }
     
-  #content{
+    #content{
     	width: 750px; /* 너비를 250픽셀로 설정 */
         height: 350px;
         resize: none; /* 높이를 50픽셀로 설정 */
@@ -86,23 +84,40 @@
        	border: 1px solid var(--input-bd);
     }
     #radio{
-    margin-left: 10px;
+    	margin-right: 4px;
     }
-   #short,#searchOption{
-   width: 100px; /* 너비를 250픽셀로 설정 */
-   font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
-   padding: 10px; 
+     #radio + span{
+     	margin-right: 14px;
+     }
+    #short,#searchOption{
+	   width: 100px; /* 너비를 250픽셀로 설정 */
+	   font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
+	   padding: 10px; 
    }
    
     
 	.btn01-l{
-	margin-top: 50px;
-	margin-left: 650px;
+		margin-top: 50px;
+		/* margin-left: 650px; */
 	}
 	#dot{
-	font-size: 34px;
-	color: #FB7E3A;
+		font-size: 34px;
+		color: #FB7E3A;
 	}
+	input[name="cost"]#text{
+		margin-right: 8px;
+	}
+	.title2#text {
+		width: 74px;
+	}
+	#img_miri {
+         width: 360px;    
+         height: 360px;       
+         margin-right: 10px;
+         border: 1px solid var(--input-bd); 
+         background-color: transparent;  
+         overflow: hidden;
+     }
 	
 </style>
 </head>
@@ -115,7 +130,7 @@
 	 <div class="content-wrapper">	
 		<aside class="fixed-left">
             <div class="image">
-                <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+                <img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
             </div>
             <p class="title2" id="admin_name">관리자</p>
             <p class="title3" onclick="location.href='adminMember'">회원정보</p>
@@ -129,105 +144,50 @@
         </aside>
 	 	<main class="main-content">
 	 	
-		<p class="title1" >팝업</p>
+		<p class="title1" >아이콘 수정</p>
 		
 		
-	  	<form action="adminPopupUpdate" method="post" id="form" enctype="multipart/form-data">
+	  	<form action="/adminIconUpdate" method="post" id="form" enctype="multipart/form-data">
 	  	
-		<div class="input-container">
+			<input type="hidden" name="icon_idx" id="text" value="${iconDto.icon_idx}"/>
+			<div class="input-container">
+				<p class="title2" id="dot">•</p>
+				<p class="title2" id="text">아이콘명</p>
+				<input type="text" name="icon_name" id="text" value="${iconDto.icon_name}"/>
+			</div>
+			<div class="input-container">
+				<p class="title2" id="dot">•</p>
+				<p class="title2" id="text">가격</p>
+				<input type="text" name="cost" id="text" value="${iconDto.cost}"/>P
+			</div>
+			<!-- <input type="text" name="code_name" id="text" value="PP100" hidden=""/> -->
+			
+			<div class="input-container">
 			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">제목</p>
-			<input type="text" name="subject" id="text" value="check"/>
-		</div>
-		
-		<input type="text" name="popup_idx" id="text" value="$check" hidden=""/>
-			<input type="text" name="code_name" id="text" value="PP100" hidden=""/>
-		
-		<div class="input-container">
-	    <p class="title2" id="dot">•</p>
-	    <p class="title2" id="text">이미지</p>
-	    <input type="file" name="file" id="fileInput" multiple="multiple" onchange="previewImage(event)">      
-	
-	    <!-- 기존 이미지 미리보기 (수정 페이지에서만 사용) -->
-<%-- 	    <c:if test="${not empty file}">
-	        <div id="currentImageContainer">
-	            <img alt="${file.img_ori}" src="/photo/${file.img_new}" id="currentImage" style="max-width: 200px;">
-	            <button type="button" class="btn01-m" id="deleteImageBtn">이미지 삭제</button>
-	        </div>
-	    </c:if> --%>
-	
-	    <!-- 새 이미지 미리보기 -->
-	    <div id="newImageContainer" style="display: none;">
-	        <img id="newImagePreview" style="max-width: 200px;">
-	    </div>
-		<div>
-		    <input type="hidden" name="deleteImage" value="N" id="deleteImageFlag"/>
-		</div>
-
-					
-		</div>
-		<div class="input-container">
-		<p class="title2" id="dot">•</p>
-		<p class="title2" id="text">순서</p>
-		<select id="searchOption" name="priority">
-            <option value="1" <c:if test="${info.priority eq 1}">selected</c:if>>1</option>
-		    <option value="2" <c:if test="${info.priority eq 2}">selected</c:if>>2</option>
-		    <option value="3" <c:if test="${info.priority eq 3}">selected</c:if>>3</option>
-        </select>
-		</div>
-		
-		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">사용여부</p>
-			<input type="radio" name="use_yn" value="Y" class="raido" id="radio"
-			<c:if test="${info.use_yn eq 'Y'}">checked</c:if>						
-				/>사용
-		
-			<input type="radio" name="use_yn" value="N" class="raido" id="radio"
-			<c:if test="${info.use_yn eq 'N'}">checked</c:if>						
-				/>미사용
-		</div>
-		
-		
-		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">위치</p>
-			<p class="title2" id="text"> X: </p>
-			<input type="text" name="x" id="short" value="${info.x}"/>
-			<p class="title2" id="text"> Y: </p>
-			<input type="text" name="y" id="short" value="${info.y}"/>
-		</div>
-		
-		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">크기</p>
-			<p class="title2" id="text"> 가로: </p>
-			<input type="text" name="width" id="short" value="${info.width}"/>
-			<p class="title2" id="text"> 세로: </p>
-			<input type="text" name="height" id="short" value="${info.height}"/>
-		</div>
-		
-		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">기간</p>
-			<input type="date" name="start_date" id="start_date" value="${info.start_date}"/>
-			<p class="title2" id=""> ~ </p>
-			<input type="date" name="end_date" id="end_date" value="${info.end_date}"/>
-		</div>
-		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">내용</p>
-			<textarea name="content" id="content" >${info.content}</textarea>
-		</div>
-		
-
-   	<button class="btn01-l" type="submit" id="text">수정</button>
-	<div class="btn02-l" onclick="location.href='adminPopup'">취소</div> <!-- 클릭시 색깔변경 -->
+			<p class="title2" id="text">이미지</p>
+			<div id="img_miri"></div>
+			<input type="file" name="file" onchange="readFile(this)">	
+			</div>
+			
+			<div class="input-container">
+				<p class="title2" id="dot">•</p>
+				<p class="title2" id="text">활성여부</p>
+				<input type="radio" name="use_yn" value="Y" class="raido" id="radio" 
+					<c:if test="${iconDto.use_yn eq 'Y'}">
+						checked 
+					</c:if>
+				/><span>활성</span>
+				
+				<input type="radio" name="use_yn" value="N" class="raido" id="radio"
+					<c:if test="${iconDto.use_yn eq 'N'}">
+						checked 
+					</c:if>				
+				/><span>비활성</span>
+			</div>
+			
+			
+		   	<button class="btn01-l" type="submit" id="text">등록</button>
+			<div class="btn02-l" onclick="location.href='/adminIconList'">취소</div> <!-- 클릭시 색깔변경 -->
 	</form>
 	 </main>
 	</div>
@@ -239,26 +199,22 @@
 
 
 <script>
-    // 이미지 삭제 버튼 클릭 시
-    $('#deleteImageBtn').on('click', function() {
-        $('#deleteImageFlag').val('Y'); // 이미지 삭제 플래그 설정
-        $('#currentImageContainer').hide(); // 기존 이미지 숨기기
-    });
-
-    // 새 이미지 선택 시 미리보기 기능
-    function previewImage(event) {
-        var file = event.target.files[0];
-        if (file) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#newImagePreview').attr('src', e.target.result);
-                $('#newImageContainer').show(); // 새 이미지 컨테이너 표시
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+	//크루 대표 이미지 미리보기
+	 $('#img_miri').append('<img class="preview" width="360px" height="360px" src="/photo/${iconDto.image}"/>');   
+	function readFile(input) {
+	    var reader;
+	    $('#img_miri').empty();
+	
+	    for (var file of input.files) {
+	        reader = new FileReader();
+	        reader.readAsDataURL(file);
+	        reader.onload = function (e) {
+	            $('#img_miri').append('<img class="preview" width="360px" height="360px" src="' + e.target.result + '"/>');
+	        }
+	    }
+	}
+    
 </script>
-
-<script src="resources/js/common.js" type="text/javascript"></script>
-<script src="resources/js/layerPopup.js"></script>
+<script src="/resources/js/common.js" type="text/javascript"></script>
+<script src="/resources/js/layerPopup.js"></script>
 </html>

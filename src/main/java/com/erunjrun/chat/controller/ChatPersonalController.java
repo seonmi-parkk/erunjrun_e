@@ -164,7 +164,7 @@ public class ChatPersonalController {
 	    
 	    /////////////////////크루장 채팅
 	    @GetMapping("/crewMgchat/{crewIdx}/{userId}")
-		 @ResponseBody
+		@ResponseBody
 	     public Map<String, Object> getCrewLeaderChat(@PathVariable String crewIdx, @PathVariable String userId){
 			 Map<String, Object> data = new HashMap<String, Object>();
 			 //logger.info("crewIdx : {}, baseUser: {}",crewIdx,userId);
@@ -203,8 +203,10 @@ public class ChatPersonalController {
 		 @GetMapping("/crewLdchat/data/{chatIdx}")
 		 @ResponseBody
 		 public Map<String, Object> getCrewLeaderContent(@PathVariable String chatIdx, HttpSession session){
+			 logger.info("/crewLdchat/data 컨트롤러 시작");
 			 String baseUser = (String) session.getAttribute("loginId");
 			 Map<String, Object> values = chatPersonalService.getCrewLeaderContent(chatIdx, baseUser);
+			 logger.info("sender :" + values.get("sender"));
 			 
 			 List<ChatCrewLeaderDTO> list = (List<ChatCrewLeaderDTO>) values.get("msgList");
 			 for (int num = 0; num<list.size(); num++) {				
