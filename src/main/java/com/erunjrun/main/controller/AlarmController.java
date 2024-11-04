@@ -97,12 +97,15 @@ public class AlarmController {
 	// 게시글 댓글 알림
 	public void boardComment(int board_idx, String from_id, String board_name) {
 		alarm_dto.setSubject("게시글 댓글");
-		alarm_dto.setCode_name("");
+		alarm_dto.setCode_name("AB100");
 		alarm_dto.setIs_url("Y");
+		alarm_dto.setIdx(board_idx);
+		alarm_dto.setFrom_id(from_id);
 		
 		if(board_name.equals("R")) {
-	//		alarm_dto.setUrl("/run");
+			alarm_dto.setUrl("/runBoardDetail/"+board_idx); // 러닝 코스 게시판
+		}else {
+			alarm_dto.setUrl(""+board_idx); // 자유 게시판
 		}
-		alarm_dto.setIdx(board_idx);
 	}
 }
