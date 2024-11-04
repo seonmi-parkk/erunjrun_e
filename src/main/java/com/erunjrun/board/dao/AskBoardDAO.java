@@ -13,6 +13,6 @@ public interface AskBoardDAO {
 
 	List<RunBoardDTO> askList(int limit, int offset, String code_name);
 
-	int ask();
+	
 
 }

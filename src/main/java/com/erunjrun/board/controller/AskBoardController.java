@@ -1,6 +1,5 @@
 package com.erunjrun.board.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,14 +53,11 @@ public class AskBoardController {
 		}
 		
 		@GetMapping(value="/askBoardWrite")
-		public String write(Model model) {
-			
-			int row = askService.ask();
-			
-			model.addAttribute("ask", row);
-			
+		public String write() {			
 			return "askBoard/askBoardWrite";
 		}
+		
+		
 	
 	
 	

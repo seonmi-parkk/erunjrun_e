@@ -99,11 +99,11 @@
                     </div> <br>
                     <span class="title2" style="width: 140px; margin-left: 14px; margin-top: 4px;">카테고리 <span class="requiredText">※ 필수</span></span>
                         <span id="tagFilters">
-                            <label><input type="checkbox" name="tag_idx_list" value="1">크루</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="2">‍러닝메이트</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="3">게시글</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="4">회원</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="5">기타</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="Q100">크루</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="Q101">‍러닝메이트</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="Q102">게시글</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="Q103">회원</label>
+                            <label><input type="checkbox" name="tag_idx_list" value="Q104">기타</label>
                          </span> <br>
                     <div class="boxheigth">
                         
@@ -151,7 +151,7 @@
          
         // 레이어 팝업
 	 	function secondBtn1Act() {
-	 	    // 두번째팝업 1번버튼 클릭시 수행할 내용
+	 	// 두번째팝업 1번버튼 클릭시 수행할 내용
 	 	    console.log('두번째팝업 1번 버튼 동작');
 	 	// formData 생성
             var formData = new FormData($('form')[0]);
@@ -186,17 +186,21 @@
             var subject = $("input[name='subject']").val();
             var content = $('#summernote').val();
             var userId = "${sessionScope.loginId}";  // 세션에서 사용자 ID 가져오기
+			var code_name =$('input[name="tag_idx_list"]:checked').val();
+            console.log("선택한 태그의 코드네임 ->",code_name);
 
-
-
+			
             formData.append('content', content);
+            formData.append('subject', subject);
             formData.append('id', userId);
+            formData.append('code_name', code_name);
 
             
             console.log('게시글 등록 데이터:', {
                 subject: subject,
                 content: content,
-                id: userId
+                id: userId,
+                code_name: code_name
             });
 
             // 서버에 데이터 전송
