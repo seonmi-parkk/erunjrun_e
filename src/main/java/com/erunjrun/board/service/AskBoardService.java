@@ -23,10 +23,7 @@ public class AskBoardService {
 		
 		return askDAO.askList(limit,offset,code_name);
 	}
-	public int ask() {
-		
-		return askDAO.ask();
-	}
+
 	
 	
 	

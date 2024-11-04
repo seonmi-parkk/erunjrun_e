@@ -13,9 +13,7 @@
 		SELECT COUNT(*) FROM ask
     </select>
     
-    <select id="ask" resultType="int">
-    	
-    </select>
+	
 
     
 </mapper>
