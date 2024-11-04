@@ -58,9 +58,9 @@
 							</div>	
 							<div class="notice">
 								<div class="num-box">
-									<span>3</span>
+									<span id="alarmNum"></span>
 								</div>
-								<img class="profile-img" src="/resources/img/common/ico_notice.png" alt="알림"/>
+								<img id="alarmIcon" class="profile-img" src="/resources/img/common/ico_notice.png" alt="알림"/>
 							</div>
 						</c:when>
 						<c:otherwise>
@@ -94,5 +94,53 @@
 	console.log('${sessionScope.loginId}');
 	console.log('${sessionScope.profileImg}');
 	console.log('${sessionScope.iconImg}');
+	
+	
+	// 총 알림 수
+		
+	var loginId = '${sessionScope.loginId}';
+	var alarmNum = 0;
+	
+	if(loginId){
+		setInterval(alarmCount, 5000);
+	}
+	
+	
+	function alarmCount(){
+		$.ajax({
+			type: 'GET', 
+			url: '/alarmCount',
+			data: {'loginId' : loginId},
+			dataType: 'JSON',
+			success: function(response){
+				//console.log('알림 수 => ', response);
+				$('#alarmNum').html(response);
+				alarmNum = response;
+			},error: function(e){
+				console.log('알림 수 에러 => ', e);
+			}
+		});
+	}
+	
+	$('#alarmIcon').on('click', function(){
+		console.log('알림 리스트 실행');
+		if(alarmNum > 0){
+			$.ajax({
+				type: 'POST',
+				url: '/alarmList',
+				data: {'loginId' : loginId},
+				dataType: 'JSON',
+				success: function(response){
+					//console.log(response.result);
+				},error: function(e){
+					console.log('알림 리스트 에러 => ', e);
+				}
+			});
+		}else{
+			// 알림 없다는 문구 노출 or 이미지
+		}
+		
+	});
+	
 
 </script>

@@ -494,11 +494,7 @@
 	                    var result = response.result;
 	                    var application = response.application;
 	                    
-	                    // 프로필 이미지 '' 여부 확인해서 이미지 설정 if문 추가 필요
-   	                   /*  var profileImg = '<img src="/photo/' + result.image + '"/>';  */
 	                    var profileImg = '';
-	                    
-	                    // '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png'" id=\"profileImg\" width = 32px;>\';
 	                    
 	                    var genderImg = '';
 	                    var content = '';
