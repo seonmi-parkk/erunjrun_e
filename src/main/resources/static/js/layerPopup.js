@@ -11,13 +11,19 @@ var handleKeyDown = function(event) {
     event.preventDefault();
 };
 
+// 기본 텍스트 팝업
 function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = btn2Act) {
     // 대화 상자를 HTML 요소로 생성
     var confirmBox = document.createElement('div');
     confirmBox.setAttribute('class', 'confirm-box');
     confirmBox.innerHTML = '<p>' + message + '</p><a class="btn-close">닫기</a><div class="btn-box"><button class="confirm btn01-m">'+btn1+'</button></div>';
     
-    if(btn2){
+    popUpCommon(btn2, confirmBox, btn1Callback, btn2Callback);
+}
+
+// 팝업 공통 기능
+function popUpCommon(btn2, confirmBox, btn1Callback, btn2Callback, iconIdx){
+	if(btn2){
         confirmBox.getElementsByClassName('btn-box')[0].insertAdjacentHTML('beforeend', '<button class="cancel btn02-m">'+btn2+'</button>');
     }
 
@@ -32,7 +38,7 @@ function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = 
     // 확인 버튼 클릭 시
     var confirmButton = document.querySelector('.confirm-box .confirm');
     confirmButton.addEventListener('click', function() {
-        btn1Callback();  // 
+        btn1Callback(iconIdx);  
     });
 
     // 취소 버튼이 있을 때 클릭 이벤트 처리
@@ -52,5 +58,6 @@ function layerPopup(message, btn1, btn2, btn1Callback = btn1Act, btn2Callback = 
 
     // 키보드 동작 막기
     window.addEventListener('keydown', handleKeyDown);
+    
 }
 
