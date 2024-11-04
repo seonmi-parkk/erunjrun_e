@@ -544,7 +544,7 @@
 	
 	<!-- 관심 크루 목록 -->
 	<select id="crewLikeCrew" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="String">
-		select crew_idx from crew_like where id = #{id}
+		select crew_idx from crew_like where id = #{id} ORDER BY crew_idx DESC
 	</select>
 	
 </mapper>

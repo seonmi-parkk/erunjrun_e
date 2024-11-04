@@ -321,6 +321,7 @@
 					<div id="butt" class="btn03-s" style='visibility : hidden'>비활성화</div>					
 					<p class="title3-2" id="create_date"></p>
 					<span class="title3-3" >조회수 </span><span id="hit"></span>
+					<!-- todo - 댓글 수 카운트해서 가져와야 함! -->
 					<span class="title3-4"><img src="/resources/img/run/image 14.png" id="comment" alt="댓글"> 댓글 2</span>
 				</div>
 			</div>
@@ -356,7 +357,7 @@
 	    </div>
 	    
 	    
-	<!-- 모달 -->
+		<!-- 모달 -->
 		<div id="profilePopup" class="modal">
 		    <div class="modal-content">
 		        <span class="close">&times;</span>
@@ -577,7 +578,9 @@
 		$.ajax({
 			type:'POST',
 			url:'/noticeComment',
-			data:{'notice_idx':notice_idx, 'content':content, 'nickname':nickname},
+			data:{'notice_idx':notice_idx, 
+				'content':content, 
+				'nickname':nickname},
 			dataType:'JSON',
 			success:function(data){
 				console.log('댓글 등록',data);
@@ -715,20 +718,6 @@
 	document.getElementsByClassName("dis")[0].onclick = function() {
 	    document.getElementById("reportPopup").style.display = "none";
 	};	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 
 
