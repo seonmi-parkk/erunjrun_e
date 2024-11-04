@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/resources/css/crew.css">
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
+<script src="/resources/js/layerPopup.js"></script>
 <style>
 	
 	.innerr {
@@ -300,19 +300,20 @@
 	var isLoading = false;
 	var hasMoreData = true;
 	var filtering = [];
+	var likeCrew = [];
+	var crewLikeStatus = {}; // 각 크루별 idx 와 y/n 정보를 담음 ex) 1 : Y, 2 : N ...
 	
 	var loginId = '${sessionScope.loginId}';
 	console.log(loginId, '');
-	if(loginId != null || login !== ''){
-		likeCrew();
-	}
 	
 	
 	// 크루가 홀수일 때 마지막 crowBox 왼쪽 정렬
 	$(document).ready(function() {
 		
-		
-
+		if (loginId) {
+		    // 로그인된 경우 좋아요한 크루 데이터를 먼저 가져옴
+		    fetchLikedCrews();
+		}
 		
 		crewList(currentPage); // 1 전달 (현재 페이지)
 		
@@ -326,9 +327,6 @@
         });
 		
         observer.observe(document.getElementById('loading')); // 감시할 요소 지정
-		
-
-	    
 	    
 	    $('input[name="tag_idx_list"]').on('click', function() {
             currentPage = 1; // 페이지 초기화
@@ -348,7 +346,7 @@
 	    console.log('필터 =>', filtering);
 	}
 	
-	
+	// 크루리스트 불러오기
 	function crewList(page){
 		$('#loading').css('opacity', '1');
 	    isLoading = true;
@@ -367,7 +365,7 @@
 				console.log('오는값 => ',result);
 				
 				crewListPrint(result);
-	            updateHeartIcon(result);  // 하트 아이콘 수정 함수 실행
+				if (loginId) updateHeartIcons(result);  // 로그인한 경우 좋아요 아이콘 업데이트
 				
 				
 			},error: function(e){
@@ -416,11 +414,13 @@
                     var styleClass = index === 1 ? 'highlight-tag' : 'normal-tag';
                     displayedTags += '<span class="tag ' + styleClass + '">' + tag + '</span>';
                 });
+                
+                
 
 				content += '<div class="crewBox" onclick="crewDetail('+item.crew_idx+')">';
 				content += '<div class="crewImg"><img class="crew-img" id="crew-image" src="' + imgElem + '" onerror="this.src=\'/resources/img/crew/crewImg300.png\'"/>';
 					// 좋아요 이미지
-				content += '<div onclick="crew_like()"><img class="crew-like" src="/resources/img/common/ico_heart_no_act.png"/></div></div>';
+				content += '<div onclick="crewLikeCheck('+item.crew_idx+')"><img id="crewLikes-'+item.crew_idx+'" class="crew-like" src="/resources/img/common/ico_heart_no_act.png"/></div></div>';
 				// 크루 tag
 				content += '<div class="crewContentBox"><div class="tagBox2">' + displayedTags + '</div>';
 				
@@ -483,9 +483,8 @@
 	  });
 	});
 	
-	var likeCrew = [];
 	
-	function likeCrew(){
+	function fetchLikedCrews(){
 		$.ajax({
 			type: 'POST',
 			url: 'crew/likeCrew',
@@ -493,9 +492,14 @@
 			dataType: 'JSON',
 			success: function(response){
 				console.log(response);
-				likeCrew = response.result;
+				var result = response.result;
+				result.forEach(function(item){
+					/* likeCrew = item.crew_idx; */
+					likeCrew.push(item.crew_idx);
+					console.log('idx값 => ',likeCrew);
+				});
 				
-				updateHeartIcon(); 
+				
 				
 			},error: function(e){
 				console.log('관심 크루 에러 => ', e);
@@ -503,14 +507,88 @@
 		});
 	}
 
-	function updateHeartIcon(result){
+	function updateHeartIcons(result) {
 		
-		result.forEach(function(item, idx){
-			if(likeCtew.includes(item.crew_idx)){
-				$('.crew-like').attr('src', '/resources/img/common/ico_heart_act.png');
+/* 		likeCrew.forEach(function(item){
+			console.log("crew_idx : ", item.crew_idx, "타입", typeof item.crew_idx);
+		}); */
+
+	    result.forEach(function(item) {
+	        // crew_idx 타입 확인
+	        console.log("item.crew_idx:", item.crew_idx, "타입:", typeof item.crew_idx);
+			console.log("likeCrew 배열 확인:", likeCrew);
+
+	         if (likeCrew.includes(item.crew_idx)) {
+	        	 $('#crewLikes-'+item.crew_idx).attr('src', '/resources/img/common/ico_heart_act.png');
+	        	 crewLikeStatus[item.crew_idx] = 'Y';
+	            console.log('같은거 있음', item.crew_idx);
+	        } else {
+	        	crewLikeStatus[item.crew_idx] = 'N';
+	            console.log('같은거 없음', item.crew_idx);
+	        } 
+	    });
+
+	}	 
+	
+	function crewLikeCheck(crew_idx){
+		console.log('좋아요 이벤트 실행됨?');
+		event.stopPropagation(); // 이벤트 전파 방지
+	    event.preventDefault(); // 상위 태그 이벤트 중지
+	    
+	    if(loginId){
+	    	
+	    	var currentStatus = crewLikeStatus[crew_idx] || 'N'; // crew_idx 별 값 가져오기
+	    	
+	    /* 	if()
+	    	var currentStatus = crewLikeStatus[crew_idx] || 'N';  */// 현재 상태 없을 시 기본값
+	    	
+	    	if(currentStatus === 'Y'){
+	    		console.log('좋아요 취소 신청');
+	    		crewLikeChange(crew_idx, currentStatus);
+	    	}else{
+	    		console.log('좋아요 등록 신청');
+	    		crewLikeChange(crew_idx, currentStatus);
+	    	}
+	    }else{
+	    	layerPopup('로그인이 필요한 서비스입니다.', '로그인 하기', '취소', loginPageLocation, applBtn2Act);
+	    }
+	}
+	
+	function loginPageLocation(){
+		location.href='/loginView'; // 로그인 페이지로 수정 필요
+	}
+	
+	// 팝업 취소
+	function applBtn2Act() {
+	    removeAlert(); 
+	}	
+	
+	
+	function crewLikeChange(crew_idx, currentStatus){ // 선택된 크루의 idx 와 상태값(y/n) 가져옴
+		console.log('잘 실행? : crew_idx => ', crew_idx);
+		console.log('해당 크루 좋아요 상태 값 => ', currentStatus);
+		
+		$.ajax({
+			type: 'POST',
+			url: 'crew/likeRequest',
+			data: {'loginId' : loginId,
+				'crew_idx' : crew_idx,
+				'likeCrew' : currentStatus},
+			dataType: 'JSON',
+			success: function(response){
+				var result = response.result;
+				if(response.success){
+					alert(response.msg);
+					fetchLikedCrews();
+					crewList(currentPage);
+					console.log('좋아요 상태 변경 성공');
+				}
+			},error: function(e){
+				console.log('좋아요 상태 변경 중 에러 => ', e);
 			}
 		});
-	}	 
+		
+	}
 	
 </script>
 </html>

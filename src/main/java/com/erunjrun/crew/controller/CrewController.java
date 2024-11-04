@@ -32,6 +32,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
+import com.erunjrun.main.controller.*;
+
 
 
 @RestController
@@ -41,7 +43,7 @@ public class CrewController {
     
     Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired CrewService crew_service;
-    
+    @Autowired AlarmController alarm_controller;
 
     
 	@PostMapping(value="/image-upload")
@@ -397,6 +399,8 @@ public class CrewController {
 		
 		resultMap.put("success", crew_service.crewAdminUpdate(id, leader, crew_idxs));
 		
+		alarm_controller.crewAdmin(crew_idxs, id, leader);
+		
 		return resultMap;
 	}
 	
@@ -404,16 +408,18 @@ public class CrewController {
 	public Map<String, Object> crewExpel(@RequestParam(value="crew_idx") String crew_idx, @RequestParam(value="ids") List<String> ids){
 		Map<String, Object> resultMap = new HashMap<>();
 		
-		logger.info(" 양도 id =>" + ids);
+		logger.info(" 퇴출 id =>" + ids);
 		
 	    Map<String, Object> params = new HashMap<>();
-	    
-	    params.put("crew_idx", Integer.parseInt(crew_idx));
+	    int crew_idxs = Integer.parseInt(crew_idx);
+	    params.put("crew_idx", crew_idxs);
 	    params.put("ids", ids);
 	    params.put("code_name", "C103");
 	    
 	    // 서비스에 Map 전달
 	    resultMap.put("success", crew_service.crewExpel(params));
+	    
+	    alarm_controller.crewMemberExpel(crew_idxs, ids);
 	    
 	    return resultMap;
 	}
@@ -601,6 +607,19 @@ public class CrewController {
 		}
 		return null;
 	}
+	
+	/*
+	 * @PostMapping(value="/likeChange") public boolean crewLikeChange(@RequestParam
+	 * int crew_idx, @RequestParam String currentStatus) {
+	 * 
+	 * boolean success = false; Map<String, Object> parmeterMap = new HashMap<>();
+	 * parmeterMap.put("crew_idx", crew_idx); parmeterMap.put("currentStatus",
+	 * currentStatus);
+	 * 
+	 * if(currentStatus.equals("N")) { // 좋아요 등록 success =
+	 * crew_service.likeRequest(parmeterMap); }else { // 좋아요 취소 success =
+	 * crew_service.likeCencel(parmeterMap); } return success; }
+	 */
 
 	
 }

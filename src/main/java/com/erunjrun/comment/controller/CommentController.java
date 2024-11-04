@@ -20,11 +20,14 @@ import com.erunjrun.comment.service.CommentService;
 import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.member.dto.MemberDTO;
 
+import com.erunjrun.main.controller.*;
+
 @Controller
 public class CommentController {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired CommentService commentService;
+	@Autowired AlarmController alarm_controller;
 	
 	@PostMapping(value="/comment/{board_idx}")
 	@ResponseBody
@@ -121,6 +124,8 @@ public class CommentController {
 		int add = commentService.noticeComment(notice_idx,content, loginId);
 		
 		result.put("add", add);
+		
+		alarm_controller.crewNoticeComment(notice_idx, loginId);
 		
 		
 		return result;
