@@ -76,7 +76,7 @@ public class AlarmController {
 		alarm_service.crewMemberExpel(param);
 	}
 	
-	// 크루 공지사항 댓글
+	// 크루 공지사항 댓글 알림
 	public void crewNoticeComment(int notice_idx, String from_id) {
 //		logger.info("공지 idx => " + notice_idx);
 //		logger.info("댓글 작성 id => " + from_id);
@@ -94,4 +94,15 @@ public class AlarmController {
 		// contnet : notice_idx 로 가져오기 (crew_notice)
 	}
 	
+	// 게시글 댓글 알림
+	public void boardComment(int board_idx, String from_id, String board_name) {
+		alarm_dto.setSubject("게시글 댓글");
+		alarm_dto.setCode_name("");
+		alarm_dto.setIs_url("Y");
+		
+		if(board_name.equals("R")) {
+	//		alarm_dto.setUrl("/run");
+		}
+		alarm_dto.setIdx(board_idx);
+	}
 }
