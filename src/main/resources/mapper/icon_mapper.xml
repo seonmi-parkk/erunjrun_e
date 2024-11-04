@@ -45,5 +45,61 @@
 		SELECT CEIL(count(icon_idx)/#{param1}) AS pages FROM icon
 	</select>
 
+	<select id="getIconList" resultType="com.erunjrun.icon.dto.IconDTO">
+		SELECT 
+			i.icon_idx, image, icon_name, cost,
+			CASE
+				WHEN ib.icon_idx IS NOT NULL THEN 'Y'
+				ELSE 'N'
+			END AS bought
+		FROM icon i
+		LEFT JOIN
+			icon_buy ib
+		ON
+			i.icon_idx = ib.icon_idx 
+			AND ib.id = #{userId}
+		WHERE 
+			use_yn = 'Y'
+	</select>
+
+	<select id="getUserInfo" resultType="com.erunjrun.icon.dto.IconDTO">
+		SELECT image, point, count(icon_idx) AS icon_quantity FROM member m 
+			JOIN icon_buy i ON m.id = i.id 
+			JOIN profile p ON m.id = p.id 
+			WHERE m.id = #{userId}
+	</select>
+	
+	<insert id="buyIcon">
+		INSERT INTO icon_buy (icon_idx,id) VALUES (#{iconIdx},#{userId})
+	</insert>
+
+	<insert id="deductPoint">
+		INSERT INTO member_point (code_name,id,point) 
+			VALUES ('P104', #{userId}, -(SELECT cost FROM icon WHERE icon_idx = #{iconIdx}))
+	</insert>
+	
+	<update id="updateMemberTable">
+		UPDATE member SET point = (
+			SELECT SUM(point) FROM member_point 
+			WHERE id = #{userId}
+		) 
+			WHERE id = #{userId}
+	</update>
+	
+	<select id="checkPoint">
+		SELECT point FROM member WHERE id = #{userId}
+	</select>
+	
+	<select id="adminIconList" resultType="com.erunjrun.icon.dto.IconDTO">
+		SELECT icon_idx, icon_name, image, cost, use_yn,
+			COUNT(*) OVER() AS total_count
+			FROM icon
+			ORDER BY icon_idx LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<insert id="adminIconWrite" parameterType="map">
+		INSERT INTO icon (icon_name,cost,image) 
+			VALUES (#{icon-name},#{cost},#{path})
+	</insert>
 	
 </mapper> 

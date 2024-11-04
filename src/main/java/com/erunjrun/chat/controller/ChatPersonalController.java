@@ -240,7 +240,9 @@ public class ChatPersonalController {
 			
 			//Map<String, Object> resultMap = new HashMap<>();
 			
-			return chatPersonalService.crewLeaderChatListFull(crew_idxs ,page, cnt, keyword);
+			List<ChatCrewLeaderDTO> list = chatPersonalService.crewLeaderChatListFull(crew_idxs ,page, cnt, keyword);
+			
+			return list;
 			
 		 }
 		 

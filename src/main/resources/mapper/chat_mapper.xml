@@ -134,7 +134,7 @@
 	<select id="crewLeaderChatListFull" resultType="com.erunjrun.chat.dto.ChatCrewLeaderDTO" parameterType="map">
 		
 		WITH chat_data AS (	
-			SELECT 
+			SELECT DISTINCT
 				gg.id,
 				gg.chat_idx,
 				(SELECT create_date FROM crew_chat_content WHERE chat_idx = gg.chat_idx ORDER BY content_idx DESC LIMIT 1) AS create_date,
@@ -142,8 +142,7 @@
 				gender,
 				birth,
 				icon_image,
-				image,
-				COUNT(*) OVER() AS total_count
+				image
 			FROM (
 					SELECT cc.id, cc.chat_idx 
 					FROM crew_chat_link AS cc
@@ -164,10 +163,15 @@
 			JOIN member AS m ON gg.id = m.id
 			LEFT JOIN profile p ON gg.id = p.id
 		)
-		SELECT *
+		SELECT *, (SELECT COUNT(*) FROM chat_data WHERE create_date IS NOT NULL) AS totalpage
 		FROM chat_data
 		WHERE create_date IS NOT NULL
-		ORDER BY create_date DESC ;
+		<if test="keyword != null and keyword != ''">
+	        AND nickname LIKE CONCAT('%', #{keyword}, '%')
+	    </if>
+		ORDER BY create_date DESC
+		
+		
 		
 	</select>
 	

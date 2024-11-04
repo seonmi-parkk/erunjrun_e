@@ -190,7 +190,9 @@ public class ChatPersonalService {
 		parmeterMap.put("keyword", keyword);
 		parmeterMap.put("crew_idx", crew_idx);
 		
-		return chatPersonalDAO.crewLeaderChatListFull(parmeterMap);
+		List<ChatCrewLeaderDTO> list = chatPersonalDAO.crewLeaderChatListFull(parmeterMap);
+
+		return list; 
 	}
 
 
