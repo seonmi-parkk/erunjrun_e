@@ -10,7 +10,7 @@ public class IconDTO {
 	private int icon_idx;
 	private String icon_name;
 	private int cost;
-	private int image;
+	private String image; // int -> String으로 바꿈
 	private Date create_date;
 	private Date update_date;
 	private String use_yn;
@@ -20,7 +20,37 @@ public class IconDTO {
 	private String id;
 	private Date buy_date;
 	
-	
+	private String bought;
+	private int icon_quantity;
+	private int total_count;
+
+	//회원 테이블
+	private int point;
+
+	public int getTotal_count() {
+		return total_count;
+	}
+	public void setTotal_count(int total_count) {
+		this.total_count = total_count;
+	}
+	public int getIcon_quantity() {
+		return icon_quantity;
+	}
+	public void setIcon_quantity(int icon_quantity) {
+		this.icon_quantity = icon_quantity;
+	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
+	}
+	public String getBought() {
+		return bought;
+	}
+	public void setBought(String bought) {
+		this.bought = bought;
+	}
 	public int getIcon_idx() {
 		return icon_idx;
 	}
@@ -39,10 +69,10 @@ public class IconDTO {
 	public void setCost(int cost) {
 		this.cost = cost;
 	}
-	public int getImage() {
+	public String getImage() {
 		return image;
 	}
-	public void setImage(int image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 	public Date getCreate_date() {
