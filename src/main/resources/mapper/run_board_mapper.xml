@@ -129,7 +129,7 @@
         	VALUES (#{board_idx}, #{latitude}, #{longitude}, #{path}, #{order_num})
     </insert>
     
-        <!-- 파일 정보 저장 -->
+    <!-- 파일 정보 저장 -->
     <insert id="fileWrite" parameterType="com.erunjrun.image.dto.ImageDTO">
         INSERT INTO image (code_name, img_ori, img_new, img_no)
         	VALUES (#{code_name}, #{img_ori}, #{img_new}, #{img_no})
@@ -149,7 +149,7 @@
     
     <!-- 게시글 상세보기 -->
     <select id="detail" resultType="com.erunjrun.board.dto.RunBoardDTO">
-    	SELECT m.id, b.board_idx, b.subject, b.content, m.nickname, b.create_date , b.bHit ,b.likes
+    	SELECT m.id, b.board_idx, b.subject, b.content, m.nickname, b.create_date , b.bHit ,b.likes, m.icon_image
 			FROM board b
 		LEFT JOIN member m ON b.id = m.id WHERE b.board_idx = #{param1}
     </select>
@@ -228,6 +228,15 @@
     	SELECT COUNT(*) FROM comment WHERE board_idx = #{board_idx}
     </select>
     
+    <!-- 게시글 권한정지 체크 -->
+    <select id="right">
+    	SELECT * FROM ban WHERE id=#{id} AND code_name = 'A100' AND is_right = 'Y' 
+    </select>
+    
+    <!-- 게시글 권한정지 체크 -->
+    <select id="ban">
+    	SELECT * FROM ban WHERE id=#{id} AND code_name = 'A101' AND is_right = 'Y' 
+    </select>
     
     
 </mapper>

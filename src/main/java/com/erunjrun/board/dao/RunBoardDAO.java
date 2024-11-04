@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.erunjrun.admin.dto.RightDTO;
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.image.dto.ImageDTO;
 import com.erunjrun.member.dto.MemberDTO;
@@ -60,6 +61,10 @@ public interface RunBoardDAO {
 	MemberDTO nickName(String loginId);
 
 	int coun(int board_idx);
+
+	RightDTO right(String userId);
+
+	RightDTO ban(String loginId);
 
 
 

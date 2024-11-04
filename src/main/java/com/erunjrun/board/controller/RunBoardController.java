@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.erunjrun.admin.dto.RightDTO;
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.board.service.RunBoardService;
 import com.erunjrun.image.dto.ImageDTO;
@@ -42,7 +43,23 @@ public class RunBoardController {
 	@Autowired RunBoardService runBoardService;
 	
 	@GetMapping(value="/runBoard")
-	public String list() {
+	public String list(HttpSession session,Model model) {
+		
+		//check!!임시 세션(나중에 빼기)
+		session.setAttribute("loginId", "crewtest1");
+		session.setAttribute("profileImg", "profile_img1.jpg");
+		session.setAttribute("iconImg", "resources/img/icon/icon1.png");
+		session.setAttribute("adminYn", "N");
+		
+		String userId = (String) session.getAttribute("loginId");
+		
+		RightDTO right = runBoardService.right(userId);
+		
+		
+		logger.info("권한정지된 : "+right);
+		
+		model.addAttribute("right", right);
+		
 		return "runBoard/runBoardList";
 	}
 	
@@ -226,6 +243,10 @@ public class RunBoardController {
         
         int countComment = runBoardService.coun(board_idx);
         logger.info("댓글수 : "+countComment);
+        
+        RightDTO ban = runBoardService.ban(loginId);
+        
+        model.addAttribute("ban", ban);
         
     	model.addAttribute("isLike", isLike);
     	model.addAttribute("info", run);

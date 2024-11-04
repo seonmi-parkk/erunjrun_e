@@ -6,7 +6,8 @@
 <mapper namespace="com.erunjrun.comment.dao.CommentDAO">
 	
 	<select id="list" resultType="com.erunjrun.comment.dto.CommentDTO">
-		SELECT * FROM comment WHERE board_idx = #{board_idx}
+		SELECT * FROM comment c LEFT JOIN member m on c.nickname = m.nickname 
+			WHERE board_idx = #{board_idx}
 	</select>
 	
 	<insert id="addComment" parameterType="com.erunjrun.comment.dto.CommentDTO">

@@ -6,13 +6,46 @@
 <mapper namespace="com.erunjrun.board.dao.AskBoardDAO">
 	
 	<select id="askList" resultType="com.erunjrun.board.dto.RunBoardDTO">
-		SELECT * FROM ask a JOIN member m ON a.id = m.id ORDER BY a.ask_idx DESC LIMIT #{limit} OFFSET #{offset}	
+		SELECT * FROM ask a JOIN member m ON a.id = m.id 
+		WHERE a.use_yn = 'Y' 
+		ORDER BY a.ask_idx DESC LIMIT #{limit} OFFSET #{offset}	
 	</select>
 	
 	<select id="askCount" resultType="int">
 		SELECT COUNT(*) FROM ask
     </select>
     
+    <select id="detail" resultType="com.erunjrun.board.dto.RunBoardDTO">
+    	SELECT m.id, b.ask_idx, b.subject, b.content, m.nickname, b.create_date
+			FROM ask b
+		LEFT JOIN member m ON b.id = m.id WHERE b.ask_idx = #{param1}
+    </select>
+    
+    <!-- 파일 정보 저장 -->
+    <insert id="fileWrite" parameterType="com.erunjrun.image.dto.ImageDTO">
+        INSERT INTO image (code_name, img_ori, img_new, img_no)
+        	VALUES (#{code_name}, #{img_ori}, #{img_new}, #{img_no})
+    </insert>
+    
+    <!-- 게시글 정보 업데이트 -->
+	<update id="askUpdate" parameterType="com.erunjrun.board.dto.RunBoardDTO">
+	    UPDATE ask
+	    SET subject = #{subject},
+	        content = #{content},
+	        code_name = #{code_name}
+	    WHERE ask_idx = #{ask_idx} AND id = #{id}
+	</update>
+	
+	<!-- 기존 이미지 데이터 삭제 -->
+	<delete id="deleteImg" parameterType="int">
+	    DELETE FROM image
+	    WHERE img_no = #{ask_idx}
+	</delete>
+	
+	<!-- 게시글 비활성화 -->
+    <update id="askBoardDelete">
+    	UPDATE ask SET use_yn = 'N' WHERE ask_idx = #{param1}
+    </update>
 	
 
     

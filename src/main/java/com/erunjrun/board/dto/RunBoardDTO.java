@@ -45,11 +45,21 @@ public class RunBoardDTO {
     private int ask_idx;
     private String is_ask;
     
+    // 아이콘
+    private String icon_image;
+    
+    
     
     
     
 
-    public int getAsk_idx() {
+    public String getIcon_image() {
+		return icon_image;
+	}
+	public void setIcon_image(String icon_image) {
+		this.icon_image = icon_image;
+	}
+	public int getAsk_idx() {
 		return ask_idx;
 	}
 	public void setAsk_idx(int ask_idx) {

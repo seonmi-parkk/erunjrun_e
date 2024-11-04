@@ -10,6 +10,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
     <script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
     <script src="/resources/js/layerPopup.js"></script>
+    <script src="/resources/js/rightLayerPopup.js"></script>
 <style>
 	a{
 		color: #333;
@@ -227,7 +228,7 @@
 	function secondBtn1Act() {
 		// 두번째팝업 2번버튼 클릭시 수행할 내용
 	 	console.log('두번째팝업 1번 버튼 동작');
-		// 로그인 페이지로 이동하기 넣어주기!!!!!!!!
+	 	location.href='/loginView';
 	 	removeAlert();
 	 	}
 	function secondBtn2Act() {
@@ -242,12 +243,17 @@
 	 		var userId = "${sessionScope.loginId}";
 	 		
 	 		if(!userId){
-	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn1Act,secondBtn1Act);	
+	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn1Act,secondBtn1Act);		
+	 		}else if('${sessionScope.loginId}' == '${right.id}' && '${right.code_name}' == 'A100' && '${right.is_right}' == 'Y'){
+	 			rightLayerPopup('${right.end_date} 까지 정지된 서비스 입니다.','확인',secondBtn2Act);
 	 		}else{
 	 			location.href='runBoardWrite';
 	 		}
 	 		
 	 	});
+
+	 	
+	 	
 	 	
 	 	
 	 // 클릭시 운동프로필 레이어 팝업

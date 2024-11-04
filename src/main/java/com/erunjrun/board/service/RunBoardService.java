@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.erunjrun.admin.dto.RightDTO;
 import com.erunjrun.board.dao.RunBoardDAO;
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.image.dto.ImageDTO;
@@ -305,6 +306,18 @@ public class RunBoardService {
 	public int coun(int board_idx) {
 		
 		return runBoardDAO.coun(board_idx);
+	}
+
+
+	public RightDTO right(String userId) {
+		
+		return runBoardDAO.right(userId);
+	}
+
+
+	public RightDTO ban(String loginId) {
+		
+		return runBoardDAO.ban(loginId);
 	}
 
 

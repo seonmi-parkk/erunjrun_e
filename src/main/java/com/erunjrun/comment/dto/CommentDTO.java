@@ -32,12 +32,22 @@ public class CommentDTO {
     private int point;
     
     private String profile_use;
+    
+    private String icon_image;
+    
+    
 	
 	
 	
 	
 	
 	
+	public String getIcon_image() {
+		return icon_image;
+	}
+	public void setIcon_image(String icon_image) {
+		this.icon_image = icon_image;
+	}
 	public String getPw() {
 		return pw;
 	}

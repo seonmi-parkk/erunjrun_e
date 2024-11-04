@@ -117,7 +117,7 @@
 				$('#alarmNum').html(response);
 				alarmNum = response;
 			},error: function(e){
-				console.log('알림 수 에러 => ', e);
+				//console.log('알림 수 에러 => ', e);
 			}
 		});
 	}
@@ -133,7 +133,7 @@
 				success: function(response){
 					//console.log(response.result);
 				},error: function(e){
-					console.log('알림 리스트 에러 => ', e);
+					//console.log('알림 리스트 에러 => ', e);
 				}
 			});
 		}else{
