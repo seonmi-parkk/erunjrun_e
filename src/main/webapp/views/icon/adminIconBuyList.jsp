@@ -112,7 +112,7 @@
         <main class="main-content">
 		<p class="title1" >아이콘</p>
 	    
-	    <input id="icon_idx" name="icon_idx" value="${info.icon_idx} " hidden="">
+	    <input id="icon_idx" name="icon_idx" value="${info}" hidden=""/>
 	    
 	    
 		 <table>
@@ -160,7 +160,7 @@
 
 	function pageCall(page) {
 	var icon_idx = $('#icon_idx').val();	
-	console.log(idx);
+	console.log(icon_idx);
 	console.log('페이지',page);
 		$.ajax({
 			type:'GET',

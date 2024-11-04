@@ -63,6 +63,7 @@ public class IconController {
 		  public String iconbuy(int icon_idx,Model model) {
 			  
 			  model.addAttribute("info",icon_idx);
+			  logger.info(""+icon_idx);
 			  return "icon/adminIconBuyList";
 		  }
 		  
