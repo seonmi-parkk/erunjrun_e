@@ -291,7 +291,7 @@
     }
     
     a{
-    	text-decoration-line: none;
+    	text-decoratdion-line: none;
     }
     
     .profileImg_01{

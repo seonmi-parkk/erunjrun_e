@@ -23,13 +23,14 @@ import com.erunjrun.chat.dto.ChatCrewLeaderDTO;
 import com.erunjrun.chat.service.ChatGroupService;
 import com.erunjrun.chat.service.ChatPersonalService;
 import com.erunjrun.chat.service.SseService;
-
+import com.erunjrun.main.controller.*;
 
 
 @Controller
 public class ChatGroupController {
 
 	@Autowired ChatGroupService chatGroupService ;
+	@Autowired AlarmController alarm_controller;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	 
@@ -72,6 +73,16 @@ public class ChatGroupController {
 	 public Map<String, Object> sendCrewMessage(@RequestBody Map<String, Object> param){
 		 Map<String, Object> data = new HashMap<String, Object>();
 		 data.put("result", chatGroupService.sendCrewMessage(param));
+		 
+		 try {
+		        int idx = Integer.parseInt(param.get("chatIdx").toString());
+		        String from_id = param.get("baseUser").toString();
+		        String code = "C";
+		        alarm_controller.crewChat(idx, from_id, code);
+		    } catch (NullPointerException | NumberFormatException e) {
+		        System.out.println("chatIdx 또는 baseUser 값이 없습니다: " + e.getMessage());
+		    }
+		 
 		 return data;
 	 }
 	

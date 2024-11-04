@@ -50,10 +50,13 @@ public class CommentController {
 			
 		Map<String,Object> result = new HashMap<String, Object>();
 		
-		int add = commentService.addComment(board_idx,content,nickname, session);
+		String userId = (String) session.getAttribute("loginId");
+		int add = commentService.addComment(board_idx,content,nickname, userId);
 		
 		result.put("add", add);
 		
+		String board_name = "Y";		
+		alarm_controller.boardComment(board_idx, userId, board_name);
 		
 		return result;
 	}

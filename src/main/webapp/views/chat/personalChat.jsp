@@ -348,7 +348,7 @@
 		sendData.baseUser = $('.chat input[name="baseUser"]').val();
 		sendData.otherUser = $('.chat input[name="otherUser"]').val();	
 		$('.chat textarea[name="msg"]').val('');
-		
+	
 		$.ajax({
 			type: 'POST',
 			url: '/chat/send/',

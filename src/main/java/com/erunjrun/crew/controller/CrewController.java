@@ -608,6 +608,27 @@ public class CrewController {
 		return null;
 	}
 	
+	@GetMapping(value="/adminMemberUpdate")
+	public boolean crewMemberAdminUpdate(@RequestParam String result, @RequestParam int crew_idx, @RequestParam String id) {
+		boolean success = false;
+		Map<String, Object> param = new HashMap<>();
+		if(result.equals("Y")) {
+			param.put("crew_idx", crew_idx);
+			param.put("id", id);
+			param.put("is_agree", result);
+		}else {
+			param.put("crew_idx", crew_idx);
+			param.put("id", id);
+			param.put("is_agree", result);
+		}
+		
+		if(crew_service.crewMemberAdminUpdate(param) >0) {
+			return true;
+		}
+		return false;
+		
+	}
+	
 	/*
 	 * @PostMapping(value="/likeChange") public boolean crewLikeChange(@RequestParam
 	 * int crew_idx, @RequestParam String currentStatus) {

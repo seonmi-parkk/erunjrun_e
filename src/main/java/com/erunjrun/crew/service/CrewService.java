@@ -602,5 +602,15 @@ public class CrewService {
 		return crew_dao.crewLikeCrew(id);
 	}
 
+	public int crewMemberAdminUpdate(Map<String, Object> param) {
+		
+		if(param.get("is_agree").equals("Y")) {
+			crew_dao.crewLeaderUpdate(param);
+			crew_dao.crewLeaderChange(param);
+		}
+		
+		return crew_dao.crewMemberAdminUpdate(param);
+	}
+
 	
 }

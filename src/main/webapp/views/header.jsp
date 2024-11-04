@@ -1,6 +1,114 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!-- 팝업 스타일 추가 -->
 
+
+
+<style>
+	#alarmPopup {
+	    position: fixed;
+	    top: 15%; 
+	    right: 18%; 
+	    width: 400px;
+	    border: 1px solid #ddd;
+	    padding: 20px;
+	    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	    z-index: 1000;
+	    display: none;
+	    border-radius: 10px;
+	    background: #fff;
+	}
+	
+	#alarmPopup .popup-content {
+	    position: relative;
+	}
+	
+	#alarmPopup .close {
+	    position: absolute;
+	    top: 0px;
+	    right: 0px;
+	    font-size: 20px;
+	    cursor: pointer;
+	}
+	
+	#alarmHeader {
+	    background: #fff;
+	    height: 35px;
+	}
+	
+	#alarmSubject {
+	    font-weight: 700;
+	    font-size: 18px;
+	}
+	
+	#alarmInfo {
+	    font-size: 14px;
+	    color: gray;
+	    margin-left: 38%;
+	}
+	
+	#alarmListContent {
+	    max-height: 300px; /* 고정된 높이 설정 */
+	    overflow-y: auto; /* 스크롤바 표시 */
+	    background: #fff;
+	    border-radius: 10px;
+	    padding: 10px;
+	    margin: 3px;
+	    width: 100%;
+	    overflow-x: hidden; /* 가로 스크롤 숨기기 */
+	    padding-left: 0px;
+	}
+	
+	#alarmBox {
+	    background: #fff;
+	    width: 100%;
+	    padding: 10px;
+	    border-bottom: 1px solid #ddd;
+	    margin: 3px;
+	    border-radius: 5px;
+	    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	    margin-top: 10px;
+	    position: relative; /* 자식 요소가 절대 위치로 고정될 수 있도록 설정 */
+	}
+	
+	#al_subject{
+		font-weight: 600;
+	    font-size: 15px;
+        width: 70px;
+	}
+	
+	#al_content{
+		font-size: 14px;
+		display: inline-block;
+		max-width: 53%;
+		white-space: nowrap; /* 텍스트가 한 줄로 유지되도록 설정 */
+	    overflow: hidden; /* 넘치는 부분을 숨김 */
+	    text-overflow: ellipsis; /* 잘린 부분에 "..."을 표시 */
+	    width: 150px;
+	}
+	
+	#al_date{
+		font-size: 13px;
+   		color: darkgray;
+   		float: right;
+   		margin-right: 10px;
+	}
+	
+	.alarmclose{
+		position: absolute;
+	    top: -11px; /* 부모 요소의 위쪽에서 10px 아래에 위치 */
+	    right: 4px; /* 부모 요소의 오른쪽에서 10px 왼쪽에 위치 */
+	    font-size: 15px;
+	    cursor: pointer;
+	    color: #888; /* 닫기 아이콘 색상 */
+	}
+	
+	.alarm-item {
+	    position: relative;
+	    display: flex;
+	    align-items: center; /* 세로 중앙 정렬 */
+	}
+</style>
 <header>
 	<div class="header-inner">
 		<a href="/">
@@ -81,8 +189,21 @@
 		</c:otherwise>
 	</c:choose>
 	
+	
 	</div>
 </header>
+	<!-- 알림 리스트 팝업 -->
+	<div id="alarmPopup" class="popup" style="display: none;">
+	    <div class="popup-content">
+	        <span class="close" onclick="closeAlarmPopup()">&times;</span>
+	        <div id="alarmHeader">
+	        	<span id="alarmSubject">알림</span>
+	        	<span id="alarmInfo">※ 최대 20개 까지 노출됩니다.</span>
+	        </div>
+	        <div id="alarmListContent">
+	        </div>
+	    </div>
+	</div>
 	
 <script>
 	// 아이콘 체크 
@@ -102,8 +223,10 @@
 	var alarmNum = 0;
 	
 	if(loginId){
-		setInterval(alarmCount, 5000);
+		alarmCount();
+		setInterval(alarmCount, 2000);
 	}
+	
 	
 	
 	function alarmCount(){
@@ -113,7 +236,7 @@
 			data: {'loginId' : loginId},
 			dataType: 'JSON',
 			success: function(response){
-				//console.log('알림 수 => ', response);
+				console.log('알림 수 => ', response);
 				$('#alarmNum').html(response);
 				alarmNum = response;
 			},error: function(e){
@@ -131,16 +254,116 @@
 				data: {'loginId' : loginId},
 				dataType: 'JSON',
 				success: function(response){
-					//console.log(response.result);
+					console.log(response.result);
+					var alarmList = '';
+	                response.result.forEach(function(alarm) {
+	                	
+						var change = '';
+	                	if(alarm.code_name === 'AB100' || alarm.code_name === 'AM100' || alarm.code_name === 'AC102'){
+	                		var url = 'onclick="location.href=\''+alarm.url+'\'"';
+	                		change = chatWindowSet(url);
+	                	}else if(alarm.code_name === 'AN100' || alarm.code_name === 'AN101' || alarm.code_name === 'AN102'){
+	                		// 채팅방 열리게
+	                		change = 'onclick="location.href=\''+alarm.url+'\'"';
+	                	}else if(alarm.code_name === 'AC100'){
+	                		var url = alarm.url;
+	                		var idx = url.split('/').pop();
+	                		// 팝업
+	                		change = 'onclick="layerPopup(\'' + alarm.content + ' 크루장 권한을 승인하시겠습니까?\', \'승인\', \'거절\', function(){crewAdminUpdate(\'Y\', ' + idx + ',' +alarm.alarm_idx+')}, function(){crewAdminUpdate(\'N\', ' + idx + ')})"';
+	                	}else{
+	                		// 퇴출 팝업 (크루에서 퇴출되었습니다.)
+	                	}
+	                	
+	                	alarmList += '<div id="alarmBox"'+change+'>';
+	                    alarmList += '<div class="alarm-item">';
+	                    alarmList += '<span id="al_subject">'+ alarm.subject + '</span>'; // 알림 제목
+	                    alarmList += '<span id="al_content">' + alarm.content + '</span>'; // 알림 내용
+	                    alarmList += '<span id="al_date">' + alarm.create_date + '</span>'; // 알림 일시
+	                    alarmList += '<span class="alarmclose" data-alarm-idx="' + alarm.alarm_idx + '">&times;</span>';
+	                    alarmList += '</div>';
+						alarmList += '</div>';	                	
+	                	
+	                });
+	                
+	                // 알림 리스트 내용 업데이트
+	                $('#alarmListContent').html(alarmList);
+	                
+	                // 팝업 표시
+	                $('#alarmPopup').show();
 				},error: function(e){
 					console.log('알림 리스트 에러 => ', e);
 				}
 			});
-		}else{
-			// 알림 없다는 문구 노출 or 이미지
-		}
+		}else {
+	        // 알림이 없는 경우 팝업에 알림이 없다는 메시지 표시
+	        $('#alarmListContent').html('<p>새로운 알림이 없습니다.</p>');
+	        $('#alarmPopup').show();
+	    }
 		
 	});
 	
+
+	// 팝업 닫기 함수
+	function closeAlarmPopup() {
+	    $('#alarmPopup').hide();
+	}
+	
+	$(document).on('click', '.alarmclose', function() {
+	    var alarm_idx = $(this).data('alarm-idx');
+	    alarmUpdate(alarm_idx);
+	});
+	
+	function alarmUpdate(alarm_idx){
+		
+		console.log('알림 x표시 => ', alarm_idx);
+		
+		$.ajax({
+			type: 'GET',
+			url: 'alarmUseUpdate',
+			data: {'alarm_idx' : alarm_idx},
+			dataType: 'JSON',
+			success: function(response){
+				if (response) {
+	                $('#alarmIcon').click(); // 알림 리스트를 다시 불러오기 위해 클릭 이벤트 트리거
+	            }
+			},error: function(e){
+				console.log('알림 update 중 에러 => ', e);
+			}
+		}); 
+	}
+	
+	// 크루장 권한 update
+	function crewAdminUpdate(result, idx, alarm_idx){
+		
+		console.log('result => ', result);
+		console.log('idx => ', idx);
+		console.log('alarm_idx => ', alarm_idx);
+		var loginId = '${sessionScope.loginId}';
+		$.ajax({
+			type: 'GET',
+			url: '/crew/adminMemberUpdate',
+			data: {'result' : result,
+				'crew_idx' : idx,
+				'id' : loginId},
+			dataType: 'JSON',
+			success: function(response){
+				if(response){
+					removeAlert(); 
+					layerPopup('완료되었습니다.', '확인',false, applBtn2Act,applBtn2Act);
+					alarmUpdate(alarm_idx);
+					console.log('권한 업데이트 성공');
+					
+				}
+			},error: function(e){
+				console.log('권한 업데이트 중 에러 => ', e);
+			}
+		});
+	}
+	
+	// 팝업 취소
+	function applBtn2Act() {
+	    removeAlert(); 
+	    alarmUpdate(alarm_idx);
+	}
 
 </script>
