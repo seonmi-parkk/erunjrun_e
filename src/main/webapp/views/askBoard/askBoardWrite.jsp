@@ -213,7 +213,7 @@
                 data: formData,
                 success: function (data) {
                     console.log(data);
-                    location.href = "/runBoard";
+                    location.href = "/askBoard";
                 },
                 error: function (xhr, status, error) {
                     alert("게시글 등록 중 오류가 발생했습니다: " + error);

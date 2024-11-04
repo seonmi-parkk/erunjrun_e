@@ -2,6 +2,8 @@ package com.erunjrun.icon.dto;
 
 import java.sql.Date;
 
+import com.erunjrun.member.dto.MemberDTO;
+
 public class IconDTO {
 
 	// 아이콘 테이블
