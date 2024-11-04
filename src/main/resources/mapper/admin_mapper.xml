@@ -3,8 +3,8 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
 <mapper namespace="com.erunjrun.admin.dao.AdminDAO">
-  	
-  	<select id="getAllowedIp" resultType="String">
+     
+     <select id="getAllowedIp" resultType="String">
       SELECT ip FROM admin WHERE
       admin_id = #{id}
    </select>
@@ -22,8 +22,8 @@
       FROM admin
       WHERE admin_id = #{id}
    </select> 
-  	
-  	<insert id="adminJoin" parameterType="String">
+     
+     <insert id="adminJoin" parameterType="String">
       INSERT INTO admin
       (admin_id, admin_pw, name, ip)
       VALUES (#{id}, #{pw}, #{name}, #{ip})
@@ -33,35 +33,35 @@
       SELECT ip FROM admin WHERE
       admin_id = #{id}
    </select>
-  	
+     
 
-  	<select id="adminlist" resultType="com.erunjrun.admin.dto.AdminDTO">
-  		SELECT * FROM admin  
-  		<where>
-  		is_admin IN ('a','A')
-  		<if test="keyword != null and !keyword.equals('') and opt.equals('id')">
+     <select id="adminlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+        SELECT * FROM admin  
+        <where>
+        is_admin IN ('a','A')
+        <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
             admin_id LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="keyword != null and !keyword.equals('') and opt.equals('name')">         
             name LIKE CONCAT('%', #{keyword}, '%')
         </if>
-  		</where>
-  		ORDER BY admin_id DESC LIMIT #{limit} OFFSET #{offset}
-  	</select>
+        </where>
+        ORDER BY admin_id DESC LIMIT #{limit} OFFSET #{offset}
+     </select>
   
-  	<select id="admincount" resultType="int">
-		SELECT CEIL(count(admin_id)/#{param1}) AS pages FROM admin
-	</select>
-	
-	
-	<update id="adminyn" parameterType="String">
-		update admin set is_admin = 'n' where admin_id = #{admin_id}
-	</update>
-	
-	
-	
-	
-	  <select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+     <select id="admincount" resultType="int">
+      SELECT CEIL(count(admin_id)/#{param1}) AS pages FROM admin
+   </select>
+   
+   
+   <update id="adminyn" parameterType="String">
+      update admin set is_admin = 'n' where admin_id = #{admin_id}
+   </update>
+   
+   
+   
+   
+     <select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
     WITH ranked_ban AS (
         SELECT 
             b.id,
@@ -110,73 +110,73 @@
 
 
 
-  	
-  	<select id="count" resultType="int">
-		SELECT CEIL(count(id)/#{param1}) AS pages FROM member
-	</select>
-	
-	
-	<select id="memberdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
-		SELECT id,nickname,email,address,gender,birth,phone 
-		FROM member 
-		where id = #{param1}
-	</select>
-	
+     
+     <select id="count" resultType="int">
+      SELECT CEIL(count(id)/#{param1}) AS pages FROM member
+   </select>
+   
+   
+   <select id="memberdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
+      SELECT id,nickname,email,address,gender,birth,phone 
+      FROM member 
+      where id = #{param1}
+   </select>
+   
   
-  	<select id="memberreportlist" resultType="com.erunjrun.admin.dto.AdminDTO" >
-  	  	SElECT report_idx,id,code_name,unlike_id,use_yn,create_date From report_write where id = #{param1}
-  	</select>
+     <select id="memberreportlist" resultType="com.erunjrun.admin.dto.AdminDTO" >
+          SElECT report_idx,id,code_name,unlike_id,use_yn,create_date From report_write where id = #{param1}
+     </select>
   
-  	<select id="ban" resultType="com.erunjrun.admin.dto.AdminDTO">
-  	 	SELECT b.ban_idx,b.id,b.start_date,b.end_date,b.process_date,c.content FROM ban b
-		JOIN code c ON b.code_name = c.code_name  WHERE id = #{param1}
-  	</select>
-  	
-  	
-  	
-  	
-  	<select id="right" resultType="String">
-  	  	SELECT id from member where nickname = #{param1}
-  	</select>
-  	
+     <select id="ban" resultType="com.erunjrun.admin.dto.AdminDTO">
+         SELECT b.ban_idx,b.id,b.start_date,b.end_date,b.process_date,c.content FROM ban b
+      JOIN code c ON b.code_name = c.code_name  WHERE id = #{param1}
+     </select>
+     
+     
+     
+     
+     <select id="right" resultType="String">
+          SELECT id from member where nickname = #{param1}
+     </select>
+     
   
-  	<insert id="rightwrite" parameterType="Map">
-  		INSERT INTO ban(id, admin_id, code_name, start_date, end_date, ban_content)
-  						VALUES(#{id},#{admin_id},#{code_name},#{start_date},#{end_date},#{ban_content})
-  	</insert>
+     <insert id="rightwrite" parameterType="Map">
+        INSERT INTO ban(id, admin_id, code_name, start_date, end_date, ban_content)
+                    VALUES(#{id},#{admin_id},#{code_name},#{start_date},#{end_date},#{ban_content})
+     </insert>
   <!-- id,admin_id,is_ban 추가해야됌 -->
   
   <select id="rightdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
-  		SELECT b.ban_idx,b.id,m.nickname,b.start_date,b.end_date,b.ban_content,b.code_name,c.content FROM ban b
-		LEFT JOIN  code c ON b.code_name = c.code_name  
-		LEFT JOIN  member m ON b.id = m.id WHERE b.ban_idx = #{param1}
+        SELECT b.ban_idx,b.id,m.nickname,b.start_date,b.end_date,b.ban_content,b.code_name,c.content FROM ban b
+      LEFT JOIN  code c ON b.code_name = c.code_name  
+      LEFT JOIN  member m ON b.id = m.id WHERE b.ban_idx = #{param1}
   </select>
   
   <update id="rightupdate" parameterType="Map">
-  	UPDATE ban <set>
-  		 <if test= "id != null">
-			id = #{id},
-		</if>
-		<if test="admin_id != null">
-			admin_id = #{admin_id},
-		</if>
-		<if test="code_name != null">
-			code_name = #{code_name},
-		</if>
-		<if test="start_date != null">
-			start_date = #{start_date},
-		</if>
-		<if test="end_date != null">
-			end_date = #{end_date} ,
-		</if>
-		<if test="ban_content != null">
-			ban_content = #{ban_content} 
-		</if>
-  	</set>
-			  WHERE ban_idx = #{ban_idx}
+     UPDATE ban <set>
+         <if test= "id != null">
+         id = #{id},
+      </if>
+      <if test="admin_id != null">
+         admin_id = #{admin_id},
+      </if>
+      <if test="code_name != null">
+         code_name = #{code_name},
+      </if>
+      <if test="start_date != null">
+         start_date = #{start_date},
+      </if>
+      <if test="end_date != null">
+         end_date = #{end_date} ,
+      </if>
+      <if test="ban_content != null">
+         ban_content = #{ban_content} 
+      </if>
+     </set>
+           WHERE ban_idx = #{ban_idx}
   </update>
   
-	 	<!-- 시작일이 오늘 또는 과거인 권한을 'Y'로 업데이트 -->
+       <!-- 시작일이 오늘 또는 과거인 권한을 'Y'로 업데이트 -->
     <update id="updateRightY" parameterType="date">
         UPDATE ban
         SET is_right = 'Y'
@@ -194,275 +194,282 @@
   
   
   
-	<select id="reportlist" resultType="com.erunjrun.admin.dto.AdminDTO">
-	    SELECT 
-	        rw.report_idx,
-	        rw.code_name,
-	        c1.content AS category,
-	        rw.unlike_id,
-	        rw.create_date,
-	        a.name,
-	        rp.code_name,
-	        c2.content AS process
-	    FROM 
-	        report_write rw
-	    LEFT JOIN 
-	        code c1 ON rw.code_name = c1.code_name
-	    LEFT JOIN 
-	        report_process rp ON rw.report_idx = rp.report_idx
-	    LEFT JOIN 
-	        code c2 ON rp.code_name = c2.code_name
-	    LEFT JOIN 
-	        admin a ON rp.admin_id = a.admin_id
-	    <where>
-	        <if test="category != null and category != 'all'">
-	            c1.content = #{category}
-	        </if>
-	    </where>
-	    ORDER BY rw.report_idx DESC
-	    LIMIT #{limit} OFFSET #{offset}
-	</select>
-	  
-  	<select id="reportcount" resultType="int">
-		SELECT CEIL(count(report_idx)/#{param1}) AS pages FROM report_write
-	</select>
+   <select id="reportlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+    SELECT 
+        rw.report_idx,
+        rw.code_name,
+        c1.content AS category,
+        rw.unlike_id,
+        rw.create_date,
+        a.name,
+        rp.code_name,
+        c2.content AS process
+    FROM 
+        report_write rw
+    LEFT JOIN 
+        code c1 ON rw.code_name = c1.code_name
+    LEFT JOIN 
+        report_process rp ON rw.report_idx = rp.report_idx
+    LEFT JOIN 
+        code c2 ON rp.code_name = c2.code_name
+    LEFT JOIN 
+        admin a ON rp.admin_id = a.admin_id
+    <where>
+        <if test="category != null and category != 'all'">
+            c1.content = #{category}
+        </if>
+        <if test="status != null and status != 'all'">
+            AND (
+                (c2.code_name = #{status}) OR
+                (#{status} = 'D101' AND c2.code_name IS NULL)
+            )
+        </if>
+    </where>
+    ORDER BY rw.report_idx DESC
+    LIMIT #{limit} OFFSET #{offset}
+</select>
+
+     
+     <select id="reportcount" resultType="int">
+      SELECT CEIL(count(report_idx)/#{param1}) AS pages FROM report_write
+   </select>
   
    <select id="reportdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
-   		SELECT 
-   		c.content as category,
-   		rw.code_name,
-   		rw.report_idx,
-   		rw.id,
-   		rw.create_date,
-   		rw.unlike_id,
-   		rw.content,
-   		rp.content AS process
-		FROM report_write rw
-		LEFT JOIN
-		 code c on rw.code_name = c.code_name
-		LEFT JOIN 
-		 report_process rp on rw.report_idx = rp.report_idx 
-		 WHERE rw.report_idx = #{param1}
+         SELECT 
+         c.content as category,
+         rw.code_name,
+         rw.report_idx,
+         rw.id,
+         rw.create_date,
+         rw.unlike_id,
+         rw.content,
+         rp.content AS process
+      FROM report_write rw
+      LEFT JOIN
+       code c on rw.code_name = c.code_name
+      LEFT JOIN 
+       report_process rp on rw.report_idx = rp.report_idx 
+       WHERE rw.report_idx = #{param1}
    </select>
-	  
-	  <select id="image" resultType="com.erunjrun.image.dto.ImageDTO">
-	  	select 
-	  	img_ori,
-	  	img_new,
-	  	img_no,
-	  	img_idx
-	  	from image 
-	  	 where img_no = #{param1}
-	  	 and code_name = #{param2}
-	  </select>
-	  
-	 	<insert id="reportupdate" parameterType="Map">
-		 	INSERT INTO report_process (report_idx, admin_id, code_name, content) 
-		 	VALUES (#{report_idx},#{admin_id},#{code_name},#{process})
-			ON DUPLICATE KEY UPDATE 
-			    report_idx = #{report_idx},
-			    admin_id = #{admin_id},
-	 			code_name = #{code_name},
-	 			content = #{process}
-	 	</insert>
-	 	
-	 	
+     
+     <select id="image" resultType="com.erunjrun.image.dto.ImageDTO">
+        select 
+        img_ori,
+        img_new,
+        img_no,
+        img_idx
+        from image 
+         where img_no = #{param1}
+         and code_name = #{param2}
+     </select>
+     
+       <insert id="reportupdate" parameterType="Map">
+          INSERT INTO report_process (report_idx, admin_id, code_name, content) 
+          VALUES (#{report_idx},#{admin_id},#{code_name},#{process})
+         ON DUPLICATE KEY UPDATE 
+             report_idx = #{report_idx},
+             admin_id = #{admin_id},
+             code_name = #{code_name},
+             content = #{process}
+       </insert>
+       
+       
   
-	 <select id="asklist">
-			SELECT 
-			a.ask_idx,
-		    c.content AS category, 
-		    a.id, 
-		    m.nickname,
-		   	a.subject,        
-			a.is_ask,
-		    a.create_date
-		    FROM ask a
-			LEFT JOIN 
-				code c ON a.code_name = c.code_name
-			LEFT JOIN 
-				member m ON a.id = m.id   
-		<where>
-	    <if test="keyword != null and !keyword.equals('') and opt.equals('category')">
-	        a.category LIKE CONCAT('%', #{keyword}, '%')
-	    </if>
-	    <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
-	        a.id LIKE CONCAT('%', #{keyword}, '%')
-	    </if>
-	    <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
-	        a.subject LIKE CONCAT('%', #{keyword}, '%')
-	    </if>
-		</where>   
-			ORDER BY a.ask_idx DESC LIMIT #{limit} OFFSET #{offset}
-		</select>  
-	  
-	  <select id="askcount" resultType="int">
-		SELECT CEIL(count(ask_idx)/#{param1}) AS pages FROM ask
-	</select>
-	
-	
-	
-	
-	  <select id="taglist" resultType="com.erunjrun.admin.dto.AdminDTO">
-	  select * from tag ORDER BY tag_idx DESC LIMIT #{limit} OFFSET #{offset}
-	  </select>
-	  
-	  <select id="tagcount" resultType="int">
-		SELECT CEIL(count(tag_idx)/#{param1}) AS pages FROM tag
-	</select>
-	  
-	  <insert id="tagwrite" parameterType="Map">
-	  		INSERT INTO tag(tag_name,use_yn)VALUES(#{tag_name},#{use_yn})
-	  </insert>
-	  
-	  <select id="tagdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
-	  		select * from tag where tag_idx = #{tag_idx}
-	  </select>
-	  
-  		<update id="tagupdate" parameterType="Map">
-  			update tag<set>
-  		 <if test= "tag_name != null">
-			tag_name = #{tag_name},
-		</if>
-		<if test="use_yn != null">
-			use_yn = #{use_yn}
-		</if>
-  		</set>
-			where tag_idx = #{tag_idx}	
-  		</update>
-  		
-  		
-  		
-  		
-  		<select id="codelist" resultType="com.erunjrun.admin.dto.AdminDTO">
-  			select * from code
-  			<where>
-	    <if test="keyword != null and !keyword.equals('') and opt.equals('content')">
-	        content LIKE CONCAT('%', #{keyword}, '%')
-	    </if>
-	    <if test="keyword != null and !keyword.equals('') and opt.equals('code_name')">
-	        code_name LIKE CONCAT('%', #{keyword}, '%')
-	    </if>
-  		</where>   
-			ORDER BY code_name DESC LIMIT #{limit} OFFSET #{offset}	
-  		</select>
-  		
-	    <select id="codecount" resultType="int">
-			SELECT CEIL(count(code_name)/#{param1}) AS pages FROM code
-		</select>
-	
-  		<insert id="codewrite" parameterType="Map">
-  			INSERT INTO code(content,code_name,use_yn)VALUES(#{content},#{code_name},#{use_yn})
-  		</insert>
-  		
-  		<select id="codeoverlay" resultType="int">
-  			SELECT COUNT(code_name) FROM code WHERE code_name = #{param1}
-  		</select>
-  		
-  		<select id="codedetail" resultType="com.erunjrun.admin.dto.AdminDTO">
-  			select * from code where code_name = #{param1}
-  		</select>
-  		
-  		<update id="codeupdate" parameterType="Map">
-  			UPDATE code<set>
-  		 <if test= "content != null">
-			content = #{content},
-		</if>
-		<if test="use_yn != null">
-			use_yn = #{use_yn}
-		</if>
-  		</set>
-			WHERE code_name = #{code_name}	
-  		</update>
-  		
-  		
-  		<select id="popuplist" resultType="com.erunjrun.admin.dto.PopupDTO">
-	  		select * from popup ORDER BY popup_idx DESC LIMIT #{limit} OFFSET #{offset}
-	  </select>
-  		
-  		<select id="popupcount" resultType="int">
-			SELECT CEIL(count(popup_idx)/#{param1}) AS pages FROM popup
-		</select>
-		
-		<insert 
-			useGeneratedKeys="true"
-			keyColumn="popup_idx"
-			keyProperty="popup_idx"
-			id="popupwrite" parameterType="com.erunjrun.admin.dto.PopupDTO">
-			INSERT INTO popup(subject,priority,code_name,use_yn,x,y,width,height,start_date,end_date,content)
-			VALUES(#{subject},#{priority},#{code_name},#{use_yn},#{x},#{y},#{width},#{height},#{start_date},#{end_date},#{content})
-		</insert>
-		
-		<insert id="fileWrite">
-			INSERT INTO image(img_ori,img_new,img_no,code_name)VALUES(#{param1},#{param2},#{param3},#{param4})
-		</insert>
-		
-		<update id="fileupdate" parameterType="String">
-				update image <set>				
-  		 <if test= "img_ori != null">
-			img_ori = #{img_ori},
-		</if>
-		<if test="img_new != null">
-			img_new = #{img_new},
-		</if>
-		<if test="code_name != null">
-			code_name = #{code_name}
-		</if>
-		</set>
-		where img_no = #{popup_idx}
-		and code_name = #{code_name}
-		</update>
-		
-  		
-  		<select id="popupdetail" resultType="com.erunjrun.admin.dto.PopupDTO" >
-  			select * from popup where popup_idx = #{popup_idx}
-  		</select>
-  		
-  		<update id="popupupdate">
-  			update popup <set>
-  		 <if test= "subject != null">
-			subject = #{subject},
-		</if>
-		<if test="priority != null">
-			priority = #{priority},
-		</if>
-		<if test="use_yn != null">
-			use_yn = #{use_yn},
-		</if>
-		<if test="x != null">
-			x = #{x},
-		</if>
-		<if test="y != null">
-			y = #{y},
-		</if>
-		<if test="width != null">
-			width = #{width},
-		</if>
-		<if test="height != null">
-			height = #{height},
-		</if>
-		<if test="start_date != null">
-			start_date = #{start_date},
-		</if>
-		<if test="end_date != null">
-			end_date = #{end_date},
-		</if>
-		<if test="content != null">
-			content = #{content}
-		</if>
-  		</set>
-			where popup_idx = #{popup_idx}	
-  		</update>
-  		
-  		<delete id="filedelete">
-  			delete from image where img_no = #{param1} and code_name = #{param2}
-  		</delete>
-  		
-  		<update id="ExistingPopupPriority" >
-		    UPDATE popup
-		    SET use_yn = 'N'
-		    WHERE priority = #{priority} AND use_yn = 'Y'
-		</update>
-  		
-  		
+    <select id="asklist">
+         SELECT 
+         a.ask_idx,
+          c.content AS category, 
+          a.id, 
+          m.nickname,
+            a.subject,        
+         a.is_ask,
+          a.create_date
+          FROM ask a
+         LEFT JOIN 
+            code c ON a.code_name = c.code_name
+         LEFT JOIN 
+            member m ON a.id = m.id   
+      <where>
+       <if test="keyword != null and !keyword.equals('') and opt.equals('category')">
+           a.category LIKE CONCAT('%', #{keyword}, '%')
+       </if>
+       <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
+           a.id LIKE CONCAT('%', #{keyword}, '%')
+       </if>
+       <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
+           a.subject LIKE CONCAT('%', #{keyword}, '%')
+       </if>
+      </where>   
+         ORDER BY a.ask_idx DESC LIMIT #{limit} OFFSET #{offset}
+      </select>  
+     
+     <select id="askcount" resultType="int">
+      SELECT CEIL(count(ask_idx)/#{param1}) AS pages FROM ask
+   </select>
+   
+   
+   
+   
+     <select id="taglist" resultType="com.erunjrun.admin.dto.AdminDTO">
+     select * from tag ORDER BY tag_idx DESC LIMIT #{limit} OFFSET #{offset}
+     </select>
+     
+     <select id="tagcount" resultType="int">
+      SELECT CEIL(count(tag_idx)/#{param1}) AS pages FROM tag
+   </select>
+     
+     <insert id="tagwrite" parameterType="Map">
+           INSERT INTO tag(tag_name,use_yn)VALUES(#{tag_name},#{use_yn})
+     </insert>
+     
+     <select id="tagdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
+           select * from tag where tag_idx = #{tag_idx}
+     </select>
+     
+        <update id="tagupdate" parameterType="Map">
+           update tag<set>
+         <if test= "tag_name != null">
+         tag_name = #{tag_name},
+      </if>
+      <if test="use_yn != null">
+         use_yn = #{use_yn}
+      </if>
+        </set>
+         where tag_idx = #{tag_idx}   
+        </update>
+        
+        
+        
+        
+        <select id="codelist" resultType="com.erunjrun.admin.dto.AdminDTO">
+           select * from code
+           <where>
+       <if test="keyword != null and !keyword.equals('') and opt.equals('content')">
+           content LIKE CONCAT('%', #{keyword}, '%')
+       </if>
+       <if test="keyword != null and !keyword.equals('') and opt.equals('code_name')">
+           code_name LIKE CONCAT('%', #{keyword}, '%')
+       </if>
+        </where>   
+         ORDER BY code_name DESC LIMIT #{limit} OFFSET #{offset}   
+        </select>
+        
+       <select id="codecount" resultType="int">
+         SELECT CEIL(count(code_name)/#{param1}) AS pages FROM code
+      </select>
+   
+        <insert id="codewrite" parameterType="Map">
+           INSERT INTO code(content,code_name,use_yn)VALUES(#{content},#{code_name},#{use_yn})
+        </insert>
+        
+        <select id="codeoverlay" resultType="int">
+           SELECT COUNT(code_name) FROM code WHERE code_name = #{param1}
+        </select>
+        
+        <select id="codedetail" resultType="com.erunjrun.admin.dto.AdminDTO">
+           select * from code where code_name = #{param1}
+        </select>
+        
+        <update id="codeupdate" parameterType="Map">
+           UPDATE code<set>
+         <if test= "content != null">
+         content = #{content},
+      </if>
+      <if test="use_yn != null">
+         use_yn = #{use_yn}
+      </if>
+        </set>
+         WHERE code_name = #{code_name}   
+        </update>
+        
+        
+        <select id="popuplist" resultType="com.erunjrun.admin.dto.PopupDTO">
+           select * from popup ORDER BY popup_idx DESC LIMIT #{limit} OFFSET #{offset}
+     </select>
+        
+        <select id="popupcount" resultType="int">
+         SELECT CEIL(count(popup_idx)/#{param1}) AS pages FROM popup
+      </select>
+      
+      <insert 
+         useGeneratedKeys="true"
+         keyColumn="popup_idx"
+         keyProperty="popup_idx"
+         id="popupwrite" parameterType="com.erunjrun.admin.dto.PopupDTO">
+         INSERT INTO popup(subject,priority,code_name,use_yn,x,y,width,height,start_date,end_date,content)
+         VALUES(#{subject},#{priority},#{code_name},#{use_yn},#{x},#{y},#{width},#{height},#{start_date},#{end_date},#{content})
+      </insert>
+      
+      <insert id="fileWrite">
+         INSERT INTO image(img_ori,img_new,img_no,code_name)VALUES(#{param1},#{param2},#{param3},#{param4})
+      </insert>
+      
+      <update id="fileupdate" parameterType="String">
+            update image <set>            
+         <if test= "img_ori != null">
+         img_ori = #{img_ori},
+      </if>
+      <if test="img_new != null">
+         img_new = #{img_new},
+      </if>
+      <if test="code_name != null">
+         code_name = #{code_name}
+      </if>
+      </set>
+      where img_no = #{popup_idx}
+      and code_name = #{code_name}
+      </update>
+      
+        
+        <select id="popupdetail" resultType="com.erunjrun.admin.dto.PopupDTO" >
+           select * from popup where popup_idx = #{popup_idx}
+        </select>
+        
+        <update id="popupupdate">
+           update popup <set>
+         <if test= "subject != null">
+         subject = #{subject},
+      </if>
+      <if test="priority != null">
+         priority = #{priority},
+      </if>
+      <if test="use_yn != null">
+         use_yn = #{use_yn},
+      </if>
+      <if test="x != null">
+         x = #{x},
+      </if>
+      <if test="y != null">
+         y = #{y},
+      </if>
+      <if test="width != null">
+         width = #{width},
+      </if>
+      <if test="height != null">
+         height = #{height},
+      </if>
+      <if test="start_date != null">
+         start_date = #{start_date},
+      </if>
+      <if test="end_date != null">
+         end_date = #{end_date},
+      </if>
+      <if test="content != null">
+         content = #{content}
+      </if>
+        </set>
+         where popup_idx = #{popup_idx}   
+        </update>
+        
+        <delete id="filedelete">
+           delete from image where img_no = #{param1} and code_name = #{param2}
+        </delete>
+        
+        <update id="ExistingPopupPriority" >
+          UPDATE popup
+          SET use_yn = 'N'
+          WHERE priority = #{priority} AND use_yn = 'Y'
+      </update>
+        
+        
   </mapper>

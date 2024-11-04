@@ -10,73 +10,73 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
-	.input-container {
+   .input-container {
     display: flex;        /* Flexbox 사용 */
     align-items: center; /* 수직 중앙 정렬 */
     margin-bottom: 20px;
     margin-top: 20px;
-	}
-	#text{
+   }
+   #text{
    
     margin-right: 15px
-	}
-	body {
+   }
+   body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
-	}
+   }
 
 /* 헤더 스타일 */
 
 
-	/* 콘텐츠와 사이드바 감싸는 래퍼 */
-	.content-wrapper {
-	    display: flex;
-	    width: 100%;
-	    margin: 80px 10px; /* 헤더 높이만큼 여백 */
-	    flex-grow: 1; /* 남은 공간 채우기 */
-	}
+   /* 콘텐츠와 사이드바 감싸는 래퍼 */
+   .content-wrapper {
+       display: flex;
+       width: 100%;
+       margin: 80px 10px; /* 헤더 높이만큼 여백 */
+       flex-grow: 1; /* 남은 공간 채우기 */
+   }
 
-	/* 사이드바 스타일 */
-	.fixed-left {
-	    width: 300px;
-	    border-right: 1px solid #ccc;
-	    padding: 20px;
-	    position: sticky;
-	    top: 80px; /* 헤더 아래에 고정 */
-	    height: calc(100vh - 80px); /* 화면 높이에 맞추기 */
-	    overflow-y: auto;
-	}
-	.fixed-left p{
-	    margin: 15px 0;
-	    line-height: 1.5;
-	    font-size: 20px;
-	}
-	
-	#admin_name{
-	font-weight: 800;
-	font-size: 23px;
-	}
-	
-	.image img {
-	    width: 35%;  /* 또는 원하는 픽셀 값 */
-	    height: auto;
-	    margin-bottom: 20px; /* 비율을 유지 */
-		}
-	/* 메인 콘텐츠 */
-	.main-content {
-	    flex: 1; /* 남은 공간 채우기 */
-	    padding: 20px;
-	    overflow: auto;
-	}
+   /* 사이드바 스타일 */
+   .fixed-left {
+       width: 300px;
+       border-right: 1px solid #ccc;
+       padding: 20px;
+       position: sticky;
+       top: 80px; /* 헤더 아래에 고정 */
+       height: calc(100vh - 80px); /* 화면 높이에 맞추기 */
+       overflow-y: auto;
+   }
+   .fixed-left p{
+       margin: 15px 0;
+       line-height: 1.5;
+       font-size: 20px;
+   }
+   
+   #admin_name{
+   font-weight: 800;
+   font-size: 23px;
+   }
+   
+   .image img {
+       width: 35%;  /* 또는 원하는 픽셀 값 */
+       height: auto;
+       margin-bottom: 20px; /* 비율을 유지 */
+      }
+   /* 메인 콘텐츠 */
+   .main-content {
+       flex: 1; /* 남은 공간 채우기 */
+       padding: 20px;
+       overflow: auto;
+   }
     .radio{
-    	
-    	 transform: scale(1.5);
+       
+        transform: scale(1.5);
     }
     
     #content{
-    	width: 750px; /* 너비를 250픽셀로 설정 */
+       width: 750px; /* 너비를 250픽셀로 설정 */
         height: 350px;
         resize: vertical; /* 높이를 50픽셀로 설정 */
         font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
@@ -84,28 +84,28 @@
     
     }
    
-	.btn01-l{
-	margin-top: 50px;
-	margin-bottom: 50px;
-	margin-left: 680px;
-	}
+   .btn01-l{
+   margin-top: 50px;
+   margin-bottom: 50px;
+   margin-left: 680px;
+   }
     #radio{
     margin-left: 10px;
     }
-	#dot{
-	font-size: 34px;
-	color: #FB7E3A;
-	}
-	
+   #dot{
+   font-size: 34px;
+   color: #FB7E3A;
+   }
+   
 </style>
 </head>
 <body>
-	<!-- 헤더 -->
-	<jsp:include page="../header.jsp"/> 
-	
-	<!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
-	<div class="content-wrapper">
-		<aside class="fixed-left">
+   <!-- 헤더 -->
+   <jsp:include page="../header.jsp"/> 
+   
+   <!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
+   <div class="content-wrapper">
+      <aside class="fixed-left">
             <div class="image">
                 <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
             </div>
@@ -121,60 +121,60 @@
         </aside>
         
         <main class="main-content">
-		<p class="title1" >신고</p>
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">카테고리</p>
-			<p class="title2" id="text">${info.category}</p>
-		</div>	
-		
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">게시글번호</p>
-			<p class="title2" id="text" onclick="location.href='adminIcon'">${info.report_idx}</p> <!-- -- 특정 게시글로 이동 -->
-		</div>	
-		
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">작성일시</p>
-			<p class="title2" id="text">${info.create_date}</p>
-		</div>	
+      <p class="title1" >신고</p>
+       <div class="input-container">
+           <p class="title2" id="dot">•</p>
+         <p class="title2" id="text">카테고리</p>
+         <p class="title2" id="text">${info.category}</p>
+      </div>   
+      
+       <div class="input-container">
+           <p class="title2" id="dot">•</p>
+         <p class="title2" id="text">게시글번호</p>
+         <p class="title2" id="text" onclick="location.href='adminIcon'">${info.report_idx}</p> <!-- -- 특정 게시글로 이동 -->
+      </div>   
+      
+       <div class="input-container">
+           <p class="title2" id="dot">•</p>
+         <p class="title2" id="text">작성일시</p>
+         <p class="title2" id="text">${info.create_date}</p>
+      </div>   
 
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">신고자</p>
-			<p class="title2" id="text">${info.unlike_id}</p>
-		</div>	
-		
-		<div class="input-container">
-		<p class="title2" id="dot">•</p>
-		<p class="title2" id="text">이미지</p>
-	 	<img alt="${file.img_ori}" src="/photo/${file.img_new}">	
-		</div>
-		
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">내용</p>
-			<p class="title2" id="text">${info.content}</p>
-		</div>	
-		
-					
- 		<div class="input-container">
-  			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">처리내용</p>
-			<p class="title2" id="text">${info.process}</p>
-		</div>	
-		
-   	
-	<div class="btn01-l" onclick="location.href='adminReportUpdate?report_idx=${info.report_idx}&code_name=${info.code_name}'">처리하기</div> <!-- 클릭시 색깔변경 -->
-	<div class="btn02-l" onclick="location.href='adminReport'">취소</div> <!-- 클릭시 색깔변경 -->
-	
+       <div class="input-container">
+           <p class="title2" id="dot">•</p>
+         <p class="title2" id="text">신고자</p>
+         <p class="title2" id="text">${info.unlike_id}</p>
+      </div>   
+      
+      <div class="input-container">
+      <p class="title2" id="dot">•</p>
+      <p class="title2" id="text">이미지</p>
+       <img alt="${file.img_ori}" src="/photo/${file.img_new}">   
+      </div>
+      
+       <div class="input-container">
+           <p class="title2" id="dot">•</p>
+         <p class="title2" id="text">내용</p>
+         <p class="title2" id="text">${info.content}</p>
+      </div>   
+      
+               
+       <div class="input-container">
+           <p class="title2" id="dot">•</p>
+         <p class="title2" id="text">처리내용</p>
+         <p class="title2" id="text">${info.process}</p>
+      </div>   
+      
+      
+   <div class="btn01-l" onclick="location.href='adminReportUpdate?report_idx=${info.report_idx}&code_name=${info.code_name}'">처리하기</div> <!-- 클릭시 색깔변경 -->
+   <div class="btn02-l" onclick="location.href='adminReport'">취소</div> <!-- 클릭시 색깔변경 -->
+   
         
         </main>
-	</div>
-	
-	<!-- 푸터 -->
-	<jsp:include page="../footer.jsp"/>
+   </div>
+   
+   <!-- 푸터 -->
+   <jsp:include page="../footer.jsp"/>
 </body>
 
 

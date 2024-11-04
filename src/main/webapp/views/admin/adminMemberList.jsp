@@ -11,62 +11,62 @@
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 /* 전체 페이지 레이아웃 */
-	body {
-	    display: flex;
-	    flex-direction: column;
-	    min-height: 100vh;
-	    margin: 0;
-	}
-	
-	/* 헤더 스타일 */
-	
-	
-	/* 콘텐츠와 사이드바 감싸는 래퍼 */
-	.content-wrapper {
-	    display: flex;
-	    width: 100%;
-	    margin-top: 80px; /* 헤더 높이만큼 여백 */
-	    flex-grow: 1; /* 남은 공간 채우기 */
-	}
-	
-	/* 사이드바 스타일 */
-	.fixed-left {
-	    width: 300px;
-	    border-right: 1px solid #ccc;
-	    padding: 20px;
-	    position: sticky;
-	    top: 80px; /* 헤더 아래에 고정 */
-	    height: calc(100vh - 80px); /* 화면 높이에 맞추기 */
-	    overflow-y: auto;
-	}
-	.fixed-left p{
-	    margin: 15px 0;
-	    line-height: 1.5;
-	    font-size: 20px;
-	}
-	
-	#admin_name{
-	font-weight: 800;
-	font-size: 23px;
-	}
-	
-	.image img {
-	    width: 35%;  /* 또는 원하는 픽셀 값 */
-	    height: auto;
-	    margin-bottom: 20px; /* 비율을 유지 */
-		}
-	/* 메인 콘텐츠 */
-	.main-content {
-	    flex: 1; /* 남은 공간 채우기 */
-	    padding: 20px;
-	    overflow: auto;
-	}
-	
+   body {
+       display: flex;
+       flex-direction: column;
+       min-height: 100vh;
+       margin: 0;
+   }
+   
+   /* 헤더 스타일 */
+   
+   
+   /* 콘텐츠와 사이드바 감싸는 래퍼 */
+   .content-wrapper {
+       display: flex;
+       width: 100%;
+       margin-top: 80px; /* 헤더 높이만큼 여백 */
+       flex-grow: 1; /* 남은 공간 채우기 */
+   }
+   
+   /* 사이드바 스타일 */
+   .fixed-left {
+       width: 300px;
+       border-right: 1px solid #ccc;
+       padding: 20px;
+       position: sticky;
+       top: 80px; /* 헤더 아래에 고정 */
+       height: calc(100vh - 80px); /* 화면 높이에 맞추기 */
+       overflow-y: auto;
+   }
+   .fixed-left p{
+       margin: 15px 0;
+       line-height: 1.5;
+       font-size: 20px;
+   }
+   
+   #admin_name{
+   font-weight: 800;
+   font-size: 23px;
+   }
+   
+   .image img {
+       width: 35%;  /* 또는 원하는 픽셀 값 */
+       height: auto;
+       margin-bottom: 20px; /* 비율을 유지 */
+      }
+   /* 메인 콘텐츠 */
+   .main-content {
+       flex: 1; /* 남은 공간 채우기 */
+       padding: 20px;
+       overflow: auto;
+   }
+   
 
-	.btn02-l{
-	margin-top: 0px;
-	margin-bottom: 50px;
-	}
+   .btn02-l{
+   margin-top: 0px;
+   margin-bottom: 50px;
+   }
 
 </style>
 </head>
@@ -162,7 +162,7 @@
         var opt = $('#searchOption').val();
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: 'adminMemberList',
             data: {
                 page: page,
@@ -195,14 +195,14 @@
     function drawList(list) {
         var content = '';
         for (var view of list) {
-        	content += '<tr>';
-        	content += '<td style="' + (view.report_status == 'Y' ? 'color: blue;' : '') + '">' + view.id + '</td>';
-        	content += '<td><a href="adminMemberDetail?id=' + view.id + '">' + view.nickname + '</a></td>';
-        	content += '<td>' + view.email + '</td>';
-        	content += '<td><a href="memberRight?nickname=' + view.nickname + '" style="color: orange;">권한</a></td>';
-        	content += '<td>' + view.report_count + '</td>';
-        	content += '<td>' + view.join_date + '</td>';
-        	content += '</tr>';
+           content += '<tr>';
+           content += '<td style="' + (view.report_status == 'Y' ? 'color: blue;' : '') + '">' + view.id + '</td>';
+           content += '<td><a href="adminMemberDetail/' + view.id + '">' + view.nickname + '</a></td>';
+           content += '<td>' + view.email + '</td>';
+           content += '<td><a href="memberRight?nickname=' + view.nickname + '" style="color: orange;">권한</a></td>';
+           content += '<td>' + view.report_count + '</td>';
+           content += '<td>' + view.join_date + '</td>';
+           content += '</tr>';
 
         }
         $('#list').html(content);
