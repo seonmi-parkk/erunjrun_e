@@ -425,19 +425,40 @@
 <script src="resources/js/layerPopup.js"></script>
 
 <script>
-	var msg = '${msg}';
-	if (msg != '') {
-	   alert(msg);
-	}
-	
-	/* 레이어팝업 */
-	function btn1Act() {
-	    // 1번버튼 클릭시 수행할 내용
-	    console.log('1번 버튼 동작');
-	
-	    // 팝업 연달아 필요할 경우 (secondBtn1Act:1번 버튼 클릭시 수행할 내용/ secondBtn2Act: 2번 버튼 클릭시 수행할 내용)
-	    layerPopup("두번째", "체크", false ,secondBtn1Act , secondBtn2Act);
-	}
+
+var msg = '${msg}';
+if (msg != '') {
+   //alert(msg);
+}
+
+/* 레이어팝업 */
+function btn1Act() {
+    // 1번버튼 클릭시 수행할 내용
+    console.log('1번 버튼 동작');
+
+    // 팝업 연달아 필요할 경우 (secondBtn1Act:1번 버튼 클릭시 수행할 내용/ secondBtn2Act: 2번 버튼 클릭시 수행할 내용)
+    layerPopup("두번째", "체크", false ,secondBtn1Act , secondBtn2Act);
+}
+
+function btn2Act() {
+    // 2번버튼 클릭시 수행할 내용
+    console.log('2번 버튼 동작');
+}
+
+function secondBtn1Act() {
+    // 두번째팝업 1번버튼 클릭시 수행할 내용
+    console.log('두번째팝업 1번 버튼 동작');
+}
+
+function secondBtn2Act() {
+    // 두번째팝업 2번버튼 클릭시 수행할 내용
+    console.log('두번째팝업 2번 버튼 동작');
+}
+
+$('.btn-popup').on('click',function(){
+	layerPopup('~~~하시겠습니까?222','다음으로2','취소2' ,secondBtn1Act , secondBtn2Act);
+});
+
 
 	
 	

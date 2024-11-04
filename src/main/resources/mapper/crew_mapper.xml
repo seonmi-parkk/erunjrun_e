@@ -547,4 +547,19 @@
 		select crew_idx from crew_like where id = #{id} ORDER BY crew_idx DESC
 	</select>
 	
+	<!-- 크루 권한 승인 및 거절 -->
+	<update id="crewMemberAdminUpdate" parameterType="map">
+		UPDATE crew_application_history SET is_agree = #{is_agree} WHERE crew_idx = #{crew_idx} AND id = #{id}
+	</update>
+	
+	<!-- 기존 리더 업데이트 -->
+	<update id="crewLeaderUpdate" parameterType="map">
+		UPDATE crew_member SET is_leader = 'N' WHERE crew_idx = #{crew_idx} AND is_leader = 'Y'
+	</update>
+	
+	<!-- 새 리더 업데이트 -->
+	<update id="crewLeaderChange" parameterType="map">
+		UPDATE crew_member SET is_leader = 'Y' WHERE crew_idx = #{crew_idx} AND id = #{id}
+	</update>
+	
 </mapper>

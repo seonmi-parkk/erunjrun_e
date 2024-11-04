@@ -22,6 +22,8 @@ import com.erunjrun.chat.dto.ChatCrewLeaderDTO;
 import com.erunjrun.chat.service.ChatPersonalService;
 import com.erunjrun.chat.service.SseService;
 
+import com.erunjrun.main.controller.*;
+
 
 
 @Controller
@@ -29,6 +31,8 @@ public class ChatPersonalController {
 
 	@Autowired ChatPersonalService chatPersonalService;
 	@Autowired SseService sseService;
+	@Autowired AlarmController alarm_controller;
+	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	 @GetMapping("/chat/{id}/{unlikeId}")
@@ -64,7 +68,6 @@ public class ChatPersonalController {
 		
 		 String baseUser = (String) session.getAttribute("loginId");
 		 Map<String, Object> values = chatPersonalService.getContent(chatIdx, baseUser);
-		 
 		 return values;
 	 }
 	
@@ -73,6 +76,18 @@ public class ChatPersonalController {
 	 public Map<String, Object> sendMessage(@RequestBody Map<String, Object> param){
 		 Map<String, Object> data = new HashMap<String, Object>();
 		 data.put("result", chatPersonalService.sendMessage(param));
+		 
+		    try {
+		        int idx = Integer.parseInt(param.get("chatIdx").toString());
+		        String id = (String) param.get("otherUser");
+		        String from_id = param.get("baseUser").toString();
+		        
+		        alarm_controller.personalChat(idx, id, from_id);
+		    } catch (NullPointerException | NumberFormatException e) {
+		        System.out.println("chatIdx 또는 baseUser 값이 없습니다: " + e.getMessage());
+		    }
+		 
+		 
 		 return data;
 	 }
 
@@ -118,7 +133,6 @@ public class ChatPersonalController {
 	    	
 	        // 2. 해당 채팅방의 클라이언트에게만 메시지 전송
 	        sseService.sendMessage(roomId, userId, message);
-
 	        return "Message sent successfully!";
 	    }
 
@@ -202,11 +216,22 @@ public class ChatPersonalController {
 			 return values;
 		 }
 
+		 // 크루장 1:1 채팅 전송 (크루장, 일반 사용자 포함)
 		 @PostMapping("/crewLdchat/send")
 		 @ResponseBody
 		 public Map<String, Object> sendCrewLeaderMessage(@RequestBody Map<String, Object> param){
 			 Map<String, Object> data = new HashMap<String, Object>();
 			 data.put("result", chatPersonalService.sendCrewLeaderMessage(param));
+			 
+			    try {
+			        int idx = Integer.parseInt(param.get("chatIdx").toString());
+			        String from_id = param.get("baseUser").toString();
+			        String code = "P";
+			        alarm_controller.crewChat(idx, from_id, code);
+			    } catch (NullPointerException | NumberFormatException e) {
+			        System.out.println("chatIdx 또는 baseUser 값이 없습니다: " + e.getMessage());
+			    }
+			    
 			 return data;
 		 }
 		 

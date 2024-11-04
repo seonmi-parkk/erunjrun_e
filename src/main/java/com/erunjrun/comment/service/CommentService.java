@@ -25,8 +25,8 @@ public class CommentService {
 		
 		return commentDao.list(board_idx);
 	}
-	public int addComment(int board_idx,String content, String nickname,HttpSession session) {
-		String userId = (String) session.getAttribute("loginId");
+	public int addComment(int board_idx,String content, String nickname,String userId) {
+		
 		logger.info("받을 아이디? :"+userId);
 		
 		Map<String, Object> commPoint = new HashMap<String, Object>();
