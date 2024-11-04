@@ -7,7 +7,7 @@
 
 	<!-- 총 알림 수 -->
 	<select id="alarmCount" resultType="int" parameterType="String">
-		SELECT COUNT(id) AS alarmCount FROM alarm WHERE id = #{id}
+		SELECT COUNT(id) AS alarmCount FROM alarm WHERE id = #{id} AND confirm_use = 'N'
 	</select>
 	
 	<!-- 최근 알림 리스트 (20개) -->
@@ -40,4 +40,44 @@
 			(SELECT id FROM crew_notice WHERE notice_idx = #{idx}),
 			(SELECT subject FROM crew_notice WHERE notice_idx = #{idx}))
 	</insert>
+	
+	<!-- 게시글 댓글 알림 -->
+	<insert id="boardComment" parameterType="com.erunjrun.main.dto.AlarmDTO">
+		INSERT INTO alarm(code_name, subject, from_id, url, is_url, id, content) 
+			VALEUS(#{code_name}, #{subject}, #{from_id}, #{url}, #{is_url},
+			(SELECT id FROM board WHERE board_idx = #{idx}),
+			(SELECT subject FROM board WHERE board_idx = #{idx))
+	</insert>
+	
+	<!-- 1:1 채팅 알림 -->
+	<insert id="personalChat" parameterType="com.erunjrun.main.dto.AlarmDTO">
+		INSERT INTO alarm(id, from_id, subject, code_name, is_url, url, content) 
+			VALUES(#{id}, #{from_id}, #{subject}, #{code_name}, #{is_url}, #{url}, 
+			(SELECT content FROM chat_content WHERE chat_idx = #{idx} AND sender = #{from_id} ORDER BY start_date DESC LIMIT 1))
+	</insert>
+	
+	<!-- 크루장 1:1 채팅 알림 -->
+	<insert id="crewLeaderChat" parameterType="com.erunjrun.main.dto.AlarmDTO">
+		INSERT INTO alarm(subject, code_name, from_id, is_url, url, id, content) 
+			VALUES(#{subject}, #{code_name}, #{from_id}, #{is_url}, #{url},
+				(SELECT id FROM crew_chat_link WHERE chat_idx = #{idx} AND id != #{from_id}),
+				(SELECT c.crew_name FROM crew_chat cc JOIN crew c ON cc.crew_idx = c.crew_idx WHERE cc.chat_idx = #{idx}))
+	</insert>
+	
+	<!-- 크루 채팅 알림 -->
+	<insert id="crewGroupChat" parameterType="com.erunjrun.main.dto.AlarmDTO">
+		INSERT INTO alarm(id, subject, code_name, from_id, is_url, url, content)
+			SELECT cm.id, #{subject}, #{code_name}, #{from_id}, #{is_url},
+			    CONCAT('/crewChat/open/', (SELECT crew_idx FROM crew_chat WHERE chat_idx = #{idx} LIMIT 1), '/', #{idx}),
+			    (SELECT c.crew_name FROM crew_chat cc JOIN crew c ON cc.crew_idx = c.crew_idx WHERE cc.chat_idx = #{idx} LIMIT 1)
+			FROM crew_member cm
+			WHERE cm.crew_idx = (SELECT crew_idx FROM crew_chat WHERE chat_idx = #{idx} LIMIT 1)
+			    AND cm.id != #{from_id}
+	</insert>
+	
+	<!-- 알림 읽음 처리 -->
+	<update id="alarmUseUpdate" parameterType="int">
+		UPDATE alarm SET confirm_use = 'Y' WHERE alarm_idx = #{alarm_idx}
+	</update>
+	
 </mapper>

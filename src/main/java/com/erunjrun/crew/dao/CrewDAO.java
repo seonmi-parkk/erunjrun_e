@@ -105,6 +105,12 @@ public interface CrewDAO {
 	String crewLeaderCheck(int crew_idx);
 
 	List<CrewMemberDTO> crewLikeCrew(String id);
+
+	int crewMemberAdminUpdate(Map<String, Object> param);
+
+	int crewLeaderUpdate(Map<String, Object> param);
+
+	int crewLeaderChange(Map<String, Object> param);
 	
 	
 

@@ -20,4 +20,14 @@ public interface AlarmDAO {
 
 	void crewNoticeComment(AlarmDTO alarm_dto);
 
+	void boardComment(AlarmDTO alarm_dto);
+
+	void personalChat(AlarmDTO alarm_dto);
+
+	void crewLeaderChat(AlarmDTO alarm_dto);
+
+	void crewGroupChat(AlarmDTO alarm_dto);
+
+	int alarmUseUpdate(Object ala);
+
 }

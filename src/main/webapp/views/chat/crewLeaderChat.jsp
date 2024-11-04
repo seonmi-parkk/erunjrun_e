@@ -342,9 +342,8 @@
 		var sendData = {};
 		sendData.message = $('.chat textarea[name="msg"]').val();
 		sendData.chatIdx = chatIdx;
-		sendData.baseUser = $('.chat input[name="baseUser"]').val();
+		sendData.baseUser = '${sessionScope.loginId}'; // $('.chat input[name="baseUser"]').val()
 		$('.chat textarea[name="msg"]').val('');
-		
 		
 		$.ajax({
 			type: 'POST',

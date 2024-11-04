@@ -41,5 +41,25 @@ public class AlarmService {
 	public void crewNoticeComment(AlarmDTO alarm_dto) {
 		alarm_dao.crewNoticeComment(alarm_dto);
 	}
+
+	public void boardComment(AlarmDTO alarm_dto) {
+		alarm_dao.boardComment(alarm_dto);
+	}
+
+	public void personalChat(AlarmDTO alarm_dto) {
+		alarm_dao.personalChat(alarm_dto);
+	}
+
+	public void crewLeaderChat(AlarmDTO alarm_dto) {
+		alarm_dao.crewLeaderChat(alarm_dto);
+	}
+
+	public void crewGroupChat(AlarmDTO alarm_dto) {
+		alarm_dao.crewGroupChat(alarm_dto);
+	}
+
+	public int alarmUseUpdate(int alarm_idx) {
+		return alarm_dao.alarmUseUpdate(alarm_idx);
+	}
 	
 }

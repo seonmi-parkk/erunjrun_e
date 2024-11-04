@@ -105,7 +105,73 @@ public class AlarmController {
 		if(board_name.equals("R")) {
 			alarm_dto.setUrl("/runBoardDetail/"+board_idx); // 러닝 코스 게시판
 		}else {
-			alarm_dto.setUrl(""+board_idx); // 자유 게시판
+			alarm_dto.setUrl("/freeBoardDetail/"+board_idx); // 자유 게시판
 		}
+		
+		alarm_service.boardComment(alarm_dto);
 	}
+	
+	// 문의하기 답글 알림
+	
+	
+	// 1:1 채팅 알림
+	public void personalChat(int idx, String id, String from_id) {
+		
+		logger.info("개인 채팅 알림 insert===================================================");
+		logger.info("idx ======================> " + idx);
+		logger.info("id ======================> " + id);
+		logger.info("from_id ======================> " + from_id);
+		alarm_dto.setId(id);
+		alarm_dto.setFrom_id(from_id);
+		alarm_dto.setSubject("1:1 채팅");
+		alarm_dto.setCode_name("AN100");
+		alarm_dto.setIs_url("Y");
+		alarm_dto.setIdx(idx);
+		alarm_dto.setUrl("/chat/"+idx);
+		
+		alarm_service.personalChat(alarm_dto);
+	}
+	
+	// 크루장 채팅 알림 
+	public void crewChat(int idx, String from_id, String code) {
+		logger.info("크루장 1 대 1 채팅 알림 메서드 호출" + idx + " : " +from_id);
+		
+		if(code.equals("P")) { // 크루장 1 : 1
+			alarm_dto.setSubject("크루 1:1");
+			alarm_dto.setCode_name("AN101");
+			alarm_dto.setFrom_id(from_id);
+			alarm_dto.setIdx(idx);
+			alarm_dto.setIs_url("Y");
+			alarm_dto.setUrl("/crewLdchat/open/"+idx);
+			
+			alarm_service.crewLeaderChat(alarm_dto);
+		}else { // 크루 채팅
+			alarm_dto.setSubject("크루 채팅");
+			alarm_dto.setCode_name("AN102");
+			alarm_dto.setFrom_id(from_id);
+			alarm_dto.setIdx(idx);
+			alarm_dto.setIs_url("Y");
+			// /crewChat/open/crew_idx/chat_idx -> crew_idx는 chat_idx로 가져와야 함
+			// alarm_dto.setUrl("/crewChat/open/52/12"+idx);
+			
+			alarm_service.crewGroupChat(alarm_dto);
+		}
+		// 크루 채팅 알림
+		// 알림 테이블에 insert => url ()
+		
+	}
+	
+	@GetMapping(value="/alarmUseUpdate")
+	@ResponseBody
+	public boolean alarmUseUpdate(@RequestParam int alarm_idx) {
+		
+		if(alarm_service.alarmUseUpdate(alarm_idx) > 0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	
 }
