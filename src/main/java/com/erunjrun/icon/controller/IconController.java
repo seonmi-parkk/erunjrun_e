@@ -146,10 +146,11 @@ public class IconController {
         return result;
      }
      
-     @GetMapping(value = "/adminIconUpdate/{icon_idx}")  
-     public String adminIconUpdate(@PathVariable String icon_idx) {   
+     @GetMapping(value = "/adminIconData/{icon_idx}")  
+     public String adminIconUpdate(@PathVariable String icon_idx, Model model) {   
         logger.info("icon_idx : "+icon_idx);
-      
+        IconDTO iconDto = iconService.adminIconData(icon_idx);
+        model.addAttribute("iconDto", iconDto);
         return "/icon/adminIconUpdate";
      }
      
@@ -161,7 +162,15 @@ public class IconController {
      @PostMapping(value = "/adminIconWrite")  
      public String adminIconWrite(MultipartFile file, @RequestParam Map<String, String> param) {   
         iconService.adminIconWrite(file, param);
-        return "redirect:/adminIconList";
+        logger.info("use_yn : "+param.get("use_yn"));
+        return "redirect:/adminIconListView";
+     }
+     
+     @PostMapping(value = "/adminIconUpdate")  
+     public String adminIconUpdate(MultipartFile file, @RequestParam Map<String, String> param) {   
+    	 iconService.adminIconUpdate(file, param);
+    	 logger.info("use_yn : "+param.get("use_yn"));
+    	 return "redirect:/adminIconListView";
      }
    
 }

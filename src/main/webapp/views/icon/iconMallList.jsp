@@ -184,7 +184,7 @@
 						<div class="profile-area">
 							<input type="hidden" name="icon-idx" value="${item.icon_idx}"/>
 							<div class="profile-img" style="background: url(/photo/${userInfoList.image}) center center / cover no-repeat;"></div>
-							<div class="profile-box" style="background: url(${item.image}) center center / 100% 100% no-repeat;"></div>
+							<div class="profile-box" style="background: url(/photo/${item.image}) center center / 100% 100% no-repeat;"></div>
 						</div>
 						<p class="name">${item.icon_name}</p>
 						<span class="price">${item.cost}</span><span>p</span><br/>

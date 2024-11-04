@@ -98,8 +98,25 @@
 	</select>
 	
 	<insert id="adminIconWrite" parameterType="map">
-		INSERT INTO icon (icon_name,cost,image) 
-			VALUES (#{icon-name},#{cost},#{path})
+		INSERT INTO icon (icon_name,cost,image,use_yn) 
+			VALUES (#{icon_name},#{cost},#{path},#{use_yn})
 	</insert>
+	
+	<select id="adminIconData" resultType="com.erunjrun.icon.dto.IconDTO">
+		SELECT icon_idx, icon_name, cost, image, use_yn 
+			FROM icon WHERE icon_idx = #{icon_idx}
+	</select>
+	
+	<insert id="adminIconUpdate" parameterType="map">
+		UPDATE icon 
+		SET 
+			icon_name = #{icon_name}, 
+			cost = #{cost}, 
+			image = #{path}, 
+			use_yn = #{use_yn} 
+		WHERE
+			icon_idx = #{icon_idx}
+	</insert>
+	
 	
 </mapper> 

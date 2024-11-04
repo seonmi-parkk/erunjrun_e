@@ -29,10 +29,11 @@ public class ChatPersonalService {
 		Map<String, Object> values = new HashMap<String, Object>();
 		
 		List<ChatPersonalDTO> userList = chatPersonalDAO.getUserName(chatIdx);
-		//logger.info("userNames"+userNames[0]);
+		logger.info("userNames: "+userList.get(0).getNickname());
 		// userNames들어오는지 check하고 위에 values에 아래 list랑 usernames넣어서 컨트롤러 보내기
 		// 컨트롤러도 수정해야함.
 		List<ChatPersonalDTO> msgList = chatPersonalDAO.getContent(chatIdx, baseUser);
+		logger.info("msgList getContent: "+msgList.get(0).getContent());
 		
 		// 날짜 비교 (날짜 바뀔경우 체크)
 		LocalDate previousDate = null;
@@ -55,7 +56,7 @@ public class ChatPersonalService {
         	}
         }
         
-       // logger.info("getFirstOfDay: "+ msgList.get(0).getFirstOfDay());
+        logger.info("getFirstOfDay: "+ msgList.get(0).getFirstOfDay());
         
         values.put("userList", userList);
         values.put("msgList", msgList);
@@ -110,6 +111,7 @@ public class ChatPersonalService {
 
 	// getContent()에서 baseUser도 지우기 check!!
 	public Map<String, Object> getCrewLeaderContent(String chatIdx, String baseUser) {
+		 logger.info("/crewLdchat/data service 시작");
 		Map<String, Object> values = new HashMap<String, Object>();
 		
 		List<ChatCrewLeaderDTO> userList = chatPersonalDAO.getCrewLeaderUserName(chatIdx);

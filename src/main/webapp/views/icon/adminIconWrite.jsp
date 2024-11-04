@@ -112,7 +112,7 @@
 	}
 	#img_miri {
          width: 360px;    
-         height: 240px;       
+         height: 360px;       
          margin-right: 10px;
          border: 1px solid var(--input-bd); 
          background-color: transparent;  
@@ -147,7 +147,7 @@
 		<p class="title1" >아이콘 등록</p>
 		
 		
-	  	<form action="adminIconWrite" method="post" id="form" enctype="multipart/form-data">
+	  	<form action="/adminIconWrite" method="post" id="form" enctype="multipart/form-data">
 	  	
 			<div class="input-container">
 				<p class="title2" id="dot">•</p>
@@ -198,7 +198,7 @@
 	        reader = new FileReader();
 	        reader.readAsDataURL(file);
 	        reader.onload = function (e) {
-	            $('#img_miri').append('<img class="preview" width="360px" height="240px" src="' + e.target.result + '"/>');
+	            $('#img_miri').append('<img class="preview" width="360px" height="360px" src="' + e.target.result + '"/>');
 	        }
 	    }
 	}
