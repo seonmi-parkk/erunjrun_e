@@ -43,7 +43,7 @@
 		border-style: solid;
 		border-color: #bdbdbd;
 		border-width: 0px 0px 1px 0px;
-		height: 350px;
+		height: 360px;
 		position: relative;
 	}
 	
@@ -52,7 +52,7 @@
 		border-style: solid;
 		border-color: #bdbdbd;
 		border-width: 0px 0px 1px 0px;
-		height: 350px;
+		height: 360px;
 		position: relative;
 	}
 	.crew-chat-list .line {
