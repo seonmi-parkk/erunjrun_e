@@ -342,9 +342,9 @@
 	}
 	
 	// 팝업 닫기
-	document.getElementsByClassName("close")[0].onclick = function() {
-	    document.getElementById("profilePopup").style.display = "none";
-	};
+	$(document).on('click','#profilePopup .close',function(){
+       document.getElementById("profilePopup").style.display = "none";
+   });
 
 
 </script>

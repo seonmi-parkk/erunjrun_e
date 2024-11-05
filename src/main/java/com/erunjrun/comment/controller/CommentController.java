@@ -171,8 +171,11 @@ public class CommentController {
 		public Map<String, Object> addFreeComment(int board_idx,String content,HttpSession session,String nickname){
 				
 			Map<String,Object> result = new HashMap<String, Object>();
+			String id = (String) session.getAttribute("loginId");
 			
 			int add = commentService.addFreeComment(board_idx,content,nickname, session);
+			String board_name = "F";
+			alarm_controller.boardComment(board_idx, id, board_name);
 			
 			result.put("add", add);
 			
@@ -189,6 +192,8 @@ public class CommentController {
 			Map<String,Object> result = new HashMap<String, Object>();
 			
 			int add = commentService.addAskComment(board_idx,content, nickname);
+			
+			alarm_controller.askCommentAlarm(board_idx, nickname);
 			
 			result.put("add", add);
 			

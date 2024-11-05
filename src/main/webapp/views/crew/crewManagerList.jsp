@@ -371,6 +371,14 @@
 	    z-index: 10; /* 다른 요소보다 위에 표시되도록 설정 */
 	}
     
+    .profile-box3{
+ 	   position: absolute; 
+	   top: 4px; /* testeee의 맨 위에 오도록 설정 */
+	   left: 34px; /* 좌측 정렬 */
+	   width: 44px; 
+	   height: 44px;
+	   z-index: 10; /* 다른 요소보다 위에 표시되도록 설정 */
+    }
   
 	
 	
@@ -508,9 +516,12 @@
 	                    }    
 	                        
 	                        
+	                    var member_icon = '';
 	                    if(item.is_leader === 'Y' && item.icon_image != null && item.icon_image !== ''){
             				iconBox = '<div class="profile-box2" style="background: url(/resources/img/icon/'+item.icon_image+') center center / 100% 100% no-repeat;"></div>';
-            			}
+            			}else if(item.icon_image != null && item.icon_image !== ''){
+							member_icon = '<div class="profile-box3" style="background: url(/resources/img/icon/'+item.icon_image+') center center / 100% 100% no-repeat;"></div>';
+						}
 	                        
 	                        
 	                    // 크루장 체크
@@ -526,7 +537,7 @@
 	                        crewone.push(item.id); // 배열에 크루원 id 추가
 	                        content += '<div class="testeee"><input class="basictex" type="checkbox" name="crew_member" data-id="'+item.id+'"/>' +
 	                        '<a class="user" style="cursor: pointer;"  data-id="' + item.id + '">' 
-	                            + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / '  + item.create_date + '</div></a>';
+	                            + profileImg + member_icon + ' ' + item.nickname + ' / ' + genderImg + ' / '  + item.create_date + '</div></a>';
 	                    }
 	                });
 
@@ -785,9 +796,9 @@
 	}
 	
 	// 팝업 닫기
-	document.getElementsByClassName("close")[0].onclick = function() {
-	    document.getElementById("profilePopup").style.display = "none";
-	};	
+	$(document).on('click','#profilePopup .close',function(){
+       document.getElementById("profilePopup").style.display = "none";
+   });	
 	
 	// 크루장 채팅리스트
 	$.ajax({

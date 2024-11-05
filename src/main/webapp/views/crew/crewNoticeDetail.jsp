@@ -730,9 +730,9 @@
 	}
 	
 	// 팝업 닫기
-	document.getElementsByClassName("dis")[0].onclick = function() {
-	    document.getElementById("reportPopup").style.display = "none";
-	};	
+	$(document).on('click','#profilePopup .close',function(){
+       document.getElementById("profilePopup").style.display = "none";
+   });
 	
 	
 	// 관리자 세션 체크! 

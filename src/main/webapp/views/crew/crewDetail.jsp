@@ -331,7 +331,7 @@
 	.profile-box23{
 		position: absolute;
 	    top: 4px; /* 프로필 이미지와 정확히 겹치도록 */
-	    left: -7px; /* 프로필 이미지와 정확히 겹치도록 */
+	    left: -5px; /* 프로필 이미지와 정확히 겹치도록 */
 	    width: 44px;
 	    height: 44px;
 	    z-index: 2;
@@ -630,7 +630,7 @@
 					    $('.crewAccess').click(function() {
 						    if (loginId != null && loginId !== '') {
 						        // loginId가 result.id와 다르고, 또한 crewLeader와 다를 때만 접근 차단
-						        if (loginId == result.id || loginId == crewLeader) {
+						        if (crewone.includes(loginId) || loginId == crewLeader) {
 						            location.href = "/crewNoticeList/" + crew_idx;
 						        } else {
 						            // 접근 차단
@@ -649,8 +649,8 @@
 					    $('#crewChatLocation').click(function() {
 					        if (loginId != null && loginId !== '') {
 					            // loginId가 result.id와 다르고, 또한 crewLeader와 다를 때만 접근 차단
-					            if (loginId == result.id || loginId == crewLeader) {
-					                openCrewChat(); // 채팅 열기
+					            if (crewone.includes(loginId) || loginId === crewLeader) {
+					                	openCrewChat(); // 채팅 열기
 					            } else {
 					                // 접근 차단
 					                console.log('로그인 했지만 크루원이나 크루장만 접근 가능합니다.');
@@ -912,9 +912,9 @@
 	}
 	
 	// 팝업 닫기
-	document.getElementsByClassName("close")[0].onclick = function() {
-	    document.getElementById("profilePopup").style.display = "none";
-	};	
+	$(document).on('click','#profilePopup .close',function(){
+       document.getElementById("profilePopup").style.display = "none";
+   });	
 	
 
 </script>

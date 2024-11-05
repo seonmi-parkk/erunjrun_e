@@ -80,4 +80,12 @@
 		UPDATE alarm SET confirm_use = 'Y' WHERE alarm_idx = #{alarm_idx}
 	</update>
 	
+	<!-- 문의사항 답변 알림 -->
+	<insert id="askCommentAlarm" parameterType="com.erunjrun.main.dto.AlarmDTO">
+		INSERT INTO alarm(subject, code_name, is_url, url, from_id, id, content) 
+			VALUES(#{subject}, #{code_name}, #{is_url}, #{url}, #{from_id},
+			(SELECT id FROM ask WHERE ask_idx = #{idx}),
+			(SELECT subject FROM ask WHERE ask_idx = #{idx}))
+	</insert>
+	
 </mapper>

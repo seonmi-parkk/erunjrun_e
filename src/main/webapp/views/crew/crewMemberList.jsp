@@ -318,7 +318,7 @@ table tbody tr td.profileContainer {
 	 	});
 	 	
 	 	
-/* 	 // 클릭시 운동프로필 레이어 팝업
+ 	 // 클릭시 운동프로필 레이어 팝업
 		$(document).on('click','.user',function(){
 		    var toUserId = $(this).data('id');
 		   // console.log('toUserId',toUserId);
@@ -349,9 +349,9 @@ table tbody tr td.profileContainer {
 		}
 		
 		// 팝업 닫기
-		document.getElementsByClassName("close")[0].onclick = function() {
-		    document.getElementById("profilePopup").style.display = "none";
-		};  */
+		$(document).on('click','#profilePopup .close',function(){
+       		document.getElementById("profilePopup").style.display = "none";
+  		 });  
 		
 		// 팝업 취소
 		function applBtn2Act() {
