@@ -152,7 +152,7 @@
 		margin-left: 4px;
     	transform: translateY(3px);
 	} */
-	.profile-area {
+	#map .profile-area {
 	    position: relative;
 	    width: 56px;
 	    height: 78px;

@@ -106,16 +106,47 @@
 		color: #fff;
 	} 
 	
+	.profileDetail .profile-area{
+    	width: 116px; height: 116px;
+    	position: relative;
+    	margin: 0 auto 14px;
+    }
+    .profileDetail .profile-box{
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 116px; height: 116px;
+		margin-right: 2px;
+	}
+	.profileDetail .profile-img{
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 84px; height: 84px;
+		border-radius: 50%;
+	}
+	
 </style>
 </head>
 <body>
 	<div class="profileDetail">
-		<!-- check!! 프로필 주인 id 정보 나중에 바꿔줘야 함. -->
 		<input type="hidden" name="id" value="${profileDto.id}"/>
 	    <div class="user-info">
  	        <div>
  	        	<!-- check!!  -->
-	           <div class="profile-box" style="background: url('/resources/img/icon/${profileDto.icon_image}') center center / 100% 100% no-repeat;">
+ 	        	<div class="profile-area">
+ 	        		<c:choose>
+						<c:when test="${not empty profileDto.image}">  
+							<div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div>
+						</c:when>
+						<c:otherwise>
+							<div class="profile-img" style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>
+						</c:otherwise>
+					</c:choose>
+					<c:if test="${not empty profileDto.icon_image}">
+						<div class="profile-box" style="background: url(/photo/${profileDto.icon_image}) center center / 100% 100% no-repeat;"></div>
+					</c:if>
+				</div>
+ 	        	
+	       <%--     <div class="profile-box" style="background: url('/resources/img/icon/${profileDto.icon_image}') center center / 100% 100% no-repeat;">
      				<c:choose>
 						<c:when test="${not empty profileDto.image}">  
 							<div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div>
@@ -124,7 +155,7 @@
 							<div class="profile-img"  style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>
 						</c:otherwise>
 					</c:choose>
-	           </div>
+	           </div> --%>
 	           <div class="name-addr">
 	               <p class="user-name">${profileDto.nickname}</p>
 	               <img src="/resources/img/common/ico_map.png" alt="위치"/><span class="addr">${profileDto.shortsido} ${profileDto.dong}</span>
@@ -137,10 +168,10 @@
 		       			<c:when test="${result.isBlocked eq false}">
 			       			<c:choose>
 			       				<c:when test="${result.MateAppl eq 'apply'}">
-						           <a class="btn01-s" style="cursor: default;">러닝메이트 신청중</a> <!-- check!! mypage로 이동 -->
+						           <a href="/requestingMateListView" class="btn01-s" style="cursor: default;">러닝메이트 신청중</a>
 								</c:when>
 			       				<c:when test="${result.MateAppl eq 'recieve'}">
-						           <a class="btn01-s">러닝메이트 신청수락</a> <!-- check!! mypage로 이동 -->
+						           <a href="/requestedMateListView" class="btn01-s">러닝메이트 신청수락</a>
 								</c:when>
 			       				<c:when test="${result.MateAppl eq 'none'}">
 						           <div class="btn-mate-appl btn01-s">러닝메이트 신청</div>
