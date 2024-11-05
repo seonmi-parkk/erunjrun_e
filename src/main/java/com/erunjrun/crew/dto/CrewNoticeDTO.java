@@ -32,6 +32,7 @@ public class CrewNoticeDTO {
     private int totalpage;
     
     private String image;
+    private String icon_image;
     
     
 	public int getNotice_idx() {
@@ -157,6 +158,16 @@ public class CrewNoticeDTO {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	
+	
+	
+	
+	public String getIcon_image() {
+		return icon_image;
+	}
+	public void setIcon_image(String icon_image) {
+		this.icon_image = icon_image;
 	}
 	@Override
 	public String toString() {

@@ -204,37 +204,37 @@
 			  
 		}
 		
-    /*운동프로필 레이어팝업*/
-	#profilePopup {
-	    width: fit-content;
-	    top: 185px;
-	    left: 50%;
-	    transform: translateX(-50%);
-		z-index: 996;
-	}
-	#profilePopup .close {
-	    font-size: 40px;
-	    font-weight: 300;
-	    position: absolute;
-	    z-index: 996;
-	    top: 30px;
-	    right: 30px;
-	    display: inline-block;
-	    width: 30px;
-	    height: 30px;
-	    line-height: 27px;
-	    text-align: center;
-	}
-	#profilePopup .modal-content{
-	    padding: 20px 20px;
-	    background: #f8f8f8;
-	    border: none;
-    	border-radius: 0;
-    }
-    #PopupBody {
-    	background: #fff;
-    	border-radius: 10px;
-    }
+	    /*운동프로필 레이어팝업*/
+		#profilePopup {
+		    width: fit-content;
+		    top: 185px;
+		    left: 50%;
+		    transform: translateX(-50%);
+			z-index: 996;
+		}
+		#profilePopup .close {
+		    font-size: 40px;
+		    font-weight: 300;
+		    position: absolute;
+		    z-index: 996;
+		    top: 30px;
+		    right: 30px;
+		    display: inline-block;
+		    width: 30px;
+		    height: 30px;
+		    line-height: 27px;
+		    text-align: center;
+		}
+		#profilePopup .modal-content{
+		    padding: 20px 20px;
+		    background: #f8f8f8;
+		    border: none;
+	    	border-radius: 0;
+	    }
+	    #PopupBody {
+	    	background: #fff;
+	    	border-radius: 10px;
+	    }
 	    
 	   .layoutbox-bt {
 		    height: 90px; /* 하단 배너 영역의 높이를 90px로 설정 */
@@ -296,6 +296,16 @@
 	    	background: #fff;
 	    	border-radius: 10px;
 	    }
+	    
+	    .profile-box2 {
+			position: absolute; top: 97px; left: 15px;
+			transform: translate(-50%, -50%);
+			width: 44px; height: 44px;
+			margin-right: 2px;
+		}
+		.title3-1{
+		
+		}
 
 		
     </style>
@@ -310,14 +320,14 @@
 			<div class="rectangle-250">
 				<div class="dari">
 					<p class="title2" id="subject"></p>
-					<p class="title3-1" id="leader">
+					<div class="title3-1" id="leader">
 						<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src='/resources/img/common/profile.png'" id="profileImg" width = 30px;>
+						<div class="profile-box2"></div>
 						<span id="leaderId"></span>
-					</p>
+					</div>
 				</div>
 				<div style="text-align: right;" class="duri">
 				
-					<!-- todo - 관리자 세션 체크해서 보여지게 해야함 -->
 					<div id="butt" class="btn03-s" style='visibility : hidden'>비활성화</div>					
 					<p class="title3-2" id="create_date"></p>
 					<span class="title3-3" >조회수 </span><span id="hit"></span>
@@ -404,9 +414,14 @@
 			
 			$('#subject').html(result.subject);
 			
-			if(result.image != null || result.image != ''){
+			if(result.image != null && result.image != ''){
 				$('#profileImg').attr('src', '/photo/'+result.image);
 				
+			}
+			if(result.icon_image != null && result.icon_image !== ''){
+				$('.profile-box2').css({
+				    'background': 'url(/resources/img/icon/' + result.icon_image + ') center center / 100% 100% no-repeat'
+				});
 			}
 
  			$('#leaderId').html('<a class="user" style="cursor: pointer;"  data-id="' + result.id + '">' + result.nickname + '</a>'); 
@@ -719,6 +734,14 @@
 	    document.getElementById("reportPopup").style.display = "none";
 	};	
 	
+	
+	// 관리자 세션 체크! 
+	var authority = '${sessionScope.authority}';
+	if(authority){
+		if(loginId){
+			$('#butt').css('visibility', 'visible');
+		}
+	}
 
 
 </script>

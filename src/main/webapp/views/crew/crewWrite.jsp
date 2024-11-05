@@ -149,6 +149,7 @@
 <script>
 
 	var crew_idx = '';
+	var loginId = '${sessionScope.loginId}';
 
 	// 크루 대표 이미지 미리보기
     function readFile(input) {
@@ -221,7 +222,7 @@
             console.log(fileInput);
         }
 
-        formData.append('id', 'test'); // 세션값 체크해서 넣어줘야 함!
+        formData.append('id', loginId); 
         formData.append('content', content);  // summernote의 HTML 내용 추가 (이미지 포함)
 
         formData.append('address', roadAddr); // 화면에 출력

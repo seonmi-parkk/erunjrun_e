@@ -113,25 +113,32 @@
         font-size: 14px;
     }
     
-     .profileBox{
-    	margin-right: 10px;
-    } 
-
-	
-	/* 프로필 컨테이너 */
-	table tbody tr td.profileContainer {
-/* 	    display: block;
-	    align-items: center;
-	    vertical-align: middle;
-	    text-align: left;
-    	margin-left: 60px; */
-    	
-    	display: table-cell;
-	    align-items: center;
-	    vertical-align: middle;
-	    text-align: center;
-	    margin-left: 70px;
-	}   
+		/* 프로필 컨테이너 */
+		table tbody tr td.profileContainer {
+		    position: relative; /* 자식 요소의 절대 위치 기준으로 설정 */
+		    display: flex; /* 수평 정렬을 위한 flex 설정 */
+		    align-items: center; /* 수직 가운데 정렬 */
+		    vertical-align: middle;
+		    text-align: left;
+		    margin-left: 60px;
+		}
+		
+		/* 프로필 이미지 */
+		.profileBox {
+		    margin-right: 10px;
+		    border-radius: 50%; /*프로필 둥글게*/
+		}
+		
+		/* 아이콘 이미지 */
+		.profile-box2 {
+		    position: absolute;
+		    top: -8px; /* profileBox와 같은 높이에 위치 */
+		    left: 10px; /* profileBox 오른쪽에 배치 */
+		    width: 44px;
+		    height: 44px;
+		    margin-right: 2px;
+		    transform: translateY(50%); /* 필요 시 위치 조정 */
+		} 
 </style>
 </head>
 <body>
@@ -259,19 +266,46 @@
 				btn = '<button class="btn02-s">수락</button>';
 			}else if(item.is_agree === 'N'){
 				btn = '<button class="btn04-s">거절</button></td>';
+			}else{
+				btn = '<button class="btn04-s">대기</button></td>';
 			}
 			
 			if(item.update_date === null){
 				item.update_date = '없음';
 			}
 			
+			var member_profileImg = '';
+			var leader_profileImg = '';
+	        var member_icon_img = '';
+	        var leader_icon_img = '';
 	        
-            content += '<tr>';
+	        if(item.member_image != null && item.member_image != ''){
+				member_profileImg = '/photo/'+item.member_image;
+			}else{
+				member_profileImg = '/resources/img/common/profile.png';
+			}
+	        
+	        if(item.leader_image != null && item.leader_image != ''){
+				leader_profileImg = '/photo/'+item.leader_image;
+			}else{
+				leader_profileImg = '/resources/img/common/profile.png';
+			}
+	        
+			if(item.member_icon_image != null && item.member_icon_image !== ''){
+				member_icon_img = 'background: url(/resources/img/icon/' + item.member_icon_image + ') center center / 100% 100% no-repeat;';
+			}
+			
+			if(item.leader_icon_img != null && item.leader_icon_img !== ''){
+				leader_icon_img = 'background: url(/resources/img/icon/' + item.leader_icon_img + ') center center / 100% 100% no-repeat;';
+			}
+            
             // 프로필 + 닉네임 (나중에 연결 필요)
-            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'
+            content +='<td class="profileContainer"><img src="'+member_profileImg+'" width="32px" class="profileBox"/>'
+            + '<div class="profile-box2" style="' + member_icon_img + '"></div>'
             + '<a class="user" style="cursor: pointer;"  data-id="' + item.member_id + '">'
             +item.member_nickname+'</a></td>';
-            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'
+            content +='<td class="profileContainer"><img src="'+leader_profileImg+'" width="32px" class="profileBox"/>'
+            + '<div class="profile-box2" style="' + leader_icon_img + '"></div>'
             + '<a class="user" style="cursor: pointer;"  data-id="' + item.leader_id + '">'
             +item.leader_nickname+'</a></td>';
             

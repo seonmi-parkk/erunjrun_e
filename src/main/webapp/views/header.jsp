@@ -2,13 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- 팝업 스타일 추가 -->
 
-
+<script src="/resources/js/chatting.js"></script>
 
 <style>
 	#alarmPopup {
 	    position: fixed;
-	    top: 15%; 
-	    right: 18%; 
+	    top: 80px;
+    	left: calc(50% - -261px);
 	    width: 400px;
 	    border: 1px solid #ddd;
 	    padding: 20px;
@@ -96,9 +96,9 @@
 	
 	.alarmclose{
 		position: absolute;
-	    top: -11px; /* 부모 요소의 위쪽에서 10px 아래에 위치 */
-	    right: 4px; /* 부모 요소의 오른쪽에서 10px 왼쪽에 위치 */
-	    font-size: 15px;
+	    top: -6px; /* 부모 요소의 위쪽에서 10px 아래에 위치 */
+	    right: 10px; /* 부모 요소의 오른쪽에서 10px 왼쪽에 위치 */
+	    font-size: 20px;
 	    cursor: pointer;
 	    color: #888; /* 닫기 아이콘 색상 */
 	}
@@ -107,6 +107,10 @@
 	    position: relative;
 	    display: flex;
 	    align-items: center; /* 세로 중앙 정렬 */
+	}
+	
+	#alarmPopup * {
+	    pointer-events: auto;
 	}
 </style>
 <header>
@@ -195,7 +199,7 @@
 	<!-- 알림 리스트 팝업 -->
 	<div id="alarmPopup" class="popup" style="display: none;">
 	    <div class="popup-content">
-	        <span class="close" onclick="closeAlarmPopup()">&times;</span>
+	        <span class="close" id="alarmClose" >&times;</span> <!-- onclick="closeAlarmPopup(event)" -->
 	        <div id="alarmHeader">
 	        	<span id="alarmSubject">알림</span>
 	        	<span id="alarmInfo">※ 최대 20개 까지 노출됩니다.</span>
@@ -224,7 +228,7 @@
 	
 	if(loginId){
 		alarmCount();
-		setInterval(alarmCount, 2000);
+		setInterval(alarmCount, 10000);
 	}
 	
 	
@@ -260,11 +264,12 @@
 	                	
 						var change = '';
 	                	if(alarm.code_name === 'AB100' || alarm.code_name === 'AM100' || alarm.code_name === 'AC102'){
-	                		var url = 'onclick="location.href=\''+alarm.url+'\'"';
-	                		change = chatWindowSet(url);
+	                		change = 'onclick="location.href=\''+alarm.url+'\'"';
 	                	}else if(alarm.code_name === 'AN100' || alarm.code_name === 'AN101' || alarm.code_name === 'AN102'){
 	                		// 채팅방 열리게
-	                		change = 'onclick="location.href=\''+alarm.url+'\'"';
+	                	/* 	var url = 'onclick="location.href=\''+alarm.url+'\'"'; */
+	                		change = 'onclick="chatWindowSet(\'' + alarm.url + '\')"';
+	                		alarmUpdate(alarm.alarm_idx);
 	                	}else if(alarm.code_name === 'AC100'){
 	                		var url = alarm.url;
 	                		var idx = url.split('/').pop();
@@ -272,6 +277,7 @@
 	                		change = 'onclick="layerPopup(\'' + alarm.content + ' 크루장 권한을 승인하시겠습니까?\', \'승인\', \'거절\', function(){crewAdminUpdate(\'Y\', ' + idx + ',' +alarm.alarm_idx+')}, function(){crewAdminUpdate(\'N\', ' + idx + ')})"';
 	                	}else{
 	                		// 퇴출 팝업 (크루에서 퇴출되었습니다.)
+	                		change = 'onclick="layerPopup(\'' + alarm.content + ' 크루에서 퇴출되었습니다.\', \'확인\', false, function(){alarmUpdate(' + alarm.alarm_idx + ')}, function(){alarmUpdate(' + alarm.alarm_idx + ')})"';
 	                	}
 	                	
 	                	alarmList += '<div id="alarmBox"'+change+'>';
@@ -304,11 +310,19 @@
 	
 
 	// 팝업 닫기 함수
-	function closeAlarmPopup() {
+
+	
+/* 	function closeAlarmPopup(event) 
+		console.log('닫기');
+	} */
+	
+	$('#alarmClose').on('click', function(){
 	    $('#alarmPopup').hide();
-	}
+	});
+	
 	
 	$(document).on('click', '.alarmclose', function() {
+	    //event.stopPropagation(); // 클릭 전파 방지
 	    var alarm_idx = $(this).data('alarm-idx');
 	    alarmUpdate(alarm_idx);
 	});
@@ -325,6 +339,7 @@
 			success: function(response){
 				if (response) {
 	                $('#alarmIcon').click(); // 알림 리스트를 다시 불러오기 위해 클릭 이벤트 트리거
+	                removeAlert();
 	            }
 			},error: function(e){
 				console.log('알림 update 중 에러 => ', e);
@@ -349,8 +364,7 @@
 			success: function(response){
 				if(response){
 					removeAlert(); 
-					layerPopup('완료되었습니다.', '확인',false, applBtn2Act,applBtn2Act);
-					alarmUpdate(alarm_idx);
+					layerPopup('완료되었습니다.', '확인',false, applBtn2Act, applBtn2Act);
 					console.log('권한 업데이트 성공');
 					
 				}

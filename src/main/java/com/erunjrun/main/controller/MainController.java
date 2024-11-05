@@ -42,11 +42,6 @@ public class MainController {
 		}
 	     
 	     
-		//check!!임시 세션(나중에 빼기)
-		//session.setAttribute("loginId", "crewtest9");
-		//session.setAttribute("profileImg", "profile_img1.jpg");
-		//session.setAttribute("iconImg", "resources/img/icon/icon1.png");
-		//session.setAttribute("adminYn", "Y");
 		return "main";
 	}
 

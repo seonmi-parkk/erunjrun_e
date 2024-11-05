@@ -199,7 +199,7 @@
         priority = priority.replace(/^,|,$/g, '');
         
 
-        formData.append('id', 'test'); // todo - loginId
+        formData.append('id', loginId); 
         formData.append('content', content); 
 		formData.append('priority', priority); 
 		
