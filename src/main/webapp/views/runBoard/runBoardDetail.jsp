@@ -61,6 +61,7 @@
 		}
 		.duri{
 			margin: 15px;
+			margin-top: 30px;
 		}
 		.title1{
     		margin-top: 160px;
@@ -72,6 +73,8 @@
     	}
     	.title2-3{
 			transform: translateY(-25px);
+			font-weight: 700;
+    		font-size: 24px;
     	}
     	.ori{
 
@@ -235,6 +238,7 @@
 	    	background: #fff;
 	    	border-radius: 10px;
 	    }
+	    
 	    #dori .profile-area{
     	width: 44px; height: 44px;
     	position: relative;
@@ -301,8 +305,8 @@
 		    	<div id="reo" class="btn-like btn02-s" data-board-idx="${info.board_idx}" style="padding: 20px;"><img src="/resources/img/run/신고.png" alt="신고"></div>	    	
 	    	</div>
 	    	<div class="supa">
-		    	<span id="title2-1" class="title2">등록순</span>
-	    		<span id="title2-2" class="title2">최신순</span>
+		    	<span id="title2-1" class="title2" onclick="commentCall('ASC')" style="cursor: pointer;">등록순</span>
+	    		<span id="title2-2" class="title2" onclick="commentCall('DESC')" style="cursor: pointer;">최신순</span>
 	    	</div>
 	    	<div id="list">
 
@@ -517,8 +521,24 @@ function initializeMap() {
 	 	});
 	 	
 	 	$('#reo').on('click',function(board_idx){
-	 		layerPopup('정말 신고 하시겠습니까?','신고','취소' ,secondBtn3Act , secondBtn2Act);
+	 		
+			var userId = "${sessionScope.loginId}";
+	 		
+	 		if(!userId){
+	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn0Act,secondBtn1Act);	
+	 		}else{
+	 			layerPopup('정말 신고 하시겠습니까?','신고','취소' ,secondBtn3Act , secondBtn2Act);
+	 		}	 		
 	 	});
+	 	
+	 	function secondBtn0Act() {
+			// 두번째팝업 2번버튼 클릭시 수행할 내용
+		 	console.log('4번째팝업 1번 버튼 동작');
+		 	location.href='/loginView';
+		 	removeAlert();
+		}
+	 	
+	 	
 	 	
 	 	function secondBtn3Act() {
 	 	    // 두번째팝업 3번버튼 클릭시 수행할 내용
@@ -562,17 +582,17 @@ function initializeMap() {
 		};
 		
 		// 댓글 리스트 부르는 함수
-		commentCall();
+		commentCall('ASC');
 		
 		// 댓글 리스트
-		function commentCall() {
+		function commentCall(order = 'DESC') {
 			
 			var board_idx = '${info.board_idx}';
 			
 			$.ajax({
 	        	type: "POST",
 	            url: "/comment/" + board_idx ,
-	            data: { 'board_idx': board_idx },
+	            data: { 'board_idx': board_idx, 'order': order },
 	            datatype: 'JSON',
 	            success: function(data) {
 	                console.log('댓글 불러오기');

@@ -7,9 +7,10 @@
 	
 	<select id="list" resultType="com.erunjrun.comment.dto.CommentDTO">
 		SELECT * FROM comment c LEFT JOIN member m on c.nickname = m.nickname 
-			WHERE board_idx = #{board_idx}
+			WHERE board_idx = #{board_idx} ORDER BY create_date ${order}
 	</select>
 	
+	<!-- 러닝코스 댓글 등록 -->
 	<insert id="addComment" parameterType="com.erunjrun.comment.dto.CommentDTO">
 		INSERT INTO comment(code_name,board_idx,content,nickname)
 							VALUES('B100',#{board_idx},#{content},#{nickname})
@@ -28,6 +29,7 @@
     	UPDATE comment SET use_yn = 'N' WHERE comment_idx = #{comment_idx}
     </update>
     
+    <!-- 크루 공지 댓글 리스트 -->
     <select id="commentList" resultType="com.erunjrun.crew.dto.CrewNoticeDTO">
 		SELECT cnc.*, m.nickname
 			FROM crew_notice_comment cnc
@@ -39,6 +41,7 @@
     	select * from member where id = #{param1}
     </select>
     
+    <!-- 크루 공지 댓글 등록 -->
     <insert id="noticeComment" parameterType="com.erunjrun.crew.dto.CrewNoticeDTO">
 		INSERT INTO crew_notice_comment(notice_idx,content,id)
 							VALUES(#{notice_idx},#{content},#{loginId})
@@ -51,5 +54,22 @@
     <update id="nocoDel" parameterType="com.erunjrun.crew.dto.CrewNoticeDTO">
     	UPDATE crew_notice_comment SET use_yn = 'N' WHERE comment_idx = #{comment_idx}
     </update>
+    
+    <!-- 자유게시판 댓글 등록 -->
+    <insert id="addFreeComment" parameterType="com.erunjrun.comment.dto.CommentDTO">
+		INSERT INTO comment(code_name,board_idx,content,nickname)
+							VALUES('B101',#{board_idx},#{content},#{nickname})
+	</insert>
+	
+	<!-- 관리자 답변 댓글등록 -->
+	<insert id="addAskComment" parameterType="com.erunjrun.comment.dto.CommentDTO">
+		INSERT INTO comment(code_name,board_idx,content,nickname)
+							VALUES('Q105',#{board_idx},#{content},#{nickname})
+	</insert>
+	
+	<!-- 답변시 처리완료 -->
+	<update id="askYes" parameterType="com.erunjrun.board.dto.RunBoardDTO">
+		UPDATE ask SET is_ask = 'Y' WHERE ask_idx = #{board_idx}
+	</update>
 
 </mapper>

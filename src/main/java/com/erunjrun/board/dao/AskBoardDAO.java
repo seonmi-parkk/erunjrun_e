@@ -24,6 +24,8 @@ public interface AskBoardDAO {
 
 	int askBoardDelete(int ask_idx);
 
+	int insertAskBoard(RunBoardDTO runBoard);
+
 	
 
 }

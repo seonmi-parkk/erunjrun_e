@@ -31,13 +31,13 @@ public class CommentController {
 	
 	@PostMapping(value="/comment/{board_idx}")
 	@ResponseBody
-	public Map<String,Object> comment(@PathVariable int board_idx){
+	public Map<String,Object> comment(@PathVariable int board_idx,String order){
 		
 		logger.info("글번호 : "+board_idx);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
-		List<CommentDTO> list = commentService.list(board_idx);
+		List<CommentDTO> list = commentService.list(board_idx,order);
 		
 		result.put("list", list);
 		
@@ -163,6 +163,38 @@ public class CommentController {
 		
 		return result;
 	}
+	
+	// 자유주제 댓글 등록
+		@PostMapping(value="/addFreeComment")
+		
+		@ResponseBody
+		public Map<String, Object> addFreeComment(int board_idx,String content,HttpSession session,String nickname){
+				
+			Map<String,Object> result = new HashMap<String, Object>();
+			
+			int add = commentService.addFreeComment(board_idx,content,nickname, session);
+			
+			result.put("add", add);
+			
+			
+			return result;
+		}
+		
+		@PostMapping(value="/addAskComment")	
+		@ResponseBody
+		public Map<String, Object> addAskComment(int board_idx,String content,HttpSession session){
+				
+			String nickname = (String) session.getAttribute("loginId");
+			
+			Map<String,Object> result = new HashMap<String, Object>();
+			
+			int add = commentService.addAskComment(board_idx,content, nickname);
+			
+			result.put("add", add);
+			
+			
+			return result;
+		}
 	
 	
 	

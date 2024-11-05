@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>문의하기 게시글 상세보기</title>   
+    <title>자유주제 게시글 상세보기</title>   
     <link rel="stylesheet" href="/resources/css/common.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -60,7 +60,7 @@
 		}
 		.duri{
 			margin: 15px;
-			margin-top: 117px;
+			margin-top: 38px;
 		}
 		.title1{
     		margin-top: 160px;
@@ -258,31 +258,6 @@
 			display: flex;
 			align-items: flex-end;
 		}
-		
-		 .label {
-	    color: #333; /* 텍스트 색상 */
-	    font-weight: bold; /* 굵게 */
-	    font-size: 14px; /* 폰트 크기 */
-	    margin-right: 5px; /* 오른쪽 여백 */
-		}
-		
-		#tagFilters1{
-    		display: flex;
-    	}
-    	#tagFilters1 label {
-		display: -moz-box; display: -ms-flexbox; display: flex;
-		-webkit-box-pack: space-between; -ms-flex-pack: space-between; justify-content: space-between;
-		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
-	 	padding: 5px 14px;
-	 	width: fit-content;
-    	height: 38px;
-    	line-height: 38px;
-   	 	position: relative;
-    	border-radius: 100px;
-    	border: 1px solid rgba(0,0,0,0.07);
-	 	margin-right: 15px;
-	  	font-size: 16px;
-	}
 
 		
     </style>
@@ -291,93 +266,82 @@
     <jsp:include page="../header.jsp" />
     <input type="hidden" name="board_idx"/>
 	<div class="inner">
-		<p class="title1">문의하기 게시글</p>
+		<p class="title1">자유주제 게시글</p>
 		
 		<div id="dori">
 			<div class="rectangle-250">
 				<div class="dari">
-				<span id="tagFilters1">
-					
-					<c:choose>
-						<c:when test="${info.code_name == 'Q100'}">
-							<label style="margin-top: -56px;">크루</label>
-			    		</c:when>
-			    		<c:when test="${info.code_name == 'Q101'}">
-							<label style="margin-top: -56px;">러닝메이트</label>  
-			    		</c:when>
-			    		<c:when test="${info.code_name == 'Q102'}">
-							<label style="margin-top: -56px;">게시글</label>
-			    		</c:when>
-			    		<c:when test="${info.code_name == 'Q103'}">
-							<label style="margin-top: -56px;">회원</label>  
-			    		</c:when>	    		
-			    		<c:otherwise>
-			    			<label style="margin-top: -56px;">기타</label> 	    				
-						</c:otherwise>
-		    		</c:choose>
-						
-					</span><br>
-				
-				
-				<p class="title2-3">${info.subject}</p>
+					<p class="title2-3">${info.subject}</p>
+					<p class="title3-1">
 					<div class="are">
 						 <div class="profile-area">
 						 <div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${info.icon_image}) center center / 100% 100% no-repeat;"></div></div>
-						  <p class="title3-1">
+						  <p>
 						  ${info.nickname}
 					  	  </p>
 						</div>
+					</p>
 				</div>
-				<div style="text-align: right;" class="duri">					
+				<div style="text-align: right;" class="duri">
+					<div id="butt"class=btn03-s>비활성화</div>					
 					<p class="title3-2">${info.create_date}</p>
-					
+					<span class="title3-3">조회수 ${info.bHit}</span>
+					<span class="title3-4"><img src="/resources/img/run/image 14.png" alt="댓글"> 댓글 ${coun}</span>
 				</div>
 			</div>
 			<div class="ori">
-				
 				<br>
 				<div id="con">${info.content}</div>
 			</div>
 	    	<div class="repo">
-	    			    		    	
+	    		<div id="pre" class="btn-like btn02-s" style="padding: 20px;" onclick="boardLike(${info.board_idx})">
+					<img class="icon" data-board-idx="${info.board_idx}" 
+							 src="${isLike ? '/resources/img/common/ico_heart_act.png' : '/resources/img/common/ico_heart_no_act.png'}" 
+        					 alt="${isLlike ? '좋아요' : '안좋아요'}" 
+        					 style="height: 17px;">
+				</div>
+
+		    	<div id="reo" class="btn-like btn02-s" data-board-idx="${info.board_idx}" style="padding: 20px;"><img src="/resources/img/run/신고.png" alt="신고"></div>	    	
 	    	</div>
 	    	<div class="supa">
-
+		    	<span id="title2-1" class="title2" onclick="commentCall('ASC')" style="cursor: pointer;">등록순</span>
+	    		<span id="title2-2" class="title2" onclick="commentCall('DESC')" style="cursor: pointer;">최신순</span>
 	    	</div>
 	    	<div id="list">
 
     		 </div>
-    		<c:if test="${sessionScope.adminYn == 'Y'}">   		
-		    	<div class="com">
-		    		<div>
-		    			<div class="nick">
-	    				<div class="profile-area">
-							<div class="profile-img" style="background: url(/resources/img/common/admin_profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
-	    			   	${sessionScope.loginId}
-	    				</div>
-		    			
-			    		<input type="text" class="tex">
-		    		</div>
-		    		<div>
-		    			<div id="ins" class=btn01-s onclick="comment()">등록</div>	    		
-		    		</div>
-		    	</div>
-    		</c:if> 
-	    	
+	    	<div class="com">
+	    		<div>
+	    			<div class="nick">
+	    			<div class="profile-area">
+							<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
+	    			   ${nickname.nickname}
+					</div>
+		    		<input type="text" class="tex">
+	    		</div>
+	    		<div>
+	    			<div id="ins" class=btn01-s onclick="comment()">등록</div>	    		
+	    		</div>
+	    	</div>
 	    </div>
 	    <div class="bubu">
 	    	<div class="bbs">
-	    		<c:if test="${sessionScope.loginId == info.id || sessionScope.adminYn == 'Y'}">
-	    		<c:if test="${info.is_ask != 'Y'}">
-	    			<button type="button" id="upda" class="btn01-l" onclick="location.href='/askBoardUpdate/${info.ask_idx}'">수정</button>
-	    		</c:if>        
+	    		<c:if test="${sessionScope.loginId == info.id}">
+			        <button type="button" class="btn01-l" onclick="location.href='/freeBoardUpdate/${info.board_idx}'">수정</button>
 				    <button type="button" class="btn03-l btn-popup" >삭제</button>	    	    	
 	    		</c:if>
 	    	</div>
-		    <button type="button" class="btn02-l"  onclick="location.href='/askBoard'" >목록</button>
+		    <button type="button" class="btn02-l"  onclick="location.href='/freeBoard'" >목록</button>
 	    </div>
 	    
 	    
+	    <!-- 모달 -->
+		<div id="reportPopup" class="modal">
+		    <div class="modal-content">
+		        <span class="close">&times;</span>
+		        <div id="reportPopupBody"></div>
+		    </div>
+		</div>
 	    
 	
 	</div>
@@ -386,24 +350,56 @@
     
 </body>
 <script>
-
-	 	
+	
+	 // 추천 업데이트
+	 function boardLike(board_idx) {
+		 	 
+		 var userId = "${sessionScope.loginId}";
+         console.log(userId);
+         if(!userId){
+         	alert("로그인이 필요한 서비스 입니다.");
+         	return;
+         }
+		 	 
+	        $.ajax({
+	            type: 'POST',
+	            url: '/freeBoardLike',
+	            data: { board_idx: board_idx},
+	            success: function(data) {
+	            	console.log("변함?:", data.like);
+	            	var icon = $(`.icon[data-board-idx='${board_idx}']`);
+	                if (data.like == true) {
+	                	icon.attr('src', '/resources/img/common/ico_heart_act.png');
+	                	console.log("좋아요?:", data.like);
+	                } else {
+	                	icon.attr('src', '/resources/img/common/ico_heart_no_act.png');
+	                	console.log("안좋아요?:", data.like);
+	                }
+	                 
+	                
+	            },
+	            error: function() {
+	                alert('추천에 실패 했습니다.');
+	            }
+	        });
+	    }
+	 	 		 	
 	 	/* 레이어팝업 */
 
 	 	function secondBtn1Act() {
 	 	    // 두번째팝업 1번버튼 클릭시 수행할 내용
 	 	    
-	 	    var board_idx = "${info.ask_idx}";
+	 	    var board_idx = "${info.board_idx}";
 	 	    
 	 	    console.log('두번째팝업 1번 버튼 동작');
 	 	    
 	 	   $.ajax({
                type: "POST",
-               url: "/askBoardDelete/" + board_idx ,
+               url: "/freeBoardDelete/" + board_idx ,
                data: { board_idx: board_idx },
                success: function(response) {
                    if (response.success) {
-                       location.href = "/askBoard";
+                       location.href = "/freeBoard";
                    } else {
                        alert("삭제에 실패했습니다.");
                    }
@@ -424,22 +420,80 @@
 	 		layerPopup('정말 삭제 하시겠습니까?','삭제','취소' ,secondBtn1Act , secondBtn2Act);
 	 	});
 	 	
-	 	 		 			
+		$('#reo').on('click',function(board_idx){
+	 		
+			var userId = "${sessionScope.loginId}";
+	 		
+	 		if(!userId){
+	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn0Act,secondBtn1Act);	
+	 		}else{
+	 			layerPopup('정말 신고 하시겠습니까?','신고','취소' ,secondBtn3Act , secondBtn2Act);
+	 		}	 		
+	 	});
+		
+		function secondBtn0Act() {
+			// 두번째팝업 2번버튼 클릭시 수행할 내용
+		 	console.log('4번째팝업 1번 버튼 동작');
+		 	location.href='/loginView';
+		 	removeAlert();
+		}
+		
+		
+	 	
+	 	function secondBtn3Act() {
+	 	    // 두번째팝업 3번버튼 클릭시 수행할 내용
+	 	    console.log('두번째팝업 2번 버튼 동작');
+	 	   var boardIdx = $(this).data('board_idx');
+	 	   openReport(boardIdx);
+	 	   removeAlert();
+	 	}
+	 	
+	 	
+		
+		// 신고 레이어 팝업 열기
+		function openReport(boardIdx){
+			var modal = document.getElementById("reportPopup");
+		    var PopupBody = document.getElementById("reportPopupBody");
+		    var userId = '${sessionScope.loginId}';
+		    var board_idx = '${info.board_idx}';
+			console.log('가지고와ㅣ?',board_idx);
+			console.log('가지고와ㅣ?',userId);
+		    // AJAX 요청 데이터 넣을때 해당 게시판 idx 값 넣기!!!!
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("GET", "/reportForm/"+board_idx, true);
+		    xhr.onreadystatechange = function() {
+		        if (xhr.readyState === 4 && xhr.status === 200) {
+		            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+		            modal.style.display = "block"; // 모달 열기
+		            
+		         	// JS 파일을 동적으로 로드
+		         	
+		            var script = document.createElement('script');
+		            script.src = '/resources/js/report.js'; 
+		            document.body.appendChild(script);
+		            
+		        }
+		    };
+		    xhr.send();
+		}
+		
+		// 팝업 닫기
+		document.getElementsByClassName("close")[0].onclick = function() {
+		    document.getElementById("reportPopup").style.display = "none";
+		};
 		
 		// 댓글 리스트 부르는 함수
-		commentCall();
+		commentCall('ASC');
 		
 		// 댓글 리스트
-		function commentCall() {
+		function commentCall(order = 'DESC') {
 			
-			
-			var board_idx = '${info.ask_idx}';
-			
+			var board_idx = '${info.board_idx}';
 			
 			$.ajax({
 	        	type: "POST",
 	            url: "/comment/" + board_idx ,
-	            data: { 'board_idx': board_idx },
+	            data: { 'board_idx': board_idx, 'order': order },
 	            datatype: 'JSON',
 	            success: function(data) {
 	                console.log('댓글 불러오기');
@@ -456,15 +510,15 @@
 			
 			var content ='';
 			list.forEach(function(view,idx){
-				
+				var nickName = '${nickname.nickname}';
 				var addName = view.nickname;
 				var comment_idx = view.comment_idx;
-				
+				console.log(view.icon_image);
 				
 				content +='<div id="sort-area">';
 				content +='<div class="sort" id="sort-update'+comment_idx+'">';
 				content +='<div>';
-				content +='<div class="nick"><div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/admin_profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+view.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+addName+'</div>';
+				content +='<div class="nick"><div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+view.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+view.nickname+'</div>';
 				if(view.use_yn == 'N'){
 					content +='<p class="coco" style="color: #999;" >(삭제된 댓글 입니다.)</p>';
 				}else{
@@ -472,15 +526,17 @@
 				}
 				content +='<div class="date">'+view.create_date+'</div>';
 				content +='</div>';
-				if(view.use_yn == 'Y' && ${sessionScope.adminYn == 'Y'}){
+				if(view.use_yn == 'Y'){
 					content +='<div class="ard" id="dis">';					
 					content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
 					content +='<div id ="bih" class=btn03-s>비활성화</div>';
 					content += '<div class="action-buttons" style="display:none; cursor: pointer;" id="actions-' + comment_idx + '">';
-					
-					content +='<div class="suj1 btn-popup" style=" cursor: pointer;" onclick="update('+comment_idx+')"  >수정</div>';
-					content +='<div class="suj2 btn-popup" style=" cursor: pointer;" onclick="del('+comment_idx+')">삭제</div>';
-					
+					if(nickName == addName){
+						content +='<div class="suj1 btn-popup" style=" cursor: pointer;" onclick="update('+comment_idx+')"  >수정</div>';
+						content +='<div class="suj2 btn-popup" style=" cursor: pointer;" onclick="del('+comment_idx+')">삭제</div>';
+					}else{
+						content +='<div id="sin" style="margin-top: 5px;" data-comment_idx="'+comment_idx+'" onclick="report('+comment_idx+')" style=" cursor: pointer;" class="suj2 btn-popup"  >신고</div>';
+					}
 					
 				}
 				content += '</div>';
@@ -490,18 +546,18 @@
 			});
 			$('#list').html(content);
 		}
-		/*
+		
 		function comment() {
 			
 			var content = $('input[class="tex"]').val();
 			console.log('댓굴 내용 : ',content);
-			var board_idx = '${info.ask_idx}';
-			console.log('댓글 번호 : ',board_idx);
+			var board_idx = '${info.board_idx}';
+			var nickname = '${nickname.nickname}';
 			
 			$.ajax({
 				type:'POST',
-				url:'/addComment',
-				data:{'board_idx':board_idx, 'content':content},
+				url:'/addFreeComment',
+				data:{'board_idx':board_idx, 'content':content, 'nickname':nickname},
 				dataType:'JSON',
 				success:function(data){
 					console.log('댓글 등록',data);
@@ -511,31 +567,6 @@
 					console.log('댓글 등록 오류',e);
 				}
 			})
-			
-		}
-		*/
-		
-			function comment() {
-			
-				var content = $('input[class="tex"]').val();
-				console.log('댓굴 내용 : ',content);
-				var board_idx = '${info.ask_idx}';	
-				console.log('해당 문의글 번호 : ',board_idx);
-				
-				$.ajax({
-					type:'POST',
-					url:'/addAskComment',
-					data:{'board_idx':board_idx, 'content':content},
-					dataType:'JSON',
-					success:function(data){
-						console.log('댓글 등록',data);
-						commentCall();
-						$('#upda').hide();
-					},
-					error:function(e){
-						console.log('댓글 등록 오류',e);
-					}
-				})
 			
 		}
 		
@@ -558,8 +589,7 @@
 		    // 기존 댓글을 숨기고 편집 필드를 삽입
 		    $("#sort-update" + comment_idx + " .coco").html(editField);
 			
-					
-			
+								
 		}
 		
 		function toggleActions(comment_idx) {
@@ -619,13 +649,53 @@
 		}
 		
 		
-	
+		function report(comment_idx) {
+			
+		 		layerPopup('정말 신고 하시겠습니까?','신고','취소' ,function (){secondBtn4Act(comment_idx)} , secondBtn2Act);
+		
+		}
 		
 		
 		
 		
+		function secondBtn4Act(comment_idx) {
+	 		// 두번째팝업 4번버튼 클릭시 수행할 내용
+	 	    console.log('두번째팝업 4번 버튼 동작');
+	 	   
+	 	    console.log('동작시 가ㅣ고외?',comment_idx);
+	 	    commentReport(comment_idx);
+	 	    removeAlert();
+	 	}
 		
 		
+		
+		
+		function commentReport(comment_idx){
+			
+			var modal = document.getElementById("reportPopup");
+		    var PopupBody = document.getElementById("reportPopupBody");
+		    var userId = '${sessionScope.loginId}';
+		    
+			console.log('가지고와번호?',comment_idx);
+			console.log('가지고와? 아이디',userId);
+		    // AJAX 요청 데이터 넣을때 해당 게시판 idx 값 넣기!!!!
+		    var xhr = new XMLHttpRequest();
+		    xhr.open("GET", "/reportComment/"+comment_idx, true);
+		    xhr.onreadystatechange = function() {
+		        if (xhr.readyState === 4 && xhr.status === 200) {
+		            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+		            modal.style.display = "block"; // 모달 열기
+		            
+		         	// JS 파일을 동적으로 로드
+		         	
+		            var script = document.createElement('script');
+		            script.src = '/resources/js/reportComment.js'; 
+		            document.body.appendChild(script);
+		            
+		        }
+		    };
+		    xhr.send();
+		}
 		
 		
 		

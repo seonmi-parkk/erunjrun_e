@@ -70,6 +70,48 @@ public class AskBoardController {
 			return "askBoard/askBoardWrite";
 		}
 		
+		 // 게시글 등록
+	    @PostMapping(value = "/askBoardWrite")
+	    @ResponseBody
+	    public Map<String, Object> submitPost(@RequestParam("imgsJson") String imgsJson, @ModelAttribute RunBoardDTO runBoardDto) {
+	        Map<String, Object> resultMap = new HashMap<>();
+	        
+
+	        // JSON 문자열을 ImageDTO 리스트로 변환
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        List<ImageDTO> imgs = null;
+	        try {
+	            // TypeFactory를 사용하여 제네릭 타입을 처리하여 변환
+	            imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ImageDTO.class));
+	            runBoardDto.setImageList(imgs);  // 변환한 이미지 리스트를 RunBoardDTO에 설정
+	        } catch (Exception e) {
+	            logger.error("파싱 오류 : {}", e.getMessage());
+	            return Map.of("error", e.getMessage());
+	        }
+
+	        // 변환된 이미지 리스트 확인
+	        if (imgs != null && !imgs.isEmpty()) {
+	            for (ImageDTO img : imgs) {
+	                logger.info("Original Filename: " + img.getImg_ori());
+	                logger.info("New Filename: " + img.getImg_new());
+	            }
+	        }
+	        
+	        logger.info("imgDTO : " + runBoardDto.toString());
+	        
+	        int ask_idx = askService.submitPost(runBoardDto);
+	        
+	        // 게시글 등록 서비스 호출
+	        if (ask_idx > 0) {
+	            logger.info("글 업로드 완료");
+	            resultMap.put("success", true);
+	            resultMap.put("ask_idx", runBoardDto.getAsk_idx());
+	            logger.info("제목3 : "+runBoardDto.getSubject());
+	        }
+
+	        return resultMap;
+	    }
+		
 		
 		// 집에서 작업한거 추가할거임 
 		

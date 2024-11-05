@@ -38,6 +38,40 @@ public class AskBoardService {
 		return askDAO.detail(ask_idx);
 	}
 	
+	// 게시글 등록
+		public int submitPost(RunBoardDTO runBoard) {
+			
+			int row = askDAO.insertAskBoard(runBoard);
+			
+			 try {
+		            	            
+		            // 게시글 정보 저장
+		            runBoard.getCode_name();
+		            logger.info("insertRunBoard 호출 전 - 제목: {}", runBoard.getSubject());
+		            
+		            logger.info("제목1 : "+runBoard.getSubject()); 
+		           
+		            
+		            // 이미지 정보 저장 (이미지가 있을 경우 반복문 사용)
+		            List<ImageDTO> imgs = runBoard.getImageList();
+		            if (imgs != null && !imgs.isEmpty()) {
+		                for (ImageDTO img : imgs) {
+		                    img.setImg_no(runBoard.getAsk_idx());
+		                    img.setCode_name(runBoard.getCode_name());
+		                    fileWrite(img); // 게시글 이미지 파일 복사 저장
+		                }
+		            }
+		            	       
+		            
+		            
+		            
+		        } catch (Exception e) {
+		            e.printStackTrace();	      
+		        }
+			 return row;
+		  }
+	
+	
 	 // 파일 임시 저장
     public Map<String, Object> saveFile(MultipartFile file) throws IllegalStateException, IOException {
         logger.info("file : " + file.getOriginalFilename());

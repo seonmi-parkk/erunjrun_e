@@ -40,9 +40,9 @@ public class RunBoardService {
 		return runBoardDAO.bHitList();
 	}
 
-	public List<RunBoardDTO> list(int limit, int offset, String code_name, String use_yn, String is_map) {
+	public List<RunBoardDTO> list(int limit, int offset, String code_name, String use_yn, String is_map, String sortColumn, String sortOrder) {
 		
-		return runBoardDAO.list(limit, offset,code_name,use_yn,is_map);
+		return runBoardDAO.list(limit, offset,code_name,use_yn,is_map,sortColumn,sortOrder);
 	}
 
 	public List<RunBoardDTO> searchList(String opt, String keyword, int limit, int offset) {

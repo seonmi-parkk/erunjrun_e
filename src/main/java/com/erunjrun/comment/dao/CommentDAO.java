@@ -12,7 +12,7 @@ import com.erunjrun.member.dto.MemberDTO;
 @Mapper
 public interface CommentDAO {
 
-	List<CommentDTO> list(int board_idx);
+	List<CommentDTO> list(int board_idx, String order);
 
 	int addComment(int board_idx,String content, String nickname);
 
@@ -31,5 +31,11 @@ public interface CommentDAO {
 	int updateNoticeComment(CrewNoticeDTO crewNoticeDto);
 
 	int nocoDel(int comment_idx);
+
+	int addFreeComment(int board_idx, String content, String nickname);
+
+	int askYes(int board_idx);
+
+	int addAskComment(int board_idx, String content, String nickname);
 
 }

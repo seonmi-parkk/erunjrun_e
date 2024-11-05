@@ -108,9 +108,9 @@
 				<th>글번호</th>
 				<th>작성자</th>
 				<th>제목</th>
-				<th>조회수</th>
-				<th>추천수</th>
-				<th>작성일</th>
+				<th><p style="cursor:pointer; font-size: 18px;" onclick="sortBy('bHit')">조회수</p></th>
+				<th><p style="cursor:pointer; font-size: 18px;" onclick="sortBy('likes')">추천수</p></th>
+				<th><p style="cursor:pointer; font-size: 18px;" onclick="sortBy('create_date')">작성일</p></th>
 			</tr>
 		</thead>
 		<tbody id="list" >
@@ -141,8 +141,24 @@
 <script>
 	var show = 1;
 	var paginationInitialized = false;
+	var sortColumn = 'create_date'; // 기본 정렬 기준을 작성일로 설정
+	var sortOrder = 'DESC'; // 기본 정렬 순서를 오름차순으로 설정
 	
 	pageCall(show);
+	
+	function sortBy(column) {
+	    if (sortColumn === column) {
+	        // 동일한 컬럼을 클릭하면 정렬 순서를 토글
+	        sortOrder = sortOrder === 'ASC' ? 'DESC' : 'ASC';
+	    } else {
+	        // 새로운 컬럼 클릭 시 오름차순으로 시작
+	        sortColumn = column;
+	        sortOrder = 'ASC';
+	    }
+	    show = 1;
+	    paginationInitialized = false;
+	    pageCall(show);
+	}
 	
 	// 검색 폼 제출 시 AJAX 호출
 	$('#searchForm').on('submit', function(event) {
@@ -164,7 +180,9 @@
 	            'page': page,
 	            'cnt': 15,
 	            'opt': option,  // 검색 옵션
-	            'keyword': keyword  // 검색어
+	            'keyword': keyword,  // 검색어
+	            'sortColumn': sortColumn, // 정렬 기준 추가
+	            'sortOrder': sortOrder // 정렬 순서 추가
 	        },
 	        datatype: 'JSON',
 	        success: function(data) {

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.erunjrun.comment.dao.CommentDAO;
 import com.erunjrun.comment.dto.CommentDTO;
@@ -21,10 +22,11 @@ public class CommentService {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired CommentDAO commentDao;
-	public List<CommentDTO> list(int board_idx) {
+	public List<CommentDTO> list(int board_idx, String order) {
 		
-		return commentDao.list(board_idx);
+		return commentDao.list(board_idx,order);
 	}
+	
 	public int addComment(int board_idx,String content, String nickname,String userId) {
 		
 		logger.info("받을 아이디? :"+userId);
@@ -66,5 +68,33 @@ public class CommentService {
 		
 		return commentDao.nocoDel(comment_idx) >0;
 	}
+	
+	@Transactional
+	public int addFreeComment(int board_idx,String content, String nickname,HttpSession session) {
+		String userId = (String) session.getAttribute("loginId");
+		logger.info("받을 아이디? :"+userId);
+		
+		Map<String, Object> commPoint = new HashMap<String, Object>();
+		commPoint.put("code_name", "P102");
+        commPoint.put("id", userId);
+        commPoint.put("point", 2);
+        
+        commentDao.commPoint(commPoint);
+		
+		return commentDao.addFreeComment(board_idx,content,nickname);
+	}
+	public int addAskComment(int board_idx, String content, String nickname) {
+		
+		commentDao.askYes(board_idx);
+		
+		return commentDao.addAskComment(board_idx,content,nickname);
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 }

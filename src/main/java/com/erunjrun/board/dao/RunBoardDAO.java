@@ -18,7 +18,7 @@ public interface RunBoardDAO {
 
 	List<RunBoardDTO> bHitList();
 
-	List<RunBoardDTO> list(int limit, int offset, String code_name, String use_yn, String is_map);
+	List<RunBoardDTO> list(int limit, int offset, String code_name, String use_yn, String is_map, String sortColumn, String sortOrder);
 
 	List<RunBoardDTO> search(String opt, String keyword, int limit, int offset);
 

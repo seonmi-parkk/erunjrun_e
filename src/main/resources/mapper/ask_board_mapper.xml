@@ -15,8 +15,18 @@
 		SELECT COUNT(*) FROM ask
     </select>
     
+     <!-- 게시글 삽입 -->
+    <insert id="insertAskBoard" 
+    			useGeneratedKeys="true"
+				keyColumn="ask_idx"
+				keyProperty="ask_idx"
+    			parameterType="com.erunjrun.board.dto.RunBoardDTO">
+        INSERT INTO ask (id, code_name, subject, content)
+        	VALUES (#{id}, #{code_name}, #{subject}, #{content})
+    </insert>
+    
     <select id="detail" resultType="com.erunjrun.board.dto.RunBoardDTO">
-    	SELECT m.id, b.ask_idx, b.subject, b.content, m.nickname, b.create_date
+    	SELECT m.id, b.ask_idx, b.subject, b.content, m.nickname, b.create_date,m.icon_image,is_ask
 			FROM ask b
 		LEFT JOIN member m ON b.id = m.id WHERE b.ask_idx = #{param1}
     </select>
