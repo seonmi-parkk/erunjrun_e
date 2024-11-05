@@ -258,14 +258,10 @@
     .leaderjb{
 		display: flex;  /*수직 정렬 flex, center*/
     	align-items: center;  
+   	    position: relative;
 	}
 	
-	.testeee{
-		margin-left: 10px;
-		display: flex;  /*수직 정렬 flex, center*/
-    	align-items: center;  
-    	padding: 10px 0px 10px 0px;
-	}
+
 	
     #btn04-s{
     	display: inline-block;
@@ -280,10 +276,11 @@
         font-size: 14px;
     }
     
-    .profileImg{
+    div img.profileImg{
     	margin-right: 10px;
    		margin-left: 10px;
    		margin-bottom: -10px;
+   		border-radius: 70%;
     }
     
     input[type="checkbox"]{
@@ -296,6 +293,7 @@
     
     .profileImg_01{
     	margin-right: 15px;
+    	border-radius: 50%;
     }
     
     .imglayout{
@@ -346,6 +344,32 @@
     	background: #fff;
     	border-radius: 10px;
     }
+    
+	.testeee {
+	    position: relative;
+	    margin-left: 10px;
+	    display: flex;
+	    align-items: center;
+	    padding: 9px 0px 0px 0px;
+	}
+	
+	.profile-box2 {
+	    position: absolute; 
+	    top: -2px; /* testeee의 맨 위에 오도록 설정 */
+	    left: -6px; /* 좌측 정렬 */
+	    width: 44px; 
+	    height: 44px;
+	    z-index: 10; /* 다른 요소보다 위에 표시되도록 설정 */
+	}
+	
+	.profile-box21{
+		position: absolute; 
+	    top: 4px; /* testeee의 맨 위에 오도록 설정 */
+	    left: -5px; /* 좌측 정렬 */
+	    width: 44px; 
+	    height: 44px;
+	    z-index: 10; /* 다른 요소보다 위에 표시되도록 설정 */
+	}
     
   
 	
@@ -465,9 +489,10 @@
 	                crewApplicationMember(application);
 
 	                // 프로필 이미지 기본값 설정 (추가 조건이 있으면 적용 가능)
-	                var profileImg = '<img src="/resources/img/common/profile.png" class="profileImg" width="32px"/>';
+	                var profileImg = '';
 	                var genderImg = '';
 	                var content = '';
+	                var iconBox = '';
 
 	                result.forEach(function(item, idx) {
 	                    // 성별에 따른 이미지 설정
@@ -475,14 +500,27 @@
 	                        ? '<img src="/resources/img/common/ico_male.png" width="9px" class="genderImg"/>'
 	                        : '<img src="/resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
 
+	                    
+	                    if(item.image){
+	                    	profileImg = '<img alt="profileImg" src="/photo/' + item.image + '" onerror="this.src=\'/resources/img/common/profile.png\'" class="profileImg" width="32px" />';
+	                    }else{
+	                    	profileImg = '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png\'" class="profileImg" width="32px" />';
+	                    }    
+	                        
+	                        
+	                    if(item.is_leader === 'Y' && item.icon_image != null && item.icon_image !== ''){
+            				iconBox = '<div class="profile-box2" style="background: url(/resources/img/icon/'+item.icon_image+') center center / 100% 100% no-repeat;"></div>';
+            			}
+	                        
+	                        
 	                    // 크루장 체크
 	                    if (item.is_leader === 'Y') {
 	                        crewLeader = item.id;
-	                        console.log('반복문 안에서 리더 id 체크 =>', crewLeader);
-	                        $('#leaderprofile').html('<div class="leaderjb">' + profileImg 
+	                        /* console.log('반복문 안에서 리더 id 체크 =>', crewLeader); */
+	                        $('#leaderprofile').html('<div class="leaderjb">' + profileImg + iconBox
 	                        		+ '<a class="user" style="cursor: pointer;"  data-id="' + item.id + '">' 
 	                        		+ item.nickname + ' / ' 
-	                            + genderImg + ' / ' + '크루장' + '</div></a>');
+	                            + genderImg + ' / ' + '크루장</div></a>');
 	                        $('.profileImg').attr('class', 'profileImg_01');
 	                    } else {
 	                        crewone.push(item.id); // 배열에 크루원 id 추가
@@ -560,8 +598,19 @@
 	            ? '<img src="/resources/img/common/ico_male.png" width="9px" class="genderImg"/>'
 	            : '<img src="/resources/img/common/ico_female.png" width="9px" class="genderImg"/>';
 
+	        if(item.image){
+            	profileImg = '<img alt="profileImg" src="/photo/' + item.image + '" onerror="this.src=\'/resources/img/common/profile.png\'" class="profileImg03" width="32px" />';
+            }else{
+            	profileImg = '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png\'" class="profileImg03" width="32px" />';
+            }
+	        
+	        var iconBox2 = '';
+	        if(item.icon_image != null && item.icon_image !== ''){
+				iconBox2 = '<div class="profile-box21" style="background: url(/resources/img/icon/'+item.icon_image+') center center / 100% 100% no-repeat;"></div>';
+			}
+	            
 	        // 프로필 이미지와 닉네임, 성별 및 날짜 정보 추가
-	        content += '<div class="testeee">' + profileImg + '<a class="user" style="cursor: pointer;"  data-id="' + item.id + '">' + item.nickname + ' / ' + genderImg + ' / ' + item.create_date + '</a>'
+	        content += '<div class="testeee">' + profileImg + iconBox2 + '<a class="user" style="cursor: pointer;"  data-id="' + item.id + '">' + item.nickname + ' / ' + genderImg + ' / ' + item.create_date + '</a>'
 	            + '<div class="btn-sty06"> <button class="btn02-s" onclick="layerPopup(\'' + item.nickname + '님을 승인 하시겠습니까?\', \'승인\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'Y\'); }, applBtn2Act)">승인</button>'
 	            + '<button class="btn02-s" id="btn04-s" onclick="layerPopup(\'' + item.nickname + '님을 거절 하시겠습니까?\', \'거절\', \'취소\', function() { memberResult(\'' + item.id + '\', \'' + item.nickname + '\', \'N\'); }, applBtn2Act)">거절</button></div></div>';
 	    });
@@ -574,7 +623,7 @@
 	    console.log('Nickname:', nickname);
 	    console.log('value:', value);
 	    
-		var crew_idx = 52; // 나중에 변경 필요
+		var crew_idx = $('input[name="crew_idx"]').val(); // 나중에 변경 필요
 		var code_name = '';
 		
 		if(value === 'Y'){
@@ -596,9 +645,9 @@
 			success: function(response){
 				
 				console.log('성공');
+				removeAlert();
 				
 				if(response.success){
-					removeAlert();
 					layerPopup(response.msg + '완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
 					crewMemberList();
 				}else{

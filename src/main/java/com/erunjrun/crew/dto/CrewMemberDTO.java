@@ -43,6 +43,12 @@ public class CrewMemberDTO {
     private String leader_nickname;
     private String leader_image;
     
+    
+    private String icon_image;
+    
+    private String member_icon_image;
+    
+    private String leader_icon_image;
 
 	public int getCrew_idx() {
 		return crew_idx;
@@ -230,6 +236,37 @@ public class CrewMemberDTO {
 
 	public void setLeader_image(String leader_image) {
 		this.leader_image = leader_image;
+	}
+	
+	
+	
+
+	public String getIcon_image() {
+		return icon_image;
+	}
+
+	public void setIcon_image(String icon_image) {
+		this.icon_image = icon_image;
+	}
+	
+	
+
+	public String getMember_icon_image() {
+		return member_icon_image;
+	}
+
+	public void setMember_icon_image(String member_icon_image) {
+		this.member_icon_image = member_icon_image;
+	}
+	
+	
+
+	public String getLeader_icon_image() {
+		return leader_icon_image;
+	}
+
+	public void setLeader_icon_image(String leader_icon_image) {
+		this.leader_icon_image = leader_icon_image;
 	}
 
 	@Override

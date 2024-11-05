@@ -113,25 +113,39 @@
         font-size: 14px;
     }
     
-     .profileBox{
-    	margin-right: 10px;
-    } 
+		
+		/* 프로필 컨테이너 */
+table tbody tr td.profileContainer {
+    position: relative; /* 자식 요소의 절대 위치 기준으로 설정 */
+    display: flex; /* 수평 정렬을 위한 flex 설정 */
+    align-items: center; /* 수직 가운데 정렬 */
+    vertical-align: middle;
+    text-align: left;
+    margin-left: 60px;
+}
 
-	
-	/* 프로필 컨테이너 */
-	table tbody tr td.profileContainer {
-	    display: block;
-	    align-items: center;
-	    vertical-align: middle;
-	    text-align: left;
-    	margin-left: 60px;
-	}   
+/* 프로필 이미지 */
+.profileBox {
+    margin-right: 10px;
+}
+
+/* 아이콘 이미지 */
+.profile-box2 {
+    position: absolute;
+    top: -8px; /* profileBox와 같은 높이에 위치 */
+    left: 10px; /* profileBox 오른쪽에 배치 */
+    width: 44px;
+    height: 44px;
+    margin-right: 2px;
+    transform: translateY(50%); /* 필요 시 위치 조정 */
+}
 </style>
 </head>
 <body>
 	<jsp:include page="../header.jsp"/>
 	
 	<div class="inner">
+	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
 	<p class="title1" onclick="location.href='/crewManagerList/${crew_idx}'">크루 신청자 관리</p>
 	<form id="searchForm">
     <select id="searchOption">
@@ -193,7 +207,7 @@
 
 	function pageCall(page) {
 	    var keyword = $('#searchKeyword').val();  // 검색어
-	    var crew_idx = 52; // 나중에 변경 필요
+	    var crew_idx = $('input[name="crew_idx"]').val(); // 나중에 변경 필요
 	
 	    $.ajax({
 	        type: 'POST',
@@ -261,12 +275,22 @@
 
 	        // 현재 연도에서 출생 연도를 빼고 나이대 계산
 	        var ageGroup = Math.floor((new Date().getFullYear() - birthYear) / 10) * 10 + "대";
-
+			
+	        var profileImg = '';
+	        var icon_img = '';
+	        if(item.image != null && item.image != ''){
+				profileImg = '/photo/'+item.image;
+			}else{
+				profileImg = '/resources/img/common/profile.png';
+			}
+			if(item.icon_image != null && item.icon_image !== ''){
+				icon_img = 'background: url(/resources/img/icon/' + item.icon_image + ') center center / 100% 100% no-repeat;';
+			}
 	        
             content += '<tr>';
-            // 프로필 + 닉네임 (나중에 연결 필요)
-            content +='<td class="profileContainer"><img src="/resources/img/common/profile.png" width="32px" class="profileBox"/>'+item.nickname+'</td>';
-			
+            content +='<td class="profileContainer"><img src="'+profileImg+'" width="32px" class="profileBox" onerror="this.src=\'/resources/img/common/profile.png\'" //>'+item.nickname;
+			content += '<div class="profile-box2" style="' + icon_img + '"></div>'; // icon
+			content += '</td>';
 			content +='<td>'+ageGroup+'</td>';
 			content +='<td>'+genderImg+ '&nbsp;' +item.gender+'</td>';
 			content +='<td>'+item.create_date+'</td>'; // 신청일자
@@ -340,7 +364,7 @@
 		    console.log('Nickname:', nickname);
 		    console.log('value:', value);
 		    
-			var crew_idx = 52; // 나중에 변경 필요
+			var crew_idx = $('input[name="crew_idx"]').val(); // 나중에 변경 필요
 			var code_name = '';
 			
 			if(value === 'Y'){
@@ -379,8 +403,6 @@
 			 
 		    
 		}
-		
-		
 
 
 </script>

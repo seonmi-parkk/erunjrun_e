@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -610,6 +611,14 @@ public class CrewService {
 		}
 		
 		return crew_dao.crewMemberAdminUpdate(param);
+	}
+
+	public Date crewNoriceDate(int crew_idx) {
+		return crew_dao.crewNoticeDate(crew_idx);
+	}
+
+	public int crewChatMin(int crew_idx) {
+		return crew_dao.crewChatMin(crew_idx);
 	}
 
 	

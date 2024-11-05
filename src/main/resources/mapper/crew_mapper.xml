@@ -101,7 +101,7 @@
 	
 	<!-- 크루 멤버 리스트 (프로필 이미지 포함) -->
 	<select id="crewMemberList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="int">
-		SELECT m.id, m.nickname, m.gender, COALESCE(p.image, '') as image, cm.is_leader, cm.create_date, cm.crew_idx
+		SELECT m.id, m.nickname, m.gender,  COALESCE(m.icon_image, '') as icon_image, COALESCE(p.image, '') as image, cm.is_leader, cm.create_date, cm.crew_idx
 			FROM crew_member cm JOIN member m ON cm.id = m.id
 			LEFT JOIN profile p ON m.id = p.id WHERE cm.crew_idx = #{crew_idx};
 			
@@ -109,7 +109,7 @@
 	
 	<!-- 크루 신청자 리스트 -->
 	<select id="crewApplicationList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="map">
-    SELECT m.id, m.nickname, m.gender, m.birth,  COALESCE(p.image, '') AS image, ca.create_date,
+    SELECT m.id, m.nickname, m.gender, m.birth, COALESCE(m.icon_image, '') AS icon_image,  COALESCE(p.image, '') AS image, ca.create_date,
         (SELECT COUNT(*) FROM crew_application ca_inner JOIN member m_inner ON ca_inner.id = m_inner.id
          WHERE ca_inner.crew_idx = #{crew_idx}
            <if test="keyword != null and keyword != ''">
@@ -301,8 +301,10 @@
 	<!-- 크루 권한 기록 리스트 -->
 	<select id="applicationAdminList" resultType="com.erunjrun.crew.dto.CrewMemberDTO" parameterType="map">
 	    SELECT 
-	        m.id AS member_id, m.nickname AS member_nickname, COALESCE(p.image, '') AS member_image,
+	        m.id AS member_id, m.nickname AS member_nickname, COALESCE(m.icon_image, '') AS member_icon_image, 
+	        COALESCE(p.image, '') AS member_image,
 	        leader.id AS leader_id, leader.nickname AS leader_nickname,
+	        COALESCE(leader.icon_image, '') AS leader_icon_image,
 	        COALESCE(leader_profile.image, '') AS leader_image,
 	        cah.create_date, cah.update_date, cah.is_agree,
 	        (SELECT COUNT(*) FROM crew_application_history WHERE crew_idx = #{crew_idx} 
@@ -511,7 +513,7 @@
 	
 	<!-- 크루 공지 상세보기 -->
 	<select id="crewNoticeDetail" resultType="com.erunjrun.crew.dto.CrewNoticeDTO" parameterType="int">
-		SELECT cn.*, m.nickname, p.image 
+		SELECT cn.*, m.nickname, m.icon_image, p.image 
 			FROM crew_notice cn join `member` m on cn.id = m.id
 			JOIN profile p on p.id = m.id 
 			where notice_idx = #{notice_idx}
@@ -562,4 +564,19 @@
 		UPDATE crew_member SET is_leader = 'Y' WHERE crew_idx = #{crew_idx} AND id = #{id}
 	</update>
 	
+	<!-- 크루 상세 페이지 최근 게시글 -->
+	<select id="crewNoticeDate" parameterType="int" resultType="java.sql.Date">
+		SELECT create_date FROM crew_notice WHERE crew_idx = #{crew_idx} ORDER BY create_date DESC LIMIT 1
+	</select>
+	
+	<!-- 크루 상세 페이지 최근 채팅 -->
+	<select id="crewChatMin" parameterType="int" resultType="int">
+		SELECT TIMESTAMPDIFF(MINUTE, ccc.create_date, NOW()) 
+		    FROM crew_chat_content ccc 
+		    JOIN crew_chat cc ON ccc.chat_idx = cc.chat_idx 
+		    WHERE cc.crew_idx = #{crew_idx} 
+		      AND cc.code_cp = 'C' 
+		    ORDER BY ccc.create_date DESC 
+		    LIMIT 1
+	</select>
 </mapper>
