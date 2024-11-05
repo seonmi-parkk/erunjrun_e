@@ -1,0 +1,366 @@
+@charset "UTF-8";
+
+	.innerr {
+	    max-width: 1300px;
+	    margin: 80px auto 0;
+	    display: flex;                  
+	    justify-content: space-between; 
+	    align-items: flex-start;        
+	    gap: 20px;      
+	}
+	
+	.layoutbox {
+	    height: 90px;                  /* 이 높이와 동일한 값을 .two의 top에 설정 */
+	    background-color: white;        /* 헤더 영역이 배경과 겹치지 않도록 배경색 추가 */
+	}
+
+	.crew-info{
+		background: #fff;
+		border-style: solid;
+		border-color: #bdbdbd;
+		border-width: 0px 0px 1px 0px;
+		height: 300x;
+		position: relative;
+		display: flex;
+	}
+	.crew-application-list{
+		background: #fff;
+		border-style: solid;
+		border-color: #bdbdbd;
+		border-width: 0px 0px 1px 0px;
+		height: 360px;
+		position: relative;
+	}
+	
+	.crew-chat-list{
+		background: #fff;
+		border-style: solid;
+		border-color: #bdbdbd;
+		border-width: 0px 0px 1px 0px;
+		height: 360px;
+		position: relative;
+	}
+	.crew-chat-list .line {
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;
+	    gap: 4px;
+		padding: 12px 4px 0 25px;
+	}
+	.crew-chat-list .bar {
+		color: #ccc;
+	}
+	.crew-chat-list .ico-gender {
+		width: 9px;
+	}
+	.crew-chat-list .btn-chat {
+		margin-left: 12px;
+	}
+	.crew-chat-list .profile-area{
+    	width: 44px; height: 44px;
+    	position: relative;
+    }
+    .crew-chat-list .profile-box {
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 44px; height: 44px;
+		margin-right: 2px;
+	}
+	.crew-chat-list .profile-img {
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 33px; height: 33px;
+		border-radius: 50%;
+	}
+	
+	
+	.one {
+	    width: 70%;                     
+	    padding: 20px;                  
+	    box-sizing: border-box;          
+	    /* background-color: #D5D5D5; */
+	    position: relative;              /* 기본 요소 배치를 유지 */
+	    z-index: 1;                      /* 다른 요소들 위에 놓기 */
+	}
+	
+    .two {
+        width: 30%;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #FBFBFB;
+        position: relative;
+        max-height: 1200px;
+        overflow-y: hidden;
+        position: sticky;
+        top: 100px;
+        z-index: 80;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* 자식 요소들이 위아래로 배치되도록 설정 */
+    }
+    
+    .fixbox {
+	    position: sticky;                /* 이 부분은 고정 */
+	    top: 0;                          /* 상단에 고정 */
+/* 	    background-color: #FFD9EC;        *//* 스크롤 시 배경이 덮이지 않도록 설정 */
+    	z-index: 10;
+	}
+	
+    .title2-2{
+    	color: var(--main-color);
+        font-family: "Pretendard Variable", sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+        display: inline-block;
+   		width: 200px;
+   		padding: 0px 11px 0px 6px;
+   		position: relative; /* 상대적인 위치 설정 */
+   		bottom: 3px;
+    }
+
+    .title1-1 {
+        color: var(--font-color);
+        font-family: "GmarketSans", sans-serif;
+        font-size: 25px;
+        font-weight: 700;
+        padding: 10px 0px 10px;
+    }
+    
+    
+    
+    .title1-12 {
+        color: var(--font-color);
+        font-family: "GmarketSans", sans-serif;
+        font-size: 25px;
+        font-weight: 700;
+        padding: 25px 25px 5px;
+    }
+    
+    .title1-12 a {
+        color: var(--font-color);
+        font-family: "GmarketSans", sans-serif;
+        font-size: 25px;
+        font-weight: 700;
+    }
+   
+	.scrollable-content {
+	    max-height: 1200px;               /* 스크롤할 영역의 최대 높이 설정 */
+	    overflow-y: auto;                /* 이 부분만 스크롤 가능하게 설정 */
+	    margin-top: 20px;                /* 위쪽 고정 영역과의 간격 */
+	    
+	    margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 16px;
+        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+        vertical-align: baseline;
+        box-sizing: border-box;
+        color: var(--font-color);
+        background: #fff;
+        height: 700px;
+	}
+	
+	.btn-layout{
+		margin-bottom: 10px;
+	}
+	
+	.btn02-s1 {
+    	 display: inline-block;
+         height: 32px;
+         padding: 8px 11px;
+         margin: 0 4px;
+         border-radius: 10px;
+         border: 1px solid #AAAAAA;
+         color: #AAAAAA;
+         background: #fff;
+         cursor: pointer;
+	}
+	
+	.btn02-s13 {
+    	 display: inline-block;
+         height: 32px;
+         padding: 8px 11px;
+         margin: 0 4px;
+         border-radius: 10px;
+         border: 1px solid #AAAAAA;
+         color: #AAAAAA;
+         background: #fff;
+         cursor: pointer;
+         font-size: 14px;
+         margin-right: 140px;
+	}
+	
+	.btn04-s{
+    	display: inline-block;
+        height: 32px;
+        padding: 6px 11px;
+        margin: 0 4px;
+        border-radius: 10px;
+        border: 1px solid #6994FF;
+        color: #6994FF;
+        background: #fff;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    
+    .title-layout{
+    	display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+    
+	.crewImg {
+	    position: relative; /* 하트 아이콘이 이미지 위에 배치될 수 있도록 상대 위치 설정 */
+	    width: 180px; /* 이미지의 너비를 140px로 설정 */
+	    height: 180px; /* 이미지의 높이를 140px로 설정 */
+	    border-radius: 12px; /* 이미지 모서리를 둥글게 설정 */
+	    overflow: hidden; /* 이미지가 영역을 넘칠 경우 숨김 */
+	    margin: 35px 0px 0px 25px
+	}
+    
+	.crew-img {
+	    width: 100%; /* 이미지 너비를 부모 요소에 맞춤 */
+	    height: 100%; /* 이미지 높이를 부모 요소에 맞춤 */
+	    object-fit: cover; /* 이미지 비율을 유지하면서 넘치는 부분을 잘라냄 */
+	}
+	
+	.crew-text-box{
+		margin: 10px 0px 0px 0px;
+	}
+	
+    .contentbox{
+    	width: 100%;
+   		padding-left: 25px;
+   		line-height: 30px;
+   		
+    }
+    
+    .content-box01{
+        margin-left: 25px;
+    	margin-top: 12px;
+  		margin-bottom: 17px;
+    }
+    
+    .leaderjb{
+		display: flex;  /*수직 정렬 flex, center*/
+    	align-items: center;  
+   	    position: relative;
+	}
+	
+
+	
+    #btn04-s{
+    	display: inline-block;
+        height: 32px;
+        padding: 6px 11px;
+        margin: 0 4px;
+        border-radius: 10px;
+        border: 1px solid #6994FF;
+        color: #6994FF;
+        background: #fff;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    
+    div img.profileImg{
+    	margin-right: 10px;
+   		margin-left: 10px;
+   		margin-bottom: -10px;
+   		border-radius: 70%;
+    }
+    
+    input[type="checkbox"]{
+        margin-top: 6px;
+    }
+    
+    a{
+    	text-decoratdion-line: none;
+    }
+    
+    .profileImg_01{
+    	margin-right: 15px;
+    	border-radius: 50%;
+    }
+    
+    .imglayout{
+    	margin: 11px 14px -3px 9px;
+    }
+    
+    .genderImg{
+        margin: 0px 3px -3px 3px;
+    }
+    
+    .profileImg03{
+    	margin: 0px 13px 0px 2px;
+    }
+    
+    .testeee .btn-sty06{
+    	margin-left: auto;
+    }
+
+    /*운동프로필 레이어팝업*/
+	#profilePopup {
+	    width: fit-content;
+	    top: 185px;
+	    left: 50%;
+	    transform: translateX(-50%);
+		z-index: 996;
+		display: none;
+	}
+	#profilePopup .close {
+	    font-size: 40px;
+	    font-weight: 300;
+	    position: absolute;
+	    z-index: 996;
+	    top: 30px;
+	    right: 30px;
+	    display: inline-block;
+	    width: 30px;
+	    height: 30px;
+	    line-height: 27px;
+	    text-align: center;
+	}
+	#profilePopup .modal-content{
+	    padding: 20px 20px;
+	    background: #f8f8f8;
+	    border: none;
+    	border-radius: 0;
+    }
+    #PopupBody {
+    	background: #fff;
+    	border-radius: 10px;
+    }
+    
+	.testeee {
+	    position: relative;
+	    margin-left: 10px;
+	    display: flex;
+	    align-items: center;
+	    padding: 9px 0px 0px 0px;
+	}
+	
+	.profile-box2 {
+	    position: absolute; 
+	    top: -2px; /* testeee의 맨 위에 오도록 설정 */
+	    left: -6px; /* 좌측 정렬 */
+	    width: 44px; 
+	    height: 44px;
+	    z-index: 10; /* 다른 요소보다 위에 표시되도록 설정 */
+	}
+	
+	.profile-box21{
+		position: absolute; 
+	    top: 4px; /* testeee의 맨 위에 오도록 설정 */
+	    left: -5px; /* 좌측 정렬 */
+	    width: 44px; 
+	    height: 44px;
+	    z-index: 10; /* 다른 요소보다 위에 표시되도록 설정 */
+	}
+    
+    .profile-box3{
+ 	   position: absolute; 
+	   top: 4px; /* testeee의 맨 위에 오도록 설정 */
+	   left: 34px; /* 좌측 정렬 */
+	   width: 44px; 
+	   height: 44px;
+	   z-index: 10; /* 다른 요소보다 위에 표시되도록 설정 */
+    }

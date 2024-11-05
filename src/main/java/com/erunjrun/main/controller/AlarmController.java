@@ -37,6 +37,7 @@ public class AlarmController {
 	public Map<String, Object> alarmList(@RequestParam String loginId){
 		
 //		logger.info("알림 리스트 : loginId => " + loginId);
+		logger.info("알림 업데이트!!!!!!!!!!!!!!!!!!!!!!");
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", alarm_service.alarmList(loginId));
@@ -175,7 +176,8 @@ public class AlarmController {
 	@GetMapping(value="/alarmUseUpdate")
 	@ResponseBody
 	public boolean alarmUseUpdate(@RequestParam int alarm_idx) {
-		
+		logger.info("알림 업데이트 요청!!!!!!!!!!1");
+		logger.info("idx ===================> "+ alarm_idx);
 		if(alarm_service.alarmUseUpdate(alarm_idx) > 0) {
 			return true;
 		}

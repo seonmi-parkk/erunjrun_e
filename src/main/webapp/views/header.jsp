@@ -399,17 +399,7 @@
 	    }
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 
 	// x 클릭 시 팝업 닫힘	
 	$('.close').on('click', function(){
@@ -445,7 +435,7 @@
 	});
 	
 	function alarmUpdate(alarm_idx){
-		console.log('알림 x표시 => ', alarm_idx);
+		console.log('알림 x표시 ㅇㅇㅇㅇㅇㅇㅇㅇㅇ=> ', alarm_idx);
 		
 		$.ajax({
 			type: 'GET',
@@ -512,5 +502,4 @@
 	    removeAlert(); 
 	    alarmUpdate(alarm_idx);
 	}
-
 </script>
