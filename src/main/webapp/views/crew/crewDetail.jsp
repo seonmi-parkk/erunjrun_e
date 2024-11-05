@@ -126,6 +126,7 @@
     .right-x1{
     	float: inline-end;
     	margin: 10px 12px;
+    	cursor: pointer;
     }
     
     .title1-1 {
@@ -363,7 +364,7 @@
 			<div class="title2-1">크루 채팅방</div>
 			<div class="right-x">
 				<img src="/resources/img/crew/img07.png" width="40px" /> 
-				<span class="right-x1"><a onclick="openCrewChat()" class="crewAccess">바로가기</a></span>
+				<span class="right-x1"><a onclick="openCrewChat()" >바로가기</a></span>
 			</div>
 			<div class="contentbox">
 				<span><img src="/resources/img/crew/img06.png" width="17px" class="imglayout"/> 마지막 대화 n 분 전</span>

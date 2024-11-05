@@ -37,13 +37,14 @@
         }
         .sec1 {
             position: relative;
+            margin-top: 60px;
             padding-top: 50px;
         }
         .sec1 .img {
             width: 100%;
             height: 530px;
             border-radius: 20px;
-            background: url('/resources/img/main/main_image.jpg');
+            background: url('/resources/img/main/main_image.jpg') no-repeat center/cover;
         }
         .sec1 .quick li a{
             background: #ffffff;
@@ -83,7 +84,7 @@
        	    text-align: center;
         }
         .view-more {
-        	margin-top: 90px;
+        	margin-top: 80px;
         	text-align: center;
         }
         .view-more img {
@@ -133,12 +134,12 @@
 		    height: 100%;
 			position: absolute;
 			top: 0; right: 0;
-			background: url('/resources/img/main/sec4_bg.png') no-repeat;
+			background: url('/resources/img/main/sec4_bg.png') no-repeat center/cover;
 		}
 		.sec4 .bg img {
 			position: absolute;
 			top: 50%;
-			right: 0%;
+			right: 22%;
 			transform: translate(-50%, -50%);
 		}
 		.sec4 .txt_area {
@@ -342,7 +343,7 @@
 	        <div class="quick">
 	            <ul>
 	                <li>
-	                    <a href="#">
+	                    <a href="/crewList">
 	                        <img src="/resources/img/main/quick1.png" alt="러닝크루">
 	                        <div class="txt">
 	                            <div class="tit">러닝크루</div>
@@ -351,7 +352,7 @@
 	                    </a>
 	                </li>
 	                <li>
-	                    <a href="#">
+	                    <a href="/mateList">
 	                        <img src="/resources/img/main/quick2.png" alt="러닝메이트">
 	                        <div class="txt">
 	                            <div class="tit">러닝메이트</div>
@@ -360,7 +361,7 @@
 	                    </a>
 	                </li>
 	                <li>
-	                    <a href="#">
+	                    <a href="/runBoard">
 	                        <img src="/resources/img/main/quick3.png" alt="게시판">
 	                        <div class="txt">
 	                            <div class="tit">게시판</div>
@@ -369,7 +370,7 @@
 	                    </a>
 	                </li>
 	                <li>
-	                    <a href="#">
+	                    <a href="/icon">
 	                        <img src="/resources/img/main/quick4.png" alt="아이콘몰">
 	                        <div class="txt">
 	                            <div class="tit">아이콘몰</div>
@@ -411,6 +412,9 @@
 	        <div class="tit-tag"><img src="/resources/img/main/star_bl.png" alt="아이콘">러닝메이트</div>
 	        <div class="tit">근처 유저 중 성향이 맞는 친구들과<br/>러닝메이트를 맺어요</div>
 	        <img src="/resources/img/main/sec5.png" alt="아이콘">
+	        <div class="view-more">	       
+		        <a href="/mateList">바로가기<img src="/resources/img/main/arrow_r.png"/ alt="바로가기"></a>
+	        </div>
 	    </div>
 		
 
