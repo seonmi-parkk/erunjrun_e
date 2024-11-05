@@ -90,8 +90,17 @@ public class FreeBoardController {
 	}
 	
 	@GetMapping(value="/freeBoardWrite")
-	public String write() {			
-		return "freeBoard/freeBoardWrite";
+	public String write(HttpSession session) {
+		
+		String page ="";
+ 		String userId = (String) session.getAttribute("loginId");
+ 		if(userId == null) {
+ 			page = "member/login";
+ 		}else {
+ 			page ="freeBoard/freeBoardWrite";
+ 		}
+ 		
+ 		return page;
 	}
 	
 	 // 이미지 저장
@@ -213,9 +222,18 @@ public class FreeBoardController {
     	RunBoardDTO run = freeBoardService.detail(board_idx);
     	logger.info("내용 : "+run);    	
         
-         model.addAttribute("post", run);      
+        model.addAttribute("post", run);
+         
+        String page ="";
+  		String userId = (String) session.getAttribute("loginId");
+  		if(userId == null) {
+  			page = "member/login";
+  		}else {
+  			page ="freeBoard/freeBoardUpdate";
+  		}
+  		
+  		return page;
     	
-    	return "freeBoard/freeBoardUpdate";
     }
     
     //게시글 수정 요청

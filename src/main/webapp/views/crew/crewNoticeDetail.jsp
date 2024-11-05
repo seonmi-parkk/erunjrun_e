@@ -12,6 +12,7 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=26c56d5b3e89329f848d1188b85f2e3d&libraries=services"></script>
 	<script src="/resources/js/common.js"></script>
 	<script src="/resources/js/layerPopup.js"></script>
+
 </head>
 <body>
     <jsp:include page="../header.jsp" />
@@ -42,8 +43,8 @@
 			</div>
 			
 	    	<div class="supa">
-		    	<span id="title2-1" class="title21">등록순</span>
-	    		<span id="title2-2" class="title21">최신순</span>
+		    	<span id="title2-1" class="title21" onclick="commentCall('ASC')" style="cursor: pointer;">등록순</span>
+	    		<span id="title2-2" class="title21" onclick="commentCall('DESC')" style="cursor: pointer;">최신순</span>
 	    	</div>
 	    	
 	    	<!-- 댓글 리스트 -->
@@ -98,10 +99,14 @@
 </body>
 <script src="/resources/js/crew/crewNoticeDetail.js" type="text/javascript"></script>
 <script>
+
+
+
 	//관리자 세션 체크! 
 	var authority = '${sessionScope.adminYn}';
 	if(authority === 'Y'){
 		$('#butt').css('visibility', 'visible');
 	}
+
 </script>
 </html>

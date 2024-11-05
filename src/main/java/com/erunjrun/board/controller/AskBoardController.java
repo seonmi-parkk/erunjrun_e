@@ -1,6 +1,5 @@
 package com.erunjrun.board.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.erunjrun.board.dto.RunBoardDTO;
 import com.erunjrun.board.service.AskBoardService;
 import com.erunjrun.image.dto.ImageDTO;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
@@ -66,8 +64,19 @@ public class AskBoardController {
 		}
 		
 		@GetMapping(value="/askBoardWrite")
-		public String write() {			
-			return "askBoard/askBoardWrite";
+		public String write(HttpSession session) {
+			
+			String userId = (String) session.getAttribute("loginId");
+			String page ="";
+			
+			if(userId == null) {
+				page = "member/login";
+			}else {
+				page ="askBoard/askBoardWrite";
+			}
+			
+			
+			return page;
 		}
 		
 		 // 게시글 등록
@@ -116,23 +125,40 @@ public class AskBoardController {
 		// 집에서 작업한거 추가할거임 
 		
 		@RequestMapping(value="/askBoardDetail/{ask_idx}")
-		public String detail(@PathVariable int ask_idx,Model model) {
+		public String detail(@PathVariable int ask_idx,Model model,HttpSession session) {
 			
 			RunBoardDTO info = askService.detail(ask_idx);
 			
 			model.addAttribute("info", info);
 			
-			return "askBoard/askBoardDetail";
+			String page ="";
+			String userId = (String) session.getAttribute("loginId");
+			if(userId == null) {
+				page = "member/login";
+			}else {
+				page ="askBoard/askBoardDetail";
+			}
+			
+			return page;
 		}
 		
 		@GetMapping(value="/askBoardUpdate/{ask_idx}")
-		public String update(@PathVariable int ask_idx,Model model) {
+		public String update(@PathVariable int ask_idx,Model model,HttpSession session) {
 			
 			RunBoardDTO post = askService.detail(ask_idx);
 			
 			model.addAttribute("post", post);
 			
-			return "askBoard/askBoardUpdate";
+			String page ="";
+			String userId = (String) session.getAttribute("loginId");
+			if(userId == null) {
+				page = "member/login";
+			}else {
+				page ="askBoard/askBoardUpdate";
+			}
+			
+			return page;
+						
 		}
 		
 		@PostMapping(value="/askBoardUpdate")

@@ -104,7 +104,7 @@ public class CommentController {
 	// 크루 공지사항 댓글
 	@PostMapping(value="/crewComment/{notice_idx}")
 	@ResponseBody
-	public Map<String,Object> crewComment(@PathVariable int notice_idx,HttpSession session){
+	public Map<String,Object> crewComment(@PathVariable int notice_idx,HttpSession session,String order){
 		
 		String loginId = (String) session.getAttribute("loginId");
 		MemberDTO nickname = null;
@@ -117,7 +117,7 @@ public class CommentController {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
-		List<CommentDTO> list = commentService.commentList(notice_idx);
+		List<CommentDTO> list = commentService.commentList(notice_idx,order);
 		
 		result.put("list", list);
 		result.put("nickname", nickname);
@@ -200,6 +200,7 @@ public class CommentController {
 			
 			return result;
 		}
+		
 		
 		@PostMapping(value="/addAskComment")	
 		@ResponseBody

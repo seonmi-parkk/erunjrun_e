@@ -12,8 +12,8 @@
 	
 	<!-- 러닝코스 댓글 등록 -->
 	<insert id="addComment" parameterType="com.erunjrun.comment.dto.CommentDTO">
-		INSERT INTO comment(code_name,board_idx,content,nickname)
-							VALUES('B100',#{board_idx},#{content},#{nickname})
+		INSERT INTO comment(code_name, board_idx, content, nickname)
+							VALUES('B100', #{board_idx}, #{content}, #{nickname})
 	</insert>
 	
 	 <insert id="commPoint" parameterType="map">
@@ -31,10 +31,10 @@
     
     <!-- 크루 공지 댓글 리스트 -->
     <select id="commentList" resultType="com.erunjrun.crew.dto.CrewNoticeDTO">
-		SELECT cnc.*, m.nickname
+		SELECT cnc.*, m.nickname,m.icon_image
 			FROM crew_notice_comment cnc
 			JOIN member m ON cnc.id = m.id
-			WHERE cnc.notice_idx = #{notice_idx}
+			WHERE cnc.notice_idx = #{notice_idx} ORDER BY create_date ${order}
 	</select>
 	
 	<select id="nickName" resultType="com.erunjrun.member.dto.MemberDTO">

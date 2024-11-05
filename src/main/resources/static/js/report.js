@@ -5,11 +5,13 @@
 		var unlike_id = $('.user').text();
 		var userId = $("input[name='reput']").val();
 		var code_name = $("input[name='code_name']").val();
-		var board_idx = $("input[name='board_idx']").val();
+		var board_idx = $("input[name='faker']").val();
 		console.log('신고한', unlike_id);
 		console.log('신고받은', userId);
 		console.log('코드네임', code_name);
 		console.log('설마이게...?', board_idx);
+		
+			
 		reportBoard();
 	});
 	
@@ -23,19 +25,29 @@
             console.log(fileInput);
         }
 		
-		
+		var code_name = $("input[name='code_name']").val();
 		
 		var subject = $("input[name='subject']").text();
         var content = $("input[name='content']").text();
         var unlike_id = $('.user').text();
 		var userId = $("input[name='reput']").val();
-		var board_idx = $("input[name='board_idx']").val();
+		var board_idx = $("input[name='faker']").val();
+		var url = '/runBoardDetail/'+board_idx;
+		var path = '/freeBoardDetail/'+board_idx;
+		
+		console.log('경로 : ',url);
 		
 		console.log('제목', subject);
 		console.log('내용', content);
+		
+		if(code_name == 'B100'){
+			formData.append('url',url);
+		}else{
+			formData.append('url',path);
+		}
          
          
-         
+          
         formData.append('id',userId);  
         formData.append('unlike_id',unlike_id);   
 		formData.append('subject',subject);

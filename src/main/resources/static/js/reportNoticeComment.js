@@ -11,6 +11,13 @@
 		
 		console.log('신고받은', id);
 		
+		var notice_idx = $("input[name='zeus']").val();
+		
+		console.log('공지번호 : ',notice_idx);
+		
+		var url = '/crewNoticeDetail/'+notice_idx;
+			
+		console.log('경로 : ',url);
 		
 	
 		var formData = new FormData($('form')[0]); 
@@ -22,13 +29,16 @@
         }
 		
 		
-		
 		var subject = $("input[name='subject']").text();
         var content = $("input[name='content']").text();
         
 		var unlike_id = $("input[name='unlike_id']").val();
 		
 		var id = $("input[name='user_id']").val();
+		
+		
+		
+		formData.append('url',url);
 		
         formData.append('id',id);  
         formData.append('unlike_id',unlike_id);   
