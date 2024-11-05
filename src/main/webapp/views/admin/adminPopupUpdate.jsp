@@ -122,7 +122,7 @@
             <p class="title3" onclick="location.href='adminReport'">신고</p>
             <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
             <p class="title3" onclick="location.href='adminTag'">태그</p>
-            <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
+            <p class="title3" onclick="location.href='adminIconListView'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
             <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>

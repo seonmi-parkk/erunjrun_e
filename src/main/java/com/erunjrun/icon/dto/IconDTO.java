@@ -26,6 +26,26 @@ public class IconDTO {
 
 	//회원 테이블
 	private int point;
+    private MemberDTO member;
+    private String birth;
+    private String gender;
+	   
+	   
+   //구매차트
+    private int male_count;
+    private int female_count;
+    private double sales_percentage;
+    private int total_sales;
+   
+	    
+    //그래프
+   private int timePeriod;
+   private int purchaseCount;
+   private int year;
+   
+	   
+
+	
 
 	public int getTotal_count() {
 		return total_count;
@@ -114,6 +134,66 @@ public class IconDTO {
 	}
 	public void setBuy_date(Date buy_date) {
 		this.buy_date = buy_date;
+	}
+	public MemberDTO getMember() {
+		return member;
+	}
+	public void setMember(MemberDTO member) {
+		this.member = member;
+	}
+	public String getBirth() {
+		return birth;
+	}
+	public void setBirth(String birth) {
+		this.birth = birth;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public int getMale_count() {
+		return male_count;
+	}
+	public void setMale_count(int male_count) {
+		this.male_count = male_count;
+	}
+	public int getFemale_count() {
+		return female_count;
+	}
+	public void setFemale_count(int female_count) {
+		this.female_count = female_count;
+	}
+	public double getSales_percentage() {
+		return sales_percentage;
+	}
+	public void setSales_percentage(double sales_percentage) {
+		this.sales_percentage = sales_percentage;
+	}
+	public int getTotal_sales() {
+		return total_sales;
+	}
+	public void setTotal_sales(int total_sales) {
+		this.total_sales = total_sales;
+	}
+	public int getTimePeriod() {
+		return timePeriod;
+	}
+	public void setTimePeriod(int timePeriod) {
+		this.timePeriod = timePeriod;
+	}
+	public int getPurchaseCount() {
+		return purchaseCount;
+	}
+	public void setPurchaseCount(int purchaseCount) {
+		this.purchaseCount = purchaseCount;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
 	}
 	
 	

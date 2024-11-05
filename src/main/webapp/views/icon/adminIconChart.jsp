@@ -82,7 +82,7 @@
    
    .btn01-l{
    margin-top: 10px;
-   margin-left: 1450px;
+   margin-left: 1050px;
    margin-bottom: 10px;
    }
 </style>
@@ -103,7 +103,7 @@
             <p class="title3" onclick="location.href='adminReport'">신고</p>
             <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
             <p class="title3" onclick="location.href='adminTag'">태그</p>
-            <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
+            <p class="title3" onclick="location.href='adminIconListView'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
             <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
@@ -111,8 +111,9 @@
         
         <main class="main-content">
       <p class="title1" >아이콘</p>
-       <img alt="아이콘이미지" src="/resources/static/img/icon/icon2.png">   
        
+       <div class="btn02-l" onclick="location.href='adminIconChart'">차트</div>
+       <div class="btn03-l" onclick="location.href='adminIconGraph'">그래프</div>
        <table>
          <colgroup>
              <col width="15   %"/>
@@ -145,8 +146,9 @@
       </thead>
           <tbody id="list">
              
-
+         
           </tbody>
+           
           <tr>
             <th colspan="7">
                <div class="container">
@@ -157,6 +159,7 @@
             </th>
          </tr>
    </table>
+    <div class="btn01-l" onclick="location.href='adminIcon'">리스트</div>
         </main>
    </div>
    
@@ -209,13 +212,13 @@
       
    })
    
-
    function drawList(list) {
     var content = '';
     for (var view of list) {
+      console.log(view.image);
         content += '<tr>';
         content += '<td><a href="adminIconBuyList?icon_idx=' + view.icon_idx + '">' + view.icon_name + '</a></td>';
-        content += '<td><img src="' + view.image + '" alt="아이콘 이미지" width="50" height="50"/></td>'; // 아이콘 이미지 표시
+        content += '<td><img src="/resources/img/icon/'+ view.image+'" alt="아이콘 이미지" width="50" height="50"/></td>'; // 아이콘 이미지 표시
         content += '<td>' + $('#ageGroup').val() + '</td>'; // 선택된 연령대 표시
         content += '<td>' + (view.male_count || 0) + '</td>'; // 남성 구매 수
         content += '<td>' + (view.female_count || 0) + '</td>'; // 여성 구매 수
@@ -231,4 +234,4 @@
 </script>
 <script src="resources/js/common.js" type="text/javascript"></script>
 <script src="resources/js/layerPopup.js"></script>
-</html> 
+</html>

@@ -38,6 +38,14 @@ public interface IconDAO {
 
 	public int adminIconUpdate(Map<String, String> param);
 
+	public List<IconDTO> getMonthlySalesData(Integer year);
+
+	public List<IconDTO> getDailySalesData(Integer year, Integer month);
+
+	public List<IconDTO> getWeeklySalesData(Integer year, Integer month);
+
+	public List<Integer> getAvailableYears();
+
 
 	
 	

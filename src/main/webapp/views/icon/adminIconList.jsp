@@ -126,7 +126,7 @@
             <p class="title3" onclick="location.href='adminReport'">신고</p>
             <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
             <p class="title3" onclick="location.href='adminTag'">태그</p>
-            <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
+            <p class="title3" onclick="location.href='adminIconListView'">아이콘</p>
             <p class="title3" onclick="location.href='adminPopup'">팝업</p>
             <p class="title3" onclick="location.href='adminCode'">구분코드</p>
             <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
@@ -136,7 +136,7 @@
 		<p class="title1" >아이콘</p>
 	    <div class="btn-area">
 	    	<div class="btn01-l" onclick="location.href='/adminIconWriteView'" >등록</div>
-	    	<div class="btn02-l" onclick="location.href='/'" >통계</div>
+	    	<div class="btn02-l" onclick="location.href='adminIconChart'" >통계</div>
 	    </div>
 		 <table>
 			<colgroup>

@@ -82,7 +82,7 @@
         <p class="title3" onclick="location.href='adminReport'">신고</p>
         <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
         <p class="title3" onclick="location.href='adminTag'">태그</p>
-        <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
+        <p class="title3" onclick="location.href='adminIconListView'">아이콘</p>
         <p class="title3" onclick="location.href='adminPopup'">팝업</p>
         <p class="title3" onclick="location.href='adminCode'">구분코드</p>
         <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
@@ -147,6 +147,15 @@
 <script>
 var currentCategory = 'all'; // 기본값 설정
 var show = 1; // 기본 페이지 설정
+
+//버튼 클릭 시 스타일 변경
+$('.btn-category').on('click', function () {
+    // 모든 버튼에서 기존 스타일 제거
+    $('.btn-category').removeClass('btn02-l').addClass('btn03-l');
+    
+    // 클릭한 버튼에 스타일 추가
+    $(this).removeClass('btn03-l').addClass('btn02-l');
+});
 
 // 페이지 로딩 시 호출
 $(document).ready(function () {
