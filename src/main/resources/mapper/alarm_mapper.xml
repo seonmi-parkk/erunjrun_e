@@ -44,7 +44,7 @@
 	<!-- 게시글 댓글 알림 -->
 	<insert id="boardComment" parameterType="com.erunjrun.main.dto.AlarmDTO">
 		INSERT INTO alarm(code_name, subject, from_id, url, is_url, id, content) 
-			VALEUS(#{code_name}, #{subject}, #{from_id}, #{url}, #{is_url},
+			VALUES(#{code_name}, #{subject}, #{from_id}, #{url}, #{is_url},
 			(SELECT id FROM board WHERE board_idx = #{idx}),
 			(SELECT subject FROM board WHERE board_idx = #{idx))
 	</insert>

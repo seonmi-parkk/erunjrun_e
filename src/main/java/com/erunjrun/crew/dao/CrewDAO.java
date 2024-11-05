@@ -1,5 +1,6 @@
 package com.erunjrun.crew.dao;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -111,6 +112,10 @@ public interface CrewDAO {
 	int crewLeaderUpdate(Map<String, Object> param);
 
 	int crewLeaderChange(Map<String, Object> param);
+
+	Date crewNoticeDate(int crew_idx);
+
+	int crewChatMin(int crew_idx);
 	
 	
 

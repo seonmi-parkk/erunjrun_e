@@ -162,6 +162,7 @@
 <script src="/resources/js/daumapi.js"></script>
 
 <script>
+	var loginId = '${sessionScope.loginId}';
 	var dayCheckboxes = [];
 	var tagCheckboxes = [];
 	var crew_idx = $('input[name="crew_idx"]').val();
@@ -313,7 +314,7 @@
             console.log(formData.crew_img);
         }
 
-        formData.append('id', 'test'); // todo - 세션값 체크해서 넣어줘야 함!
+        formData.append('id', loginId); 
         
         formData.append('content', content);  // summernote의 HTML 내용 추가 (이미지 포함)
 		

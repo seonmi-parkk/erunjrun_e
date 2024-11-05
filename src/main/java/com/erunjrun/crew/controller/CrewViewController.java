@@ -26,7 +26,7 @@ public class CrewViewController {
     
     // 크루 수정!
     @GetMapping(value="/crewUpdate/{crew_idx}")
-    public String crewUpdateView(@PathVariable int crew_idx, Model model) {
+    public String crewUpdateView(@PathVariable int crew_idx, Model model, HttpSession session) {
     	
 //    	Map<String, Object> resultMap = crew_service.crewUpdateView(crew_idx);
     	
@@ -40,7 +40,8 @@ public class CrewViewController {
     @GetMapping(value="/crewDetail/{crew_idx}")
     public String crewDetailView(@PathVariable int crew_idx, Model model, HttpSession session) {
     	model.addAttribute("crew_idx", crew_idx);
-    	
+    	model.addAttribute("notice_date", crew_service.crewNoriceDate(crew_idx));
+    	model.addAttribute("crewChatMin", crew_service.crewChatMin(crew_idx));
     	return "/crew/crewDetail";
     }
     
@@ -50,51 +51,51 @@ public class CrewViewController {
     }
     
     @GetMapping(value="/crewMemberList/{crew_idx}")
-    public String crewMemberListView(@PathVariable int crew_idx, Model model) {
+    public String crewMemberListView(@PathVariable int crew_idx, Model model, HttpSession session) {
     	model.addAttribute("crew_idx", crew_idx);
     	return "/crew/crewMemberList";
     }
     
     @GetMapping(value="/crewAuthorityList/{crew_idx}")
-    public String crewAuthorityListView(@PathVariable int crew_idx, Model model) {
+    public String crewAuthorityListView(@PathVariable int crew_idx, Model model, HttpSession session) {
     	model.addAttribute("crew_idx", crew_idx);
     	return "/crew/crewAuthorityList";
     }
     
     @GetMapping(value="/crewManagerList/{crew_idx}")
-    public String crewManagerView(@PathVariable int crew_idx, Model model) {
+    public String crewManagerView(@PathVariable int crew_idx, Model model, HttpSession session) {
     	model.addAttribute("crew_idx", crew_idx);
     	return "/crew/crewManagerList";
     }
     
     @GetMapping(value="/crewNoticeList/{crew_idx}")
-    public String crewNoticeListView(@PathVariable int crew_idx, Model model) {
+    public String crewNoticeListView(@PathVariable int crew_idx, Model model, HttpSession session) {
     	model.addAttribute("crew_idx", crew_idx);
     	return "/crew/crewNoticeList";
     }
     
     @GetMapping(value="/crewNoticeWrite/{crew_idx}")
-    public String crewNoticeWrete(@PathVariable int crew_idx, Model model) {
+    public String crewNoticeWrete(@PathVariable int crew_idx, Model model, HttpSession session) {
     	model.addAttribute("crew_idx", crew_idx);
     	return "/crew/crewNoticeWrite";
     }
     
     @RequestMapping(value="/crewNoticeDetail/{notice_idx}")
-    public String crewNoticeDetailView(@PathVariable int notice_idx) {
-    	
+    public String crewNoticeDetailView(@PathVariable int notice_idx, Model model, HttpSession session) {
+    	model.addAttribute("notice_idx", notice_idx);
     	return "crew/crewNoticeDetail";
     }
 
     @GetMapping(value="/crewNoticeUpdate/{notice_idx}")
-    public String crewNoticeUpdateView(@PathVariable int notice_idx, Model model) {
+    public String crewNoticeUpdateView(@PathVariable int notice_idx, Model model, HttpSession session) {
     	model.addAttribute("result", crew_service.crewNoticeUpdateView(notice_idx));
     	model.addAttribute("notice_idx", notice_idx);
     	return "crew/crewNoticeUpdate";
     }
     
     @RequestMapping(value="/crewChatListView/{crew_idx}")
-    public String crewChatListView(@PathVariable String crew_idx) {
-    	
+    public String crewChatListView(@PathVariable String crew_idx, Model model, HttpSession session) {
+    	model.addAttribute("crew_idx", crew_idx);
     	return "crew/crewChatList";
     }
 

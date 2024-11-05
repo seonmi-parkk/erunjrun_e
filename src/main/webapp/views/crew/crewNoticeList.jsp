@@ -174,7 +174,7 @@
 	var paginationInitialized = false;
 	
 	
-	var loginId = 'test'; //${sessionScope.loginId}
+	var loginId = '${sessionScope.loginId}'; 
 	
     var crew_idx = $('input[name="crew_idx"]').val();
 	

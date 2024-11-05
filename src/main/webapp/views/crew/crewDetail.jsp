@@ -264,10 +264,11 @@
 	}
 	
 	.testeee{
-		margin-left: 10px;
-		display: flex;  /*수직 정렬 flex, center*/
-    	align-items: center;  
-    	padding: 9px 0px 0px 0px;
+		position: relative; /* 절대 위치 기준으로 사용 */
+	    margin-left: 10px;
+	    display: flex;
+	    align-items: center;
+	    padding: 9px 0px 0px 0px;
 	}
 	
 	.leaderjb{
@@ -316,8 +317,62 @@
 		color: #333;
 		text-decoration-line : none;
 	}
+	
+	.profile-box2 {
+	    position: absolute; 
+	    top: 88px;
+    	left: 4px; /* 필요에 따라 조정 */
+	    width: 44px; 
+	    height: 44px;
+	    z-index: 2;
+	}
 
-  
+	.profile-box23{
+		position: absolute;
+	    top: 4px; /* 프로필 이미지와 정확히 겹치도록 */
+	    left: -7px; /* 프로필 이미지와 정확히 겹치도록 */
+	    width: 44px;
+	    height: 44px;
+	    z-index: 2;
+	    border-radius: 50%; /* 아이콘이 원형으로 맞춰지도록 */
+	}
+	
+	
+	    /*운동프로필 레이어팝업*/
+		#profilePopup {
+		    width: fit-content;
+		    top: 185px;
+		    left: 50%;
+		    transform: translateX(-50%);
+			z-index: 996;
+		}
+		#profilePopup .close {
+		    font-size: 40px;
+		    font-weight: 300;
+		    position: absolute;
+		    z-index: 996;
+		    top: 30px;
+		    right: 30px;
+		    display: inline-block;
+		    width: 30px;
+		    height: 30px;
+		    line-height: 27px;
+		    text-align: center;
+		}
+		#profilePopup .modal-content{
+		    padding: 20px 20px;
+		    background: #f8f8f8;
+		    border: none;
+	    	border-radius: 0;
+	    }
+	    #PopupBody {
+	    	background: #fff;
+	    	border-radius: 10px;
+	    }  
+	    
+	    #crewChatLocation{
+	    	cursor: pointer;
+	    }
 </style>
 </head>
 <body>
@@ -357,16 +412,16 @@
 				<span class="right-x1"><a class="crewAccess">바로가기</a></span>
 			</div>
 			<div class="contentbox">
-				<img src="/resources/img/crew/img05.png" width="17px" class="imglayout"/> 최근 공지사항 yyyy.mm.dd
+				<img src="/resources/img/crew/img05.png" width="17px" class="imglayout"/> 최근 공지사항 <span id="notice_date">${notice_date}</span>
 			</div>
 	
 			<div class="title2-1">크루 채팅방</div>
 			<div class="right-x">
 				<img src="/resources/img/crew/img07.png" width="40px" /> 
-				<span class="right-x1"><a onclick="openCrewChat()" class="crewAccess">바로가기</a></span>
+				<span class="right-x1"><a id="crewChatLocation">바로가기</a></span>
 			</div>
 			<div class="contentbox">
-				<span><img src="/resources/img/crew/img06.png" width="17px" class="imglayout"/> 마지막 대화 n 분 전</span>
+				<span><img src="/resources/img/crew/img06.png" width="17px" class="imglayout"/> 마지막 대화 <span id="crewChat_min">${crewChatMin}</span> 분 전</span>
 			</div>
 			<a href="/crewList"><button class="btn03-s22">목록</button></a>
 		</div>
@@ -381,7 +436,8 @@
 				<div class="title1-1" id="crew-name"></div>
 				
 				<div class="profilebox">
-					<span class="profile-text" id="leaderprofile"></span> <!-- 크루장 정보 -->
+					<span class="profile-text" id="leaderprofile"></span> 
+					<div class="profile-box2"></div><!-- 크루장 정보 -->
 					<button class="btn03-s2" onclick="crewChat_Admin()"><span id="crewLeaderCheck"></span></button>
 				</div>
 			</div>
@@ -396,11 +452,18 @@
 			    	<button class="btn01-l2" id="crew-btn-01" onclick="layerPopup('신청 및 취소하시겠습니까?', '확인', '취소', crewMemberUpdate, applBtn2Act)">러닝크루 신청하기</button>
 			    	<!-- 크루 페이지 로딩 시 가져오기 -->
 			    	<div class="btn-like btn02-s1" onclick="like()">
-			    		<img src="resources/img/common/ico_heart_no_act.png" id="likeImg" alt="좋아요비활성">
+			    		<img src="resources/img/common/ico_heart_no_act.png" onerror="this.src='/resources/img/common/ico_heart_no_act.png'" id="likeImg" alt="좋아요비활성">
 		           	</div>
 		    	</div>
 		    </div>
 
+		</div>
+		<!-- 모달 -->
+		<div id="profilePopup" class="modal">
+		    <div class="modal-content">
+		        <span class="close">&times;</span>
+		        <div id="PopupBody"></div>
+		    </div>
 		</div>
 	
 	</div>
@@ -507,6 +570,12 @@
 		                    	profileImg = '<img alt="profileImg" src="/resources/img/common/profile.png" onerror="this.src=\'/resources/img/common/profile.png\'" id="profileImg" width="32px" />';
 		                    }
 	                    	
+	                    	if(item.is_leader === 'Y' && item.icon_image != null && item.icon_image !== ''){
+	            				$('.profile-box2').css({
+	            				    'background': 'url(/resources/img/icon/' + item.icon_image + ') center center / 100% 100% no-repeat'
+	            				});
+	            			}
+	                    	
 	                    	// 성별 체크 -> 이미지 변환
 	                    	if(item.gender === '남'){
 	                    		genderImg = '<img src="/resources/img/common/ico_male.png" width="9px" class="genderImg"/>';
@@ -518,10 +587,14 @@
 		                    if(item.is_leader === 'Y'){
 		                    	crewLeader = item.id;
 		                    	console.log('반복문 안에서 =>',crewLeader);
-		                    	$('#leaderprofile').html('<a href="#"><div class="leaderjb">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루장' + '</div></a>');
+		                    	$('#leaderprofile').html('<a class="user" style="cursor: pointer;"  data-id="' + item.id + '"><div class="leaderjb">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루장' + '</div></a>');
 		                    }else{
 		                    	crewone.push(item.id); // 배열에 크루원 id 넣기
-		                    	content += '<a href="#"><div class="testeee">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루원'  + '</div></a>';
+		                    	content += '<a class="user" style="cursor: pointer;"  data-id="' + item.id + '"><div class="testeee">' + profileImg + ' ' + item.nickname + ' / ' + genderImg + ' / ' + '크루원';
+		                    	content += '<div class="profile-box23" style="background: url(/resources/img/icon/' + item.icon_image + ') center center / 100% 100% no-repeat;"></div>';
+		                    	content += '</div></a>';
+		                    	
+		                    
 		                    }
 		                    
 		                    $('#crew-member-profile').html(content);
@@ -551,16 +624,42 @@
 					    crewApplication(application, result);
 	                    
 					    // 로그인 안했거나 크루원이 아니면
-					    $('.crewAccess').click(function(){
-						    if(loginId != null || loginId === '' || loginId != result.id || loginId != crewLeader){
-						    	location.href="/crewNoticeList/" +crew_idx;
-								
-						    }else{
-						    	
-						    	$('.crewAccess').attr('href', 'javascript:void(0);');
-						    	console.log('로그인 안했거나 크루원 아님');
-						    	alert('크루원만 접근 가능합니다.');
+					    $('.crewAccess').click(function() {
+						    if (loginId != null && loginId !== '') {
+						        // loginId가 result.id와 다르고, 또한 crewLeader와 다를 때만 접근 차단
+						        if (loginId == result.id || loginId == crewLeader) {
+						            location.href = "/crewNoticeList/" + crew_idx;
+						        } else {
+						            // 접근 차단
+						            $('.crewAccess').attr('href', 'javascript:void(0);');
+						            console.log('로그인 했지만 크루원이나 크루장만 접근 가능합니다.');
+						            layerPopup('크루원만 접근 가능합니다.', '확인', false,applBtn2Act ,applBtn2Act);
+						        }
+						    } else {
+						        // 로그인하지 않은 경우
+						        $('.crewAccess').attr('href', 'javascript:void(0);');
+						        console.log('로그인 안했거나 크루원 아님');
+						        layerPopup('크루원만 접근 가능합니다.', '확인', false,applBtn2Act ,applBtn2Act);
 						    }
+					    });
+					    
+					    $('#crewChatLocation').click(function() {
+					        if (loginId != null && loginId !== '') {
+					            // loginId가 result.id와 다르고, 또한 crewLeader와 다를 때만 접근 차단
+					            if (loginId == result.id || loginId == crewLeader) {
+					                openCrewChat(); // 채팅 열기
+					            } else {
+					                // 접근 차단
+					                console.log('로그인 했지만 크루원이나 크루장만 접근 가능합니다.');
+					                layerPopup('크루원만 접근 가능합니다.', '확인', false, applBtn2Act, applBtn2Act);
+					                return false; // 이벤트 전파 차단
+					            }
+					        } else {
+					            // 로그인하지 않은 경우
+					            console.log('로그인 안했거나 크루원 아님');
+					            layerPopup('크루원만 접근 가능합니다.', '확인', false, applBtn2Act, applBtn2Act);
+					            return false; // 이벤트 전파 차단
+					        }
 					    });
 					    
 	                }
@@ -740,7 +839,7 @@
 	
 	
 	function loginPageLocation(){
-		location.href='/'; // 로그인 페이지로 수정 필요
+		location.href='/loginView'; // 로그인 페이지로 수정 필요
 	}
 	
 	function crewUpdate(){
@@ -766,7 +865,7 @@
 	                    location.href = '/crewList' // 크루 리스트 페이지로 이동
 	                }, function() {
 	                    applBtn2Act();
-	                    location.href = '/' 
+	                    location.href = '/loginView' 
 	                });
     			}else{
     				alert('크루 삭제 실패');
@@ -778,6 +877,41 @@
     	});
     	
     }
+    
+	// 클릭시 운동프로필 레이어 팝업
+	$(document).on('click','.user',function(){
+	    var toUserId = $(this).data('id');
+	   // console.log('toUserId',toUserId);
+	    openProfile(toUserId);
+	});
+	
+	
+	// 운동프로필 레이어 팝업 열기
+	function openProfile(toUserId){
+		var modal = document.getElementById("profilePopup");
+	    var PopupBody = document.getElementById("PopupBody");
+		
+	    // AJAX 요청
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("GET", "/mate/"+toUserId, true);
+	    xhr.onreadystatechange = function() {
+	        if (xhr.readyState === 4 && xhr.status === 200) {
+	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
+	            modal.style.display = "block"; // 모달 열기
+	            
+	         	// JS 파일을 동적으로 로드
+	            var script = document.createElement('script');
+	            script.src = '/resources/js/profileDetail.js'; 
+	            document.body.appendChild(script);
+	        }
+	    };
+	    xhr.send();
+	}
+	
+	// 팝업 닫기
+	document.getElementsByClassName("close")[0].onclick = function() {
+	    document.getElementById("profilePopup").style.display = "none";
+	};	
 	
 
 </script>
