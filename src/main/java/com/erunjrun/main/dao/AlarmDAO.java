@@ -30,4 +30,6 @@ public interface AlarmDAO {
 
 	int alarmUseUpdate(Object ala);
 
+	void askCommentAlarm(AlarmDTO alarm_dto);
+
 }

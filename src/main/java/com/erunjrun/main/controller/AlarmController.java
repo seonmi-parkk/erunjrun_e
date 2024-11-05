@@ -37,6 +37,7 @@ public class AlarmController {
 	public Map<String, Object> alarmList(@RequestParam String loginId){
 		
 //		logger.info("알림 리스트 : loginId => " + loginId);
+		logger.info("알림 업데이트!!!!!!!!!!!!!!!!!!!!!!");
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", alarm_service.alarmList(loginId));
@@ -96,6 +97,7 @@ public class AlarmController {
 	
 	// 게시글 댓글 알림
 	public void boardComment(int board_idx, String from_id, String board_name) {
+		logger.info("게시글 알림 들어옴");
 		alarm_dto.setSubject("게시글 댓글");
 		alarm_dto.setCode_name("AB100");
 		alarm_dto.setIs_url("Y");
@@ -112,7 +114,17 @@ public class AlarmController {
 	}
 	
 	// 문의하기 답글 알림
-	
+	public void askCommentAlarm(int ask_idx, String from_id) {
+		logger.info("문의하기 알림 들어옴");
+		alarm_dto.setSubject("문의 답변");
+		alarm_dto.setCode_name("AM100");
+		alarm_dto.setIs_url("Y");
+		alarm_dto.setIdx(ask_idx);
+		alarm_dto.setFrom_id(from_id);
+		alarm_dto.setUrl("/askBoardDetail/"+ask_idx);
+		
+		alarm_service.askCommentAlarm(alarm_dto);
+	}
 	
 	// 1:1 채팅 알림
 	public void personalChat(int idx, String id, String from_id) {
@@ -164,7 +176,8 @@ public class AlarmController {
 	@GetMapping(value="/alarmUseUpdate")
 	@ResponseBody
 	public boolean alarmUseUpdate(@RequestParam int alarm_idx) {
-		
+		logger.info("알림 업데이트 요청!!!!!!!!!!1");
+		logger.info("idx ===================> "+ alarm_idx);
 		if(alarm_service.alarmUseUpdate(alarm_idx) > 0) {
 			return true;
 		}

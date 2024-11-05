@@ -115,7 +115,7 @@ public interface CrewDAO {
 
 	Date crewNoticeDate(int crew_idx);
 
-	int crewChatMin(int crew_idx);
+	Integer crewChatMin(int crew_idx);
 	
 	
 

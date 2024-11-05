@@ -570,8 +570,8 @@
 	</select>
 	
 	<!-- 크루 상세 페이지 최근 채팅 -->
-	<select id="crewChatMin" parameterType="int" resultType="int">
-		SELECT TIMESTAMPDIFF(MINUTE, ccc.create_date, NOW()) 
+	<select id="crewChatMin" parameterType="int" resultType="Integer">
+		SELECT COALESCE(TIMESTAMPDIFF(MINUTE, ccc.create_date, NOW()), 0) 
 		    FROM crew_chat_content ccc 
 		    JOIN crew_chat cc ON ccc.chat_idx = cc.chat_idx 
 		    WHERE cc.crew_idx = #{crew_idx} 

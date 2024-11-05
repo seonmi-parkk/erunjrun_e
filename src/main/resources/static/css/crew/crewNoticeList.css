@@ -1,0 +1,98 @@
+@charset "UTF-8";
+
+	
+	#searchForm {
+        float: right;
+        margin: 10px;
+    }
+    .btn01-l{
+    	float: right;
+    	margin: -80px -80px;	
+    }
+	.container{
+		margin-top: 18px;
+	}
+	.highlight {
+    	background-color: FFEADE;
+    	
+    }
+    .tag-l-bd{
+    	margin-left: 51px;
+    	background-color: #FB7E3A;
+    	color: #fff;
+    }
+    .title1{
+    	margin-top: 00px;
+    }
+    
+    /*운동프로필 레이어팝업*/
+	#profilePopup {
+	    width: fit-content;
+	    top: 185px;
+	    left: 50%;
+	    transform: translateX(-50%);
+		z-index: 996;
+	}
+	#profilePopup .close {
+	    font-size: 40px;
+	    font-weight: 300;
+	    position: absolute;
+	    z-index: 996;
+	    top: 30px;
+	    right: 30px;
+	    display: inline-block;
+	    width: 30px;
+	    height: 30px;
+	    line-height: 27px;
+	    text-align: center;
+	}
+	#profilePopup .modal-content{
+	    padding: 20px 20px;
+	    background: #f8f8f8;
+	    border: none;
+    	border-radius: 0;
+    }
+    #PopupBody {
+    	background: #fff;
+    	border-radius: 10px;
+    }
+	.profileDetail {
+   	   position: relative;
+   	   width: 760px;
+       padding: 34px 50px 10px;
+       height: fit-content !important;
+   	   overflow-y: auto;
+   }
+    .profileDetail .user-info .user-name{
+       font-size: 30px;
+       margin-bottom: 0px;
+   }
+
+   .layoutbox-bt {
+	    height: 90px; /* 하단 배너 영역의 높이를 90px로 설정 */
+	    background-color: white; /* 배경색을 흰색으로 설정 */
+	}
+    
+    .input-txt-l01{
+    	width: 300px;
+   	 	padding: 11px 8px;
+    	height: 46px;
+    }
+    
+  	
+  	table thead tr th.thSize{
+  		width: 550px;
+  	}
+  	
+  	.headlayout{
+  		margin-top : 140px;
+  	}
+  	
+  	#crew_name{
+  		font-size: 14px;
+	    margin-bottom: 0px;
+  	}
+  	
+  	.btn01-l{
+	    margin-top: 31px;
+  	}

@@ -61,5 +61,10 @@ public class AlarmService {
 	public int alarmUseUpdate(int alarm_idx) {
 		return alarm_dao.alarmUseUpdate(alarm_idx);
 	}
+
+	public void askCommentAlarm(AlarmDTO alarm_dto) {
+		logger.info("문의하기 답변 알림 추가");
+		alarm_dao.askCommentAlarm(alarm_dto);
+	}
 	
 }

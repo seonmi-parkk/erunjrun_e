@@ -617,7 +617,7 @@ public class CrewService {
 		return crew_dao.crewNoticeDate(crew_idx);
 	}
 
-	public int crewChatMin(int crew_idx) {
+	public Integer crewChatMin(int crew_idx) {
 		return crew_dao.crewChatMin(crew_idx);
 	}
 

@@ -1,0 +1,296 @@
+@charset "UTF-8";
+    	.dot {overflow:hidden;float:left;width:12px;height:12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}    
+		.dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#fff;}
+		.dotOverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}    
+		.number {font-weight:bold;color:#ee6152;}
+		.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
+		.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
+		.distanceInfo:after {content:none;}
+		
+		.label {
+	    color: #333; /* 텍스트 색상 */
+	    font-weight: bold; /* 굵게 */
+	    font-size: 14px; /* 폰트 크기 */
+	    margin-right: 5px; /* 오른쪽 여백 */
+		}
+    
+    
+    	user.a{
+    		color: #333;
+    		text-decoration: none;
+    		
+    	}
+        #dori {
+            width: 1280px;          /* 박스의 너비 설정 */
+            /* 박스의 높이 설정 */
+            border: 1px solid #EAEAEA;  /* 연한 회색(#d3d3d3) 선 설정 */
+            background-color: transparent;
+            margin: 80px auto 0;
+            border-radius: 15px;
+        }
+        #title3{
+        	font-size: 16;
+        }
+        .rectangle-250, .rectangle-250 * {
+			box-sizing: border-box;
+		}
+		.rectangle-250 {
+			display: flex;
+    		justify-content: space-between;
+			background: #ffffff;
+			border-style: solid;
+			border-color: #bdbdbd;
+			border-width: 0px 0px 1px 0px;
+			position: relative;
+			margin: 40px;
+			margin-top: 10px;
+		}
+		.duri{
+			margin: 15px;
+		}
+		.title1{
+    		margin-top: 160px;
+    		margin-left: 10px;
+    	}
+    	.dari{
+    		margin-top: 45px;
+    	}
+    	.title2{
+			transform: translateY(0px);
+			font-weight: 700;
+    		font-size: 24px;
+    		margin-top: -25px;
+    		margin-bottom: 25px;
+   			font-family: "Pretendard Variable", Pretendard;
+    	}
+    	.ori{
+
+			  background: #ffffff;
+			  border-style: solid;
+			  border-color: #bdbdbd;
+			  border-width: 0px 0px 1px 0px;
+			  position: relative;
+			  margin: 40px;
+			  
+    	}
+    	#butt{
+    		transform: translateY(-5px);
+    	}
+    	.repo{
+    		  background: #ffffff;
+			  border-style: solid;
+			  border-color: #bdbdbd;
+			  border-width: 0px 0px 1px 0px;
+			  position: relative;
+			  margin: 40px;
+			  display: flex;
+
+    	}
+    	#pre{
+    		margin-left: 565px;
+    		    margin-bottom: 30px;
+    	}
+    	#reo{
+    		border-color: #AAAAAA;
+    	}
+    	.com{
+			  border-style: solid;
+			  border-color: #bdbdbd;
+			  border-width: 1px 1px 1px 1px;
+			  position: relative;
+			  margin: 40px;
+			  display: flex;
+			  padding: 20px;
+			  border-radius: 15px;
+			  justify-content: space-between;
+    	}
+    	#title2-1{
+    		margin-left: 0px;
+    	}
+    	.colist{
+    		  background: #ffffff;
+			  border-style: solid;
+			  border-color: #bdbdbd;
+			  border-width: 0px 0px 1px 0px;
+			  position: relative;
+			  margin: 40px;
+			  display: flex;
+    	}
+		.sort{
+			background: #ffffff;
+			  border-style: solid;
+			  border-color: #bdbdbd;
+			  border-width: 0px 0px 1px 0px;
+			  position: relative;
+			  margin: 40px;
+			  display: flex;
+			  justify-content: space-between;
+			  min-height: 120px;
+			  
+		}
+		#con{
+			width: 1200px;
+			font-size: 16;
+			min-height: 250px;
+		}
+		.dat {
+			display: flex;
+			justify-content: space-between;
+		}
+		
+		.detail{
+			    margin-left: 35px;
+		}
+		#bih{
+			margin-top: -50px;
+		}
+		
+		.nick{
+			margin-left: 18;
+   		 	margin-bottom: 7px;
+   		 	transform: translate(10px, -2px);
+		}
+
+		.date{
+			margin-left: 50;
+			margin-top: 10px;
+		}
+		
+		.supa{
+			margin-left: 60px;
+   		 	margin-top: -20px;
+		}
+		.coco{
+			width: 1000;
+   		 	margin-left: 50px;
+		}
+		#ins{
+			margin-left: -28px;
+			margin-top: 34px;
+		}
+		input[type="text"].tex{
+    		margin-left: 30px;
+    		width: 1000px;
+		}
+		.bubu{
+			display: flex;
+			justify-content: space-between;
+			margin: 17px;
+		}
+		.suj1{
+			  background: #eeeeee;
+			  border: solid 1px;
+			  border-color: AEAEAE;
+			  text-align: center;
+			  margin-top: 5px;
+		}
+		.suj2{
+			  background: #eeeeee;
+			  border: solid 1px;
+			  border-color: AEAEAE;
+			  text-align: center;
+			  
+		}
+		
+	    /*운동프로필 레이어팝업*/
+		#profilePopup {
+		    width: fit-content;
+		    top: 185px;
+		    left: 50%;
+		    transform: translateX(-50%);
+			z-index: 996;
+		}
+		#profilePopup .close {
+		    font-size: 40px;
+		    font-weight: 300;
+		    position: absolute;
+		    z-index: 996;
+		    top: 30px;
+		    right: 30px;
+		    display: inline-block;
+		    width: 30px;
+		    height: 30px;
+		    line-height: 27px;
+		    text-align: center;
+		}
+		#profilePopup .modal-content{
+		    padding: 20px 20px;
+		    background: #f8f8f8;
+		    border: none;
+	    	border-radius: 0;
+	    }
+	    #PopupBody {
+	    	background: #fff;
+	    	border-radius: 10px;
+	    }
+	    
+	   .layoutbox-bt {
+		    height: 90px; /* 하단 배너 영역의 높이를 90px로 설정 */
+		    background-color: white; /* 배경색을 흰색으로 설정 */
+		}
+		
+		#content{
+		    min-height: 500px;
+		}
+		
+		.title21{
+			font-size: 18px;
+			font-family: "Pretendard Variable", Pretendard;
+			font-weight: 500;
+		    margin-right: 5px;
+		}
+		
+		#comment{
+			margin-left: 10px;
+		}
+		
+		/* 프로필 이미지 원처리 */
+		#profileImg{
+	   		border-radius: 70%;
+   			overflow: hidden;
+   			margin-right : 13px;
+		}
+		
+		
+		/*신고 레이어팝업*/
+		#reportPopup {
+		    width: fit-content;
+		    top: 130px;
+		    left: 50%;
+		    transform: translateX(-50%);
+			z-index: 996;
+			
+		}
+		#reportPopup .dis {
+		    font-size: 40px;
+		    font-weight: 300;
+		    position: absolute;
+		    z-index: 996;
+		    top: 30px;
+		    right: 30px;
+		    display: inline-block;
+		    width: 30px;
+		    height: 30px;
+		    line-height: 27px;
+		    text-align: center;
+		}
+		#reportPopup .modal-content{
+		    padding: 20px 20px;
+		    background: #f8f8f8;
+		    border: none;
+	    	border-radius: 0;
+	    }
+	    #reportPopupBody {
+	    	background: #fff;
+	    	border-radius: 10px;
+	    }
+	    
+	    .profile-box2 {
+			position: absolute; top: 97px; left: 15px;
+			transform: translate(-50%, -50%);
+			width: 44px; height: 44px;
+			margin-right: 2px;
+		}
+		.title3-1{
+		
+		}
