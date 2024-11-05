@@ -47,7 +47,7 @@
 	function appl2Btn2Act() {
 	    // 신청완료 팝업 - 내 운동메이트로 이동 버튼 클릭시
 	    removeAlert();
-	    location.href='/'; //check!!
+	    location.href='/myMateList'; 
 	}
 	
 	// 차단하기 버튼 클릭시

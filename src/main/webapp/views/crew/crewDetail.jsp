@@ -884,7 +884,6 @@
 	// 클릭시 운동프로필 레이어 팝업
 	$(document).on('click','.user',function(){
 	    var toUserId = $(this).data('id');
-	   // console.log('toUserId',toUserId);
 	    openProfile(toUserId);
 	});
 	

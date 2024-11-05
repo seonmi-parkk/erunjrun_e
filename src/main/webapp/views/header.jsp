@@ -120,71 +120,77 @@
 		</a>
 		
 		<c:choose>
-			<c:when test="${sessionScope.adminYn eq 'N'}">
+			<c:when test="${empty sessionScope.authority}">
 				<ul class="menu">
 					<li>
-						<a href="#">러닝크루</a>
+						<a href="/crewList">러닝크루</a>
 						<ul class="depth2">
 							<li>
-								<a href="#">러닝크루</a>			
+								<a href="/crewList">러닝크루</a>			
 							</li>
 							<li>
-								<a href="#">러닝크루 개설</a>			
+								<a href="/crewWrite">러닝크루 개설</a>			
 							</li>
 						</ul>
 					</li>
 					<li>
-						<a href="#">러닝메이트</a>
+						<a href="/mateList">러닝메이트</a>
 					</li>
 					<li>
-						<a href="#">게시판</a>
+						<a href="/runBoard">게시판</a>
 						<ul class="depth2">
 							<li>
-								<a href="#">러닝코스 게시판</a>			
+								<a href="/runBoard">러닝코스 게시판</a>			
 							</li>
 							<li>
-								<a href="#">자유주제 게시판</a>			
+								<a href="/freeBoard">자유주제 게시판</a>			
 							</li>
 						</ul>
 					</li>
 					<li>
-						<a href="#">아이콘몰</a>
+						<a href="/icon">아이콘몰</a>
 					</li>
 					<li>
-						<a href="#">문의하기</a>
+						<a href="/askBoard">문의하기</a>
 					</li>
 				</ul>
 				
 				<div class="login-box">
 					<c:choose>
 						<c:when test="${not empty sessionScope.loginId}">
-							<div class="profile-box" onclick=""><!-- check!! onclick이동 -->
-								<c:choose>
+						
+							<div class="profile-area" onclick="location.href='/profileDetail'">
+				        		<c:choose>
 									<c:when test="${not empty sessionScope.profileImg}">  
 										<div class="profile-img" style="background: url(/photo/${sessionScope.profileImg}) center center / cover no-repeat;"></div>
 									</c:when>
 									<c:otherwise>
-										<div class="profile-img"  style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>
+										<div class="profile-img" style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>
 									</c:otherwise>
 								</c:choose>
-							</div>	
+								<c:if test="${not empty sessionScope.iconImage}">
+									<div class="profile-box" style="background: url(/photo/${sessionScope.iconImage}) center center / 100% 100% no-repeat;"></div>
+								</c:if>
+							</div>
+						
 							<div class="notice">
 								<div class="num-box">
 									<span id="alarmNum"></span>
 								</div>
-								<img id="alarmIcon" class="profile-img" src="/resources/img/common/ico_notice.png" alt="알림"/>
+								<img id="alarmIcon" class="" src="/resources/img/common/ico_notice.png" alt="알림"/>
 							</div>
+							<a class="logout" href="/">로그아웃</a>
 						</c:when>
 						<c:otherwise>
-							<a class="login" href="/login">로그인</a>
-							<a href="/join">회원가입</a>
+							<a class="login" href="/loginView">로그인</a>
+							<a href="/joinView">회원가입</a>
 						</c:otherwise>
 					</c:choose>
 				</div>
 			</c:when>
 		<c:otherwise>
 			<div class="admin-menu"> <!-- 관리자일 경우에만 display: block -->
-				<img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+				<img class="" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
 				<div class="admin-mod on">
 					<div class="toggle-slider"></div>
 					<span>관리자</span>
@@ -210,6 +216,79 @@
 	</div>
 	
 <script>
+	// 관리자 모드 체크
+	 window.onload = function() {
+         const savedMode = localStorage.getItem('mode');
+         if (savedMode) {
+             setMode(savedMode);
+         }
+     };
+     
+     // 모드 변경 시 localStorage에 저장하고 페이지 이동
+/*      function toggleMode() {
+         const currentMode = localStorage.getItem('mode') === 'admin' ? 'user' : 'admin';
+         setMode(currentMode);
+         localStorage.setItem('mode', currentMode);
+
+         // 각 모드에 따라 페이지 이동
+         if (currentMode === 'admin') {
+             location.href = '/admin';  // 관리자 페이지로 이동
+         } else {
+             location.href = '/user';   // 일반 사용자 페이지로 이동
+         }
+     } */
+
+     // 모드 설정 함수 (버튼이나 UI 상태 변경을 위한 예시)
+     function setMode(mode) {
+         const modeText = document.querySelector('header .admin-mod span');
+         if (mode === 'admin') {
+             modeText.textContent = '관리자';
+         } else {
+             modeText.textContent = '일반';
+         }
+     } 
+
+     // 관리자모드 헤더 토글
+     $('.toggle-slider').on('click',function(){
+    	 const currentMode = localStorage.getItem('mode') === 'admin' ? 'user' : 'admin';
+         setMode(currentMode);
+         localStorage.setItem('mode', currentMode);
+
+         // 각 모드에 따라 페이지 이동 및 css 조정
+         $(this).parent().toggleClass('on');
+         if (currentMode === 'admin') {
+             $(this).siblings('span').text('관리자');
+      		location.href='/adminMember';
+         } else {
+             $(this).siblings('span').text('일반');
+            location.href = '/'; 
+         }
+    	 
+/*      	$(this).parent().toggleClass('on');
+     	if($('.admin-mod').hasClass('on')){
+     		$(this).siblings('span').text('관리자');
+     		console.log('관리자모드');
+     		location.href='/adminMember';
+     	}else{
+     		$(this).siblings('span').text('일반');
+     		console.log('일반모드');
+     		location.href='/adminMember';
+     	} */
+     });
+
+	  // 헤더 마우스오버 애니메이션
+	  $('.menu > li ').on({
+	  	'mouseover' : function(){
+	  		$(this).find('.depth2').stop().slideDown(200);
+	  	},
+	  	'mouseleave' : function(){
+	  		$(this).find('.depth2').stop().slideUp(200);
+	  	},
+	  });
+
+     
+     
+
 	// 아이콘 체크 
 	if('${sessionScope.iconImg}' != ''){
 		$('header .profile-box').css('background','url(/${sessionScope.iconImg}) center center/100% no-repeat ');
