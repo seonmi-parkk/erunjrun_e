@@ -40,8 +40,6 @@ public class ChatPersonalController {
      public Map<String, Object> getChat(@PathVariable String id, @PathVariable String unlikeId, HttpSession session, Model model){
 		 Map<String, Object> data = new HashMap<String, Object>();
 
-		 //check!! 임시세션 나중에 빼기
-		session.setAttribute("loginId", "kimee01");
 		logger.info("id: {}, unlikeId: {}",id,unlikeId);
 		// 채팅방 넘버 체크
 		String roomNum = chatPersonalService.getRoomNum(id,unlikeId);
@@ -123,18 +121,18 @@ public class ChatPersonalController {
 	 
 	 
 	// 채팅 메시지 전송 - 특정 채팅방에 메시지 전송
-	    @PostMapping("/chat/update/{roomId}")
-	    @ResponseBody //check!!
-	    public String postMessage(@PathVariable String roomId, @RequestParam String message, HttpSession session) {
-	        // 1. 메시지 저장 로직 (데이터베이스에 roomId와 함께 저장)
-	        // 예시: messageRepository.save(new Message(roomId, message));
+    @PostMapping("/chat/update/{roomId}")
+    @ResponseBody 
+    public String postMessage(@PathVariable String roomId, @RequestParam String message, HttpSession session) {
+        // 1. 메시지 저장 로직 (데이터베이스에 roomId와 함께 저장)
+        // 예시: messageRepository.save(new Message(roomId, message));
 
-	    	String userId = (String) session.getAttribute("loginId");
-	    	
-	        // 2. 해당 채팅방의 클라이언트에게만 메시지 전송
-	        sseService.sendMessage(roomId, userId, message);
-	        return "Message sent successfully!";
-	    }
+    	String userId = (String) session.getAttribute("loginId");
+    	
+        // 2. 해당 채팅방의 클라이언트에게만 메시지 전송
+        sseService.sendMessage(roomId, userId, message);
+        return "Message sent successfully!";
+    }
 
 	    
 	    /*

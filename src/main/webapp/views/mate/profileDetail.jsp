@@ -152,7 +152,7 @@
 	           </div>
            </div>
            <c:choose>
-           	<c:when test="${profileDto.id != sessionScope.loginId}">
+           	<c:when test="${profileDto.id != sessionScope.loginId && not empty sessionScope.loginId }">
 		       <div class="buttons">
 		       		<c:choose>
 		       			<c:when test="${result.isBlocked eq false}">
@@ -221,7 +221,7 @@
 		        </div>
 			</c:if>
      	   <c:choose>
-    	   		<c:when test="${result.isBlocked eq false}">
+    	   		<c:when test="${result.isBlocked eq false && profileDto.id != sessionScope.loginId && not empty sessionScope.loginId }">
 	       			<a class="btn-block" onclick="layerPopup('${profileDto.nickname} 님을 차단하시겠습니까?<br/>차단 시 해당 회원과의 대화기능은 이용 불가합니다.','차단하기','취소',blockBtnAct,cancleBtnAct)">차단하기</a>
        			</c:when>
      		</c:choose>

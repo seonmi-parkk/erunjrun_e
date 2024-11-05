@@ -184,6 +184,9 @@
 						<div class="profile-area">
 							<input type="hidden" name="icon-idx" value="${item.icon_idx}"/>
 							<div class="profile-img" style="background: url(/photo/${userInfoList.image}) center center / cover no-repeat;"></div>
+							<c:if test="${empty sessionScope.loginId}">
+								<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>						
+							</c:if>
 							<div class="profile-box" style="background: url(/photo/${item.image}) center center / 100% 100% no-repeat;"></div>
 						</div>
 						<p class="name">${item.icon_name}</p>
@@ -200,19 +203,24 @@
 			
 			<div class="my-area">
 				<div class="top-area">
-					<div class="point-area">
-						<img src="/resources/img/iconMall/ico_point.png" alt="포인트"/>
-						<p class="tit">보유 포인트</p>
-						<p class="num">${userInfoList.point}p</p>
-						<a class="link" href="">상세내역</a>
-					</div>
-				
-					<div class="icon-area">
-						<img src="/resources/img/iconMall/ico_emoji.png" alt="아이콘"/>
-						<p class="tit">보유 아이콘</p>
-						<p class="num">${userInfoList.icon_quantity}개</p>
-						<a class="link" href="">상세내역</a>
-					</div>
+					<c:if test="${not empty sessionScope.loginId}">
+						<div class="point-area">
+							<img src="/resources/img/iconMall/ico_point.png" alt="포인트"/>
+							<p class="tit">보유 포인트</p>
+							<p class="num">${userInfoList.point}p</p>
+							<a class="link" href="">상세내역</a>
+						</div>
+					
+						<div class="icon-area">
+							<img src="/resources/img/iconMall/ico_emoji.png" alt="아이콘"/>
+							<p class="tit">보유 아이콘</p>
+							<p class="num">${userInfoList.icon_quantity}개</p>
+							<a class="link" href="">상세내역</a>
+						</div>
+					</c:if>
+					<c:if test="${empty sessionScope.loginId}">
+						로그인이 필요한 서비스입니다.
+					</c:if>
 				</div>
 
 			
