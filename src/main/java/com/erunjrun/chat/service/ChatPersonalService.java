@@ -33,7 +33,7 @@ public class ChatPersonalService {
 		// userNames들어오는지 check하고 위에 values에 아래 list랑 usernames넣어서 컨트롤러 보내기
 		// 컨트롤러도 수정해야함.
 		List<ChatPersonalDTO> msgList = chatPersonalDAO.getContent(chatIdx, baseUser);
-		logger.info("msgList getContent: "+msgList.get(0).getContent());
+		//logger.info("msgList getContent: "+msgList.get(0).getContent());
 		
 		// 날짜 비교 (날짜 바뀔경우 체크)
 		LocalDate previousDate = null;
@@ -42,13 +42,13 @@ public class ChatPersonalService {
 	    
         for(ChatPersonalDTO msg : msgList) {
         	LocalDate msgDate = msg.getStart_date().toLocalDate();
-        	logger.info("msg.getStart_date(): "+msg.getStart_date());
-        	logger.info("msgDate: "+msgDate);
+        	//logger.info("msg.getStart_date(): "+msg.getStart_date());
+        	//logger.info("msgDate: "+msgDate);
         	
         	if(previousDate == null || !msgDate.equals(previousDate)) {
-        		logger.info("previousDate: "+previousDate);
-        		logger.info("msgDate: "+msgDate);
-        		logger.info("msgDate.format(dateFormatter): "+msgDate.format(dateFormatter));
+        		//logger.info("previousDate: "+previousDate);
+        		//logger.info("msgDate: "+msgDate);
+        		//logger.info("msgDate.format(dateFormatter): "+msgDate.format(dateFormatter));
         		msg.setFirstOfDay(msgDate.format(dateFormatter));
         		
         		previousDate = msgDate;
@@ -56,7 +56,7 @@ public class ChatPersonalService {
         	}
         }
         
-        logger.info("getFirstOfDay: "+ msgList.get(0).getFirstOfDay());
+        //logger.info("getFirstOfDay: "+ msgList.get(0).getFirstOfDay());
         
         values.put("userList", userList);
         values.put("msgList", msgList);
@@ -109,7 +109,7 @@ public class ChatPersonalService {
 	}
 
 
-	// getContent()에서 baseUser도 지우기 check!!
+
 	public Map<String, Object> getCrewLeaderContent(String chatIdx, String baseUser) {
 		 logger.info("/crewLdchat/data service 시작");
 		Map<String, Object> values = new HashMap<String, Object>();
