@@ -141,11 +141,11 @@
         </div>
         <div class="msg-area">
             <div class="line">
-            	<!-- check!! 아이콘 & 프로필 이미지 바꾸기 -->
-            	<div class="profile-box" style="background: url('/resources/img/icon/') center center / 100% 100% no-repeat;">
+            	<!-- 아이콘 & 프로필 이미지 바꾸기 -->
+            	<%-- <div class="profile-box" style="background: url('/resources/img/icon/') center center / 100% 100% no-repeat;">
             		<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>
-            		<%-- <div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div> --%>
-                </div>
+            		<div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div>
+                </div> --%>
             
                <%--  <div class="profile-box" style="background: url('/resources/img/icon/${profileDto.icon_image}') center center / 100% 100% no-repeat;">
                     <!-- <c:choose>

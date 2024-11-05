@@ -115,7 +115,7 @@
 </style>
 <header>
 	<div class="header-inner">
-		<a href="/">
+		<a class="logo" href="/">
 			<img src="/resources/img/common/logo.png" alt="이런저런"/>
 		</a>
 		
@@ -179,7 +179,7 @@
 								</div>
 								<img id="alarmIcon" class="" src="/resources/img/common/ico_notice.png" alt="알림"/>
 							</div>
-							<a class="logout" href="/">로그아웃</a>
+							<a class="logout" href="/logOut">로그아웃</a>
 						</c:when>
 						<c:otherwise>
 							<a class="login" href="/loginView">로그인</a>
@@ -194,6 +194,7 @@
 				<div class="admin-mod on">
 					<div class="toggle-slider"></div>
 					<span>관리자</span>
+					<a class="logout" href="/logOut">로그아웃</a>
 				</div>
 			</div>
 		</c:otherwise>
@@ -218,7 +219,7 @@
 <script>
 	// 관리자 모드 체크
 	 window.onload = function() {
-         const savedMode = localStorage.getItem('mode');
+         const savedMode = localStorage.getItem('adminMode');
          if (savedMode) {
              setMode(savedMode);
          }
@@ -238,44 +239,43 @@
          }
      } */
 
-     // 모드 설정 함수 (버튼이나 UI 상태 변경을 위한 예시)
+     // 모드 설정 (UI 상태 변경)
      function setMode(mode) {
          const modeText = document.querySelector('header .admin-mod span');
          if (mode === 'admin') {
+        	 $('header .admin-mod').addClass('on');
              modeText.textContent = '관리자';
          } else {
+        	 $('header .admin-mod').removeClass('on');
              modeText.textContent = '일반';
          }
      } 
 
      // 관리자모드 헤더 토글
      $('.toggle-slider').on('click',function(){
-    	 const currentMode = localStorage.getItem('mode') === 'admin' ? 'user' : 'admin';
+    	 const currentMode = localStorage.getItem('adminMode') === 'admin' ? 'user' : 'admin';
          setMode(currentMode);
-         localStorage.setItem('mode', currentMode);
+         localStorage.setItem('adminMode', currentMode);
 
          // 각 모드에 따라 페이지 이동 및 css 조정
          $(this).parent().toggleClass('on');
          if (currentMode === 'admin') {
-             $(this).siblings('span').text('관리자');
-      		location.href='/adminMember';
-         } else {
              $(this).siblings('span').text('일반');
-            location.href = '/'; 
+     		 location.href='/adminMember';
+         } else {
+             $(this).siblings('span').text('관리자');
+           	 location.href = '/'; 
          }
     	 
-/*      	$(this).parent().toggleClass('on');
-     	if($('.admin-mod').hasClass('on')){
-     		$(this).siblings('span').text('관리자');
-     		console.log('관리자모드');
-     		location.href='/adminMember';
-     	}else{
-     		$(this).siblings('span').text('일반');
-     		console.log('일반모드');
-     		location.href='/adminMember';
-     	} */
+     });
+     
+     // 로고 클릭시 관리자 토글 상태 변경
+     $('.header-inner .logo').on('click',function(){
+    	 setMode('user');
+    	 localStorage.setItem('adminMode', 'user');
      });
 
+     
 	  // 헤더 마우스오버 애니메이션
 	  $('.menu > li ').on({
 	  	'mouseover' : function(){
@@ -285,9 +285,6 @@
 	  		$(this).find('.depth2').stop().slideUp(200);
 	  	},
 	  });
-
-     
-     
 
 	// 아이콘 체크 
 	if('${sessionScope.iconImg}' != ''){

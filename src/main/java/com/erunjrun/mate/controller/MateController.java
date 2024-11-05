@@ -30,18 +30,16 @@ public class MateController {
 	@RequestMapping(value="/mate/{toUserId}")
 
 	public String mate(@PathVariable String toUserId, HttpSession session, Model model) {
-		//check!!임시 세션(나중에 빼기)
-		session.setAttribute("loginId", "kimee01");
-		session.setAttribute("profileImg", "profile_img1.jpg");
-		session.setAttribute("iconImg", "resources/img/icon/icon1.png");
-		session.setAttribute("adminYn", "N");
 		logger.info("[mate]toUserId"+toUserId);
 		
 		Map<String, Object> result = new HashMap<String, Object>();
-
+		String loginYn = "Y";
 		// 운동메이트 여부 체크
-		// check!!(나중에 찐으로 넣어줘야 함)
+
 		String fromUserId = (String) session.getAttribute("loginId");
+		if(fromUserId == null) {
+			fromUserId = "test";
+		}
 		//String toUserId = "moma123";
 		//result.put("isMate", mateService.checkMate(fromUserId,toUserId));
 		
@@ -60,6 +58,7 @@ public class MateController {
 		
 		model.addAttribute("profileDto", profileDto);
 		model.addAttribute("result", result);
+
 		
 		return "mate/profileDetail";
 	}
@@ -131,19 +130,24 @@ public class MateController {
 	// 러닝메이트 리스트
 	@RequestMapping(value="/mateList")
 	public String mateList(HttpSession session, Model model) {
-		// check!! 임시세션 나중에 지우기
-		session.setAttribute("loginId", "kimee01");
 		String fromUserId = (String) session.getAttribute("loginId");
+		
 		//mateService.getPos(fromUserId);
-		// 로그인 유저의 동을 가져오기 ( check!! 로그인 안한경우 ?? 해당 위치 가져오기??)
-		MateProfileDTO userPos = mateService.getUserPos(fromUserId); 
+
+		logger.info("fromUserId", fromUserId);
+		MateProfileDTO userPos = null;
+		if(fromUserId == null) {
+			// 로그인 안한 경우 임의의 주소 설정 (check!! 나중에 바꾸기 -> 해당 위치 가져오기?)
+			fromUserId = "test";
+		}
+		userPos = mateService.getUserPos(fromUserId); 			
 		userPos.setId(fromUserId);
 		model.addAttribute("userPos", userPos);
 		//model.addAttribute("userShortsido", userPos.getShortsido());
 		//model.addAttribute("userDong", userPos.getDong());
 		
 		
-		// 유저와 같은 지역 유저들의 리스트 //check!! 이거 두줄 빼도됨??
+		// 유저와 같은 지역 유저들의 리스트 // check!! 이거 두줄 빼도됨??
 		//List<MateProfileDTO> closeList = mateService.getCloseList(userPos); // 아이디, 닉네임, 성별, 짧은시도, 동, 운동메이트 여부, 프로필, 아이콘
 		//model.addAttribute("closeList", closeList);
 		
@@ -168,16 +172,25 @@ public class MateController {
 
 	@RequestMapping(value="/moveMateList")
 	@ResponseBody
-	public List<MateProfileDTO> moveMateList(@RequestBody List<String> users, HttpSession session) {
+	public Map<String, Object> moveMateList(@RequestBody List<String> users, HttpSession session) {
 		String fromUserId = (String) session.getAttribute("loginId");
+		String loginYn = "Y";
 		//logger.info("users.get(0)"+users.get(0));
 		//List<MateProfileDTO> moveMateList = mateService.moveMateList(username); // 아이디, 닉네임, 성별, 짧은시도, 동, 운동메이트 여부, 프로필, 아이콘
 		//model.addAttribute("closeList", closeList);
+		if(fromUserId == null) {
+			fromUserId = "test";
+			loginYn = "N";
+		}
 		List<MateProfileDTO> list = null;
 		if(users.size()>0) {			
 			list = mateService.moveMateList(users,fromUserId);
 		}
-		return list;
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("list", list);
+		result.put("loginYn", loginYn);
+		return result;
 	}
 	
 	

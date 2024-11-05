@@ -32,7 +32,7 @@
 	  	box-shadow: rgba(0, 0, 0, 0.12) 4px 4px 13px -4px;
   }
   .mateList .list .sch-box{
-  	margin-bottom: 22px;
+  		margin-bottom: 22px;
   }
    .mateList .list .input-txt-l{
    		width : calc(100% - 54px);
@@ -131,7 +131,7 @@
 		margin-right: 2px;
 	}
 	.mateList .profile-img{
-		position: absolute; top: 59%; left: 50%;
+		position: absolute; top: 50%; left: 50%;
 		transform: translate(-50%, -50%);
 		width: 32px; height: 32px;
 		border-radius: 50%;
@@ -151,12 +151,12 @@
 	    height: 78px;
 	    background: url(/resources/img/common/ico_marker.png) center / 100% no-repeat;
 	}
-	.profile-area .profile-box{
+	/* .profile-area .profile-box{
 	    position: absolute;
 	    left: 50%;
 	    transform: translateX(-50%);
 	    top: 4px;
-	}
+	} */
 	.profile-area .ico-mate{
 		position: absolute;
 	    bottom: 13px;
@@ -174,7 +174,7 @@
 	.mateList .marker-img .profile-box{
 		width: 48px;
     	height: 48px;
-    	top: 6px;
+    	top: 30px;
 	}
 	.mateList .marker-img .profile-img{
 	    width: 34px;
@@ -240,7 +240,7 @@
 <script>
 	
 	// 리스트 태그 생성			   
-	function closeList(list){
+	function closeList(list, loginYn){
 		var userCont = '';
 		console.log("list--",list);
 		
@@ -278,8 +278,10 @@
 				userCont+='<span class="bar">/</span>';
 				userCont+='<span>'+member.shortsido+'</span>';
 				userCont+='<span class="mg-l4">'+member.dong+'</span>';
-				userCont+='<span class="bar">/</span>';
-				userCont+='<span class="distance">'+getDistance(member.latitude,member.longitude,${userPos.latitude},${userPos.longitude})+'</span><span>km</span>';
+				if(loginYn == "Y"){					
+					userCont+='<span class="bar">/</span>';
+					userCont+='<span class="distance">'+getDistance(member.latitude,member.longitude,${userPos.latitude},${userPos.longitude})+'</span><span>km</span>';
+				}
 				userCont+='<span>';
 				if(member.mate_idx > 0){
 					userCont+='<span class="tag-mate">메이트</span>';
@@ -614,6 +616,7 @@
 	   
 		// 맵 이동시 보여지는 유저들의 닉네임
 	   function moveMap(){
+			console.log("moveMap실행");
 			//$('input[name="sch-addr"]').val('');
 		    var bounds = map.getBounds();
 		    var inBounds = overlays.filter(function(overlay) {
@@ -634,9 +637,9 @@
 				contentType: 'application/json', // JSON 형식으로 보낼 경우 필요
 		        data: JSON.stringify(users),  // 배열을 JSON 문자열로 변환
 				dataType: 'JSON',
-				success: function(list){
-					console.log(list);
-				    closeList(list);
+				success: function(data){
+					console.log("list",data.list);
+				    closeList(data.list, data.loginYn);
 				},
 				error: function(e){
 					console.log(e);

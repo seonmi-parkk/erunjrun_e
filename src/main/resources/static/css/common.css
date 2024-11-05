@@ -95,6 +95,7 @@
 		padding: 10px 14px;
 		margin: 0 9px;
 		font-size: 18px;
+		color: var(--font-color);
 	}
 	
 	header .menu li a:hover{
@@ -231,7 +232,8 @@
 	}
 	header .logout {
 		color: #777;
-		margin-left: 14px;
+		margin-left: 12px;
+		font-size: 14px;
 	}
 	
 	
@@ -263,7 +265,7 @@
 	}
 	.footer a{
 		font-size: 15px;
-		
+		color: var(--font-color);
 	}
 	.footer .col:last-child{
 		position: initial;

@@ -170,8 +170,8 @@
 	
 	
 	
-	/* check!! 임시 */
-	#message-input{
+	/* 임시 */
+/* 	#message-input{
 		position:absolute;top:0;	
 	}
     #message-btn{
@@ -180,7 +180,7 @@
 
     #chat-box{
 		position: absolute;top: 100px;
-    }
+    } */
 	
 </style>
 </head>
