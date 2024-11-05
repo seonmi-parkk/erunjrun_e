@@ -6,9 +6,9 @@
 <title>이런저런</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="resources/css/common.css">
+<link rel="stylesheet" href="/resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
    .input-container {
     display: flex;        /* Flexbox 사용 */
@@ -105,19 +105,19 @@
    
    <!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
    <div class="content-wrapper">
-      <aside class="fixed-left">
+		<aside class="fixed-left">
             <div class="image">
-                <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+                <img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
             </div>
-            <p class="title2" id="admin_name">관리자</p>
-            <p class="title3" onclick="location.href='adminMember'">회원정보</p>
-            <p class="title3" onclick="location.href='adminReport'">신고</p>
-            <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
-            <p class="title3" onclick="location.href='adminTag'">태그</p>
-            <p class="title3" onclick="location.href='adminIconListView'">아이콘</p>
-            <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
-            <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
+           <p class="title2" id="admin_name">관리자</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminMember'">회원정보</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminReport'">신고</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminAsk'">문의하기</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminTag'">태그</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminIconListView'">아이콘</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminPopup'">팝업</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminCode'">구분코드</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminJoin'">회원가입</p>
         </aside>
         
         <main class="main-content">
@@ -129,9 +129,9 @@
       </div>   
       
        <div class="input-container">
-           <p class="title2" id="dot">•</p>
+         <p class="title2" id="dot">•</p>
          <p class="title2" id="text">게시글번호</p>
-         <p class="title2" id="text" onclick="location.href='adminIcon'">${info.report_idx}</p> <!-- -- 특정 게시글로 이동 -->
+         <p class="title2" id="text" onclick="location.href='${info.url}'"  style="cursor: pointer;">${info.report_idx}</p> <!-- -- 특정 게시글로 이동 -->
       </div>   
       
        <div class="input-container">
@@ -166,8 +166,8 @@
       </div>   
       
       
-   <div class="btn01-l" onclick="location.href='adminReportUpdate?report_idx=${info.report_idx}&code_name=${info.code_name}'">처리하기</div> <!-- 클릭시 색깔변경 -->
-   <div class="btn02-l" onclick="location.href='adminReport'">취소</div> <!-- 클릭시 색깔변경 -->
+   <div class="btn01-l" onclick="location.href='/adminReportUpdate/${info.report_idx},${info.code_name}'">처리하기</div> <!-- 클릭시 색깔변경 -->
+   <div class="btn02-l" onclick="location.href='/adminReport'">취소</div> <!-- 클릭시 색깔변경 -->
    
         
         </main>
@@ -183,6 +183,6 @@
 
     
 </script>
-<script src="resources/js/common.js" type="text/javascript"></script>
-<script src="resources/js/layerPopup.js"></script>
+<script src="/resources/js/common.js" type="text/javascript"></script>
+<script src="/resources/js/layerPopup.js"></script>
 </html>

@@ -7,6 +7,7 @@ import com.erunjrun.image.dto.ImageDTO;
 
 public class AdminDTO {
    private String id;
+   private String icon_image;
    private String nickname;
    private String email;
    private String report_status;
@@ -39,12 +40,31 @@ public class AdminDTO {
    private IconDTO icondto;
    private String status;
    private String subject;
+   private int ask_idx;
+   private String is_ask;
+   private String url;
    
    
    
-   
-   
-   public String getSubject() {
+   public String getUrl() {
+	return url;
+}
+public void setUrl(String url) {
+	this.url = url;
+}
+public String getIs_ask() {
+	return is_ask;
+}
+public void setIs_ask(String is_ask) {
+	this.is_ask = is_ask;
+}
+public int getAsk_idx() {
+	return ask_idx;
+}
+public void setAsk_idx(int ask_idx) {
+	this.ask_idx = ask_idx;
+}
+public String getSubject() {
       return subject;
    }
    public void setSubject(String subject) {
@@ -252,9 +272,16 @@ public class AdminDTO {
    public String getStatus() {
       return status;
    }
-   public void setStatus(String status) {
+   public String getIcon_image() {
+	return icon_image;
+}
+public void setIcon_image(String icon_image) {
+	this.icon_image = icon_image;
+}
+public void setStatus(String status) {
       this.status = status;
    }
+
    
    
    

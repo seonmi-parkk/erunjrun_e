@@ -6,9 +6,9 @@
 <title>이런저런</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="resources/css/common.css">
+<link rel="stylesheet" href="/resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
    /* 전체 페이지 레이아웃 */
    body {
@@ -24,7 +24,7 @@
    /* 콘텐츠와 사이드바 감사는 래퍼 */
    .content-wrapper {
        display: flex;
-       width: 100%;
+       width: 90%;
        margin-top: 80px; /* 헤더 높이만큼 여배 */
        flex-grow: 1; /* 남은 곳과 채우기 */
    }
@@ -73,20 +73,20 @@
    
    <!-- inner 클래스 하위에 모두 요소들을 넣어서 만들어주십시오. -->
    <div class="content-wrapper">
-    <aside class="fixed-left">
-        <div class="image">
-            <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
-        </div>
-        <p class="title2" id="admin_name">관리자</p>
-        <p class="title3" onclick="location.href='adminMember'">회원정보</p>
-        <p class="title3" onclick="location.href='adminReport'">신고</p>
-        <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
-        <p class="title3" onclick="location.href='adminTag'">태그</p>
-        <p class="title3" onclick="location.href='adminIconListView'">아이콘</p>
-        <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-        <p class="title3" onclick="location.href='adminCode'">구분코드</p>
-        <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
-       </aside>
+		<aside class="fixed-left">
+            <div class="image">
+                <img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+            </div>
+           <p class="title2" id="admin_name">관리자</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminMember'">회원정보</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminReport'">신고</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminAsk'">문의하기</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminTag'">태그</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminIconListView'">아이콘</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminPopup'">팝업</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminCode'">구분코드</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminJoin'">회원가입</p>
+        </aside>
    
        <main class="main-content">
       <div class="btn02-l btn-category"  data-category="all">전체</div>
@@ -216,7 +216,7 @@ function pageCall(page, category, status) {
        for (var view of list) {
          content +='<tr>';
             content += '<td>'+view.category+'</td>';              
-         content += '<td><a href="adminReportDetail?report_idx='+view.report_idx+'&code_name='+view.code_name+'">'+view.unlike_id+'<a/></td>';
+         content += '<td><a href="/adminReportDetail/'+view.report_idx+','+view.code_name+'">'+view.unlike_id+'<a/></td>';
           var admin_name = view.name ? view.name : '관리자';
          content +='<td>'+admin_name+'</td>';
          
@@ -248,4 +248,6 @@ function pageCall(page, category, status) {
    
     
 </script>
-
+<script src="/resources/js/common.js" type="text/javascript"></script>
+<script src="/resources/js/layerPopup.js"></script>
+</html>

@@ -6,9 +6,9 @@
 <title>이런저런</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="resources/css/common.css">
+<link rel="stylesheet" href="/resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 	.input-container {
     display: flex;        /* Flexbox 사용 */
@@ -34,7 +34,7 @@
 	/* 콘텐츠와 사이드바 감싸는 래퍼 */
 	.content-wrapper {
 	    display: flex;
-	    width: 100%;
+	    width: 90%;
 	    margin: 80px 10px; /* 헤더 높이만큼 여백 */
 	    flex-grow: 1; /* 남은 공간 채우기 */
 	}
@@ -96,22 +96,22 @@
 		<div class="content-wrapper">
 		<aside class="fixed-left">
             <div class="image">
-                <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+                <img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
             </div>
-            <p class="title2" id="admin_name">관리자</p>
-            <p class="title3" onclick="location.href='adminMember'">회원정보</p>
-            <p class="title3" onclick="location.href='adminReport'">신고</p>
-            <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
-            <p class="title3" onclick="location.href='adminTag'">태그</p>
-            <p class="title3" onclick="location.href='adminIcon'">아이콘</p>
-            <p class="title3" onclick="location.href='adminIconListView'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
-            <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
+           <p class="title2" id="admin_name">관리자</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminMember'">회원정보</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminReport'">신고</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminAsk'">문의하기</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminTag'">태그</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminIconListView'">아이콘</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminPopup'">팝업</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminCode'">구분코드</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminJoin'">회원가입</p>
         </aside>
         
         <main class="main-content">
 		<p class="title1" >팝업</p>
-	    <div class="btn01-l" onclick="location.href='adminPopupWrite'" >등록</div>
+	    <div class="btn01-l" onclick="location.href='/adminPopupWrite'" >등록</div>
 	    
 		 <table>
 			<colgroup>
@@ -199,7 +199,7 @@
             } else {
             	content += '<td style="color: red;">미사용</td>';
             }
-            content +='<td><a  href="adminPopupUpdate?popup_idx='+view.popup_idx+'&code_name='+view.code_name+'"style="color: orange;">수정</a></td>';
+            content +='<td><a  href="/adminPopupUpdate/'+view.popup_idx+','+view.code_name+'"style="color: orange;">수정</a></td>';
             content += '<td>'+view.create_date+'</td>';
 			content +='</tr>';
 		  }
@@ -207,6 +207,6 @@
 	   }
      
 </script>
-<script src="resources/js/common.js" type="text/javascript"></script>
-<script src="resources/js/layerPopup.js"></script>
+<script src="/resources/js/common.js" type="text/javascript"></script>
+<script src="/resources/js/layerPopup.js"></script>
 </html>

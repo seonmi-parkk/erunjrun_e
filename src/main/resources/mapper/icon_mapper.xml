@@ -111,7 +111,7 @@
 	   GROUP BY 
 	       i.icon_name, i.image
 	   ORDER BY 
-	       i.icon_idx DESC
+	       i.icon_idx ASC
 	   LIMIT #{limit} OFFSET #{offset};
 
    </select>

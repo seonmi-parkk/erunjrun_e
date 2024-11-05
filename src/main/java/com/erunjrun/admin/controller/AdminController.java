@@ -12,14 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.erunjrun.admin.dto.AdminDTO;
@@ -50,6 +47,7 @@ public class AdminController {
                session.setAttribute("loginId", id); // 로그인 ID 저장
                session.setAttribute("authority", admin_service.getAuthority(id)); // 권한 저장
                session.setAttribute("requestIp", requestIp); // 요청 IP 저장
+               session.setAttribute("adminYn", "Y");
             } else {
                model.addAttribute("msg", "허용되지 않은 IP에서 로그인 시도입니다.");
             }
@@ -57,11 +55,15 @@ public class AdminController {
             model.addAttribute("msg", "아이디 또는 비밀번호를 확인해.");
          }
 
-         return "main";
+         return "admin/adminMemberList";
       }
       
       @GetMapping(value = "/adminJoin")
-      public String adminJoin() {
+      public String adminJoin(HttpSession session) {
+//    	  if (session.getAttribute("")) {
+//			
+//		}
+    	  
          return"admin/adminJoin";
       }
       
@@ -98,12 +100,18 @@ public class AdminController {
       
       
    @GetMapping(value = "/adminMember")
-   public String memberList() {
-      return "admin/adminMemberList";
+   public String memberList(HttpSession session,Model model) {
+	   String page = "admin/adminLogin";
+	   
+	   if (session.getAttribute("adminYn").equals('Y')) {
+		   page = "admin/adminMemberList";
+	   }
+	   
+      return page;
    }
       
    
-     @PostMapping(value = "/adminMemberList") //post?
+     @GetMapping(value = "/adminMemberList") //post?
      @ResponseBody 
      public Map<String,Object> memberlist(String page, String cnt,String opt, String keyword,String sortField,String sortOrder){
         
@@ -156,12 +164,15 @@ public class AdminController {
         return "redirect:/admin"; 
      }
      
-     @PostMapping(value = "/adminMemberDetail/{id}") 
+     @GetMapping(value = "/adminMemberDetail/{id}") 
      public String memberdetail(@PathVariable String id, Model model) {
         logger.info(id);
         
         AdminDTO dto = admin_service.memberdetail(id);
+        String image = dto.getIcon_image();
+        logger.info(image);
         model.addAttribute("info",dto);
+        
         
         List<AdminDTO> result = admin_service.ban(id);
         model.addAttribute("result",result);
@@ -175,8 +186,8 @@ public class AdminController {
      
 //      권한처리     -- 권한 세션체크 스케줄링 사용해서 만들어야 함.
      
-     @GetMapping(value = "/memberRight")
-     public String right(String nickname,Model model) {
+     @GetMapping(value = "/memberRight/{nickname}")
+     public String right(@PathVariable String nickname,Model model) {
         logger.info(nickname);
         String id = admin_service.right(nickname);
         model.addAttribute("info",nickname);
@@ -195,8 +206,8 @@ public class AdminController {
         return"redirect:/adminMember";
      }
      
-     @GetMapping(value = "/memberRightDetail")
-     public String rightdetail(String ban_idx,Model model) {
+     @GetMapping(value = "/memberRightDetail/{ban_idx}")
+     public String rightdetail(@PathVariable String ban_idx,Model model) {
         AdminDTO dto = admin_service.rightdetail(ban_idx);
         model.addAttribute("info",dto);
         
@@ -264,8 +275,8 @@ public class AdminController {
         return result;
      }
      
-     @GetMapping(value = "/adminReportDetail")
-     public String reportdetail(String report_idx,String code_name,Model model) {
+     @GetMapping(value = "/adminReportDetail/{report_idx},{code_name}")
+     public String reportdetail(@PathVariable String report_idx,@PathVariable String code_name,Model model) {
         admin_service.reportdetail(report_idx,code_name,model);
       
         
@@ -273,14 +284,14 @@ public class AdminController {
         return "admin/adminReportDetail";
      }
 
-     @GetMapping(value = "/adminReportUpdate")
-     public String reportupdate(String report_idx,String code_name,Model model) {
+     @GetMapping(value = "/adminReportUpdate/{report_idx},{code_name}")
+     public String reportupdate(@PathVariable String report_idx,@PathVariable String code_name,Model model) {
         admin_service.reportdetail(report_idx,code_name,model);
         
         return "admin/adminReportUpdate";
      }
      
-     @PostMapping(value = "/adminReportUpdate")
+     @GetMapping(value = "/adminReportUpdate")
      public String reportupdate(@RequestParam Map<String, String> param,HttpSession session,
            Model model) {
         String admin_id = (String)session.getAttribute("loginId");
@@ -288,18 +299,18 @@ public class AdminController {
         param.put("admin_id", admin_id);// 관리자 로그인 ID 저장
         admin_service.reportupdate(param);
         logger.info(param.get("report_id"));
-       return "redirect:/adminReportDetail?report_idx="+param.get("report_idx");
+       return "redirect:/adminReportDetail/"+param.get("report_idx")+","+param.get("code_name");
      }
      
      
      //문의하기
      
-     @GetMapping(value = "adminAsk")
+     @GetMapping(value = "/adminAsk")
      public String ask() {
         return "admin/adminAskList";
      }
      
-     @GetMapping(value = "adminAskList")
+     @PostMapping(value = "/adminAskList")
      @ResponseBody 
      public Map<String, Object> asklist(String page, String cnt,String opt, String keyword) {
       int page_ = Integer.parseInt(page);
@@ -319,12 +330,12 @@ public class AdminController {
      
      // 태그
      
-     @GetMapping(value = "adminTag")
+     @GetMapping(value = "/adminTag")
      public String tag() {
         return "admin/adminTagList";
      }
      
-     @GetMapping(value = "adminTagList")
+     @GetMapping(value = "/adminTagList")
      @ResponseBody 
      public Map<String, Object> taglist(String page, String cnt) {
          int page_ = Integer.parseInt(page);
@@ -340,13 +351,13 @@ public class AdminController {
          return result;
      
      }
-     @GetMapping(value = "adminTagWrite")
+     @GetMapping(value = "/adminTagWrite")
      public String tagwrite() {
         return "admin/adminTagWrite";
      }
      
      
-     @PostMapping(value = "adminTagWrite")
+     @PostMapping(value = "/adminTagWrite")
      public String tagwrite(@RequestParam Map<String, String> param, Model model) {
       logger.info(param.get("tag_name"));
       logger.info(param.get("use_yn"));
@@ -355,14 +366,14 @@ public class AdminController {
      }
      
      
-     @GetMapping(value = "adminTagUpdate")
-     public String tagdetail(String tag_idx,Model model) { 
+     @GetMapping(value = "/adminTagUpdate/{tag_idx}")
+     public String tagdetail(@PathVariable String tag_idx,Model model) { 
         admin_service.tagdetail(tag_idx,model);
 
         return "admin/adminTagUpdate";
      }
      
-     @PostMapping(value = "adminTagUpdate")
+     @PostMapping(value = "/adminTagUpdate")
      public String tagupdate(@RequestParam Map<String, String> param) {
         
         admin_service.tagupdate(param);
@@ -375,12 +386,12 @@ public class AdminController {
      
      
      // 구분코드
-     @GetMapping(value = "adminCode")
+     @GetMapping(value = "/adminCode")
      public String code() {
         return "admin/adminCodeList";
      }
      
-     @GetMapping(value = "adminCodeList")
+     @GetMapping(value = "/adminCodeList")
      @ResponseBody
      public Map<String, Object> codelist(String page, String cnt,String opt, String keyword) {
          int page_ = Integer.parseInt(page);
@@ -397,12 +408,12 @@ public class AdminController {
      
      }
      
-     @GetMapping(value = "adminCodeWrite")
+     @GetMapping(value = "/adminCodeWrite")
      public String codewrite(){
         return "admin/adminCodeWrite";
      }
      
-     @PostMapping(value = "adminCodeWrite")
+     @PostMapping(value = "/adminCodeWrite")
      public String codewrite(@RequestParam Map<String, String> param,Model model) {
         admin_service.codewrite(param);
         return "redirect:/adminCode";
@@ -417,13 +428,13 @@ public class AdminController {
          return map;
       }
      
-     @GetMapping(value = "adminCodeUpdate")
-     public String codedetail(String code_name,Model model) { 
+     @GetMapping(value = "/adminCodeUpdate/{code_name}")
+     public String codedetail(@PathVariable String code_name,Model model) { 
         admin_service.codedetail(code_name,model);
         return "admin/adminCodeUpdate";
      }
      
-     @PostMapping(value = "adminCodeUpdate")
+     @PostMapping(value = "/adminCodeUpdate")
      public String codeupdate(@RequestParam Map<String, String> param) { 
         admin_service.codeupdate(param);
         logger.info(param.get("code_name"));
@@ -434,14 +445,14 @@ public class AdminController {
      }
      
      
-     @GetMapping(value = "adminPopup")
+     @GetMapping(value = "/adminPopup")
      public String popup() {
         
         return "admin/adminPopupList";
      }
      
      
-     @GetMapping(value = "adminPopupList")
+     @GetMapping(value = "/adminPopupList")
      @ResponseBody
      public Map<String, Object> popuplist(String page, String cnt) {
          int page_ = Integer.parseInt(page);
@@ -458,7 +469,7 @@ public class AdminController {
          return result;
      }
      
-     @GetMapping(value = "adminPopupWrite")
+     @GetMapping(value = "/adminPopupWrite")
      public String popupwrite() {
         
         
@@ -466,7 +477,7 @@ public class AdminController {
      }
      
      
-     @PostMapping(value = "adminPopupWrite")
+     @PostMapping(value = "/adminPopupWrite")
      public String popupwrite(MultipartFile file,@RequestParam Map<String, String> param, Model model) {
       logger.info(param.get("tag_name"));
       logger.info(param.get("use_yn"));
@@ -474,13 +485,13 @@ public class AdminController {
         return "redirect:/adminPopup";
      }
      
-     @GetMapping(value = "adminPopupUpdate")
-     public String popupupdetail(String popup_idx,String code_name,Model model) { 
+     @GetMapping(value = "/adminPopupUpdate/{popup_idx},{code_name}")
+     public String popupupdetail(@PathVariable String popup_idx,@PathVariable String code_name,Model model) { 
         admin_service.popupdetail(popup_idx,code_name,model);
         return "admin/adminPopupUpdate";
      }
      
-     @PostMapping(value = "adminPopupUpdate")
+     @PostMapping(value = "/adminPopupUpdate")
      public String popupupdate(MultipartFile file,
            @RequestParam Map<String, String> param) { 
        admin_service.popupupdate(file,param);

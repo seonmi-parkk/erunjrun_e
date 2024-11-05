@@ -132,15 +132,15 @@
             <div class="image">
                 <img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
             </div>
-            <p class="title2" id="admin_name">관리자</p>
-            <p class="title3" onclick="location.href='adminMember'">회원정보</p>
-            <p class="title3" onclick="location.href='adminReport'">신고</p>
-            <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
-            <p class="title3" onclick="location.href='adminTag'">태그</p>
-            <p class="title3" onclick="location.href='adminIconListView'">아이콘</p>
-            <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
-            <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
+          <p class="title2" id="admin_name">관리자</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='adminMember'">회원정보</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='adminReport'">신고</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='adminAsk'">문의하기</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='adminTag'">태그</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='adminIconListView'">아이콘</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='adminPopup'">팝업</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='adminCode'">구분코드</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='adminJoin'">회원가입</p>
         </aside>
 	 	<main class="main-content">
 	 	

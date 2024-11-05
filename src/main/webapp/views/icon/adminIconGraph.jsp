@@ -6,7 +6,7 @@
 <title>이런저런</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="resources/css/common.css">
+<link rel="stylesheet" href="/resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
@@ -82,18 +82,47 @@
    
    .btn01-l{
    margin-top: 10px;
-   margin-left: 1400px;
+   margin-left: 1550px;
    margin-bottom: 10px;
    }
-   #yearSelect{
-   margin-left: 1200px;
-   top: 10px;
-   }
-   .selectmwd{
-   margin-left: 1450px;
    
-
+   .selector{
+   margin-left: 1300px;
+   display: inline-block;
+   top: 10px;
+   
    }
+  
+   /* 공통 버튼 스타일 */
+	.selectmwd {
+	    display: flex;
+	    margin-left: 1530px;
+	   
+	    /* 버튼 그룹 전체에 하단선을 제거합니다 */
+	}
+	
+	.selectmwd button {
+	    background: none;
+	    border: none;
+	    color: #ccc; /* 기본 색상 */
+	    font-weight: normal;
+	    padding: 10px;
+	    cursor: pointer;
+	    transition: color 0.3s ease;
+	    border-bottom: 2px solid transparent; /* 기본적으로 하단선을 투명하게 설정 */
+	}
+	
+	.selectmwd button.active {
+	    color: #000; /* 선택된 버튼 검은색 */
+	    font-weight: bold;
+	    border-bottom: 2px solid #000; /* 선택된 버튼 하단선 */
+	}
+	
+	.selectmwd button:not(.active):hover {
+	    color: #666; /* 비활성화된 버튼 hover 색상 */
+	}
+
+
    
 </style>
 </head>
@@ -103,20 +132,20 @@
    
    <!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
       
-      <div class="content-wrapper">
-      <aside class="fixed-left">
+     <div class="content-wrapper">
+		<aside class="fixed-left">
             <div class="image">
-                <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+                <img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
             </div>
-            <p class="title2" id="admin_name">관리자</p>
-            <p class="title3" onclick="location.href='adminMember'">회원정보</p>
-            <p class="title3" onclick="location.href='adminReport'">신고</p>
-            <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
-            <p class="title3" onclick="location.href='adminTag'">태그</p>
-            <p class="title3" onclick="location.href='adminIconListView'">아이콘</p>
-            <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구분코드</p>
-            <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
+           <p class="title2" id="admin_name">관리자</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminMember'">회원정보</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminReport'">신고</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminAsk'">문의하기</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminTag'">태그</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminIconListView'">아이콘</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminPopup'">팝업</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminCode'">구분코드</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminJoin'">회원가입</p>
         </aside>
         
         <main class="main-content">
@@ -124,28 +153,31 @@
        
        <div class="btn03-l" onclick="location.href='adminIconChart'">차트</div>
        <div class="btn02-l" onclick="location.href='adminIconGraph'">그래프</div>
-       <select id="yearSelect"></select>
-     <select id="monthSelect" style="display: none;">
-       <option value="1">1월</option>
-       <option value="2">2월</option>
-       <option value="3">3월</option>
-       <option value="4">4월</option>
-       <option value="5">5월</option>
-       <option value="6">6월</option>
-       <option value="7">7월</option>
-       <option value="8">8월</option>
-       <option value="9">9월</option>
-       <option value="10">10월</option>
-       <option value="11">11월</option>
-       <option value="12">12월</option>
-      </select>
+     <div class="selector">
+	     <select id="yearSelect"></select>
+	     <select id="monthSelect" style="display: none;">
+	       <option value="1">1월</option>
+	       <option value="2">2월</option>
+	       <option value="3">3월</option>
+	       <option value="4">4월</option>
+	       <option value="5">5월</option>
+	       <option value="6">6월</option>
+	       <option value="7">7월</option>
+	       <option value="8">8월</option>
+	       <option value="9">9월</option>
+	       <option value="10">10월</option>
+	       <option value="11">11월</option>
+	       <option value="12">12월</option>
+	      </select>       
+     </div>
       
       
-       <div class="selectmwd">       
-         <button  id="monthlyBtn">월간</button>
-         <button  id="weeklyBtn">주간</button>
-         <button  id="dailyBtn">일간</button>
-       </div>
+      <div class="selectmwd">       
+	    <button id="monthlyBtn" class="active">월간</button>
+	    <button id="weeklyBtn">주간</button>
+	    <button id="dailyBtn">일간</button>
+	 </div>
+       
       <canvas id="myChart"></canvas>
        <div class="btn01-l" onclick="location.href='adminIcon'">리스트</div>
       
@@ -366,6 +398,6 @@ document.getElementById('monthSelect').addEventListener('change', () => {
 });
 
 </script>
-<script src="resources/js/common.js" type="text/javascript"></script>
-<script src="resources/js/layerPopup.js"></script>
+<script src="/resources/js/common.js" type="text/javascript"></script>
+<script src="/resources/js/layerPopup.js"></script>
 </html>

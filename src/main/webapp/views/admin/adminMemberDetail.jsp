@@ -6,9 +6,9 @@
 <title>이런저런</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="resources/css/common.css">
+<link rel="stylesheet" href="/resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+<script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
 	.table-container{
 	 display: block; 
@@ -74,6 +74,10 @@ font-size: 23px;
     height: auto;
     margin-bottom: 20px; /* 비율을 유지 */
 	}
+	
+	
+	
+	
 /* 메인 콘텐츠 */
 .main-content {
     flex: 1; /* 남은 공간 채우기 */
@@ -91,6 +95,25 @@ font-size: 23px;
 	color: #FB7E3A;
 	}
 	
+	
+	
+	 #dori .profile-area{
+    	width: 120px; height: 120px;
+    	position: relative;
+	    }
+	    #dori .profile-box {
+			position: absolute; top: 50%; left: 50%;
+			transform: translate(-50%, -50%);
+			width: 120px; height: 120px;
+			margin-right: 2px;
+		}
+		#dori .profile-img {
+			position: absolute; top: 50%; left: 50%;
+			transform: translate(-50%, -50%);
+			width: 96px; height: 96px;
+			border-radius: 50%;
+		}
+	
 </style>
 </head>
 <body>
@@ -100,23 +123,34 @@ font-size: 23px;
 	<div class="content-wrapper">
 		<aside class="fixed-left">
             <div class="image">
-                <img class="profile-img" src="resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
+                <img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
             </div>
             <p class="title2" id="admin_name">관리자</p>
-            <p class="title3" onclick="location.href='adminMember'">회원정보</p>
-            <p class="title3" onclick="location.href='adminReport'">신고</p>
-            <p class="title3" onclick="location.href='adminAsk'">문의하기</p>
-            <p class="title3" onclick="location.href='adminTag'">태그</p>
-            <p class="title3" onclick="location.href='adminIconListView'">아이콘</p>
-            <p class="title3" onclick="location.href='adminPopup'">팝업</p>
-            <p class="title3" onclick="location.href='adminCode'">구븐코드</p>
-            <p class="title3" onclick="location.href='adminJoin'">회원가입</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminMember'">회원정보</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminReport'">신고</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminAsk'">문의하기</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminTag'">태그</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminIconListView'">아이콘</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminPopup'">팝업</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminCode'">구분코드</p>
+            <p class="title3" style="cursor: pointer;" onclick="location.href='/adminJoin'">회원가입</p>
         </aside>
 	    
 	   
 	    <main class="main-content">
 		<p class="title1" >회원정보</p>
 		<p class="title1" id="nick" >${info.nickname}님</p>
+		<div class="input-container">	
+		<div id="dori">
+		
+		<div class="profile-area">
+			<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${info.icon_image}) center center / 100% 100% no-repeat;"></div>				
+	    	</div>
+		</div>
+		
+	    
+		</div>	
+		
 	    <div class="input-container">
   			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">아이디</p>
@@ -176,7 +210,7 @@ font-size: 23px;
 		 	<c:forEach items="${list}" var="report">
 				<tr>
 					<td>${report.code_name}</td>
-					<td><a href="adminReportDetail?report_idx=${report.report_idx}">${report.unlike_id}</a></td>
+					<td><a href="/adminReportDetail/${report.report_idx},${report.code_name}">${report.unlike_id}</a></td>
 					<td>${report.use_yn}</td>
 					<td>${report.create_date}</td>
 				</tr>
@@ -204,7 +238,7 @@ font-size: 23px;
 		 	<tbody>
 		 		<c:forEach items="${result}" var="ban">
 				<tr>
-					<td><a href="memberRightDetail?ban_idx=${ban.ban_idx}">${ban.content}</a></td>
+					<td><a href="/memberRightDetail/${ban.ban_idx}">${ban.content}</a></td>
 					<td>${ban.start_date} ~ ${ban.end_date}</td>
 					<td>${ban.process_date}</td>
 				</tr>
@@ -225,6 +259,6 @@ font-size: 23px;
 
     
 </script>
-<script src="resources/js/common.js" type="text/javascript"></script>
-<script src="resources/js/layerPopup.js"></script>
+<script src="/resources/js/common.js" type="text/javascript"></script>
+<script src="/resources/js/layerPopup.js"></script>
 </html>

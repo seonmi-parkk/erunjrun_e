@@ -157,6 +157,8 @@ public class AdminService {
    }
 
    public void reportdetail(String report_idx, String code_name, Model model) {
+	   logger.info("report_idx"+report_idx);
+	   logger.info("code_name"+code_name);
       AdminDTO dto = admin_dao.reportdetail(report_idx);
       ImageDTO imageDTO = admin_dao.image(report_idx,code_name); // 이미지 정보 가져오기
       logger.info(""+imageDTO);
