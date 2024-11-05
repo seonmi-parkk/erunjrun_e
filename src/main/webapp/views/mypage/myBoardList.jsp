@@ -275,7 +275,7 @@ h3 {
 	            if (view) {
 	                content += '<tr>';
 	                content += '<td>' + view.board_idx + '</td>'; // 글번호
-	                content += '<td>' + view.subject + '</td>'; // 제목
+	                content += '<td><a href="viewBoard?board_idx=' + view.board_idx + '">' + view.subject + '</a></td>'; // 제목에 링크 추가
 	                content += '<td>' + new Date(view.create_date).toLocaleString('ko-KR') + '</td>'; // 작성일
 	                content += '</tr>';
 	            }

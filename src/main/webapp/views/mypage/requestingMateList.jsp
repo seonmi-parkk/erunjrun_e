@@ -198,6 +198,14 @@ h3 {
 	font-weight: bold; /* 강조 효과 */
 	background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
 }
+
+#profilePopup {
+            width: fit-content;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 996;
+        }
 </style>
 </head>
 <body>
@@ -358,18 +366,36 @@ $(document).ready(function() {
         });
     }
 
-    // 친구 이름 클릭 시 프로필 열기
-    $(document).on('click', '.friend-name', function() {
-        var toUserId = $(this).closest('.card').data('id');
-        openProfile(toUserId);
+ // 친구 이름 클릭 시, 상대방의 프로필을 여는 함수
+    $(document).on('click', '.user', function() {
+        var toUserId = $(this).closest('.card').data('id'); // data-id로 상대방의 ID 가져오기
+        console.log('toUserId:', toUserId);
+        openProfile(toUserId); // 클릭한 친구의 프로필 열기
     });
 
-    // 프로필 레이어 팝업 열기
+    // 운동프로필 레이어 팝업 열기
     function openProfile(toUserId) {
         var modal = document.getElementById("profilePopup");
         var PopupBody = document.getElementById("PopupBody");
-        PopupBody.innerHTML = "친구 " + toUserId + "의 프로필 내용"; // 예시 내용
-        modal.style.display = "block"; // 모달 열기
+
+        // AJAX 요청
+        $.ajax({
+            url: "/mate/" + toUserId, // 상대방 ID에 해당하는 프로필 정보 요청
+            method: "GET",
+            success: function(response) {
+                PopupBody.innerHTML = response; // 응답을 모달에 넣기
+                modal.style.display = "block"; // 모달 열기
+
+                // JS 파일을 동적으로 로드 (필요시 추가적인 스크립트 로딩)
+                var script = document.createElement('script');
+                script.src = '/resources/js/profileDetail.js'; // 프로필 디테일 JS 파일 로드
+                document.body.appendChild(script);
+            },
+            error: function(error) {
+                console.error("프로필 정보를 불러오는 중 오류 발생:", error);
+                alert("프로필을 불러오는 데 문제가 발생했습니다.");
+            }
+        });
     }
 
     // 팝업 닫기
@@ -377,13 +403,7 @@ $(document).ready(function() {
         document.getElementById("profilePopup").style.display = "none";
     });
 
-    // 모달 외부 클릭 시 닫기
-    $(window).on('click', function(event) {
-        var modal = document.getElementById("profilePopup");
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    });
+
 });
 	
 </script>

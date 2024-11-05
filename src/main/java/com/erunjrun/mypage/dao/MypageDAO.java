@@ -65,9 +65,11 @@ public interface MypageDAO {
 	int countMyIconList(String id, int cnt);
 
 	List<Map<String, Object>> myIconList(int limit, int offset, String id);
+	
+	boolean iconImageUpdate(Long iconId, String id);
 
 	Map<String, Object> getProfileData(String toUserId);
-
+	
 	List<Map<String, Object>> myMateList(int limit, int offset, String id);
 
 	int countFriends(String id, int cnt);

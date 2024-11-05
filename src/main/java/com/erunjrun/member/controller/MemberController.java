@@ -54,7 +54,13 @@ public class MemberController {
 
 	    return "main";
 	}
-
+	
+	@GetMapping(value = "/logOut")
+    public String logout(HttpSession session, Model model) {
+        session.invalidate(); // 세션 전체를 무효화 (세션에 저장된 모든 정보가 삭제됨)
+        model.addAttribute("msg", "로그아웃 되었습니다.");
+        return "member/login"; // 로그인 페이지로 리다이렉트
+    }
 
 	@GetMapping(value = "/joinView")
 	public String joinView() {

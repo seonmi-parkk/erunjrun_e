@@ -44,7 +44,7 @@ aside {
 	border-bottom-right-radius: 8px;
 }
 
-.friend-list {
+.icon-list {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 	gap: 15px;
@@ -71,14 +71,15 @@ aside {
 	background-color: #f1f1f1;
 }
 
-.friend-image {
+.icon-image {
 	width: 100px;
 	height: 100px;
 	border-radius: 50%;
 	margin-bottom: 30px;
+	z-index: 2;  /* 다른 이미지보다 위에 위치하도록 설정 */
 }
 
-.friend-name {
+.icon-name {
 	font-size: 16px;
 	color: #555;
 }
@@ -161,6 +162,18 @@ h3 {
 	max-height: 100px;
 	border-radius: 4px;
 	margin-left: -60px;
+	
+}
+
+.profile-img2 {
+	width: 71px;        /* 크기 조정 (너비) */
+    height: 71px;       /* 크기 조정 (높이) */
+    position: absolute; /* 절대 위치 지정 */
+    top: 24px;         /* 위로 올리기 (위쪽에서 20px 만큼 올림) */
+    right: 48px;        /* 오른쪽으로 10px 이동 */
+    border-radius: 50%; /* 둥근 이미지 */
+	z-index: 1;  /* 다른 이미지보다 위에 위치하도록 설정 */
+	
 }
 
 .divider {
@@ -207,6 +220,17 @@ h3 {
 .action-buttons button {
     margin: 0 5px; /* 좌우로 5px 간격 추가 */
 }
+
+#updateIconBtn {
+    background-color: white; /* 주황색 배경 */
+    color: #FFA500; /* 텍스트 색상은 흰색 */
+    border: 2px solid #FFA500; /* 테두리 색상도 주황색 */
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px; /* 둥근 모서리 */
+}
+
 </style>
 </head>
 <body>
@@ -251,6 +275,9 @@ h3 {
 			<div class="no-icon-message"
 				style="display: none; text-align: center; margin-top: -100px;">
 				구매한 아이콘이 없습니다.</div>
+				<div class="action-buttons">
+                <button id="updateIconBtn" class="btn btn-primary" disabled>수정하기</button>
+            </div>
 			<div class="pagination-container">
 				<nav aria-label="Page navigation">
 					<ul class="pagination" id="pagination"></ul>
@@ -281,10 +308,13 @@ $(document).ready(function() {
                         $('.no-icon-message').show(); // 데이터가 없을 경우 메시지 표시
                     } else {
                         $.each(data.list, function(index, icon) {
-                            var imageSrc = (icon.image && icon.image.trim()) ? '/photo/' + icon.image : 'resources/img/common/profile.png';
+                            var imageSrc = (icon.image && icon.image.trim()) ? '/resources/img/icon/' + icon.image : '/resources/img/icon/default.png';
+                            var profileImageSrc = '/resources/img/common/profile.png'; // 기본 프로필 이미지
                             var iconCard = '<div class="card" data-id="' + icon.icon_idx + '">' +
-                                '<img class="friend-image" src="' + imageSrc + '" alt="아이콘 이미지" />' +
-                                '<p class="friend-name">' + (icon.name || '이름 없음') + '</p>' +
+                                '<img class="icon-image" src="' + imageSrc + '" alt="아이콘 이미지" />' +
+                                '<img class="profile-img2" src="' + profileImageSrc + '" alt="기본 프로필 이미지" />' +  // 기본 프로필 이미지 추가
+                                '<p class="icon-name">' + (icon.icon_name || '이름 없음') + '</p>' +
+                                '<input type="radio" name="icon-radio" class="icon-radio" data-id="' + icon.icon_idx + '" />' +  <!-- 라디오 버튼으로 변경 -->
                                 '</div>';
                             $('.icon-list').append(iconCard);
                         });
@@ -315,6 +345,35 @@ $(document).ready(function() {
             }
         });
     }
+    
+    $(document).on('change', '.icon-radio', function() {
+        var checkedCount = $('.icon-radio:checked').length;
+        $('#updateIconBtn').prop('disabled', checkedCount === 0); // 라디오 버튼이 선택되면 수정 버튼 활성화
+    });
+
+    $('#updateIconBtn').click(function() {
+        var selectedIcon = $('.icon-radio:checked').data('id'); // 선택된 아이콘의 ID를 가져옵니다.
+
+        if (selectedIcon) {
+            $.ajax({
+                type: 'POST',
+                url: 'iconImageUpdate.ajax', // 서버에 해당 요청을 보내기 위한 URL
+                data: { iconId: selectedIcon },  // 하나의 아이콘만 변경하므로 {iconId}로 보냄
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('아이콘 이미지가 성공적으로 변경되었습니다.');
+                        location.reload(); // 페이지 새로고침 (변경된 내용을 반영하기 위해)
+                    } else {
+                        alert('아이콘 이미지 변경에 실패했습니다.');
+                    }
+                },
+                error: function(error) {
+                    console.error('아이콘 이미지를 업데이트하는 중 오류 발생:', error);
+                }
+            });
+        }
+    });
 });
 </script>
 </html>

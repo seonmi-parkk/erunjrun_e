@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="resources/css/common.css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+<script type="text/javascript" src="/resources/js/chatting.js"></script>
 
 <style>
 body {
@@ -261,7 +262,6 @@ h3 {
 	</div>
 	<jsp:include page="../footer.jsp" />
 </body>
-
 <script>
 $(document).ready(function() {
     loadChatList(1); // 첫 페이지 로드
@@ -290,7 +290,7 @@ $(document).ready(function() {
                                 console.error("Invalid date format for chat.created_date:", chat.create_date);
                                 formattedDate = "날짜 형식 오류";
                             }
-                            var chatCard = '<div class="card" data-id="' + chat.recipient + '" onclick="openChat(' + chat.recipient + ')">' +
+                            var chatCard = '<div class="card" data-id="' + chat.chat_idx + '" onclick="openChat(' + chat.chat_idx + ')">' +
                                            '<img src="resources/img/common/profile.png" alt="상대방 이미지" class="profile-img" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 480px;"/>' +
                                            '<p style="margin: -30px; margin-right: 100px;">' + chat.other_id + '님과의 대화</p>' +
                                            '<p style="margin: 7px; color: #777; margin-right: -330px;">발송일: ' + formattedDate + '</p>' +
@@ -331,9 +331,18 @@ $(document).ready(function() {
 
     // 대화방 열기
     function openChat(partnerId) {
-        console.log("대화방 열기: " + partnerId);
-        // 대화방 열기 로직을 여기에 추가
+	    var url = '/chat/'+chat_idx;
+	 // 새 창의 크기와 위치 설정
+	    var width = 400;
+	    var height = 700;
+	    var left = (screen.width - width) / 2;
+	    var top = (screen.height - height) / 2;
+	
+	    // 새 창을 열고, 크기와 위치 설정
+	    window.open(url, '_blank', `width=${width},height=${height},left=${left},top=${top},resizable=no,scrollbars=no,status=no,menubar=no,location=no`);
     }
+    
+    
 });
 </script>
 </html>
