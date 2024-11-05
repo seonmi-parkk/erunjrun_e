@@ -131,7 +131,7 @@
 		<input type="hidden" name="id" value="${profileDto.id}"/>
 	    <div class="user-info">
  	        <div>
- 	        	<!-- check!!  -->
+
  	        	<div class="profile-area">
  	        		<c:choose>
 						<c:when test="${not empty profileDto.image}">  
@@ -145,17 +145,7 @@
 						<div class="profile-box" style="background: url(/photo/${profileDto.icon_image}) center center / 100% 100% no-repeat;"></div>
 					</c:if>
 				</div>
- 	        	
-	       <%--     <div class="profile-box" style="background: url('/resources/img/icon/${profileDto.icon_image}') center center / 100% 100% no-repeat;">
-     				<c:choose>
-						<c:when test="${not empty profileDto.image}">  
-							<div class="profile-img" style="background: url(/photo/${profileDto.image}) center center / cover no-repeat;"></div>
-						</c:when>
-						<c:otherwise>
-							<div class="profile-img"  style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>
-						</c:otherwise>
-					</c:choose>
-	           </div> --%>
+
 	           <div class="name-addr">
 	               <p class="user-name">${profileDto.nickname}</p>
 	               <img src="/resources/img/common/ico_map.png" alt="위치"/><span class="addr">${profileDto.shortsido} ${profileDto.dong}</span>

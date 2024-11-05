@@ -119,18 +119,24 @@
 		transform: rotate(180deg) ;
 	}
 	
-	.mateList .profile-box {
-		display : flex; display: -moz-box; display: -ms-flexbox;
-		-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
-		-webkit-box-align: center; -ms-flex-align: center; align-items: center;
-		flex-shrink: 0;  
-		width: 50px; height: 50px;
+	.mateList .profile-area{
+    	width: 44px; height: 44px;
+    	position: relative;
+    	margin-right: 4px;
+    }
+    .mateList  .profile-box{
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 44px; height: 44px;
 		margin-right: 2px;
 	}
-	.mateList .profile-box .profile-img {
-		width: 34px; height: 34px;
+	.mateList .profile-img{
+		position: absolute; top: 59%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 32px; height: 32px;
 		border-radius: 50%;
 	}
+	
 	.mg-l4{
 	    margin-left: 4px;
 	}
@@ -138,20 +144,7 @@
 	    left: 460px !important;
 	    transform: none !important;
 	}
-/* 	.info-title {
-	    width: fit-content;
-        padding: 2px 10px;
-	    display: block;
-	    background-color: rgba(255,255,255,0.9);
-	    text-align: center;
-	    border-radius:10px;
-	    font-weight: 500;
-	}
-	.info-title .gender{
-		width: 9px;
-		margin-left: 4px;
-    	transform: translateY(3px);
-	} */
+
 	#map .profile-area {
 	    position: relative;
 	    width: 56px;
@@ -181,10 +174,12 @@
 	.mateList .marker-img .profile-box{
 		width: 48px;
     	height: 48px;
+    	top: 6px;
 	}
 	.mateList .marker-img .profile-img{
-	    width: 32px;
-	    height: 32px;
+	    width: 34px;
+	    height: 34px;
+	    top: 39%;
 	}
 	.marker-img .text{
 	    background: #fff;
@@ -221,46 +216,14 @@
 					<input class="btn-sch" type="button" value="검색">
 				</div>
 				<div class="memList">
-					<%-- <c:forEach items="${closeList}" var="member">
-						<a class="user">
-							<input type="hidden" name="toUserId" value="${member.id}"/>
-						  	<div class="profile-box" style="background: url('/resources/img/icon/${member.icon_image}') center center / 100% 100% no-repeat;">
-			               		<c:choose>
-									<c:when test="${not empty member.image}">  
-										<div class="profile-img" style="background: url(/photo/${member.image}) center center / cover no-repeat;"></div>
-									</c:when>
-									<c:otherwise>
-										<div class="profile-img"  style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>
-									</c:otherwise>
-								</c:choose>
-				            </div>
-							<span>${member.nickname}</span><span class="bar">/</span>
-							<c:if test="${member.gender eq '남'}">
-								<img class="ico-gender" src="resources/img/common/ico_male.png" alt="남성">
-							</c:if>
-							<c:if test="${member.gender eq '여'}">
-								<img class="ico-gender" src="resources/img/common/ico_female.png" alt="여성">
-							</c:if>
-							<span class="bar">/</span>
-							<span>${member.shortsido}</span>
-							<span class="mg-l4">${member.dong}</span>
-							<span>
-								<c:if test="${member.mate_idx > 0}"><span class="tag-mate">메이트</span></c:if>
-							</span>
-						</a>
-					</c:forEach> --%>
+					
 				</div>
 			</div>
 
 		</div>
 		
-			<div id="map" style="width:calc(100% - 400px);height:100%;"></div>
-<!-- 			<div class="hAddr">
-		        <span class="title">지도중심기준 행정동 주소정보</span>
-		        <span id="centerAddr"></span>
-		    </div> -->
-	
-		
+		<div id="map" style="width:calc(100% - 400px);height:100%;"></div>
+
 		<!-- 모달 -->
 		<div id="profilePopup" class="modal">
 		    <div class="modal-content">
@@ -275,34 +238,6 @@
 <script src="/resources/js/common.js" type="text/javascript"></script>
 <script src="/resources/js/layerPopup.js"></script>
 <script>
-	
-	// 해당 지역의 유저리스트 불러오기(동 기반)
-/* 	 closeListReq('${userPos.shortsido}','${userPos.dong}','${userPos.id}');
-	 function closeListReq(shortsido,dong,id){
-		 $.ajax({
-				type: 'GET',
-				url: '/searchMateList',
-				data:{
-					'shortsido': shortsido, 
-					'dong': dong, 
-					'id': id, 
-				},
-				dataType: 'JSON',
-				success: function(list){
-					console.log(list);
-					
-					closeList(list);
-					
-					
-				},
-				error: function(e){
-					console.log(e);
-				}
-			}); 
-	 } */
-	 
-	 
-	 
 	
 	// 리스트 태그 생성			   
 	function closeList(list){
@@ -320,37 +255,37 @@
 			list.forEach(function(member) {
 				userCont +='<a class="user">';
 				userCont+='<input type="hidden" name="toUserId" value="'+member.id+'"/>';
-				var icon = '';
-				if(member.icon_image != null){
-					icon = 'background: url(/resources/img/icon/'+member.icon_image+') center center / 100% 100% no-repeat';
-				}
-				userCont+='<div class="profile-box" style="'+icon+'">';
-		           	if(member.image != null){
-		           		userCont+='<div class="profile-img" style="background: url(/photo/'+member.image+') center center / cover no-repeat;"></div>';
-		           		
-		           	}else{
-		           		userCont+='<div class="profile-img"  style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>';
-		           	}
-		          
-					userCont+='</div>';
-					userCont+='<span>'+member.nickname+'</span><span class="bar">/</span>';
-					if(member.gender == '남'){
-						userCont+='<img class="ico-gender" src="resources/img/common/ico_male.png" alt="남성">';
-					}else{
-						userCont+='<img class="ico-gender" src="resources/img/common/ico_female.png" alt="여성">';
-					}
 	
-					userCont+='<span class="bar">/</span>';
-					userCont+='<span>'+member.shortsido+'</span>';
-					userCont+='<span class="mg-l4">'+member.dong+'</span>';
-					userCont+='<span class="bar">/</span>';
-					userCont+='<span class="distance">'+getDistance(member.latitude,member.longitude,${userPos.latitude},${userPos.longitude})+'</span><span>km</span>';
-					userCont+='<span>';
-					if(member.mate_idx > 0){
-						userCont+='<span class="tag-mate">메이트</span>';
-					}else{
-						userCont+='</span></a>';
-					}
+				userCont+='<div class="profile-area">';
+			   	if(member.image != null){
+			   		userCont +='<div class="profile-img" style="background: url(/photo/'+member.image+') center center / cover no-repeat;"></div>';
+			   	}else{
+			   		userCont +='<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>';
+			   	}
+			   	if(member.icon_image != null){
+			   		userCont +='<div class="profile-box" style="background: url(/photo/'+member.icon_image+') center center / 100% 100% no-repeat;"></div>';
+			   	}
+				userCont+='</div>';
+		          
+				userCont+='</div>';
+				userCont+='<span>'+member.nickname+'</span><span class="bar">/</span>';
+				if(member.gender == '남'){
+					userCont+='<img class="ico-gender" src="resources/img/common/ico_male.png" alt="남성">';
+				}else{
+					userCont+='<img class="ico-gender" src="resources/img/common/ico_female.png" alt="여성">';
+				}
+
+				userCont+='<span class="bar">/</span>';
+				userCont+='<span>'+member.shortsido+'</span>';
+				userCont+='<span class="mg-l4">'+member.dong+'</span>';
+				userCont+='<span class="bar">/</span>';
+				userCont+='<span class="distance">'+getDistance(member.latitude,member.longitude,${userPos.latitude},${userPos.longitude})+'</span><span>km</span>';
+				userCont+='<span>';
+				if(member.mate_idx > 0){
+					userCont+='<span class="tag-mate">메이트</span>';
+				}else{
+					userCont+='</span></a>';
+				}
 	
 			});
 		}
@@ -407,9 +342,9 @@
 	}
 	
 	// 팝업 닫기
-	document.getElementsByClassName("close")[0].onclick = function() {
+	$(document).on('click','#profilePopup .close',function(){
 	    document.getElementById("profilePopup").style.display = "none";
-	};
+	});
 
 	
 	// 리스트 최소화
@@ -494,14 +429,17 @@
 		    }
 		    
 		    let profileArea = document.createElement('div'); //overlay content를 생성합니다.
+		   
+		    
+		    
 		    profileArea.className = 'profile-area';
 			if(positions[i].id == '${sessionScope.loginId}'){
 				profileArea.style.background = 'url(/resources/img/common/ico_marker_b.png) center / 100% no-repeat';
 			}
 		    
-		    var image = '/photo/'+positions[i].image;
+		    var image = 'background: url(/photo/'+positions[i].image+') center center / 100% no-repeat;';
 		    if(positions[i].image == ''){
-		    	image = '/resources/img/common/profile.png';
+		    	image = 'background: url(/resources/img/common/profile.png) center center / 100% no-repeat;';
 		    }
 		    var isMate = '';
 		    if(positions[i].mate_idx > 0){
@@ -510,9 +448,9 @@
 		    }
 		    var icon = '';
 		    if(positions[i].icon_image != ''){
-		    	icon = 'background: url(/resources/img/icon/'+positions[i].icon_image+') center center / 100% no-repeat';	
+		    	icon = 'background: url(/photo/'+positions[i].icon_image+') center center / 100% no-repeat;';	
 		    }
-			profileArea.innerHTML = '<div class="profile-box" onclick="" style="'+icon+'"><div class="profile-img" style="background: url('+image+') center center / cover no-repeat;"></div></div>'+isMate;
+			profileArea.innerHTML = '<div class="profile-img" style="'+image+'"></div><div class="profile-box" style="'+icon+'"></div></div>'+isMate;
 
 			wrap.appendChild(profileArea);
 		    

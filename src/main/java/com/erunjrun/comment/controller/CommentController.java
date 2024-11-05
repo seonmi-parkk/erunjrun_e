@@ -53,10 +53,19 @@ public class CommentController {
 		String userId = (String) session.getAttribute("loginId");
 		int add = commentService.addComment(board_idx,content,nickname, userId);
 		
+		try {
+	        if (userId != null && !userId.isEmpty()) {
+	            String board_name = "Y";        
+	            alarm_controller.boardComment(board_idx, userId, board_name);
+	        } else {
+	            System.out.println("userId가 null이거나 비어 있습니다.");
+	        }
+	    } catch (NullPointerException | NumberFormatException e) {
+	        System.out.println("SQL 실행 중 에러 발생: " + e.getMessage());
+	    }
+		
 		result.put("add", add);
 		
-		String board_name = "Y";		
-		alarm_controller.boardComment(board_idx, userId, board_name);
 		
 		return result;
 	}
@@ -166,13 +175,25 @@ public class CommentController {
 	
 	// 자유주제 댓글 등록
 		@PostMapping(value="/addFreeComment")
-		
 		@ResponseBody
 		public Map<String, Object> addFreeComment(int board_idx,String content,HttpSession session,String nickname){
 				
 			Map<String,Object> result = new HashMap<String, Object>();
+			String id = (String) session.getAttribute("loginId");
 			
 			int add = commentService.addFreeComment(board_idx,content,nickname, session);
+			try {
+		        if (id != null && !id.isEmpty()) {
+		            String board_name = "F";
+		            alarm_controller.boardComment(board_idx, id, board_name);
+		        } else {
+		            System.out.println("id가 null이거나 비어 있습니다.");
+		        }
+		    } catch (NullPointerException | NumberFormatException e) {
+		        System.out.println("boardComment 실행 중 에러 발생: " + e.getMessage());
+		    }
+			
+		
 			
 			result.put("add", add);
 			
@@ -190,6 +211,8 @@ public class CommentController {
 			Map<String,Object> result = new HashMap<String, Object>();
 			
 			int add = commentService.addAskComment(board_idx,content, nickname);
+			
+			alarm_controller.askCommentAlarm(board_idx, nickname);
 			
 			result.put("add", add);
 			

@@ -15,72 +15,6 @@
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="/resources/js/summernote.js"></script>
 	<script src="/resources/js/layerPopup.js"></script>
-
-
-    <style>
-       #img_miri {
-            width: 300px;          /* 박스의 너비 설정 */
-            height: 200px;         /* 박스의 높이 설정 */
-            border: 1px solid #EAEAEA;  /* 연한 회색(#d3d3d3) 선 설정 */
-            background-color: transparent;  /* 배경색 없음 */
-        }
-
-        #file {
-            display: none;
-        }
-
-        #dori {
-            width: 1280px;          /* 박스의 너비 설정 */
-            /* 박스의 높이 설정 */
-            border: 1px solid #EAEAEA;  /* 연한 회색(#d3d3d3) 선 설정 */
-            background-color: transparent;
-            margin: 80px auto 0;
-        }
-
-        .content_layout {
-            padding: 20px;
-        }
-        
-        #priorityOption{
-        	margin-left: 45px;
-        }
-        .title2 {
-		    color: var(--main-color);
-		    font-family: "Pretendard Variable", sans-serif;
-		    font-size: 20px;
-		    font-weight: 500;
-		    display: inline-block;
-		    width: 100px;
-		    float: left;
-		    margin-top: 7px;
-		}
-		
-		.layoutbox {
-		    height: 90px;                  /* 이 높이와 동일한 값을 .two의 top에 설정 */
-		    background-color: white;        /* 헤더 영역이 배경과 겹치지 않도록 배경색 추가 */
-		}
-		
-		.btn-parent {
-		    text-align: center;
-		    margin-top: 40px;
-		}
-		
-		input[type="text"] {
-		    width: 85%;
-		    padding: 7px 8px;
-		    margin-right: 4px;
-		    font-size: 16px;
-		    border-radius: 6px;
-		    border: 1px solid var(--input-bd);
-		}
-		
-		#priorityOverlay{
-			margin-left: 30px;
-		}
-		
-		
-
-    </style>
 </head>
 <body>
     <jsp:include page="../header.jsp" />
@@ -90,19 +24,20 @@
 	    <form enctype="multipart/form-data">
 		    <input type="hidden" name="notice_idx" value="${notice_idx}"/>
 		    <input type="hidden" name="crew_idx" value="${result.crew_idx}"/>
+		    <input type="hidden" name="loginId" value="${loginId}"> 
 	        <p class="title1">크루 공지사항 수정</p>
 	
-	        <div id="dori">
+	        <div id="doricn">
 	            <div class="firstbox"> <!-- 레이아웃 구성을 위한 div -->
 	
 	                <div class="boxheigth">
-	                    <span class="title2">제목</span>
-	                    <input type="text" name="subject" value="${result.subject}" required />
+	                    <span class="title2cn">제목</span>
+	                    <input type="text" class="textB" name="subject" value="${result.subject}" required />
 	                </div> <br>
 	
 	
 	                <div class="boxheigth">
-	                    <span class="title2">필독</span>
+	                    <span class="title2cn">필독</span>
 	                    <input type="radio" name="priority" value=""  id="priorityChack"  
 	                    	<c:if test="${result.priority == 1 || result.priority == 2 || result.priority == 3}">checked</c:if>/>
 	                    	<span class="basictex">필독</span>
@@ -120,8 +55,8 @@
 	
 	            </div> <!-- 레이아웃 구성을 위한 div --> <br>
 	
-	            <div class="content_layout"> <!-- 레이아웃 구성을 위한 div -->
-	                <p class="title2">공지 내용</p> <br><br>
+	            <div class="content_layoutcn"> <!-- 레이아웃 구성을 위한 div -->
+	                <p class="title2cn">공지 내용</p> <br><br>
 	                <div class="post-form">
 	                    <textarea name="postContent" id="summernote" maxlength="10000"></textarea>
 	                </div>
@@ -129,14 +64,14 @@
 	
 	        </div>
 	
-	        <div class="btn-parent">
-	            <button type="button" class="btn03-l">수정 취소하기</button>
+	        <div class="btn-parentcn">
+	            <button type="button" class="btn03-l" onclick="location.href='/crewNoticeList/${result.crew_idx}'">수정 취소하기</button>
 	            <button type="button" class="btn01-l" onclick="sendUpdatePost()">공지사항 수정하기</button>
 	        </div>
 	    </form>
 	</div>
     </div>
-    <div class="layoutbox"></div>
+    <div class="layoutbox1"></div>
     
     <jsp:include page="../footer.jsp" />
 </body>
@@ -144,10 +79,8 @@
 <script src="/resources/js/common.js"></script>
 
 <script>
-
 	var notice_idx = $('input[name="notice_idx"]').val();
 	var crew_idx = $('input[name="crew_idx"]').val();
-	console.log(notice_idx);
 	
 	$(document).ready(function() {
 	    // 서버에서 가져온 content 값을 에디터에 삽입
@@ -172,16 +105,12 @@
 	    $('#checkReturn').on('change', function(){
 			$('#priorityOption').css('visibility', 'hidden');
 	    });
-	    
-	    
-	    
-	    
 	});	
-
-	var loginId = '${sessionScope.loginId}';
+	
+	var loginId = $('input[name="loginId"]').val();
 	var overlayCheck = 'Y';
 	var notice_idx = '';
-
+	
 	function sendUpdatePost(){
 		if(overlayCheck === 'Y'){
 			layerPopup('공지사항을 수정하시겠습니까?', '확인', '취소', updatePost, applBtn2Act);
@@ -190,43 +119,40 @@
 		}
 	}
 	
-    function updatePost() {
-        var formData = new FormData($('form')[0]); 
-
-        var content = $('#summernote').summernote('code');
-        
-        var priority = $('#priorityOption').val();
-        priority = priority.replace(/^,|,$/g, '');
-        
-
-        formData.append('id', loginId); 
-        formData.append('content', content); 
+	function updatePost() {
+	    var formData = new FormData($('form')[0]); 
+	    var content = $('#summernote').summernote('code');
+	    var priority = $('#priorityOption').val();
+	    priority = priority.replace(/^,|,$/g, '');
+	    
+	
+	    formData.append('id', loginId); 
+	    formData.append('content', content); 
 		formData.append('priority', priority); 
 		
 		var crew_idx = $('input[name="crew_idx"]').val(); // Hidden input에서 값 가져오기
 	    var notice_idx = $('input[name="notice_idx"]').val();
 		
-        formData.append('crew_idx', crew_idx);
+	    formData.append('crew_idx', crew_idx);
 		formData.append('notice_idx', notice_idx);
 		
 		
-        var tempDom = $('<div>').html(content);
-        var imgsInEditor = [];
-
-        tempDom.find('img').each(function () {
-            var src = $(this).attr('src');
-            if (src && src.includes('/photo-temp/')) {  
-                var filename = src.split('/').pop();  
-                imgsInEditor.push(filename);  
-            }
-        });
-
-        var finalImgs = tempImg.filter(function (temp) {
-            return imgsInEditor.includes(temp.img_new);  
-        });
-
-        formData.append('imgsJson', JSON.stringify(finalImgs));  
-
+	    var tempDom = $('<div>').html(content);
+	    var imgsInEditor = [];
+	
+	    tempDom.find('img').each(function () {
+	        var src = $(this).attr('src');
+	        if (src && src.includes('/photo-temp/')) {  
+	            var filename = src.split('/').pop();  
+	            imgsInEditor.push(filename);  
+	        }
+	    });
+	
+	    var finalImgs = tempImg.filter(function (temp) {
+	        return imgsInEditor.includes(temp.img_new);  
+	    });
+	    formData.append('imgsJson', JSON.stringify(finalImgs));  
+	
 	    $.ajax({
 	        type: 'POST',
 	        url: '/crew/sendNoticeUpdate', 
@@ -245,9 +171,7 @@
 	            removeAlert();
 	        }
 	    });
-       
-        
-    }
+	}
 	
 	function updatePriority(){
 		var priority = $('#priorityOption').val();
@@ -256,36 +180,30 @@
 		
 		$.ajax({
 			type: 'PUT',
-    		url: '/crew/noticePriorityUpdate',
-    		data: {'crew_idx' : crew_idx,
-    				'priority' : priority},
-    		dataType: 'JSON',
-    		success: function(response){
-    			if(response.success){
+			url: '/crew/noticePriorityUpdate',
+			data: {'crew_idx' : crew_idx,
+					'priority' : priority},
+			dataType: 'JSON',
+			success: function(response){
+				if(response.success){
 	    			submitPost();
-    			}
-    			
-    		},error: function(e){
-    			console.log('순위 수정 중 에러 => ', e);
-    		}
+				}
+			},error: function(e){
+				console.log('순위 수정 중 에러 => ', e);
+			}
 		});
-		
 	}
-    
 	
 	
-	
-    
-    
-    $('#priorityOption').on('change', function(){
-    	
-    	 var priority = $('#priorityOption').val();
-    	 console.log(priority);
-    	 
-    	 var crew_idx = $('input[name="crew_idx"]').val();
-    	 console.log(crew_idx);
-    	 
-    	 if(priority === 'pr1' || priority === 'pr2' || priority === 'pr3'){
+	$('#priorityOption').on('change', function(){
+		
+		 var priority = $('#priorityOption').val();
+		 console.log(priority);
+		 
+		 var crew_idx = $('input[name="crew_idx"]').val();
+		 console.log(crew_idx);
+		 
+		 if(priority === 'pr1' || priority === 'pr2' || priority === 'pr3'){
 	    	 $.ajax({
 	    		type: 'POST',
 	    		url: '/crew/priorityOverlay',
@@ -313,19 +231,16 @@
 	    			console.log('중복체크 중 에러 => ', e);
 	    		}
 	    	 });
-    	 }
-    });
-    
-    function locationHref(){
-    	location.href = '/crewNoticeDetail/'+$('input[name="notice_idx"]').val();
-    }
-    
+		 }
+	});
+	
+	function locationHref(){
+		location.href = '/crewNoticeDetail/'+$('input[name="notice_idx"]').val();
+	}
+	
 	// 팝업 취소
 	function applBtn2Act() {
 	    removeAlert(); 
 	}
-	
-    
-    
 </script>
 </html>

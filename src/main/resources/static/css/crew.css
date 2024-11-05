@@ -707,3 +707,86 @@
     	margin-right: 30px;
     	
     }
+    
+    
+    #doricn {
+        width: 1280px;          /* 박스의 너비 설정 */
+        /* 박스의 높이 설정 */
+        border: 1px solid #EAEAEA;  /* 연한 회색(#d3d3d3) 선 설정 */
+        background-color: transparent;
+        margin: 80px auto 0;
+    }
+    
+    .content_layoutcn {
+        padding: 20px;
+    }    
+    #priorityOption{
+      	margin-left: 45px;
+    }
+    
+	.title2cn {
+	    color: var(--main-color);
+	    font-family: "Pretendard Variable", sans-serif;
+	    font-size: 20px;
+	    font-weight: 500;
+	    display: inline-block;
+	    width: 100px;
+	    float: left;
+	    margin-top: 7px;
+	}
+	
+	.layoutbox1 {
+	    height: 90px;                  /* 이 높이와 동일한 값을 .two의 top에 설정 */
+	    background-color: white;        /* 헤더 영역이 배경과 겹치지 않도록 배경색 추가 */
+	}
+
+	.btn-parentcn {
+	    text-align: center;
+	    margin-top: 40px;
+	}	
+	
+	input[type="text"].class="textB" {
+	    width: 85%;
+	    padding: 7px 8px;
+	    margin-right: 4px;
+	    font-size: 16px;
+	    border-radius: 6px;
+	    border: 1px solid var(--input-bd);
+	}	
+		
+	#priorityOverlay{
+		margin-left: 30px;
+	}
+	
+	 #img_miri {
+	     width: 300px;          /* 박스의 너비 설정 */
+	     height: 200px;         /* 박스의 높이 설정 */
+	     border: 1px solid #EAEAEA;  /* 연한 회색(#d3d3d3) 선 설정 */
+	     background-color: transparent;  /* 배경색 없음 */
+	 }
+	 
+	 #file {
+         display: none;
+     }
+     
+        #dori22 {
+            width: 1280px;          /* 박스의 너비 설정 */
+            /* 박스의 높이 설정 */
+            border: 1px solid #EAEAEA;  /* 연한 회색(#d3d3d3) 선 설정 */
+            background-color: transparent;
+            margin: 80px auto 0;
+        }
+        
+        .content_layoutcw {
+            padding: 20px;
+        }
+        
+        .requiredTextcw{
+        	font-size: 12px;
+        	color: #d3d3d3;
+        }
+        
+		.tagImg-01{
+			margin-right: 5px;
+		}
+	 
