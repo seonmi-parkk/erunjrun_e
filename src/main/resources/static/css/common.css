@@ -74,15 +74,21 @@
 	}
 	
 	.header-inner {
+	    width: 100%;
 		max-width : 1300px;
 		margin : 0 auto;
 		display : flex; display: -moz-box; display: -ms-flexbox;
 		-webkit-box-pack: space-between; -ms-flex-pack: space-between; justify-content: space-between;
 		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
+	    position: absolute;
+    	top: 50%;
+	    left: 50%;
+	    transform: translate(-50%, -50%);
 	}
 	
 	header .menu {
 		display : flex; display: -webkit-box; display: -moz-box; display: -ms-flexbox;
+	    margin-bottom: 2px;
 	}
 	
 	header .menu li a{
@@ -132,18 +138,23 @@
 		margin-right : 20px;
 	}
 	
-	header .profile-box {
-		width : 46px;
-		height : 46px;
+	header .profile-area{
+    	width: 44px; height: 44px;
+    	position: relative;
+    	margin-right: 8px;
+    	cursor: pointer;
+    }
+    header .profile-box{
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 44px; height: 44px;
 		margin-right: 2px;
-		display : flex; display: -moz-box; display: -ms-flexbox;
-		-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
-		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
 	}
-	
-	header .profile-box .profile-img{
+	header .profile-img{
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
 		width: 32px; height: 32px;
-		border-radius: 100%;
+		border-radius: 50%;
 	}
 	
 	header .notice{
@@ -166,10 +177,12 @@
 	header .notice .num-box span{
 		color: #fff;
 		font-size: 11px;
+		display: inline-block;
+	    transform: translate(0px, 1px);
 	}
 	
 	header .admin-menu {
-		display : none;
+		display : flex; display: -moz-box; display: -ms-flexbox;
 	}
 	
 	header .admin-mod {
@@ -215,6 +228,10 @@
 		width: 37px;
 		font-size: 14px;
 		font-weight: 600;
+	}
+	header .logout {
+		color: #777;
+		margin-left: 14px;
 	}
 	
 	

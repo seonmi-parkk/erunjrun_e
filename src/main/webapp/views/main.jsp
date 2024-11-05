@@ -432,7 +432,7 @@
 
 var msg = '${msg}';
 if (msg != '') {
-   //alert(msg);
+   alert(msg);
 }
 
 /* 레이어팝업 */
