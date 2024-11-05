@@ -23,6 +23,8 @@ public interface ReportDAO {
 
 	int reportNoticeComment(ReportDTO reportDto);
 
+	CrewNoticeDTO crew(int comment_idx);
+
 
 
 	

@@ -139,6 +139,11 @@ public class ReportService {
 		
 	}
 
+	public CrewNoticeDTO crew(int comment_idx) {
+		
+		return reportDAO.crew(comment_idx);
+	}
+
 
 
 	

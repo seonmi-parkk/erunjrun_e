@@ -84,7 +84,11 @@ public class ReportController {
 	}
 	
 	@GetMapping(value="/notice/{comment_idx}")
-	public String noticeComment(@PathVariable int comment_idx) {
+	public String noticeComment(@PathVariable int comment_idx,Model model) {
+		
+		CrewNoticeDTO crew = reportService.crew(comment_idx);
+		
+		model.addAttribute("crew", crew);
 	
 		return "report/reportForm";
 	}

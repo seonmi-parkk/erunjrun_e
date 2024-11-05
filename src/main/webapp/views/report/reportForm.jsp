@@ -114,16 +114,18 @@
 <form enctype="multipart/form-data">
 <div class="rel">
 	<!-- 게시판 -->
-	<input type="hidden" value="${report.board_idx}" name="board_idx" readonly="readonly">
+	<input type="hidden" value="${report.board_idx}" name="faker" readonly="readonly">
 	<input type="hidden" value="${report.id}" name="reput" readonly="readonly">
 	<input type="hidden" value="${report.code_name}" name="code_name" readonly="readonly">
 	 <!-- 게시판 댓글 -->
 	<input type="hidden" value="${comment.comment_idx}" name="comment_idx" readonly="readonly">
 	<input type="hidden" value="${comment.id}" name="nick" readonly="readonly">
 	<input type="hidden" value="${comment.code_name}" name="code_comment" readonly="readonly">
-	
+	<input type="hidden" value="${comment.board_idx}" name="oner" readonly="readonly">
+	<!-- 크루 공지 댓글 -->
+	<input type="hidden" value="${crew.notice_idx}" name="zeus" readonly="readonly">
 
-	<p class="title1" id="dari"><img style="height: 30;" src="/resources/img/run/진짜신고.png" alt="아이콘">
+	<p class="title1" id="dari"><img style="height: 30;" src="/resources/img/run/진짜신고.png" alt="아이콘" >
 		신고하기
 	<img style="height: 30;" src="/resources/img/run/진짜신고.png" alt="아이콘"></p>
 	<div id="duri">
@@ -176,6 +178,9 @@
 
 </body>
 <script>
+	
+
+	
 	
 </script>
 <script src="/resources/js/reportComment.js"></script>

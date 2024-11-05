@@ -48,9 +48,9 @@ public class CommentService {
 		
 		return commentDao.delete(comment_idx) > 0;
 	}
-	public List<CommentDTO> commentList(int notice_idx) {
+	public List<CommentDTO> commentList(int notice_idx, String order) {
 		
-		return commentDao.commentList(notice_idx);
+		return commentDao.commentList(notice_idx,order);
 	}
 	public MemberDTO nickName(String loginId) {
 		

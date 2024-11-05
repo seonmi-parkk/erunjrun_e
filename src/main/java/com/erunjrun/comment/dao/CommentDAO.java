@@ -22,7 +22,7 @@ public interface CommentDAO {
 
 	int delete(int comment_idx);
 
-	List<CommentDTO> commentList(int notice_idx);
+	List<CommentDTO> commentList(int notice_idx, String order);
 
 	MemberDTO nickName(String loginId);
 

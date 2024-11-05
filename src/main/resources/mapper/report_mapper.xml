@@ -5,13 +5,14 @@
 
 <mapper namespace="com.erunjrun.report.dao.ReportDAO">
 	
+	<!-- 게시글 신고 -->
 	<insert id="report" 
 				useGeneratedKeys="true"
 				keyColumn="report_idx"
 				keyProperty="report_idx"
 				parameterType="com.erunjrun.report.dto.ReportDTO">
-		insert into report_write(id,code_name,content,unlike_id,subject)
-								values(#{id},'R100',#{content},#{unlike_id},#{subject})
+		insert into report_write(id,code_name,content,unlike_id,subject,url)
+								values(#{id},'R100',#{content},#{unlike_id},#{subject},#{url})
 	</insert>
 	
 	<select id="reput" parameterType="int" resultType="com.erunjrun.board.dto.RunBoardDTO">
@@ -30,24 +31,29 @@
 			    WHERE c.comment_idx = #{param1}
 	</select>
 	 
-	
+	<!-- 댓글신고 -->
 	<insert id="reportComment" 
 				useGeneratedKeys="true"
 				keyColumn="report_idx"
 				keyProperty="report_idx"
 				parameterType="com.erunjrun.report.dto.ReportDTO">
-		insert into report_write(id,code_name,content,unlike_id,subject)
-								values(#{id},'R101',#{content},#{unlike_id},#{subject})
+		insert into report_write(id,code_name,content,unlike_id,subject,url)
+								values(#{id},'R101',#{content},#{unlike_id},#{subject},#{url})
 	</insert>
-		
+	
+	<!-- 크루댓글신고 -->	
 	<insert id="reportNoticeComment" 
 				useGeneratedKeys="true"
 				keyColumn="report_idx"
 				keyProperty="report_idx"
 				parameterType="com.erunjrun.report.dto.ReportDTO">
-		insert into report_write(id,code_name,content,unlike_id,subject)
-								values(#{id},'R101',#{content},#{unlike_id},#{subject})
+		insert into report_write(id,code_name,content,unlike_id,subject,url)
+								values(#{id},'R101',#{content},#{unlike_id},#{subject},#{url})
 	</insert>
+	
+	<select id="crew" resultType="com.erunjrun.crew.dto.CrewNoticeDTO">
+		SELECT * FROM crew_notice_comment WHERE comment_idx = #{comment_idx}
+	</select>
 	
 	
 

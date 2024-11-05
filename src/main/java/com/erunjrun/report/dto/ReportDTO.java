@@ -17,7 +17,7 @@ public class ReportDTO {
 	private String unlike_id;
 	private String use_yn;
 	private int img_idx;
-	
+	private String url;
 	
 	// 게시판 테이블
 	private String board_idx;
@@ -28,7 +28,15 @@ public class ReportDTO {
 	
 	
 	
+	
+	
 
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
 	public List<ImageDTO> getImgs() {
 		return imgs;
 	}

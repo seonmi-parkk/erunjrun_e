@@ -283,7 +283,10 @@
 					</p>
 				</div>
 				<div style="text-align: right;" class="duri">
-					<div id="butt"class=btn03-s>비활성화</div>					
+				<c:if test="${sessionScope.adminYn == 'Y'}">
+					<div id="butt"class=btn03-s>비활성화</div>
+				</c:if>
+										
 					<p class="title3-2">${info.create_date}</p>
 					<span class="title3-3">조회수 ${info.bHit}</span>
 					<span class="title3-4"><img src="/resources/img/run/image 14.png" alt="댓글"> 댓글 ${coun}</span>
@@ -312,11 +315,23 @@
     		 </div>
 	    	<div class="com">
 	    		<div>
-	    			<div class="nick">
-	    			<div class="profile-area">
+	    			<c:choose>
+	    				<c:when test="${sessionScope.adminYn == 'Y'}">
+	    					<div class="nick">
+	    					<div class="profile-area">
+							<div class="profile-img" style="background: url(/resources/img/common/admin_profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
+	    			   			${sessionScope.loginId}
+							</div>
+	    				</c:when>
+	    				<c:otherwise>
+	    					<div class="nick">
+	    					<div class="profile-area">
 							<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
-	    			   ${nickname.nickname}
-					</div>
+	    			   			${nickname.nickname}
+							</div>
+	    				</c:otherwise>
+	    			</c:choose>
+	    			
 		    		<input type="text" class="tex">
 	    		</div>
 	    		<div>
@@ -508,6 +523,7 @@
 	 	
 		function commentDraw(list) {
 			
+			
 			var content ='';
 			list.forEach(function(view,idx){
 				var nickName = '${nickname.nickname}';
@@ -529,7 +545,9 @@
 				if(view.use_yn == 'Y'){
 					content +='<div class="ard" id="dis">';					
 					content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
-					content +='<div id ="bih" class=btn03-s>비활성화</div>';
+					if(${sessionScope.adminYn == 'Y'}){
+						content +='<div id ="bih" class=btn03-s>비활성화</div>';
+					}
 					content += '<div class="action-buttons" style="display:none; cursor: pointer;" id="actions-' + comment_idx + '">';
 					if(nickName == addName){
 						content +='<div class="suj1 btn-popup" style=" cursor: pointer;" onclick="update('+comment_idx+')"  >수정</div>';
@@ -539,7 +557,7 @@
 					}
 					
 				}
-				content += '</div>';
+				content +='</div>';
 				content +='</div>';
 				content +='</div>';
 				content +='</div>';

@@ -7,13 +7,13 @@
 		
 		var userId = $("input[name='nick']").val();
 		var code_name = $("input[name='code_comment']").val();
-		var comment_idx = $("input[name='comment_idx']").val();
+		var board_idx = $("input[name='oner']").val();
 		
 		console.log('신고한', unlike_id);
 		
 		console.log('신고받은', userId);
 		console.log('코드네임', code_name);
-		console.log('댓글 번호', comment_idx);
+		console.log('댓글 번호', board_idx);
 		
 	
 		var formData = new FormData($('form')[0]); 
@@ -24,13 +24,26 @@
             console.log(fileInput);
         }
 		
-		
+	
 		
 		var subject = $("input[name='subject']").text();
         var content = $("input[name='content']").text();
         var unlike_id = $('.user').text();
 		var userId = $("input[name='nick']").val();
-		var comment_idx = $("input[name='comment_idx']").val();
+		var board_idx = $("input[name='oner']").val();
+		var url = '/runBoardDetail/'+board_idx;
+		var path = '/freeBoardDetail/'+board_idx;
+		
+		
+		var code_name = $("input[name='code_comment']").val();
+		
+		if(code_name == 'B100'){
+			formData.append('url',url);
+		}else{
+			formData.append('url',path);
+		}
+		
+		console.log('경로 : ',url);
 		
         formData.append('id',userId);  
         formData.append('unlike_id',unlike_id);   

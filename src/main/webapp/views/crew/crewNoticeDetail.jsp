@@ -71,9 +71,11 @@
 			transform: translateY(0px);
 			font-weight: 700;
     		font-size: 24px;
+   			font-family: "Pretendard Variable", Pretendard;
+    	}
+    	#subject{
     		margin-top: -25px;
     		margin-bottom: 25px;
-   			font-family: "Pretendard Variable", Pretendard;
     	}
     	.ori{
 
@@ -160,7 +162,8 @@
 		.nick{
 			margin-left: 18;
    		 	margin-bottom: 7px;
-   		 	transform: translate(10px, -2px);
+   		 	display: flex;
+    		align-items: center;
 		}
 
 		.date{
@@ -303,8 +306,26 @@
 			width: 44px; height: 44px;
 			margin-right: 2px;
 		}
-		.title3-1{
 		
+		#dori .profile-area{
+    	width: 44px; height: 44px;
+    	position: relative;
+	    }
+	    #dori .profile-box {
+			position: absolute; top: 50%; left: 50%;
+			transform: translate(-50%, -50%);
+			width: 44px; height: 44px;
+			margin-right: 2px;
+		}
+		#dori .profile-img {
+			position: absolute; top: 50%; left: 50%;
+			transform: translate(-50%, -50%);
+			width: 33px; height: 33px;
+			border-radius: 50%;
+		}
+		.are{
+			display: flex;
+			align-items: flex-end;
 		}
 
 		
@@ -340,8 +361,8 @@
 			</div>
 			
 	    	<div class="supa">
-		    	<span id="title2-1" class="title21">등록순</span>
-	    		<span id="title2-2" class="title21">최신순</span>
+		    	<span id="title2-1" class="title21" onclick="commentCall('ASC')" style="cursor: pointer;">등록순</span>
+	    		<span id="title2-2" class="title21" onclick="commentCall('DESC')" style="cursor: pointer;">최신순</span>
 	    	</div>
 	    	
 	    	<!-- 댓글 리스트 -->
@@ -411,6 +432,7 @@
 			var result = response.result;
 			crew_idx = result.crew_idx;
 			var nickName = response.nickname
+			var admin = '${sessionScope.adminYn}';
 			
 			$('#subject').html(result.subject);
 			
@@ -429,7 +451,12 @@
 			$('#hit').html(result.hit);
 			$('#create_date').html(result.create_date);
 			
-			$('#name').html('<img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+nickName.nickname);
+			if(admin == 'Y'){
+				$('#name').html('<div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/admin_profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+result.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+${sessionScope.loginId});
+			}else{
+				$('#name').html('<div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+result.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+nickName.nickname);
+			}			
+			
 			
 			if(loginId === result.id){
 				console.log('같은데?');
@@ -512,9 +539,9 @@
 	    document.getElementById("profilePopup").style.display = "none";
 	};	
 	
-	commentCall();
+	commentCall('ASC');
 	
-	function commentCall() {
+	function commentCall(order = 'DESC') {
 		
 		var notice_idx = $('input[name="notice_idx"]').val();
 		console.log("공지사항 no :",notice_idx);
@@ -522,7 +549,7 @@
 		$.ajax({
         	type: "POST",
             url: "/crewComment/" + notice_idx ,
-            data: { 'notice_idx': notice_idx },
+            data: { 'notice_idx': notice_idx, 'order': order },
             datatype: 'JSON',
             success: function(data) {
                 console.log('댓글 불러오기');
@@ -544,13 +571,14 @@
 			var id = view.id
 			console.log('아이디나오냐',id);
 			var comment_idx = view.comment_idx;
+			var admin = '${sessionScope.adminYn}';
 			
 			
 			content +='<div id="sort-area">';
 			content +='<input type="hidden" name="user_id" value="'+id+'"/>';
 			content +='<div class="sort" id="sort-update'+comment_idx+'">';
 			content +='<div>';
-			content +='<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+view.nickname+'</div>';
+			content +='<div class="nick"><div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+view.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+view.nickname+'</div>';
 			if(view.use_yn == 'N'){
 				content +='<p class="coco" style="color: #999;" >(삭제된 댓글 입니다.)</p>';
 			}else{
@@ -561,7 +589,11 @@
 			if(view.use_yn == 'Y'){
 				content +='<div class="ard" id="dis">';					
 				content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
-				content +='<div id ="bih" class=btn03-s>비활성화</div>';
+				
+				if(admin == 'Y'){
+					content +='<div id ="bih" class=btn03-s>비활성화</div>';
+				}
+				
 				content += '<div class="action-buttons" style="display:none; cursor: pointer;" id="actions-' + comment_idx + '">';
 				if(nickName == addName){
 					content +='<div class="suj1 btn-popup" style=" cursor: pointer;" onclick="update('+comment_idx+')"  >수정</div>';

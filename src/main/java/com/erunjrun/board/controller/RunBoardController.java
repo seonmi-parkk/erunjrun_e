@@ -109,8 +109,18 @@ public class RunBoardController {
 	
 	
 	@GetMapping(value="/runBoardWrite")
-	public String write() {
-		return "runBoard/runBoardWrite";
+	public String write(HttpSession session) {
+		
+		String page ="";
+		String userId = (String) session.getAttribute("loginId");
+		if(userId == null) {
+			page = "member/login";
+		}else {
+			page ="runBoard/runBoardWrite";
+		}
+		
+		return page;
+		
 	}
 	
     // 이미지 저장
@@ -301,8 +311,17 @@ public class RunBoardController {
          
          model.addAttribute("post", run);
          model.addAttribute("mapData", mapDataJson); // 경로 데이터도 함께 전달
+         
+        String page ="";
+ 		String userId = (String) session.getAttribute("loginId");
+ 		if(userId == null) {
+ 			page = "member/login";
+ 		}else {
+ 			page ="runBoard/runBoardUpdate";
+ 		}
+ 		
+ 		return page;
     	
-    	return "runBoard/runBoardUpdate";
     }
     
     //게시글 수정 요청

@@ -50,6 +50,7 @@ public class AdminController {
                session.setAttribute("loginId", id); // 로그인 ID 저장
                session.setAttribute("authority", admin_service.getAuthority(id)); // 권한 저장
                session.setAttribute("requestIp", requestIp); // 요청 IP 저장
+               session.setAttribute("adminYn", "Y"); // 로그인시 관리자 여부
             } else {
                model.addAttribute("msg", "허용되지 않은 IP에서 로그인 시도입니다.");
             }
