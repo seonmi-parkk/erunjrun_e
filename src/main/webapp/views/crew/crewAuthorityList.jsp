@@ -69,7 +69,7 @@
     	background: #fff;
     	border-radius: 10px;
     }
-	   .profileDetail {
+	.profileDetail {
    	   position: relative;
    	   width: 760px;
        padding: 34px 50px 10px;
@@ -112,6 +112,9 @@
         cursor: pointer;
         font-size: 14px;
     }
+     table td{
+    	position: relative;
+    } 
     
 		/* 프로필 컨테이너 */
 		table tbody tr td.profileContainer {
@@ -133,7 +136,17 @@
 		.profile-box2 {
 		    position: absolute;
 		    top: -8px; /* profileBox와 같은 높이에 위치 */
-		    left: 10px; /* profileBox 오른쪽에 배치 */
+		    left: 78px; /* profileBox 오른쪽에 배치 */
+		    width: 44px;
+		    height: 44px;
+		    margin-right: 2px;
+		    transform: translateY(50%); /* 필요 시 위치 조정 */
+		} 
+		
+		.profile-box3 {
+		    position: absolute;
+		    top: -4px; /* profileBox와 같은 높이에 위치 */
+		    left: 65px; /* profileBox 오른쪽에 배치 */
 		    width: 44px;
 		    height: 44px;
 		    margin-right: 2px;
@@ -276,7 +289,6 @@
 			
 			var member_profileImg = '';
 			var leader_profileImg = '';
-	        var member_icon_img = '';
 	        var leader_icon_img = '';
 	        
 	        if(item.member_image != null && item.member_image != ''){
@@ -291,12 +303,13 @@
 				leader_profileImg = '/resources/img/common/profile.png';
 			}
 	        
+	        var member_icon_img = '';
 			if(item.member_icon_image != null && item.member_icon_image !== ''){
 				member_icon_img = 'background: url(/resources/img/icon/' + item.member_icon_image + ') center center / 100% 100% no-repeat;';
 			}
 			
-			if(item.leader_icon_img != null && item.leader_icon_img !== ''){
-				leader_icon_img = 'background: url(/resources/img/icon/' + item.leader_icon_img + ') center center / 100% 100% no-repeat;';
+			if(item.leader_icon_image != null && item.leader_icon_img !== ''){
+				leader_icon_img = 'background: url(/resources/img/icon/' + item.leader_icon_image + ') center center / 100% 100% no-repeat;';
 			}
             
             // 프로필 + 닉네임 (나중에 연결 필요)
@@ -305,7 +318,7 @@
             + '<a class="user" style="cursor: pointer;"  data-id="' + item.member_id + '">'
             +item.member_nickname+'</a></td>';
             content +='<td class="profileContainer"><img src="'+leader_profileImg+'" width="32px" class="profileBox"/>'
-            + '<div class="profile-box2" style="' + leader_icon_img + '"></div>'
+            + '<div class="profile-box3" style="' + leader_icon_img + '"></div>'
             + '<a class="user" style="cursor: pointer;"  data-id="' + item.leader_id + '">'
             +item.leader_nickname+'</a></td>';
             
@@ -349,9 +362,9 @@
 	}
 	
 	// 팝업 닫기
-	document.getElementsByClassName("close")[0].onclick = function() {
-	    document.getElementById("profilePopup").style.display = "none";
-	};	
+	$(document).on('click','#profilePopup .close',function(){
+       document.getElementById("profilePopup").style.display = "none";
+   });
 
 </script>
 </html>

@@ -544,15 +544,15 @@ public class CrewController {
 	public Map<String, Object> crewNoticeDetail(@RequestParam int notice_idx,HttpSession session){
 		
 		String loginId = (String) session.getAttribute("loginId");
-		MemberDTO nickname = null;
-    	if(loginId != null) {
-    		nickname = crew_service.nickName(loginId);
-    		logger.info("닉네임 맞냐 :"+nickname.toString());
-    	}
+		/*
+		 * MemberDTO nickname = null; if(loginId != null) { nickname =
+		 * crew_service.nickName(loginId); logger.info("닉네임 맞냐 :"+nickname.toString());
+		 * }
+		 */
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", crew_service.crewNoticeDetail(notice_idx));
-		resultMap.put("nickname", nickname);
+//		resultMap.put("nickname", nickname);
 		
 		return resultMap;
 	}
