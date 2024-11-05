@@ -199,11 +199,11 @@ h3 {
 }
 
 #profilePopup {
-    width: fit-content;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 996;
+	width: fit-content;
+	top: -10px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 996;
 }
 </style>
 </head>
@@ -252,156 +252,148 @@ h3 {
 					메이트)</p>
 			</div>
 			<div class="friend-list">
-				<c:forEach var="friend" items="${friendList}">
-					<div class="card" data-id="${friend.unlike_id}">
-						<img class="friend-image" src="${friend.image != null && !friend.image.trim().isEmpty() ? '/photo/' + friend.image : 'resources/img/common/profile.png'}" alt="친구 이미지" />
-						<p class="friend-name user">
-							<c:choose>
-								 <c:when test="${sessionScope.loginId == friend.id}">
-                        <!-- 사용자의 ID가 friend.id인 경우 -->
-                        ${friend.unlike_id} <!-- 상대방의 ID 출력 -->
-                    </c:when>
-                    <c:otherwise>
-                        <!-- 사용자의 ID가 friend.unlike_id인 경우 -->
-                        ${friend.id} <!-- 상대방의 ID 출력 -->
-								</c:otherwise>
-							</c:choose>
-						</p>
-					</div>
-				</c:forEach>
-			</div>
-			<div class="no-friends-message"
-				style="display: none; text-align: center; margin-top: -100px;">
-				메이트가 없어요 ㅜ_ㅜ.</div>
-			<div class="pagination-container">
-				<nav aria-label="Page navigation">
-					<ul class="pagination" id="pagination"></ul>
-				</nav>
-			</div>
-		</div>
-	</div>
-	<!-- 모달 구조 -->
-	<div id="profilePopup" class="modal">
-		<div class="modal-content">
-			<span class="close">&times;</span>
-			<div id="PopupBody">
-				<!-- 프로필 내용이 여기에 동적으로 추가됩니다 -->
-			</div>
-		</div>
-	</div>
-	<jsp:include page="../footer.jsp" />
+                <c:forEach var="friend" items="${friendList}">
+                    <div class="card" data-id="${friend.id}" onclick="openProfile('${friend.id}')">
+                        <img class="friend-image"
+                             src="${friend.image != null && !friend.image.trim().isEmpty() ? '/photo/' + friend.image : 'resources/img/common/profile.png'}"
+                             alt="친구 이미지" />
+                        <p class="friend-name user">
+                            <c:choose>
+                                <c:when test="${sessionScope.loginId == friend.id}">
+                                    <!-- 사용자의 ID가 friend.id인 경우 (자기 자신) -->
+                                    ${friend.unlike_id} <!-- 상대방의 ID 출력 -->
+                                </c:when>
+                                <c:otherwise>
+                                    <!-- 사용자의 ID가 friend.unlike_id인 경우 -->
+                                    ${friend.id} <!-- 상대방의 ID 출력 -->
+                                </c:otherwise>
+                            </c:choose>
+                        </p>
+                    </div>
+                </c:forEach>
+            </div>
+            <div class="no-friends-message" style="display: none; text-align: center; margin-top: -100px;">
+                메이트가 없어요 ㅜ_ㅜ.
+            </div>
+            <div class="pagination-container">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination" id="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div id="profilePopup" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="PopupBody">
+                <!-- 프로필 내용이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+    </div>
+    <jsp:include page="../footer.jsp" />
 </body>
 <script>
-$(document).ready(function() {
-    loadFriendList(1); // 첫 페이지 로드
+    $(document).ready(function() {
+        loadFriendList(1); // 첫 페이지 로드
 
-    // 친구 리스트를 불러오는 AJAX 호출
-    function loadFriendList(page) {
-    $.ajax({
-        type: 'GET',
-        url: 'myMateList.ajax',
-        data: { page: page, cnt: 8 },
-        dataType: 'JSON',
-        success: function(data) {
-            console.log("AJAX 요청 성공:", data);
-            if (data.error) {
-                alert(data.error);
-            } else {
-                $('.friend-list').empty(); // 기존 리스트 초기화
-                $('.no-friends-message').hide(); // 초기에는 메시지 숨김
-                if (data.list.length === 0) {
-                    $('.no-friends-message').show(); // 데이터가 없을 경우 메시지 표시
-                } else {
-                	$.each(data.list, function(index, friend) {
-                	    var imageSrc = (friend.image && friend.image.trim()) ? '/photo/' + friend.image : 'resources/img/common/profile.png';
-                	    
-                	    // 로그인한 사용자 ID를 세션에서 가져옵니다 (예: JavaScript에서 직접 접근 가능하도록 변수를 선언)
-                	    var currentUserId = '${sessionScope.loginId}'; // JSP에서 세션 변수 가져오기
-                	    
-                	    var friendName;
-                	    if (currentUserId === friend.id) {
-                	        // 사용자가 friend.id인 경우 (상대방이 신청한 경우)
-                	        friendName = friend.unlike_id; // 상대방의 ID
-                	    } else {
-                	        // 사용자가 friend.unlike_id인 경우 (사용자가 신청한 경우)
-                	        friendName = friend.id; // 상대방의 ID
-                	    }
+        // 친구 리스트를 불러오는 AJAX 호출
+        function loadFriendList(page) {
+            $.ajax({
+                type: 'GET',
+                url: 'myMateList.ajax',
+                data: { page: page, cnt: 8 },
+                dataType: 'JSON',
+                success: function(data) {
+                    console.log("AJAX 요청 성공:", data);
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        $('.friend-list').empty(); // 기존 리스트 초기화
+                        $('.no-friends-message').hide(); // 초기에는 메시지 숨김
+                        if (data.list.length === 0) {
+                            $('.no-friends-message').show(); // 데이터가 없을 경우 메시지 표시
+                        } else {
+                            $.each(data.list, function(index, friend) {
+                                var imageSrc = (friend.image && friend.image.trim()) ? '/photo/' + friend.image : 'resources/img/common/profile.png';
+                                var currentUserId = '${sessionScope.loginId}'; // JSP에서 세션 변수 가져오기
+                                var friendName;
 
-                	    var friendCard = '<div class="card" data-id="' + friend.unlike_id + '">' +
-                        '<input type="hidden" name="toUserId" value="' + friend.unlike_id + '" />' +
-                        '<img class="friend-image" src="' + imageSrc + '" alt="친구 이미지" />' +
-                        '<p class="friend-name user">' + (friendName ? friendName : '이름 없음') + '</p>' +
-                     '</div>';
+                                if (currentUserId === friend.id) {
+                                    friendName = friend.unlike_id; // 상대방의 ID
+                                } else {
+                                    friendName = friend.id; // 상대방의 ID
+                                }
 
-                	    $('.friend-list').append(friendCard);
-                	});
-                    $('.no-friends-message').hide(); // 데이터가 있을 경우 메시지 숨김
-                    // 페이지네이션 생성
-                    setupPagination(data.totalCount, page);
-                    $('.pagination-container').show(); // 데이터가 있을 때 페이지네이션 표시           
+                                var friendCard = '<div class="card" data-id="' + friend.id + '">' +
+                                    '<input type="hidden" name="toUserId" value="' + friend.id + '" />' +
+                                    '<img class="friend-image" src="' + imageSrc + '" alt="친구 이미지" />' +
+                                    '<p class="friend-name user">' + (friendName ? friendName : '이름 없음') + '</p>' +
+                                '</div>';
+
+                                $('.friend-list').append(friendCard);
+                            });
+                            $('.no-friends-message').hide(); // 데이터가 있을 경우 메시지 숨김
+                            // 페이지네이션 생성
+                            setupPagination(data.totalCount, page);
+                            $('.pagination-container').show(); // 데이터가 있을 때 페이지네이션 표시           
+                        }
+                    }
+                },
+                error: function(e) {
+                    console.error('친구 리스트를 불러오는 중 오류 발생:', e);
                 }
+            });
+        }
+
+        // 페이지네이션 설정
+        function setupPagination(totalCount, currentPage) {
+            var totalPages = Math.ceil(totalCount / 8); // 페이지 수 계산
+            if (totalPages === 0) {
+                totalPages = 1; // 기본적으로 1페이지 설정
             }
-        },
-        error: function(e) {
-            console.error('친구 리스트를 불러오는 중 오류 발생:', e);
+
+            $('#pagination').twbsPagination({
+                totalPages: totalPages,
+                startPage: currentPage,
+                visiblePages: 5,
+                onPageClick: function(evt, page) {
+                    loadFriendList(page); // 선택한 페이지의 친구 리스트 로드
+                }
+            });
         }
-    });
-}
 
-    // 페이지네이션 설정
-    function setupPagination(totalCount, currentPage) {
-    	var totalPages = Math.ceil(totalCount / 8); // 페이지 수 계산
+        // 친구 이름 클릭 시, 상대방의 프로필을 여는 함수
+        $(document).on('click', '.user', function() {
+            var toUserId = $(this).closest('.card').data('id'); // data-id로 상대방의 ID 가져오기
+            console.log('toUserId:', toUserId);
+            openProfile(toUserId); // 클릭한 친구의 프로필 열기
+        });
 
-    // totalPages가 0이라도 1페이지 버튼을 표시
-    if (totalPages === 0) {
-        totalPages = 1; // 기본적으로 1페이지 설정
-    }
+        // 운동프로필 레이어 팝업 열기
+        function openProfile(toUserId) {
+            var modal = document.getElementById("profilePopup");
+            var PopupBody = document.getElementById("PopupBody");
 
-    $('#pagination').twbsPagination({
-        totalPages: totalPages,
-        startPage: currentPage,
-        visiblePages: 5,
-        onPageClick: function(evt, page) {
-            loadFriendList(page); // 선택한 페이지의 친구 리스트 로드
+            // AJAX 요청
+            $.ajax({
+                url: "/mate/" + toUserId, // 상대방 ID에 해당하는 프로필 정보 요청
+                method: "GET",
+                success: function(response) {
+                    PopupBody.innerHTML = response; // 응답을 모달에 넣기
+                    modal.style.display = "block"; // 모달 열기
+
+                    // JS 파일을 동적으로 로드
+                    var script = document.createElement('script');
+                    script.src = '/resources/js/profileDetail.js'; // 프로필 디테일 JS 파일 로드
+                    document.body.appendChild(script);
+                }
+            });
         }
-    });
-}
 
- // 클릭시 운동프로필 레이어 팝업
-	$(document).on('click', '.user', function() {
-    var toUserId = $(this).closest('.card').find('input[name="toUserId"]').val();
-    console.log('toUserId', toUserId);
-    openProfile(toUserId);
-});
-	
-	
-	// 운동프로필 레이어 팝업 열기
-	function openProfile(toUserId){
-		var modal = document.getElementById("profilePopup");
-	    var PopupBody = document.getElementById("PopupBody");
-		
-	    // AJAX 요청
-	    var xhr = new XMLHttpRequest();
-	    xhr.open("GET", "/mate/"+toUserId, true);
-	    xhr.onreadystatechange = function() {
-	        if (xhr.readyState === 4 && xhr.status === 200) {
-	            PopupBody.innerHTML = xhr.responseText; // 응답을 모달에 넣기
-	            modal.style.display = "block"; // 모달 열기
-	            
-	         	// JS 파일을 동적으로 로드
-	            var script = document.createElement('script');
-	            script.src = '/resources/js/profileDetail.js'; 
-	            document.body.appendChild(script);
-	        }
-	    };
-	    xhr.send();
-	}
-	
-	// 팝업 닫기
-	document.getElementsByClassName("close")[0].onclick = function() {
-	    document.getElementById("profilePopup").style.display = "none";
-	};
-});
-	
+        // 팝업 닫기
+        $(document).on('click', '.close', function() {
+            document.getElementById("profilePopup").style.display = "none";
+        });
+    });
 </script>
 </html>

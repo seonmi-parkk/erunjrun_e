@@ -580,6 +580,28 @@ public class MypageController {
 
 		return result;
 	}
+	
+	@PostMapping(value = "/iconImageUpdate.ajax")
+	@ResponseBody
+	public Map<String, Object> iconImageUpdate(@RequestParam("iconId") Long iconId, HttpSession session, Model model) {
+	    String id = (String) session.getAttribute("loginId");
+
+	    Map<String, Object> response = new HashMap<>();
+
+	    if (id == null) {
+	        response.put("error", "로그인이 필요합니다.");
+	        return response; // 로그인되지 않은 경우 에러 메시지 반환
+	    }
+	    boolean updateSuccess = mypageService.iconImageUpdate(iconId, id);
+
+	    if (updateSuccess) {
+	        response.put("success", true);  // 아이콘 이미지 업데이트 성공
+	    } else {
+	        response.put("error", "아이콘 이미지 변경 실패");  // 아이콘 이미지 업데이트 실패
+	    }
+
+	    return response;  // 결과를 JSON 형태로 반환
+	}
 
 	@GetMapping(value = "/myBoardListView")
 	public String myBoardListView(HttpSession session, Model model) {
@@ -741,7 +763,7 @@ public class MypageController {
 		logger.info("Result from service: {}", result);
 		return result;
 	}
-
+	
 	@GetMapping(value = "/crewMasterMessageListView")
 	public String crewMasterMessageListView(HttpSession session, Model model) {
 

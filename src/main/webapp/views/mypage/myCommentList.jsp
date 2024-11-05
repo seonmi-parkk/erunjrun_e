@@ -269,7 +269,7 @@ h3 {
                 if (view) {
                     content += '<tr>';
                     content += '<td>' + view.comment_idx + '</td>'; // 댓글 번호
-                    content += '<td>' + view.content + '</td>'; // 댓글 내용
+                    content += '<td><a href="viewBoard?board_idx=' + view.board_idx + '#comment-' + view.comment_idx + '">' + view.content + '</a></td>'; // 댓글 내용에 링크 추가
                     content += '<td>' + new Date(view.create_date).toLocaleString('ko-KR') + '</td>'; // 작성일
                     content += '</tr>';
                 }

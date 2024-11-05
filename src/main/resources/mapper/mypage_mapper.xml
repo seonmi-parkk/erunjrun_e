@@ -87,7 +87,8 @@
 	</update>
 
 	<insert id="firstExerciseProfile" parameterType="map">
-		INSERT INTO profile (
+		INSERT INTO
+		profile (
 		id,
 		image,
 		content,
@@ -299,14 +300,27 @@
 	</delete>
 
 	<select id="myIconList" resultType="map">
-		SELECT icon_idx, buy_date, buy_idx
-		FROM icon_buy
-		WHERE id = #{id}
-		ORDER BY buy_date DESC
-		LIMIT #{limit}
-		OFFSET #{offset}
+		SELECT
+		ib.icon_idx,
+		ib.buy_date,
+		ib.buy_idx,
+		i.icon_name,
+		i.image
+		FROM
+		icon_buy ib
+		JOIN
+		icon i ON
+		ib.icon_idx = i.icon_idx
+		WHERE
+		ib.id = #{id}
+		ORDER BY
+		ib.buy_date DESC
+		LIMIT
+		#{limit}
+		OFFSET
+		#{offset}
 	</select>
-	
+
 	<select id="countMyIconList" resultType="int">
 		SELECT CEIL(COUNT(*)
 		/#{cnt})
@@ -315,6 +329,17 @@
 		icon_buy
 		WHERE id = #{id}
 	</select>
+
+	<update id="iconImageUpdate" parameterType="map">
+		UPDATE member
+		SET
+		icon_image = (
+		SELECT image
+		FROM icon
+		WHERE icon.icon_idx = #{iconId}
+		)
+		WHERE id = #{id};
+	</update>
 
 	<select id="myMateList" resultType="map">
 		SELECT id, unlike_id,
@@ -425,19 +450,23 @@
 	</select>
 
 	<select id="crewMasterMessageList" resultType="map">
-		SELECT ccl.chat_idx,
+		SELECT
+		ccl.chat_idx,
 		CASE
 		WHEN ccl.id = u1.id THEN u2.id
 		ELSE u1.id
 		END AS other_id,
-		MAX(ccc.create_date) AS message_date
+		MAX(ccc.create_date) AS message_date,
+		cc.crew_idx
 		FROM crew_chat_link ccl
 		JOIN crew_chat cc ON ccl.chat_idx = cc.chat_idx
 		JOIN crew_chat_content ccc ON ccl.chat_idx = ccc.chat_idx
 		JOIN crew_chat_link u1 ON u1.chat_idx = cc.chat_idx
 		JOIN crew_chat_link u2 ON u2.chat_idx = cc.chat_idx AND u2.id != ccl.id
 		WHERE ccl.id = #{id}
-		GROUP BY ccl.chat_idx, other_id
+		AND cc.code_cp = 'p'
+		GROUP BY
+		ccl.chat_idx, other_id, cc.crew_idx -- crew_idx를 GROUP BY에 추가
 		ORDER BY message_date DESC
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
@@ -554,9 +583,10 @@
 		FROM
 		interest_member im
 		JOIN
-		member m ON im.unlike_id = m.id 
+		member m ON im.unlike_id = m.id
 		WHERE
-		im.id = #{id}
+		im.id =
+		#{id}
 		ORDER BY
 		request_date DESC
 		LIMIT #{limit} OFFSET #{offset}
@@ -582,9 +612,9 @@
 		FROM
 		block_member bm
 		JOIN
-		member m ON bm.unlike_id = m.id 
+		member m ON bm.id = m.id
 		WHERE
-		bm.id = #{id} 
+		bm.unlike_id = #{id}
 		ORDER BY
 		block_date
 		DESC
@@ -595,8 +625,7 @@
 		SELECT
 		CEIL(COUNT(*) / #{cnt}) AS pages
 		FROM block_member
-		WHERE block_member.id
-		= #{id}
+		WHERE block_member.unlike_id = #{id}
 	</select>
 
 </mapper>   	
