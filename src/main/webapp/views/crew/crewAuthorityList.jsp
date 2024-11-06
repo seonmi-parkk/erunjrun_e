@@ -173,6 +173,7 @@
 <body>
 	<jsp:include page="../header.jsp"/>
 	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
+	<input type="hidden" name="leaderId" value="${leaderId}"/>
 	<div class="inner">
 	<p class="title1" onclick="location.href='/crewManagerList/${crew_idx}'">크루장 권한 기록</p>
 	<form id="searchForm">
@@ -224,8 +225,18 @@
 <script>
 	var firstPage = 1;
 	var paginationInitialized = false;
+	var leaderId = $('input[name="leaderId"]').val();
+	$(document).ready(function(){
+		if(leaderId !== loginId){
+			alert('크루장만 접근 가능합니다');
+			location.href='/';
+		}else{
+			pageCall(firstPage);
+			
+		}
 	
-	pageCall(firstPage);
+	}); 
+	
 	
 	// 검색 폼 제출 시 AJAX 호출
 	$('#searchForm').on('submit', function(event) {

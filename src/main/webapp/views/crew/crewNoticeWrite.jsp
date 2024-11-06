@@ -24,6 +24,7 @@
             <form enctype="multipart/form-data">
                 <p class="title1">크루 공지사항 등록</p>
                 <input type="hidden" name="crew_idx" value="${crew_idx}"/>
+                <input type="hidden" name="leaderId" value="${leaderId}"/>
 
                 <div id="doricn">
                     <div class="firstbox"> <!-- 레이아웃 구성을 위한 div -->
@@ -80,6 +81,14 @@
 	var overlayCheck = 'Y';
 	var notice_idx = '';
 	var crew_idx = $('input[name="crew_idx"]').val();
+	var leaderId = $('input[name="leaderId"]').val();
+	$(document).ready(function(){
+		if(leaderId !== loginId){
+			alert('크루장만 접근 가능합니다');
+			location.href='/';
+		}
+	
+	});
 	
 	function sendSubmitPost(){
 		if(overlayCheck === 'Y'){

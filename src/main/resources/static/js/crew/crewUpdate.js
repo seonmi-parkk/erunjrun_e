@@ -2,12 +2,57 @@
 	var dayCheckboxes = [];
 	var tagCheckboxes = [];
 	var crew_idx = $('input[name="crew_idx"]').val();
+	var leaderId = $('input[name="leaderId"]').val();
 	$(document).ready(function(){
-		if(crew_idx != null && crew_idx !== ''){
-			crewUpdateView();
-			
+		if(leaderId !== loginId){
+			alert('크루장만 접근 가능합니다');
+			location.href='/';
+		}else{
+			if(crew_idx != null && crew_idx !== ''){
+				crewUpdateView();
+			}
 		}
+	
 	}); // document
+	
+	
+	tagResult();
+	function tagResult(){
+		$.ajax({
+			type: 'GET',
+			url: '/crew/tagResult',
+			data: {},
+			dataType: 'JSON',
+			success: function(response){
+				console.log(response.tag);
+				
+				var tag = response.tag;
+				
+				var content = '';
+				tag.forEach(function(item, idx){
+					var tag_img = '';
+					if(item.tag_idx == 3){
+						tag_img = '<img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/>';
+					}else if(item.tag_idx == 4){
+						tag_img = '<img src="/resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
+					}else if(item.tag_idx == 5){
+						tag_img = '<img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
+					}
+				
+					content += '<label>';
+					content += '<input type="checkbox" name="tag_idx_list" value="' + item.tag_idx + '">';
+					content += tag_img + item.tag_name;
+					content += '</label>';
+				});
+				
+				$('#tagFilters').append(content);
+				
+			},error: function(e){
+				console.log('태그 가져오던 중 에러 => ', e);
+			}
+		})
+	
+	}
 	
 	// 크루 정보 불러오기
 	function crewUpdateView(){
@@ -107,25 +152,26 @@
     });
 
     
-    $('input[name="tag_idx_list"]').on('change', function () {
-        var $label = $(this).parent(); // 부모 label 요소 참조
-
-        if ($(this).is(':checked')) {
-            if (tagCheckboxes.length >= 3) {
-                // 이미 3개가 선택된 경우, 배열의 첫 번째 항목을 해제
-                var firstChecked = tagCheckboxes.shift(); // 배열에서 첫 번째 항목 제거
-                $(firstChecked).prop('checked', false); // 체크 해제
-                $(firstChecked).parent().removeClass('checked'); // checked 클래스 제거
-            }
-            tagCheckboxes.push(this); // 새로운 체크박스를 배열에 추가
-            $label.addClass('checked'); // 현재 체크박스의 부모 label에 checked 클래스 추가
-        } else {
-            // 체크 해제된 경우 배열에서 해당 항목 제거
-            tagCheckboxes = tagCheckboxes.filter(item => item !== this);
-            $label.removeClass('checked'); // 부모 label에서 checked 클래스 제거
-        }
-    });
+	// 부모 요소에 이벤트 위임
+	$('#tagFilters').on('change', 'input[name="tag_idx_list"]', function () {
+	    var $label = $(this).parent(); // 부모 label 요소 참조
 	
+	    if ($(this).is(':checked')) {
+	        if (tagCheckboxes.length >= 3) {
+	            // 이미 3개가 선택된 경우, 배열의 첫 번째 항목을 해제
+	            var firstChecked = tagCheckboxes.shift(); // 배열에서 첫 번째 항목 제거
+	            $(firstChecked).prop('checked', false); // 체크 해제
+	            $(firstChecked).parent().removeClass('checked'); // checked 클래스 제거
+	        }
+	        tagCheckboxes.push(this); // 새로운 체크박스를 배열에 추가
+	        $label.addClass('checked'); // 현재 체크박스의 부모 label에 checked 클래스 추가
+	    } else {
+	        // 체크 해제된 경우 배열에서 해당 항목 제거
+	        tagCheckboxes = tagCheckboxes.filter(item => item !== this);
+	        $label.removeClass('checked'); // 부모 label에서 checked 클래스 제거
+	    }
+	});
+		
 	// 수정 데이터 전송
     function submitUpdatePost() {
         var formData = new FormData($('form')[0]);

@@ -29,9 +29,13 @@ public class CrewViewController {
     @GetMapping(value="/crewUpdate/{crew_idx}")
     public String crewUpdateView(@PathVariable int crew_idx, Model model, HttpSession session) {
     	
-//    	Map<String, Object> resultMap = crew_service.crewUpdateView(crew_idx);
-    	if(session.getAttribute("loginId") != null) {
+    	String loginId = (String) session.getAttribute("loginId");
+    	if(loginId != null) {
     		model.addAttribute("crew_idx", crew_idx);
+    		String leaderId = crew_service.crewLocationLeaderCheck(loginId, crew_idx);
+    		if(leaderId != null) {
+    			model.addAttribute("leaderId", leaderId);
+    		}
     		return "/crew/crewUpdate";
     	}
     	return "redirect:/loginView";
@@ -53,8 +57,13 @@ public class CrewViewController {
     
     @GetMapping(value="/crewMemberList/{crew_idx}")
     public String crewMemberListView(@PathVariable int crew_idx, Model model, HttpSession session) {
-    	if(session.getAttribute("loginId") != null) {
+    	String loginId = (String) session.getAttribute("loginId");
+    	if(loginId != null) {
     		model.addAttribute("crew_idx", crew_idx);
+    		String leaderId = crew_service.crewLocationLeaderCheck(loginId, crew_idx);
+    		if(leaderId != null) {
+    			model.addAttribute("leaderId", leaderId);
+    		}
     		return "/crew/crewMemberList";
     	}
     	return "redirect:/loginView";
@@ -62,8 +71,13 @@ public class CrewViewController {
     
     @GetMapping(value="/crewAuthorityList/{crew_idx}")
     public String crewAuthorityListView(@PathVariable int crew_idx, Model model, HttpSession session) {
-    	if(session.getAttribute("loginId") != null) {
+    	String loginId = (String) session.getAttribute("loginId");
+    	if(loginId != null) {
     		model.addAttribute("crew_idx", crew_idx);
+    		String leaderId = crew_service.crewLocationLeaderCheck(loginId, crew_idx);
+    		if(leaderId != null) {
+    			model.addAttribute("leaderId", leaderId);
+    		}
     		return "/crew/crewAuthorityList";
     	}
     	return "redirect:/loginView";
@@ -71,8 +85,13 @@ public class CrewViewController {
     
     @GetMapping(value="/crewManagerList/{crew_idx}")
     public String crewManagerView(@PathVariable int crew_idx, Model model, HttpSession session) {
-    	if(session.getAttribute("loginId") != null) {
+    	String loginId = (String) session.getAttribute("loginId");
+    	if(loginId != null) {
     		model.addAttribute("crew_idx", crew_idx);
+    		String leaderId = crew_service.crewLocationLeaderCheck(loginId, crew_idx);
+    		if(leaderId != null) {
+    			model.addAttribute("leaderId", leaderId);
+    		}
     		return "/crew/crewManagerList";
     	}
     	return "redirect:/loginView";
@@ -89,8 +108,13 @@ public class CrewViewController {
     
     @GetMapping(value="/crewNoticeWrite/{crew_idx}")
     public String crewNoticeWrete(@PathVariable int crew_idx, Model model, HttpSession session) {
-    	if(session.getAttribute("loginId") != null) {
+    	String loginId = (String) session.getAttribute("loginId");
+    	if(loginId != null) {
     		model.addAttribute("crew_idx", crew_idx);
+    		String leaderId = crew_service.crewLocationLeaderCheck(loginId, crew_idx);
+    		if(leaderId != null) {
+    			model.addAttribute("leaderId", leaderId);
+    		}
     		return "/crew/crewNoticeWrite";
     	}
     	return "redirect:/loginView";
@@ -105,6 +129,7 @@ public class CrewViewController {
     	
     	if(loginId != null) {
     		model.addAttribute("notice_idx", notice_idx);
+//    		model.addAttribute("detail", crew_service.crewNoticeDelete(notice_idx));
     		model.addAttribute("nickname", nick);
     		return "crew/crewNoticeDetail";
     	}
@@ -113,9 +138,14 @@ public class CrewViewController {
 
     @GetMapping(value="/crewNoticeUpdate/{notice_idx}")
     public String crewNoticeUpdateView(@PathVariable int notice_idx, Model model, HttpSession session) {
-    	if(session.getAttribute("loginId") != null) {
+    	String loginId = (String) session.getAttribute("loginId");
+    	if(loginId != null) {
     		model.addAttribute("result", crew_service.crewNoticeUpdateView(notice_idx));
     		model.addAttribute("notice_idx", notice_idx);
+    		String leaderId = crew_service.crewNoticeLeaderCheck(loginId, notice_idx);
+    		if(leaderId != null) {
+    			model.addAttribute("leaderId", leaderId);
+    		}
     		return "crew/crewNoticeUpdate";
     	}
     	return "redirect:/loginView";

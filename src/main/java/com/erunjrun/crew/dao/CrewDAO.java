@@ -118,6 +118,16 @@ public interface CrewDAO {
 	Integer crewChatMin(int crew_idx);
 
 	int crewAdminResultCheck(Map<String, Object> param);
+
+	int crewAdminOverlay(Map<String, Object> param);
+
+	int crewMemberAdminChange(Map<String, Object> param);
+
+	String crewLocationLeaderCheck(Map<String, Object> param);
+
+	String crewNoticeLeaderCheck(Map<String, Object> param);
+
+	List<CrewDTO> crewTagResult();
 	
 	
 
