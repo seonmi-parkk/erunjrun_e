@@ -202,7 +202,7 @@
         <div class="btm-box">
             <textarea name="msg"></textarea>
             <div class="btn-area">
-            	<button id="btnSubmit" class="btn01-s" onclick="">전송</button>
+            	<button id="btnSubmit">전송</button>
            	</div>
         </div>
     </div>
@@ -231,7 +231,7 @@
 	function getChat(){
 		$.ajax({
 			type: 'GET',
-			url: '/chat/data/'+chatIdx,
+			url: '/chat/data/'+chatIdx,  
 			//contentType: 'application/json', // JSON 형식으로 보낼 경우 필요
 		    //data: JSON.stringify(users),  // 배열을 JSON 문자열로 변환
 			dataType: 'JSON',
@@ -239,15 +239,56 @@
 				console.log(data);
 				drawContent(data.msgList);
 				drawTitle(data.userList);
+				
+				console.log("data.userList",data.userList);
+				/* var userList = data.userList; */
+/* 				userList.forEach(function(){
+					if(userList.id == '${sessionScope.loginId}'){
+						console.log("로그인 유저: "+ userList.id);
+					}else{
+						console.log("비로그인 유저: "+ userList.id);
+					}
+				}); */
+				
 				scrollBtm();
-				if(blockYn = 'Y'){
-					$('.chat #btnSubmit').removeClass('btn01-s').end().addClass(' btn03-s');
+				if(data.blockYn){
+					console.log('차단');
+					$('.chat #btnSubmit').removeClass('btn01-s');
+					$('.chat #btnSubmit').addClass(' btn03-s');
+					$('.chat #btnSubmit').text('차단해제');
+					$('.chat #btnSubmit').attr('onclick','layerPopup( "차단해제 하시겠습니까?","차단해제","취소",unblockBtnAct,exitBtn2Act)');
 				}else {
+					console.log('미차단');
+					$('.chat #btnSubmit').removeClass('btn03-s');
+					$('.chat #btnSubmit').addClass('btn01-s');
+					$('.chat #btnSubmit').text('전송');
+					$('.chat #btnSubmit').attr('onclick','sendMessage()');  
 					
 				}
 			},
 			error: function(e){
 				console.log(e);
+			}
+		});
+	}
+	
+	// 차단 해제하기 버튼 클릭시
+	function unblockBtnAct(){
+		$.ajax({
+			type:'POST',
+			url:'/mateUnblock/'+ $('.chat input[name="otherUser"]').val(),
+			dataType:'JSON',
+			success:function(data){
+				if(data.success){		
+					removeAlert();
+					layerPopup('차단이 해제되었습니다.', '확인',false,exitBtn2Act,exitBtn2Act);
+					updateCont();
+				}else{
+					removeAlert();
+					layerPopup('차단해제 실패하였습니다.', '해제 재시도','취소',unblockBtnAct,exitBtn2Act);
+				}
+			},
+			error:function(e){
 			}
 		});
 	}
@@ -258,6 +299,9 @@
 		var nameCont = '';
 		console.log("userList",userList);
 		userList.forEach(function(user,index){
+			console.log("user.id!!!!",user.id);
+			console.log("sessionScope.loginId!!!!",'${sessionScope.loginId}');
+			
 			nameCont+= user.nickname;
 			if(index != userList.length-1){
 				nameCont+= ', ';
@@ -265,8 +309,12 @@
 			// 유저 아이디 세팅
 			if(user.id == '${sessionScope.loginId}'){				
 				$('.chat input[name="baseUser"]').val(user.id);
+				console.log('유저아이디 == 로그인유저');
+				console.log('체크!!!',	$('.chat input[name="baseUser"]').val());
 			}else{
 				$('.chat input[name="otherUser"]').val(user.id);				
+				console.log('유저아이디 != 로그인유저');
+				console.log('체크!!!',		$('.chat input[name="otherUser"]').val());
 			}
 		});
 		$('.chat .top-bar .title').text(nameCont);
@@ -344,10 +392,6 @@
 
 	}
 	
-	var btnSubmit = document.getElementById('btnSubmit');
-	btnSubmit.onclick = function(){
-		sendMessage();
-	};
 	
 	function sendMessage(){
 		console.log("전송클릭");

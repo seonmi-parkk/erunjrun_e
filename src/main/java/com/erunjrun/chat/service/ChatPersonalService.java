@@ -27,8 +27,8 @@ public class ChatPersonalService {
 	
 	public Map<String, Object> getContent(String chatIdx, String baseUser) {
 		Map<String, Object> values = new HashMap<String, Object>();
-		
-		boolean blockYn = chatPersonalDAO.checkBlock(chatIdx, baseUser) > 0 ? true : false;
+		String otherUser = chatPersonalDAO.getOtherUser(chatIdx, baseUser);
+		boolean blockYn = chatPersonalDAO.checkBlock(chatIdx, baseUser,otherUser) > 0 ? true : false;
 		
 		List<ChatPersonalDTO> userList = chatPersonalDAO.getUserName(chatIdx);
 		logger.info("userNames: "+userList.get(0).getNickname());
@@ -63,6 +63,7 @@ public class ChatPersonalService {
         values.put("userList", userList);
         values.put("msgList", msgList);
         values.put("blockYn", blockYn);
+        logger.info("blockYn!!!!!!!!"+blockYn);
 		return values;
 	}
 
@@ -116,6 +117,9 @@ public class ChatPersonalService {
 	public Map<String, Object> getCrewLeaderContent(String chatIdx, String baseUser) {
 		 logger.info("/crewLdchat/data service 시작");
 		Map<String, Object> values = new HashMap<String, Object>();
+		String otherUser = chatPersonalDAO.getCrewLeaderOtherUser(chatIdx, baseUser);
+		logger.info("otherUser!!!"+otherUser);
+		boolean blockYn = chatPersonalDAO.checkBlock(chatIdx, baseUser,otherUser) > 0 ? true : false;
 		
 		List<ChatCrewLeaderDTO> userList = chatPersonalDAO.getCrewLeaderUserName(chatIdx);
 		logger.info("userNames"+userList.get(0).getNickname());
@@ -149,6 +153,7 @@ public class ChatPersonalService {
         
         values.put("userList", userList);
         values.put("msgList", msgList);
+        values.put("blockYn", blockYn);
 		return values;
 		
 	

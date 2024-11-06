@@ -154,6 +154,7 @@ public class MateService {
 		if(mateDAO.mateUnblock(fromUserId, toUserId)>0) {
 			success = true;
 		}
+		logger.info("success!!!!!!!!!!!!!!!!"+success);
 		return success;
 	}
 
