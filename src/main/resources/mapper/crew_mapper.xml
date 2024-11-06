@@ -608,4 +608,13 @@
 	<select id="crewTagResult" resultType="com.erunjrun.crew.dto.CrewDTO">
 		SELECT tag_idx, tag_name FROM tag WHERE use_yn = 'Y'
 	</select>
+	
+	<select id="crewMemberFullCheck" resultType="int" parameterType="int">
+		SELECT 
+		    CASE 
+		        WHEN member = current_member THEN 1
+		        ELSE 0
+		    END AS is_equal
+		FROM crew WHERE crew_idx = #{crew_idx}
+	</select>
 </mapper>

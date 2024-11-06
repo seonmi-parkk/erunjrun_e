@@ -128,6 +128,8 @@ public interface CrewDAO {
 	String crewNoticeLeaderCheck(Map<String, Object> param);
 
 	List<CrewDTO> crewTagResult();
+
+	int crewMemberFullCheck(int crew_idx);
 	
 	
 

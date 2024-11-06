@@ -173,45 +173,68 @@
 	    console.log('Nickname:', nickname);
 	    console.log('value:', value);
 	    
-		var crew_idx = $('input[name="crew_idx"]').val(); // 나중에 변경 필요
-		var code_name = '';
-		
-		if(value === 'Y'){
-			code_name = 'C101';
-		}else{
-			code_name = 'C102';
-		}
-
-		console.log('code_name : ', code_name);			
-		console.log('실행됨>');
-		
-			$.ajax({
-			type: 'POST',
-			url: '/crew/applicationWrite',
-			data: {'loginId' : id,
-				'crew_idx' : crew_idx,
-				'code_name' : code_name},
-			dataType: 'JSON',
-			success: function(response){
-				
-				console.log('성공');
-				removeAlert();
-				
-				if(response.success){
-					layerPopup(response.msg + '완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
-					crewMemberList();
-				}else{
-					removeAlert();
-					layerPopup(response.msg + '미완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
-				}
-				
-			},error: function(e){
-				soncole.log('에러남 => ', e);
-			}
-		}); 
-		 
+	    var crew_idx = $('input[name="crew_idx"]').val();
+	    var code_name = '';
 	    
+	    if(value === 'Y'){
+	        code_name = 'C101';
+	    } else {
+	        code_name = 'C102';
+	    }
+	
+	    console.log('code_name : ', code_name);			
+	    console.log('실행됨>');
+	    if(code_name === 'C101'){
+	    console.log('실행??');
+	        $.ajax({
+	            type: 'GET',
+	            url: '/crew/memberFullCheck',
+	            data: {'crew_idx' : crew_idx},
+	            dataType: 'JSON',
+	            success: function(response){
+	                if(response){
+	                    memberResultUpdate(id, nickname, value);
+	                } else {
+	                	removeAlert();
+	                    layerPopup('크루원이 가득 찼습니다.', '확인', false, applBtn2Act, applBtn2Act);
+	                }
+	            }, 
+	            error: function(e){
+	                console.log('멤버수 체크 중 에러 => ', e);
+	            }
+	        });
+	    } else {
+	        memberResultUpdate(id, nickname, value);
+	    }
 	}
+	
+	function memberResultUpdate(id, nickname, value){
+	    $.ajax({
+	        type: 'POST',
+	        url: '/crew/applicationWrite',
+	        data: {
+	            'loginId': id,
+	            'crew_idx': crew_idx,
+	            'code_name': code_name
+	        },
+	        dataType: 'JSON',
+	        success: function(response){
+	            console.log('성공');
+	            
+	            if(response.success){
+	                removeAlert();
+	                layerPopup(response.msg + ' 완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
+	                pageCall(firstPage);
+	            } else {
+	                removeAlert();
+	                layerPopup(response.msg + ' 미완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
+	            }
+	        },
+	        error: function(e){
+	            console.log('에러남 => ', e);
+	        }
+	    });
+	} 
 	
 	var crew_idx = $('input[name="crew_idx"]').val();
 	
