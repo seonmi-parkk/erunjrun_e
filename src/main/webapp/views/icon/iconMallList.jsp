@@ -84,7 +84,9 @@
 		margin-bottom: 16px;
 		font-size: 20px;
 	}
-	
+	.icon-mall .icon-item .btn02-s {
+	    margin-top: 10px;
+	}
 	
 	
 	.icon-mall .my-area {
@@ -154,6 +156,16 @@
 	.icon-mall .btn03-s{
 		cursor: default;
 	}
+	.icon-mall .login-needs {
+		width: 100%;
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;
+		-webkit-box-orient: vertical; -ms-flex-direction: column; flex-direction: column;
+	}
+	.icon-mall .login-needs .btn01-s {
+	    margin-top: 20px;
+	}
 	.c-777 {
 		color: #777;
 	} 
@@ -219,7 +231,10 @@
 						</div>
 					</c:if>
 					<c:if test="${empty sessionScope.loginId}">
-						로그인이 필요한 서비스입니다.
+						<div class="login-needs">
+							로그인이 필요한 서비스입니다.
+							<a href="/loginView" class="btn01-s">로그인</a>
+						</div>
 					</c:if>
 				</div>
 
@@ -256,35 +271,42 @@
 
 	// 구매버튼 클릭시	
 	$('.btn-buy').on('click',function(){
-		var profile = $(this).closest('.icon-item').find('.profile-area').prop('outerHTML');
-		var iconName = $(this).closest('.icon-item').find('.name').text();
-		var iconPrice = $(this).closest('.icon-item').find('.price').text();
-		var iconIdx = $(this).closest('.icon-item').find('input[name="icon-idx"]').val();
-		console.log(profile);
-		
-		
-		$.ajax({
-			type: 'GET',
-	        url: '/checkPoint/'+iconPrice,
-	        datatype: 'JSON',
-	        success: function(data) {
-				if(data.purchase){
-					var cont = '<p class="c-777">'+iconName+'</p>'+'<p>'+iconPrice+'p</p>';
-					imgLayerPopup('해당 아이콘을 구매하시겠습니까?',profile,cont,'구매','취소' ,btn1Act , btn2Act, iconIdx);
-				}else{
-					var cont = '<p class="mt-10 mb-5"><span class="c-777">보유 포인트 : </span><span>'+data.userPoint+'p</span></p>'+'<p class="mb-10"><span class="c-777">아이콘 가격 : </span><span>'+iconPrice+'p</span></p>';
-					imgLayerPopup('포인트가 부족합니다.','<img class="mb-10" src="/resources/img/iconMall/ico_point.png" alt="포인트"/>', cont, '확인', false, btn2Act, btn2Act, iconIdx);
-				}
-	        },
-	        error: function(e) {
+		if('${sessionScope.loginId}' == ''){
+			alert('로그인이 필요한 서비스입니다.');
+		}else{
 
-	        }
-		});
+			var profile = $(this).closest('.icon-item').find('.profile-area').prop('outerHTML');
+			var iconName = $(this).closest('.icon-item').find('.name').text();
+			var iconPrice = $(this).closest('.icon-item').find('.price').text();
+			var iconIdx = $(this).closest('.icon-item').find('input[name="icon-idx"]').val();
+			console.log(profile);
+			
+			
+			$.ajax({
+				type: 'GET',
+		        url: '/checkPoint/'+iconPrice,
+		        datatype: 'JSON',
+		        success: function(data) {
+					if(data.purchase){
+						var cont = '<p class="c-777">'+iconName+'</p>'+'<p>'+iconPrice+'p</p>';
+						imgLayerPopup('해당 아이콘을 구매하시겠습니까?',profile,cont,'구매','취소' ,btn1Act , btn2Act, iconIdx);
+					}else{
+						var cont = '<p class="mt-10 mb-5"><span class="c-777">보유 포인트 : </span><span>'+data.userPoint+'p</span></p>'+'<p class="mb-10"><span class="c-777">아이콘 가격 : </span><span>'+iconPrice+'p</span></p>';
+						imgLayerPopup('포인트가 부족합니다.','<img class="mb-10" src="/resources/img/iconMall/ico_point.png" alt="포인트"/>', cont, '확인', false, btn2Act, btn2Act, iconIdx);
+					}
+		        },
+		        error: function(e) {
+	
+		        }
+			});
+			
+			// 닫기 버튼 클릭 시 팝업 닫기
+			$(document).on('click','.confirm-box .btn-close',function(){
+				location.reload(true);
+			});
+			
+		}
 		
-		// 닫기 버튼 클릭 시 팝업 닫기
-		$(document).on('click','.confirm-box .btn-close',function(){
-			location.reload(true);
-		});
 	});
 
 	// 아이콘 구매 레이어 팝업

@@ -91,6 +91,10 @@
 	    margin-bottom: 2px;
 	}
 	
+	header a{
+		text-decoration: none;
+	}
+	
 	header .menu li a{
 		padding: 10px 14px;
 		margin: 0 9px;
@@ -98,8 +102,9 @@
 		color: var(--font-color);
 	}
 	
-	header .menu li a:hover{
+	header a:hover{
 		color: var(--main-color);
+		text-decoration: none;
 	}
 	
 	.menu > li {
