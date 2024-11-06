@@ -66,20 +66,7 @@
 			</div>
 			<div class="contentbox">
 				<span><img src="/resources/img/crew/img06.png" width="17px" class="imglayout"/> 
-				    <c:choose>
-				        <c:when test="${crewChatMin >= 0 and crewChatMin <= 1440}">
-				            마지막 대화 <span id="crewChat_min"> ${crewChatMin}</span> 분 전
-				        </c:when>
-				        <c:when test="${crewChatMin > 1440 and crewChatMin <= 2880}">
-				            마지막 대화 <span id="crewChat_min"> 1</span> 일 전
-				        </c:when>
-				        <c:when test="${crewChatMin > 2880 and crewChatMin < 4320}">
-				            마지막 대화 <span id="crewChat_min"> 2</span> 일 전
-				        </c:when>
-				        <c:otherwise>
-				            최근 대화가 없습니다.
-				        </c:otherwise>
-				    </c:choose>
+				    <span id="crewChatDisplay">최근 대화가 없습니다.</span>
 				</span>
 			</div>
 			<a href="/crewList"><button class="btn03-s22">목록</button></a>
@@ -133,5 +120,17 @@
 </body>
 <script src="/resources/js/chatting.js" type="text/javascript"></script>
 <script src="/resources/js/crew/crewDetail.js" type="text/javascript"></script>
+<script>
+    var crewChatMin = ${crewChatMin};
 
+    if (crewChatMin < 60) {
+        document.getElementById("crewChatDisplay").innerText = "마지막 대화 " + crewChatMin + " 분 전";
+    } else if (crewChatMin < 1440) {
+        document.getElementById("crewChatDisplay").innerText = "마지막 대화 " + Math.floor(crewChatMin / 60) + " 시간 전";
+    } else if (crewChatMin < 4320) {
+        document.getElementById("crewChatDisplay").innerText = "마지막 대화 " + Math.floor(crewChatMin / 1440) + " 일 전";
+    } else {
+        document.getElementById("crewChatDisplay").innerText = "최근 대화가 없습니다.";
+    }
+</script>
 </html>
