@@ -11,6 +11,7 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=26c56d5b3e89329f848d1188b85f2e3d&libraries=services"></script>
 	<script src="/resources/js/common.js"></script>
 	<script src="/resources/js/layerPopup.js"></script>
+	<script src="/resources/js/rightLayerPopup.js"></script>
 	
     <style>
     	.dot {overflow:hidden;float:left;width:12px;height:12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}    
@@ -321,6 +322,13 @@
 	    					<div class="profile-area">
 							<div class="profile-img" style="background: url(/resources/img/common/admin_profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
 	    			   			${sessionScope.loginId}
+							</div>
+	    				</c:when>
+	    				<c:when test="${sessionScope.loginId == null}">
+	    					<div class="nick">
+	    					<div class="profile-area">
+							<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div></div>
+	    			   			비회원
 							</div>
 	    				</c:when>
 	    				<c:otherwise>
@@ -715,7 +723,19 @@
 		    xhr.send();
 		}
 		
-		
+		$('#ins').on('click',function(){
+	 		
+	 		var userId = "${sessionScope.loginId}";
+	 		
+	 		if(!userId){
+	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn1Act,secondBtn1Act);		
+	 		}else if('${sessionScope.loginId}' == '${ban.id}' && '${ban.code_name}' == 'A101' && '${ban.is_right}' == 'Y'){
+	 			rightLayerPopup('${ban.end_date} 까지 정지된 서비스 입니다.','확인',secondBtn2Act);
+	 		}else{
+	 			comment();
+	 		}
+	 		
+	 	});
 		
 		
 		

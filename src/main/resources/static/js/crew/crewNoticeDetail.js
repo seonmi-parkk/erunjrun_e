@@ -3,6 +3,7 @@
 	var loginId = $('input[name="loginId"]').val();
 	var nickname = $('input[name="userName"]').val();
 	var admin = $('input[name="admin"]').val();
+	var icon_image = $('input[name="icon_image"]').val();
 	
 	if (loginId === null || loginId === '') {
 	    loginId = 'a';
@@ -15,8 +16,11 @@
 		data: {'notice_idx' : notice_idx},
 		dataType: 'JSON',
 		success: function(response){
+			console.log('콘솔아 등장 해줘');
 			console.log('데이터 잘 받아옴 => ', response);
 			console.log('닉네임 잘 받아옴 => ', response.nickname);
+			
+			console.log('아이콘 받아옴? =>',icon_image);
 			
 			var result = response.result;
 			crew_idx = result.crew_idx;
@@ -40,9 +44,9 @@
 			$('#create_date').html(result.create_date);
 			
 			if(admin == 'Y'){
-				$('#name').html('<div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/admin_profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+result.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+loginId);
+				$('#name').html('<div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/admin_profile.png) center center / cover no-repeat;"></div></div>'+loginId);
 			}else{
-				$('#name').html('<div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+result.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+nickname);
+				$('#name').html('<div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+icon_image+') center center / 100% 100% no-repeat;"></div></div>'+nickname);
 			}
 			
 			if(loginId === result.id){

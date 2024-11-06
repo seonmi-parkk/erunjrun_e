@@ -54,6 +54,7 @@
 	    		<div>
 	    			<input type="hidden" name="unlike_id" value="${sessionScope.loginId}"/>
 	    			<input type="hidden" name="userName" value="${nickname.nickname}"/>
+	    			<input type="hidden" name="icon_image" value="${nickname.icon_image}"/>
 	    			<input type="hidden" name="admin" value="${sessionScope.adminYn}"/>
 	    			<div class="nick" id="name"></div>
 		    		<input type="text" class="tex">
