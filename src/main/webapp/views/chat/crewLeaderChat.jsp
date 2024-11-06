@@ -192,7 +192,7 @@
         <div class="btm-box">
             <textarea name="msg"></textarea>
             <div class="btn-area">
-            	<button class="btn01-s" onclick="sendMessage()">전송</button>
+            	<button id="btnSubmit">전송</button>
            	</div>
         </div>
     </div>
@@ -228,6 +228,24 @@
 				console.log(data);
 				drawTitle(data.userList);
 				drawContent(data.msgList, callback);
+				
+				
+				
+				if(data.blockYn){
+					console.log('차단');
+					$('.chat #btnSubmit').removeClass('btn01-s');
+					$('.chat #btnSubmit').addClass(' btn03-s');
+					$('.chat #btnSubmit').text('차단해제');
+					$('.chat #btnSubmit').attr('onclick','layerPopup( "차단해제 하시겠습니까?","차단해제","취소",unblockBtnAct,exitBtn2Act)');
+				}else {
+					console.log('미차단');
+					$('.chat #btnSubmit').removeClass('btn03-s');
+					$('.chat #btnSubmit').addClass('btn01-s');
+					$('.chat #btnSubmit').text('전송');
+					$('.chat #btnSubmit').attr('onclick','sendMessage()');  
+					
+				}
+				
 			},
 			error: function(e){
 				console.log(e);
