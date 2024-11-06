@@ -56,7 +56,7 @@ public class AdminController {
             model.addAttribute("msg", "아이디 또는 비밀번호를 확인해.");
          }
 
-         return "admin/adminMemberList";
+         return "redirect:/adminMember";
       }
       
       @GetMapping(value = "/adminJoin")
@@ -75,14 +75,14 @@ public class AdminController {
           // 1. 슈퍼관리자 권한 확인
           if (!superAdminAuthority.equals("s")) {
               model.addAttribute("msg", "슈퍼관리자만 회원가입을 할 수 있습니다.");
-              return "main"; // 회원가입 페이지로 리턴
+              return "admin/adminJoin"; // 회원가입 페이지로 리턴
           }
 
           // 2. 요청 IP 확인
           String allowedIp = admin_service.SgetAllowedIp(superAdminId); // 슈퍼관리자 IP 조회
           if (!allowedIp.equals(requestIp)) {
               model.addAttribute("msg", "허용되지 않은 IP에서 요청하였습니다.");
-              return "main"; // 회원가입 페이지로 리턴
+              return "admin/adminJoin"; // 회원가입 페이지로 리턴
           }
 
           // 회원가입 처리 로직 // 가입시 아이피는 슈퍼어드민의 아이피가 되고, 가입된 어드민은 디폴드값 아이피를 사용하도록 한다. 회사 내 ip로.
@@ -92,41 +92,41 @@ public class AdminController {
             model.addAttribute("msg", "회원가입에 실패했습니다.");
             return "";
          }
-          return "admin/adminLogin"; // 로그인 페이지로 리턴
+          return "admin/adminMember"; // 로그인 페이지로 리턴
       }
       
       
       
-   @GetMapping(value = "/adminMember")
-   public String memberList(HttpSession session,Model model) {
-      if (session.getAttribute("adminYn") != null) {
-         return "admin/adminMemberList";
-   }
+      @GetMapping(value = "/adminMember")
+      public String memberList(HttpSession session,Model model) {
+         if (session.getAttribute("adminYn") != null) {
+            return "admin/adminMemberList";
+      }
+         
+         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+         return "admin/adminLogin";
+      }
+         
       
-      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-      return "admin/adminLogin";
-   }
-      
-   
-     @GetMapping(value = "/adminMemberList") //post?
-     @ResponseBody 
-     public Map<String,Object> memberlist(String page, String cnt,String opt, String keyword,String sortField,String sortOrder){
+        @GetMapping(value = "/adminMemberList") //post?
+        @ResponseBody 
+        public Map<String,Object> memberlist(String page, String cnt,String opt, String keyword,String sortField,String sortOrder){
+           
+         int page_ = Integer.parseInt(page);
+         int cnt_ = Integer.parseInt(cnt);
+         int limit = cnt_;
+         int offset = (page_ - 1) * cnt_;
+         int totalPages = admin_service.count(cnt_,opt,keyword);
+         
+          
+         Map<String,Object> result = new HashMap<String, Object>();
+         result.put("totalPages", totalPages);
+         result.put("currpage", page);
+         result.put("list", admin_service.memberlist(opt, keyword,sortField,sortOrder, limit, offset));
+         
+         return result;
         
-      int page_ = Integer.parseInt(page);
-      int cnt_ = Integer.parseInt(cnt);
-      int limit = cnt_;
-      int offset = (page_ - 1) * cnt_;
-      int totalPages = admin_service.count(cnt_);
-      
-       
-      Map<String,Object> result = new HashMap<String, Object>();
-      result.put("totalPages", totalPages);
-      result.put("currpage", page);
-      result.put("list", admin_service.memberlist(opt, keyword,sortField,sortOrder, limit, offset));
-      
-      return result;
-     
-     }
+        }
    
      @GetMapping(value = "/admin")
      public String adminList(HttpSession session,Model model) {
@@ -135,12 +135,12 @@ public class AdminController {
      }
         
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-        return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
    
      @PostMapping(value = "/adminList") //post?
      @ResponseBody 
-     public Map<String,Object> adminlist(String page, String cnt,String opt, String keyword){
+     public Map<String,Object> adminlist(String opt, String keyword,String page, String cnt){
         
       int page_ = Integer.parseInt(page);
       int cnt_ = Integer.parseInt(cnt);
@@ -168,7 +168,7 @@ public class AdminController {
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-    return "admin/adminLogin";
+    return "redirect:/adminLogin";
   }
      
      @GetMapping(value = "/adminMemberDetail/{id}") 
@@ -187,7 +187,7 @@ public class AdminController {
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-      return "admin/adminLogin";
+      return "redirect:/adminLogin";
    }
      
 //      권한처리     -- 권한 세션체크 스케줄링 사용해서 만들어야 함.
@@ -204,7 +204,7 @@ public class AdminController {
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-      return "admin/adminLogin";
+      return "redirect:/adminLogin";
    }
      
      
@@ -220,7 +220,7 @@ public class AdminController {
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-    return "admin/adminLogin";
+      return "redirect:/adminLogin";
   }
      
      
@@ -236,14 +236,14 @@ public class AdminController {
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-    return "admin/adminLogin";
+      return "redirect:/adminLogin";
   }
      
      
      
      
-     @GetMapping(value = "/memberRightUpdate")
-     public String rightupdate(String ban_idx,HttpSession session,Model model) {
+     @GetMapping(value = "/memberRightUpdate/{ban_idx}")
+     public String rightupdate(@PathVariable String ban_idx,HttpSession session,Model model) {
  
      if (session.getAttribute("adminYn") != null) {
         AdminDTO dto = admin_service.rightdetail(ban_idx);
@@ -253,13 +253,13 @@ public class AdminController {
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-    return "admin/adminLogin";
+    return "redirect/adminLogin";
   }
      
      
      
      @PostMapping(value = "/memberRightUpdate")
-     public String rightupdate( @RequestParam Map<String, String> param,Model model,HttpSession session) {
+     public String rightupdate(@RequestParam Map<String, String> param,Model model,HttpSession session) {
 
      if (session.getAttribute("adminYn") != null) {
         String admin_id = (String)session.getAttribute("loginId");
@@ -270,7 +270,7 @@ public class AdminController {
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-    return "admin/adminLogin";
+      return "redirect:/adminLogin";
   }
     
      
@@ -325,7 +325,7 @@ public class AdminController {
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-    return "admin/adminLogin";
+      return "redirect:/adminLogin";
   }
      
      
@@ -338,7 +338,7 @@ public class AdminController {
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-    return "admin/adminLogin";
+      return "redirect:/adminLogin";
     }
      
      
@@ -400,7 +400,7 @@ public class AdminController {
      }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-      return "admin/adminLogin";
+      return "redirect:/adminLogin";
       }
      
      
@@ -428,7 +428,7 @@ public class AdminController {
      }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-      return "admin/adminLogin";
+      return "redirect:/adminLogin";
       }
      
      
@@ -451,7 +451,7 @@ public class AdminController {
       }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-   return "admin/adminLogin";
+      return "redirect:/adminLogin";
    }
     
      
@@ -467,7 +467,7 @@ public class AdminController {
       }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-      return "admin/adminLogin";
+      return "redirect:/adminLogin";
    }
      
      
@@ -480,7 +480,7 @@ public class AdminController {
      }
 
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-     return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
      
      
@@ -509,7 +509,7 @@ public class AdminController {
         
         
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-     return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
      
      @PostMapping(value = "/adminCodeWrite")
@@ -522,7 +522,7 @@ public class AdminController {
         
         
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-     return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
      
      @PostMapping(value = "/adminCodeOverlay")
@@ -551,7 +551,7 @@ public class AdminController {
         
         
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-     return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
      
      
@@ -564,7 +564,7 @@ public class AdminController {
         
         
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-     return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
      
      @GetMapping(value = "/adminPopupList")
@@ -591,7 +591,7 @@ public class AdminController {
      }
 
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-     return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
      
      @PostMapping(value = "/adminPopupWrite")
@@ -602,7 +602,7 @@ public class AdminController {
      }
 
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-     return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
      
      @GetMapping(value = "/adminPopupUpdate/{popup_idx},{code_name}")
@@ -628,7 +628,7 @@ public class AdminController {
         
         
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-     return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
      
      @PostMapping(value = "/adminFileDelete")

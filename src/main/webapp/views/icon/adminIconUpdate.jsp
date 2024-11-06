@@ -187,7 +187,7 @@
 			
 			
 		   	<button class="btn01-l" type="submit" id="text">등록</button>
-			<div class="btn02-l" onclick="location.href='/adminIconList'">취소</div> <!-- 클릭시 색깔변경 -->
+			<div class="btn02-l" onclick="location.href='/adminIconListView'">취소</div> <!-- 클릭시 색깔변경 -->
 	</form>
 	 </main>
 	</div>

@@ -155,7 +155,7 @@ function pageCall(page) {
    
    $.ajax({
       type:'POST',
-      url:'adminList',
+      url:'/adminList',
       data:{
          'page':page,
          'cnt':15,

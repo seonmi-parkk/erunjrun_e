@@ -129,8 +129,8 @@
 				<p class="title2" id="text">${info.ban_content}</p>
 			</div>	
    	
-			<div class="btn01-l" onclick="location.href='memberRightUpdate/${info.ban_idx}'">수정</div> <!-- 클릭시 색깔변경 -->
-			<div class="btn02-l" onclick="location.href='adminMemberDetail/${info.id}'">취소</div> <!-- 클릭시 색깔변경 -->
+			<div class="btn01-l" onclick="location.href='/memberRightUpdate/${info.ban_idx}'">수정</div> <!-- 클릭시 색깔변경 -->
+			<div class="btn02-l" onclick="location.href='/adminMemberDetail/${info.id}'">취소</div> <!-- 클릭시 색깔변경 -->
 	
 	    </main>
 	    </div>

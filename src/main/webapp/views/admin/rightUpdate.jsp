@@ -28,7 +28,15 @@
 	}
 
 /* 헤더 스타일 */
-
+	 #content{
+    	width: 750px; /* 너비를 250픽셀로 설정 */
+        height: 350px;
+        resize: none; /* 높이를 50픽셀로 설정 */
+        font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
+       	padding: 7px 8px; /* 내부 여백을 10픽셀로 설정 */
+       	border-radius: 6px;
+       	border: 1px solid var(--input-bd);
+    }
 
 	/* 콘텐츠와 사이드바 감싸는 래퍼 */
 	.content-wrapper {
@@ -107,7 +115,7 @@
 	    <p class="title1" >회원정보</p>
 		<p class="title1"  id="text">${info.nickname}님</p>
 		
-	  	<form action="memberRightUpdate" method="post">
+	  	<form action="/memberRightUpdate" method="post">
 	  	
 	  	<input type="text" name="id" id="text" value="${info.id}" hidden=""/>
 	  	
@@ -139,7 +147,8 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">정지내용</p>
-			<input type="text" name="ban_content" id="text" value="${info.ban_content}"/>
+		
+			<textarea name="ban_content" id="content" >${info.ban_content}</textarea>
 		</div>
 		
    			<input type="text" name="ban_idx" id="text" value="${info.ban_idx}" hidden=""/>

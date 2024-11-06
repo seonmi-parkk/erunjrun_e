@@ -57,9 +57,9 @@ public class AdminService {
       }
    
    
-   public int count(int cnt_) {
+   public int count(int cnt_, String keyword,String opt) {
       
-      return admin_dao.count(cnt_);
+      return admin_dao.count(cnt_,keyword,opt);
    }
 
 
@@ -422,6 +422,8 @@ public class AdminService {
       admin_dao.adminyn(admin_id);
       
    }
+
+ 
 
    
    

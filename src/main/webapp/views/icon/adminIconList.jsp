@@ -136,7 +136,7 @@
 		<p class="title1" >아이콘</p>
 	    <div class="btn-area">
 	    	<div class="btn01-l" onclick="location.href='/adminIconWriteView'" >등록</div>
-	    	<div class="btn02-l" onclick="location.href='adminIconChart'" >통계</div>
+	    	<div class="btn02-l" onclick="location.href='/adminIconChart'" >통계</div>
 	    </div>
 		 <table>
 			<colgroup>

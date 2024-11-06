@@ -142,77 +142,89 @@ if (msg != '') {
    alert(msg);
 }
 
-    var show = 1;
-    pageCall(show);
+var show = 1;
+var currentSortField = '';
+var currentSortOrder = 'ASC';
+var paginationInitialized = false;  // 페이지네이션 초기화 여부 확인 변수
 
-    var currentSortField = '';
-    var currentSortOrder = 'ASC';
+$(document).ready(function() {
+    pageCall(show); // 초기 페이지 로드
+});
 
-    function sortby(field) {
-        // 같은 필드를 클릭하면 정렬 순서를 반대로 변경
-        if (currentSortField == field) {
-            currentSortOrder = currentSortOrder == 'ASC' ? 'DESC' : 'ASC';
-        } else {
-            // 새로운 필드를 클릭하면 정렬 순서를 ASC로 초기화
-            currentSortField = field;
-            currentSortOrder = 'ASC';
-        }
+function pageCall(page, sortField = '', sortOrder = '') {
+    var keyword = $('#searchKeyword').val();
+    var opt = $('#searchOption').val();
 
-        // 정렬된 순서와 필드로 페이지 호출
-        pageCall(1, currentSortField, currentSortOrder);
-    }
+    $.ajax({
+        type: 'Get',
+        url: 'adminMemberList',
+        data: {
+            page: page,
+            cnt: 15,
+            opt: opt,
+            keyword: keyword,
+            sortField: sortField,
+            sortOrder: sortOrder
+        },
+        datatype: 'JSON',
+        success: function(data) {
+            console.log(data);
+            drawList(data.list);
 
-    function pageCall(page, sortField = '', sortOrder = '') {
-        var keyword = $('#searchKeyword').val();
-        var opt = $('#searchOption').val();
+            // 페이지네이션 초기화 및 재설정
+            if (paginationInitialized) {
+                $('#pagination').twbsPagination('destroy'); // 기존 페이지네이션 제거
+            }
 
-        $.ajax({
-            type: 'Get',
-            url: 'adminMemberList',
-            data: {
-                page: page,
-                cnt: 15,
-                opt: opt,
-                keyword: keyword,
-                sortField: sortField,
-                sortOrder: sortOrder
-            },
-            datatype: 'JSON',
-            success: function (data) {
-                console.log(data);
-                drawList(data.list);
+            if (data.totalPages > 0) { // 검색 결과가 있을 때만 페이지네이션 생성
                 $('#pagination').twbsPagination({
-                    startPage: page,
                     totalPages: data.totalPages,
                     visiblePages: 10,
-                    onPageClick: function (evt, page) {
+                    startPage: page,
+                    initiateStartPageClick: false, // 페이지네이션 초기 클릭 방지
+                    onPageClick: function(evt, page) {
                         pageCall(page, sortField, sortOrder);
                     }
                 });
-            },
-            error: function (e) {
-                console.log(e);
+                paginationInitialized = true; // 페이지네이션 초기화 완료 상태로 설정
+            } else {
+                paginationInitialized = false; // 검색 결과가 없으면 초기화 상태로 설정
             }
-        });
-    }
-
-
-    function drawList(list) {
-        var content = '';
-        for (var view of list) {
-           content += '<tr>';
-           content += '<td style="' + (view.report_status == 'Y' ? 'color: blue;' : '') + '">' + view.id + '</td>';
-           content += '<td><a href="/adminMemberDetail/' + view.id + '">' + view.nickname + '</a></td>';
-           content += '<td>' + view.email + '</td>';
-           content += '<td><a href="/memberRight/'+ view.nickname + '" style="color: orange;">권한</a></td>';
-           content += '<td>' + view.report_count + '</td>';
-           content += '<td>' + view.join_date + '</td>';
-           content += '</tr>';
-
+        },
+        error: function(e) {
+            console.log(e);
         }
-        $('#list').html(content);
+    });
+}
+
+function sortby(field) {
+    if (currentSortField == field) {
+        currentSortOrder = currentSortOrder == 'ASC' ? 'DESC' : 'ASC';
+    } else {
+        currentSortField = field;
+        currentSortOrder = 'ASC';
     }
-   
+
+    $('#pagination').twbsPagination('destroy'); // 기존 페이지네이션 초기화
+    paginationInitialized = false;
+    pageCall(1, currentSortField, currentSortOrder);
+}
+
+function drawList(list) {
+    var content = '';
+    for (var view of list) {
+        content += '<tr>';
+        content += '<td style="' + (view.report_status == 'Y' ? 'color: blue;' : '') + '">' + view.id + '</td>';
+        content += '<td><a href="/adminMemberDetail/' + view.id + '">' + view.nickname + '</a></td>';
+        content += '<td>' + view.email + '</td>';
+        content += '<td><a href="/memberRight/' + view.nickname + '" style="color: orange;">권한</a></td>';
+        content += '<td>' + view.report_count + '</td>';
+        content += '<td>' + view.join_date + '</td>';
+        content += '</tr>';
+    }
+    $('#list').html(content);
+}
+
 </script>
 <script src="/resources/js/common.js" type="text/javascript"></script>
 <script src="/resources/js/layerPopup.js"></script>

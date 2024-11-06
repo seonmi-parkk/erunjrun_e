@@ -159,7 +159,7 @@
             </th>
          </tr>
    </table>
-    <div class="btn01-l" onclick="location.href='adminIcon'">리스트</div>
+    <div class="btn01-l" onclick="location.href='/adminIconListView'">리스트</div>
         </main>
    </div>
    

@@ -32,7 +32,7 @@
 					</div>
 				</div>
 				<div style="text-align: right;" class="duri">
-					<div id="butt" class="btn03-s" style='visibility : hidden'>비활성화</div>					
+					<div id="butt" class="btn03-s" style='visibility : hidden' onclick="layerPopup('공지를 삭제하시겠습니까?', '삭제', '취소', crewNoticeDelete ,applBtn2Act)">비활성화</div>					
 					<p class="title3-2" id="create_date"></p>
 					<span class="title3-3" >조회수 </span><span id="hit"></span>
 					<span class="title3-4" ><img src="/resources/img/run/image 14.png" id="comment" alt="댓글">댓글 <span id="commentNum"></span></span>
@@ -153,7 +153,7 @@ function commentDraw(list) {
 			content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
 			
 			if(admin == 'Y'){
-				content +='<div id ="bih" class=btn03-s>비활성화</div>';
+				content +='<div id ="bih" class=btn03-s  onclick="del('+comment_idx+')">비활성화</div>';
 			}
 			
 			content += '<div class="action-buttons" style="display:none; cursor: pointer;" id="actions-' + comment_idx + '">';

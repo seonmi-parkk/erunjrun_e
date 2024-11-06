@@ -284,7 +284,7 @@
 				</div>
 				<div style="text-align: right;" class="duri">
 				<c:if test="${sessionScope.adminYn == 'Y'}">
-					<div id="butt"class=btn03-s>비활성화</div>
+					<div id="butt"class="btn03-s btn-popup">비활성화</div>
 				</c:if>
 										
 					<p class="title3-2">${info.create_date}</p>
@@ -546,7 +546,7 @@
 					content +='<div class="ard" id="dis">';					
 					content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
 					if(${sessionScope.adminYn == 'Y'}){
-						content +='<div id ="bih" class=btn03-s>비활성화</div>';
+						content +='<div id ="bih" class=btn03-s onclick="del('+comment_idx+')">비활성화</div>';
 					}
 					content += '<div class="action-buttons" style="display:none; cursor: pointer;" id="actions-' + comment_idx + '">';
 					if(nickName == addName){

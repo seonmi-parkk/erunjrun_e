@@ -31,7 +31,7 @@
 			</div>
 	
 			<button class="btn03-s1" style='visibility : hidden' onclick="crewUpdate()">수정하기</button>
-			<button class="btn03-s1" style='visibility : hidden' onclick="layerPopup('크루를 삭제하시겠습니까?', '삭제', '취소', crewDelete ,applBtn2Act)";>크루삭제</button>
+			<button class="btn03-s1" style='visibility : hidden' onclick="layerPopup('크루를 삭제하시겠습니까?', '삭제', '취소', crewDelete ,applBtn2Act)">크루삭제</button>
 	
 			<div class="title2-1">크루소개</div>
 	

@@ -76,13 +76,14 @@
     	 transform: scale(1.5);
     }
     
-    #content{
+     #content{
     	width: 750px; /* 너비를 250픽셀로 설정 */
         height: 350px;
-        resize: vertical; /* 높이를 50픽셀로 설정 */
+        resize: none; /* 높이를 50픽셀로 설정 */
         font-size: 20px; /* 글자 크기를 18픽셀로 설정 */
-        padding: 10px; /* 내부 여백을 10픽셀로 설정 */
-    
+       	padding: 7px 8px; /* 내부 여백을 10픽셀로 설정 */
+       	border-radius: 6px;
+       	border: 1px solid var(--input-bd);
     }
     #radio{
     margin-left: 10px;
@@ -126,7 +127,7 @@
 		<p class="title1" >회원정보</p>
 		<p class="title1" id="teid">${info}님</p>
 		
-	  	<form action="memberRightWrite" method="get" id="form">
+	  	<form action="/memberRightWrite" method="get" id="form">
 		<div class="input-container" hidden="hidden">
 			<input type="text" name="id" id="id"  value="${id}"/>
 		</div>
@@ -153,7 +154,7 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">정지내용</p>
-			<input type="text" name="ban_content" id="content"/>
+			<textarea name="content" id="content"></textarea>
 		</div>
 		
    	<button class="btn01-l" type="submit" id="text">정지</button>

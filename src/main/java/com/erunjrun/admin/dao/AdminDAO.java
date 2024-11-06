@@ -28,7 +28,7 @@ public interface AdminDAO {
 //   회원리스트
    public List<AdminDTO> memberlist(String opt, String keyword,String sortField,String sortOrder, int limit, int offset);
    
-   int count(int cnt);
+   int count(int cnt_, String keyword,String opt);
 
    
 //   관리자리스트
@@ -127,6 +127,8 @@ public interface AdminDAO {
    public int adminyn(String admin_id);
 
    public void ExistingPopupPriority(String newPriority);
+
+
 
    
    

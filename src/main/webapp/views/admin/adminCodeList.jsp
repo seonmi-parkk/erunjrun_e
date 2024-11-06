@@ -80,7 +80,7 @@
     
     }
     .btn01-l{
-    	margin-left: 1450px;
+    	margin-left: 1100px;
     	margin-bottom: 10px;
     }
 	
