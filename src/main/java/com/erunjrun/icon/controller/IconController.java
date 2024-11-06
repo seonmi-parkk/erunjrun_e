@@ -124,14 +124,17 @@ public class IconController {
      
      
      
+     
      @GetMapping(value = "adminIconChart")
-     public String iconchart() {
-        
-        return "icon/adminIconChart";
-     
-   }
-     
-     
+     public String iconchart(HttpSession session,Model model) {
+     if (session.getAttribute("adminYn") != null) {
+    	 return "icon/adminIconChart"; 
+     }
+    
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+    return "admin/adminLogin";
+  }
+   
       
      @GetMapping(value = "adminIconCharList")
      @ResponseBody
@@ -157,34 +160,39 @@ public class IconController {
         
      
      
-     @GetMapping(value = "adminIconBuy")
-     public String iconbuy(int icon_idx,Model model) {
+     @GetMapping(value = "/adminIconBuy/{icon_idx}")
+     public String iconbuy(@PathVariable String icon_idx,HttpSession session,Model model) {
         
-        model.addAttribute("info",icon_idx);
-        logger.info(""+icon_idx);
-        return "icon/adminIconBuyList";
+     if (session.getAttribute("adminYn") != null) {
+    	 model.addAttribute("info",icon_idx);
+    	 logger.info(""+icon_idx);
+    	 return "icon/adminIconBuyList";
+     }
+     	
+    	    
+         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+       return "admin/adminLogin";
      }
      
-     
-     @GetMapping(value = "adminIconBuyList")
+     @PostMapping(value = "/adminIconBuyList")
      @ResponseBody
      public Map<String, Object> iconbuylist(String icon_idx,String page, String cnt) {
-    	 logger.info("아이콘번호"+icon_idx);
-    	 int page_ = Integer.parseInt(page);
-    	 int cnt_ = Integer.parseInt(cnt);
-    	 int icon_idx_ =Integer.parseInt(icon_idx);
-    	 int limit = cnt_;
-    	 int offset = (page_ - 1) * cnt_;
-    	 int totalPages = iconService.iconbuycount(cnt_);
-    	 
-    	 
-    	 Map<String,Object> result = new HashMap<String, Object>();
-    	 result.put("totalPages", totalPages);
-    	 result.put("currpage", page);
-    	 result.put("list", iconService.iconbuylist(icon_idx_,limit,offset));
-    	 
-    	 
-    	 return result;
+        logger.info("아이콘번호"+icon_idx);
+        int page_ = Integer.parseInt(page);
+        int cnt_ = Integer.parseInt(cnt);
+        int icon_idx_ =Integer.parseInt(icon_idx);
+        int limit = cnt_;
+        int offset = (page_ - 1) * cnt_;
+        int totalPages = iconService.iconbuycount(cnt_);
+        
+        
+        Map<String,Object> result = new HashMap<String, Object>();
+        result.put("totalPages", totalPages);
+        result.put("currpage", page);
+        result.put("list", iconService.iconbuylist(icon_idx_,limit,offset));
+        
+        
+        return result;
      }
 
      
@@ -237,6 +245,13 @@ public class IconController {
            return "icon/adminIconGraph"; // Forward to JSP file named iconChart.jsp
        }
   }
+
+     
+     
+
+
+
+
 
      
      

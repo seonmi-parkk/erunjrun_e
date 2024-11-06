@@ -47,7 +47,6 @@ public class AdminController {
                session.setAttribute("loginId", id); // 로그인 ID 저장
                session.setAttribute("authority", admin_service.getAuthority(id)); // 권한 저장
                session.setAttribute("requestIp", requestIp); // 요청 IP 저장
-
                session.setAttribute("adminYn", "Y"); // 로그인시 관리자 여부
 
             } else {
@@ -62,10 +61,7 @@ public class AdminController {
       
       @GetMapping(value = "/adminJoin")
       public String adminJoin(HttpSession session) {
-//    	  if (session.getAttribute("")) {
-//			
-//		}
-    	  
+         
          return"admin/adminJoin";
       }
       
@@ -103,13 +99,12 @@ public class AdminController {
       
    @GetMapping(value = "/adminMember")
    public String memberList(HttpSession session,Model model) {
-	   String page = "admin/adminLogin";
-	   
-	   if (session.getAttribute("adminYn").equals('Y')) {
-		   page = "admin/adminMemberList";
-	   }
-	   
-      return page;
+      if (session.getAttribute("adminYn") != null) {
+         return "admin/adminMemberList";
+   }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+      return "admin/adminLogin";
    }
       
    
@@ -134,8 +129,13 @@ public class AdminController {
      }
    
      @GetMapping(value = "/admin")
-     public String adminList() {
-        return "admin/adminList";
+     public String adminList(HttpSession session,Model model) {
+        if (session.getAttribute("adminYn") != null) {
+           return "admin/adminList";
+     }
+        
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+        return "admin/adminLogin";
      }
    
      @PostMapping(value = "/adminList") //post?
@@ -160,79 +160,118 @@ public class AdminController {
      }
      
      @GetMapping(value = "/adminYn/{admin_id}" )
-     public String adminyn(@PathVariable String admin_id){
+     public String adminyn(@PathVariable String admin_id,HttpSession session,Model model){
+
+     if (session.getAttribute("adminYn") != null) {
         admin_service.adminyn(admin_id);
-        
-        return "redirect:/admin"; 
-     }
+         return "redirect:/admin"; 
+   }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+    return "admin/adminLogin";
+  }
      
      @GetMapping(value = "/adminMemberDetail/{id}") 
-     public String memberdetail(@PathVariable String id, Model model) {
-        logger.info(id);
+     public String memberdetail(@PathVariable String id, HttpSession session,Model model) {
         
-        AdminDTO dto = admin_service.memberdetail(id);
-        String image = dto.getIcon_image();
-        logger.info(image);
-        model.addAttribute("info",dto);
-        
-        
-        List<AdminDTO> result = admin_service.ban(id);
-        model.addAttribute("result",result);
-        
-        List<AdminDTO> list = admin_service.memberreportlist(id);
-        model.addAttribute("list",list);
-        
-        return "admin/adminMemberDetail";
-     }
-     
+    if (session.getAttribute("adminYn") != null) {
+           AdminDTO dto = admin_service.memberdetail(id);
+           model.addAttribute("info",dto);
+           
+           List<AdminDTO> result = admin_service.ban(id);
+           model.addAttribute("result",result);
+           
+           List<AdminDTO> list = admin_service.memberreportlist(id);
+           model.addAttribute("list",list);
+         return "admin/adminMemberDetail";
+   }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+      return "admin/adminLogin";
+   }
      
 //      권한처리     -- 권한 세션체크 스케줄링 사용해서 만들어야 함.
      
      @GetMapping(value = "/memberRight/{nickname}")
-     public String right(@PathVariable String nickname,Model model) {
-        logger.info(nickname);
-        String id = admin_service.right(nickname);
-        model.addAttribute("info",nickname);
-        model.addAttribute("id",id);
+     public String right(@PathVariable String nickname,HttpSession session,Model model) {
+        
+    if (session.getAttribute("adminYn") != null) {
+       String id = admin_service.right(nickname);
+         model.addAttribute("info",nickname);
+         model.addAttribute("id",id);
 
-        return "admin/adminRight";
-     }
+         return "admin/adminRight";
+   }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+      return "admin/adminLogin";
+   }
+     
+     
      
      @GetMapping(value = "/memberRightWrite")
      public String rightwrite(@RequestParam Map<String, String> param, Model model,HttpSession session) {
-       String admin_id = (String)session.getAttribute("loginId");
-       logger.info(admin_id);
-       param.put("admin_id", admin_id);// 관리자 로그인 ID 저장
-       admin_service.rightwrite(param);
-       
-        return"redirect:/adminMember";
-     }
+  
+     if (session.getAttribute("adminYn") != null) {
+        String admin_id = (String)session.getAttribute("loginId");
+         param.put("admin_id", admin_id);// 관리자 로그인 ID 저장
+         admin_service.rightwrite(param);
+         return "redirect:/adminMember";
+   }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+    return "admin/adminLogin";
+  }
+     
+     
      
      @GetMapping(value = "/memberRightDetail/{ban_idx}")
-     public String rightdetail(@PathVariable String ban_idx,Model model) {
-        AdminDTO dto = admin_service.rightdetail(ban_idx);
-        model.addAttribute("info",dto);
+     public String rightdetail(@PathVariable String ban_idx,HttpSession session,Model model) {
         
-        return"admin/rightDetail";
-     }
+     if (session.getAttribute("adminYn") != null) {
+        AdminDTO dto = admin_service.rightdetail(ban_idx);
+         model.addAttribute("info",dto);
+         
+         return"admin/rightDetail";
+   }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+    return "admin/adminLogin";
+  }
+     
+     
+     
      
      @GetMapping(value = "/memberRightUpdate")
-     public String rightupdate(String ban_idx, Model model) {
+     public String rightupdate(String ban_idx,HttpSession session,Model model) {
+ 
+     if (session.getAttribute("adminYn") != null) {
         AdminDTO dto = admin_service.rightdetail(ban_idx);
-        model.addAttribute("info",dto);
-   
-        return"admin/rightUpdate";
-     }
+         model.addAttribute("info",dto);
+    
+         return"admin/rightUpdate";
+   }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+    return "admin/adminLogin";
+  }
+     
+     
      
      @PostMapping(value = "/memberRightUpdate")
      public String rightupdate( @RequestParam Map<String, String> param,Model model,HttpSession session) {
+
+     if (session.getAttribute("adminYn") != null) {
         String admin_id = (String)session.getAttribute("loginId");
-        param.put("admin_id", admin_id);
-        admin_service.rightupdate(param);
-        
-        return"redirect:/memberRightDetail?ban_idx="+param.get("ban_idx");
-     }
-     
+         param.put("admin_id", admin_id);
+         admin_service.rightupdate(param);
+         
+         return"redirect:/memberRightDetail/"+param.get("ban_idx");
+   }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+    return "admin/adminLogin";
+  }
     
      
      
@@ -278,39 +317,61 @@ public class AdminController {
      }
      
      @GetMapping(value = "/adminReportDetail/{report_idx},{code_name}")
-     public String reportdetail(@PathVariable String report_idx,@PathVariable String code_name,Model model) {
-        admin_service.reportdetail(report_idx,code_name,model);
+     public String reportdetail(@PathVariable String report_idx,@PathVariable String code_name,HttpSession session,Model model) {
+       
+     if (session.getAttribute("adminYn") != null) {
+         admin_service.reportdetail(report_idx,code_name,model);
+          return "admin/adminReportDetail";
+   }
       
-        
-        
-        return "admin/adminReportDetail";
-     }
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+    return "admin/adminLogin";
+  }
+     
+     
 
      @GetMapping(value = "/adminReportUpdate/{report_idx},{code_name}")
-     public String reportupdate(@PathVariable String report_idx,@PathVariable String code_name,Model model) {
-        admin_service.reportdetail(report_idx,code_name,model);
-        
-        return "admin/adminReportUpdate";
-     }
+     public String reportupdate(@PathVariable String report_idx,@PathVariable String code_name,HttpSession session,Model model) {
+     if (session.getAttribute("adminYn") != null) {
+         admin_service.reportdetail(report_idx,code_name,model);         
+          return "admin/adminReportUpdate";
+   }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+    return "admin/adminLogin";
+    }
+     
+     
+     
      
      @GetMapping(value = "/adminReportUpdate")
      public String reportupdate(@RequestParam Map<String, String> param,HttpSession session,
            Model model) {
+     if (session.getAttribute("adminYn") != null) {
         String admin_id = (String)session.getAttribute("loginId");
-        logger.info(admin_id);
-        param.put("admin_id", admin_id);// 관리자 로그인 ID 저장
-        admin_service.reportupdate(param);
-        logger.info(param.get("report_id"));
-       return "redirect:/adminReportDetail/"+param.get("report_idx")+","+param.get("code_name");
-     }
-     
-     
+         logger.info(admin_id);
+         param.put("admin_id", admin_id);// 관리자 로그인 ID 저장
+         admin_service.reportupdate(param);
+         logger.info(param.get("report_id"));
+        return "redirect:/adminReportDetail/"+param.get("report_idx")+","+param.get("code_name");
+      }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+      return "admin/adminLogin";
+      }
      //문의하기
      
      @GetMapping(value = "/adminAsk")
-     public String ask() {
-        return "admin/adminAskList";
+     public String ask(HttpSession session,Model model) {
+     if (session.getAttribute("adminYn") != null) {
+          return "admin/adminAskList";
      }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+      return "admin/adminLogin";
+      }
+     
+     
      
      @PostMapping(value = "/adminAskList")
      @ResponseBody 
@@ -333,9 +394,16 @@ public class AdminController {
      // 태그
      
      @GetMapping(value = "/adminTag")
-     public String tag() {
-        return "admin/adminTagList";
+     public String tag(HttpSession session,Model model) {
+     if (session.getAttribute("adminYn") != null) {
+         return "admin/adminTagList";
      }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+      return "admin/adminLogin";
+      }
+     
+     
      
      @GetMapping(value = "/adminTagList")
      @ResponseBody 
@@ -354,13 +422,18 @@ public class AdminController {
      
      }
      @GetMapping(value = "/adminTagWrite")
-     public String tagwrite() {
+     public String tagwrite(HttpSession session,Model model) {
+     if (session.getAttribute("adminYn") != null) {
         return "admin/adminTagWrite";
      }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+      return "admin/adminLogin";
+      }
      
      
      @PostMapping(value = "/adminTagWrite")
-     public String tagwrite(@RequestParam Map<String, String> param, Model model) {
+     public String tagwrite(@RequestParam Map<String, String> param, HttpSession session,Model model) {
       logger.info(param.get("tag_name"));
       logger.info(param.get("use_yn"));
       admin_service.tagwrite(param);
@@ -369,29 +442,47 @@ public class AdminController {
      
      
      @GetMapping(value = "/adminTagUpdate/{tag_idx}")
-     public String tagdetail(@PathVariable String tag_idx,Model model) { 
+     public String tagdetail(@PathVariable String tag_idx,HttpSession session,Model model) { 
+
+     if (session.getAttribute("adminYn") != null) {
         admin_service.tagdetail(tag_idx,model);
 
-        return "admin/adminTagUpdate";
-     }
+         return "admin/adminTagUpdate";
+      }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+   return "admin/adminLogin";
+   }
+    
+     
+   
+     
      
      @PostMapping(value = "/adminTagUpdate")
-     public String tagupdate(@RequestParam Map<String, String> param) {
-        
-        admin_service.tagupdate(param);
-        logger.info(param.get("tag_idx"));
-        
-        return "redirect:/adminTag";
-     }
-     
+     public String tagupdate(@RequestParam Map<String, String> param,HttpSession session,Model model) {
+     if (session.getAttribute("adminYn") != null) {
+     admin_service.tagupdate(param);
+      logger.info(param.get("tag_idx"));
+      return "redirect:/adminTag";
+      }
+      
+      model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+      return "admin/adminLogin";
+   }
      
      
      
      // 구분코드
      @GetMapping(value = "/adminCode")
-     public String code() {
+     public String code(HttpSession session,Model model) {
+     if (session.getAttribute("adminYn") != null) {
         return "admin/adminCodeList";
      }
+
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+     return "admin/adminLogin";
+     }
+     
      
      @GetMapping(value = "/adminCodeList")
      @ResponseBody
@@ -411,14 +502,27 @@ public class AdminController {
      }
      
      @GetMapping(value = "/adminCodeWrite")
-     public String codewrite(){
+     public String codewrite(HttpSession session,Model model){
+     if (session.getAttribute("adminYn") != null) {
         return "admin/adminCodeWrite";
+     }
+        
+        
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+     return "admin/adminLogin";
      }
      
      @PostMapping(value = "/adminCodeWrite")
-     public String codewrite(@RequestParam Map<String, String> param,Model model) {
+     public String codewrite(@RequestParam Map<String, String> param,HttpSession session,Model model) {
+  
+     if (session.getAttribute("adminYn") != null) {
         admin_service.codewrite(param);
         return "redirect:/adminCode";
+     }
+        
+        
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+     return "admin/adminLogin";
      }
      
      @PostMapping(value = "/adminCodeOverlay")
@@ -431,28 +535,37 @@ public class AdminController {
       }
      
      @GetMapping(value = "/adminCodeUpdate/{code_name}")
-     public String codedetail(@PathVariable String code_name,Model model) { 
+     public String codedetail(@PathVariable String code_name,HttpSession session,Model model) { 
         admin_service.codedetail(code_name,model);
         return "admin/adminCodeUpdate";
      }
      
      @PostMapping(value = "/adminCodeUpdate")
-     public String codeupdate(@RequestParam Map<String, String> param) { 
+     public String codeupdate(@RequestParam Map<String, String> param,HttpSession session,Model model) { 
+     
+     if (session.getAttribute("adminYn") != null) {
         admin_service.codeupdate(param);
-        logger.info(param.get("code_name"));
-        logger.info(param.get("content"));
-        logger.info(param.get("use_yn"));
-        
+
         return "redirect:/adminCode";
+     }
+        
+        
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+     return "admin/adminLogin";
      }
      
      
      @GetMapping(value = "/adminPopup")
-     public String popup() {
+     public String popup(HttpSession session,Model model) {
         
+     if (session.getAttribute("adminYn") != null) {
         return "admin/adminPopupList";
      }
-     
+        
+        
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+     return "admin/adminLogin";
+     }
      
      @GetMapping(value = "/adminPopupList")
      @ResponseBody
@@ -472,46 +585,62 @@ public class AdminController {
      }
      
      @GetMapping(value = "/adminPopupWrite")
-     public String popupwrite() {
-        
-        
+     public String popupwrite(HttpSession session,Model model) {
+     if (session.getAttribute("adminYn") != null) {
         return "admin/adminPopupWrite";
      }
-     
+
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+     return "admin/adminLogin";
+     }
      
      @PostMapping(value = "/adminPopupWrite")
-     public String popupwrite(MultipartFile file,@RequestParam Map<String, String> param, Model model) {
-      logger.info(param.get("tag_name"));
-      logger.info(param.get("use_yn"));
-      admin_service.popupwrite(file,param);
+     public String popupwrite(MultipartFile file,@RequestParam Map<String, String> param,HttpSession session,Model model) {
+     if (session.getAttribute("adminYn") != null) {
+        admin_service.popupwrite(file,param);
         return "redirect:/adminPopup";
+     }
+
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+     return "admin/adminLogin";
      }
      
      @GetMapping(value = "/adminPopupUpdate/{popup_idx},{code_name}")
-     public String popupupdetail(@PathVariable String popup_idx,@PathVariable String code_name,Model model) { 
+     public String popupupdetail(@PathVariable String popup_idx,@PathVariable String code_name,HttpSession session,Model model) { 
+     if (session.getAttribute("adminYn") != null) {
         admin_service.popupdetail(popup_idx,code_name,model);
         return "admin/adminPopupUpdate";
+     }
+        
+        
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+     return "admin/adminLogin";
      }
      
      @PostMapping(value = "/adminPopupUpdate")
      public String popupupdate(MultipartFile file,
-           @RequestParam Map<String, String> param) { 
-       admin_service.popupupdate(file,param);
-      
-         
-      return "redirect:/adminPopup";
-      }
-     
+           @RequestParam Map<String, String> param,HttpSession session,Model model) { 
+     if (session.getAttribute("adminYn") != null) {
+        admin_service.popupupdate(file,param);
+        
+        return "redirect:/adminPopup";
+     }
+        
+        
+        model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
+     return "admin/adminLogin";
+     }
      
      @PostMapping(value = "/adminFileDelete")
      @ResponseBody
-      public Map<String, Object> filedelete(String code_name,int popup_idx) {
+      public Map<String, Object> filedelete(String code_name,int popup_idx,HttpSession session,Model model) {
          
-        logger.info(code_name);
-        logger.info(""+popup_idx);
+       
          Map<String, Object> map = new HashMap<String, Object>();
          map.put("del",admin_service.filedelete(code_name,popup_idx));
          return map;
+         
+         
       }
      
      

@@ -94,7 +94,7 @@
    <!-- inner 클래스 하위에 모든 요소들을 넣어서 만드시면 됩니다. -->
       
      <div class="content-wrapper">
-		<aside class="fixed-left">
+      <aside class="fixed-left">
             <div class="image">
                 <img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
             </div>
@@ -217,7 +217,7 @@
     for (var view of list) {
       console.log(view.image);
         content += '<tr>';
-        content += '<td><a href="adminIconBuyList?icon_idx=' + view.icon_idx + '">' + view.icon_name + '</a></td>';
+        content += '<td><a href="/adminIconBuy/'+ view.icon_idx +'">' + view.icon_name + '</a></td>';
         content += '<td><img src="/resources/img/icon/'+ view.image+'" alt="아이콘 이미지" width="50" height="50"/></td>'; // 아이콘 이미지 표시
         content += '<td>' + $('#ageGroup').val() + '</td>'; // 선택된 연령대 표시
         content += '<td>' + (view.male_count || 0) + '</td>'; // 남성 구매 수

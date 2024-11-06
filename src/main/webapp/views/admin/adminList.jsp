@@ -197,19 +197,12 @@ function pageCall(page) {
         }
          $('#list').html(content);
       }
- 
+   var msg = '${msg}';
+   if (msg != '') {
+      alert(msg);
+   }
     
-/* 페이지네이션 */
-/*$('#pagination').twbsPagination({ 
-   startPage:1, 
-   totalPages:10, 
-   visiblePages:10,
-    onPageClick:function(evt,page){
-      console.log('evt',evt); 
-      console.log('page',page); 
-      pageCall(page);
-   } 
-});*/
+
     
 </script>
 <script src="/resources/js/common.js" type="text/javascript"></script>

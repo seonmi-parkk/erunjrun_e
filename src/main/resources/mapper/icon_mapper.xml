@@ -94,6 +94,7 @@
    <select id="iconchart" resultType="com.erunjrun.icon.dto.IconDTO">
 	    SELECT 
 	    i.icon_name,
+	    i.icon_idx,
 	    i.image,
 	    SUM(CASE WHEN m.gender = '남' THEN 1 ELSE 0 END) AS male_count, 
 	    SUM(CASE WHEN m.gender = '여' THEN 1 ELSE 0 END) AS female_count, 

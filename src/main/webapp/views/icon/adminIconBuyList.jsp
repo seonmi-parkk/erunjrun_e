@@ -163,8 +163,8 @@
 	console.log(icon_idx);
 	console.log('페이지',page);
 		$.ajax({
-			type:'GET',
-			url:'adminIconBuyList',
+			type:'POST',
+			url:'/adminIconBuyList',
 			data:{
 				'page':page,
 				'cnt':15,

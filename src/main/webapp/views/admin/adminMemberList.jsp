@@ -137,6 +137,11 @@
     <jsp:include page="../footer.jsp"/>
 </body>
 <script>
+var msg = '${msg}';
+if (msg != '') {
+   alert(msg);
+}
+
     var show = 1;
     pageCall(show);
 
@@ -207,7 +212,7 @@
         }
         $('#list').html(content);
     }
-    
+   
 </script>
 <script src="/resources/js/common.js" type="text/javascript"></script>
 <script src="/resources/js/layerPopup.js"></script>
