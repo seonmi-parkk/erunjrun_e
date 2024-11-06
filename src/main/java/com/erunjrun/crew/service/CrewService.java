@@ -648,5 +648,15 @@ public class CrewService {
 		return crew_dao.crewTagResult();
 	}
 
+	public boolean crewMemberFullCheck(int crew_idx) {
+		
+		int result =  crew_dao.crewMemberFullCheck(crew_idx);
+		if(result == 0) {
+			return true;
+		}
+		
+		return false;
+	}
+
 	
 }
