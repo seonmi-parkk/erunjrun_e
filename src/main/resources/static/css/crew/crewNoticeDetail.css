@@ -1,13 +1,4 @@
-@charset "UTF-8";
-    	.dot {overflow:hidden;float:left;width:12px;height:12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/mini_circle.png');}    
-		.dotOverlay {position:relative;bottom:10px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#fff;}
-		.dotOverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}    
-		.number {font-weight:bold;color:#ee6152;}
-		.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
-		.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
-		.distanceInfo:after {content:none;}
-		
-		.label {
+.label {
 	    color: #333; /* 텍스트 색상 */
 	    font-weight: bold; /* 굵게 */
 	    font-size: 14px; /* 폰트 크기 */
@@ -15,10 +6,8 @@
 		}
     
     
-    	user.a{
+    	a{
     		color: #333;
-    		text-decoration: none;
-    		
     	}
         #dori {
             width: 1280px;          /* 박스의 너비 설정 */
@@ -59,9 +48,11 @@
 			transform: translateY(0px);
 			font-weight: 700;
     		font-size: 24px;
+   			font-family: "Pretendard Variable", Pretendard;
+    	}
+    	#subject{
     		margin-top: -25px;
     		margin-bottom: 25px;
-   			font-family: "Pretendard Variable", Pretendard;
     	}
     	.ori{
 
@@ -74,7 +65,7 @@
 			  
     	}
     	#butt{
-    		transform: translateY(-5px);
+    		transform: translateY(-35px);
     	}
     	.repo{
     		  background: #ffffff;
@@ -148,7 +139,8 @@
 		.nick{
 			margin-left: 18;
    		 	margin-bottom: 7px;
-   		 	transform: translate(10px, -2px);
+   		 	display: flex;
+    		align-items: center;
 		}
 
 		.date{
@@ -291,6 +283,24 @@
 			width: 44px; height: 44px;
 			margin-right: 2px;
 		}
-		.title3-1{
 		
+		#dori .profile-area{
+    	width: 44px; height: 44px;
+    	position: relative;
+	    }
+	    #dori .profile-box {
+			position: absolute; top: 50%; left: 50%;
+			transform: translate(-50%, -50%);
+			width: 44px; height: 44px;
+			margin-right: 2px;
+		}
+		#dori .profile-img {
+			position: absolute; top: 50%; left: 50%;
+			transform: translate(-50%, -50%);
+			width: 33px; height: 33px;
+			border-radius: 50%;
+		}
+		.are{
+			display: flex;
+			align-items: flex-end;
 		}

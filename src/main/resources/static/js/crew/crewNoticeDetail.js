@@ -1,7 +1,9 @@
 
 	var notice_idx = $('input[name="notice_idx"]').val();
 	var loginId = $('input[name="loginId"]').val();
-
+	var nickname = $('input[name="userName"]').val();
+	var admin = $('input[name="admin"]').val();
+	
 	if (loginId === null || loginId === '') {
 	    loginId = 'a';
 	}
@@ -37,7 +39,11 @@
 			$('#hit').html(result.hit);
 			$('#create_date').html(result.create_date);
 			
-			$('#name').html('<img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+nickName.nickname);
+			if(admin == 'Y'){
+				$('#name').html('<div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/admin_profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+result.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+loginId);
+			}else{
+				$('#name').html('<div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+result.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+nickname);
+			}
 			
 			if(loginId === result.id){
 				console.log('같은데?');
@@ -120,73 +126,7 @@
 	    document.getElementById("profilePopup").style.display = "none";
 	};	
 	
-	commentCall();
-	
-	function commentCall() {
-		
-		var notice_idx = $('input[name="notice_idx"]').val();
-		console.log("공지사항 no :",notice_idx);
-		
-		$.ajax({
-        	type: "POST",
-            url: "/crewComment/" + notice_idx ,
-            data: { 'notice_idx': notice_idx },
-            datatype: 'JSON',
-            success: function(data) {
-                var commentCount = data.list.length;
-				$('#commentNum').text(commentCount);                
-                commentDraw(data.list);
-            },
-            error: function(error) {
-               console.log('댓글 못 불러오기');    
-            }
-        });
-		
-	}
- 	
-	function commentDraw(list) {
-		
-		var content ='';
-		list.forEach(function(view,idx){
-			var nickName = $('#name').text();
-			var addName = view.nickname;
-			var id = view.id
-			console.log('아이디나오냐',id);
-			var comment_idx = view.comment_idx;
-			
-			
-			content +='<div id="sort-area">';
-			content +='<input type="hidden" name="user_id" value="'+id+'"/>';
-			content +='<div class="sort" id="sort-update'+comment_idx+'">';
-			content +='<div>';
-			content +='<div class="nick"><img style="height: 30;" src="/resources/img/run/running_8421565.png" alt="아이콘">'+view.nickname+'</div>';
-			if(view.use_yn == 'N'){
-				content +='<p class="coco" style="color: #999;" >(삭제된 댓글 입니다.)</p>';
-			}else{
-				content +='<p class="coco">'+view.content+'</p>';
-			}
-			content +='<div class="date">'+view.create_date+'</div>';
-			content +='</div>';
-			if(view.use_yn == 'Y'){
-				content +='<div class="ard" id="dis">';					
-				content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
-				content +='<div id ="bih" class=btn03-s>비활성화</div>';
-				content += '<div class="action-buttons" style="display:none; cursor: pointer;" id="actions-' + comment_idx + '">';
-				if(nickName == addName){
-					content +='<div class="suj1 btn-popup" style=" cursor: pointer;" onclick="update('+comment_idx+')"  >수정</div>';
-					content +='<div class="suj2 btn-popup" style=" cursor: pointer;" onclick="del('+comment_idx+')">삭제</div>';
-				}else{
-					content +='<div id="sin" style="margin-top: 5px;" data-comment_idx="'+comment_idx+'" onclick="report('+comment_idx+')" style=" cursor: pointer;" class="suj2 btn-popup"  >신고</div>';
-				}
-				
-			}
-			content += '</div>';
-			content +='</div>';
-			content +='</div>';
-			content +='</div>';
-		});
-		$('#list').html(content);
-	}
+
 	
 	function toggleActions(comment_idx) {
 	    $('#actions-' + comment_idx).toggle(); // 버튼 표시/숨김 토글

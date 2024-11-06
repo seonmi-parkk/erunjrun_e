@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.erunjrun.crew.service.CrewService;
+import com.erunjrun.member.dto.MemberDTO;
 
 @Controller
 public class CrewViewController {
@@ -97,8 +98,14 @@ public class CrewViewController {
     
     @RequestMapping(value="/crewNoticeDetail/{notice_idx}")
     public String crewNoticeDetailView(@PathVariable int notice_idx, Model model, HttpSession session) {
-    	if(session.getAttribute("loginId") != null) {
+    	
+    	String loginId = (String) session.getAttribute("loginId");
+    	
+    	MemberDTO nick = crew_service.nickName(loginId);
+    	
+    	if(loginId != null) {
     		model.addAttribute("notice_idx", notice_idx);
+    		model.addAttribute("nickname", nick);
     		return "crew/crewNoticeDetail";
     	}
     	return "redirect:/loginView";
