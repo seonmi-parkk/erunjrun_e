@@ -609,13 +609,16 @@ public class CrewController {
 	}
 	
 	@GetMapping(value="/adminMemberUpdate")
-	public boolean crewMemberAdminUpdate(@RequestParam String result, @RequestParam int crew_idx, @RequestParam String id) {
+	public boolean crewMemberAdminUpdate(@RequestParam String result, @RequestParam int crew_idx, @RequestParam String id, @RequestParam String leader) {
 		boolean success = false;
 		Map<String, Object> param = new HashMap<>();
 		if(result.equals("Y")) {
 			param.put("crew_idx", crew_idx);
 			param.put("id", id);
+			logger.info("id => " + id);
+			logger.info("leader => " + leader);
 			param.put("is_agree", result);
+			param.put("leader", leader);
 		}else {
 			param.put("crew_idx", crew_idx);
 			param.put("id", id);
@@ -623,9 +626,9 @@ public class CrewController {
 		}
 		
 		if(crew_service.crewMemberAdminUpdate(param) >0) {
-			return true;
+			success = true;
 		}
-		return false;
+		return success;
 		
 	}
 	
@@ -648,6 +651,31 @@ public class CrewController {
 		
 		return success;
 	}
+	
+	@GetMapping(value="/adminOverlay")
+	public boolean crewAdminOverlay(@RequestParam String id, @RequestParam int crew_idx) {
+		
+		try {
+			Map<String, Object> param = new HashMap<>();
+			param.put("crew_idx", crew_idx);
+			param.put("id", id);
+			if(crew_service.crewAdminOverlay(param) == 0) {
+				return true;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	@GetMapping(value="/tagResult")
+	public Map<String, Object> crewTagResult(){
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("tag", crew_service.crewTagResult());
+		
+		return resultMap;
+	}
+	
 	
 	/*
 	 * @PostMapping(value="/likeChange") public boolean crewLikeChange(@RequestParam

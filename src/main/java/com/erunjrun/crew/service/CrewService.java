@@ -570,7 +570,6 @@ public class CrewService {
 		return false;
 	}
 
-	@Transactional
 	public CrewNoticeDTO crewNoticeDetail(int notice_idx) {
 		
 		int row = crew_dao.crewNoticeHit(notice_idx);
@@ -606,8 +605,9 @@ public class CrewService {
 	public int crewMemberAdminUpdate(Map<String, Object> param) {
 		
 		if(param.get("is_agree").equals("Y")) {
-			crew_dao.crewLeaderUpdate(param);
-			crew_dao.crewLeaderChange(param);
+			crew_dao.crewLeaderUpdate(param); // 리더 -> 크루원
+			crew_dao.crewLeaderChange(param); // 크루원 -> 리더
+			crew_dao.crewMemberAdminChange(param); // 기존에 존재하는 다른 요청자 W -> N 으로 상태 변경
 		}
 		
 		return crew_dao.crewMemberAdminUpdate(param);
@@ -623,6 +623,29 @@ public class CrewService {
 
 	public int crewAdminResultCheck(Map<String, Object> param) {
 		return crew_dao.crewAdminResultCheck(param);
+	}
+
+	public int crewAdminOverlay(Map<String, Object> param) {
+		return crew_dao.crewAdminOverlay(param);
+	}
+
+	public String crewLocationLeaderCheck(String loginId, int crew_idx) {
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", loginId);
+		param.put("crew_idx", crew_idx);
+		return crew_dao.crewLocationLeaderCheck(param);
+	}
+
+	public String crewNoticeLeaderCheck(String loginId, int notice_idx) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("id", loginId);
+		param.put("notice_idx", notice_idx);
+		return crew_dao.crewNoticeLeaderCheck(param);
+	}
+
+	public List<CrewDTO> crewTagResult() {
+		return crew_dao.crewTagResult();
 	}
 
 	
