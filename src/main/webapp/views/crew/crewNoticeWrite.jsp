@@ -171,6 +171,7 @@
     
     $('#checkReturn').on('change', function(){
 		$('#priorityOption').css('visibility', 'hidden');
+		$('#priorityOverlay').html('');
     });
     
     $('#priorityOption').on('change', function(){

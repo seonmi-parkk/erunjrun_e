@@ -17,7 +17,6 @@
 	<script src="/resources/js/layerPopup.js"></script>
 </head>
 <body>
-    <a href="/crewUpdateView">크루 업데이트 페이지로 이동</a>
     <jsp:include page="../header.jsp" />
     
     

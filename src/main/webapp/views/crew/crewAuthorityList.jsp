@@ -116,42 +116,58 @@
     	position: relative;
     } 
     
-		/* 프로필 컨테이너 */
-		table tbody tr td.profileContainer {
-		    position: relative; /* 자식 요소의 절대 위치 기준으로 설정 */
-		    display: flex; /* 수평 정렬을 위한 flex 설정 */
-		    align-items: center; /* 수직 가운데 정렬 */
-		    vertical-align: middle;
-		    text-align: left;
-		    margin-left: 60px;
-		}
+	/* 프로필 컨테이너 */
+	table tbody tr td.profileContainer {
+	    position: relative; /* 자식 요소의 절대 위치 기준으로 설정 */
+	    /*display: flex; /* 수평 정렬을 위한 flex 설정 */
+	    align-items: center; /* 수직 가운데 정렬 */
+	    vertical-align: middle;
+	    text-align: left;
+	    margin-left: 60px;
+	}
+	
+	/* 프로필 이미지 */
+	.profileBox {
+	    margin-right: 10px;
+	    border-radius: 50%; /*프로필 둥글게*/
+	    margin-left: 24%;
+	}
+	
+	/* 아이콘 이미지 */
+	.profile-box2 {
+	    position: absolute;
+	    top: -8px; /* profileBox와 같은 높이에 위치 */
+	    left: 65px; /* profileBox 오른쪽에 배치 */
+	    width: 44px;
+	    height: 44px;
+	    margin-right: 2px;
+	    transform: translateY(50%); /* 필요 시 위치 조정 */
+	} 
+	
+	.profile-box3 {
+	    position: absolute;
+	    top: -4px; /* profileBox와 같은 높이에 위치 */
+	    left: 65px; /* profileBox 오른쪽에 배치 */
+	    width: 44px;
+	    height: 44px;
+	    margin-right: 2px;
+	    transform: translateY(50%); /* 필요 시 위치 조정 */
+	} 
+	
+	.btn05-s{
+		display: inline-block;
+		height: 32px;
+		padding: 6px 11px;
+		margin: 0 4px;
+		border-radius: 10px;
+		border: 1px solid gray;
+		color: gray;
+		background: #fff;
+		cursor: pointer;
+		font-size: 14px;
+	}
 		
-		/* 프로필 이미지 */
-		.profileBox {
-		    margin-right: 10px;
-		    border-radius: 50%; /*프로필 둥글게*/
-		}
 		
-		/* 아이콘 이미지 */
-		.profile-box2 {
-		    position: absolute;
-		    top: -8px; /* profileBox와 같은 높이에 위치 */
-		    left: 78px; /* profileBox 오른쪽에 배치 */
-		    width: 44px;
-		    height: 44px;
-		    margin-right: 2px;
-		    transform: translateY(50%); /* 필요 시 위치 조정 */
-		} 
-		
-		.profile-box3 {
-		    position: absolute;
-		    top: -4px; /* profileBox와 같은 높이에 위치 */
-		    left: 65px; /* profileBox 오른쪽에 배치 */
-		    width: 44px;
-		    height: 44px;
-		    margin-right: 2px;
-		    transform: translateY(50%); /* 필요 시 위치 조정 */
-		} 
 </style>
 </head>
 <body>
@@ -169,8 +185,8 @@
 	<table>
 		<thead>
 			<tr>
-				<th>크루장</th>
 				<th>크루원</th>
+				<th>크루장</th>
 				<th>요청일자</th>
 				<th>응답일자</th>
 				<th>결과</th>
@@ -189,6 +205,8 @@
 			</th>
 		</tr>
 	</table>
+	<br/>
+	<button class="btn02-m" onclick="location.href='/crewManagerList/${crew_idx}'">목록</button>
 	
 	<!-- 모달 -->
 		<div id="profilePopup" class="modal">
@@ -280,11 +298,11 @@
 			}else if(item.is_agree === 'N'){
 				btn = '<button class="btn04-s">거절</button></td>';
 			}else{
-				btn = '<button class="btn04-s">대기</button></td>';
+				btn = '<button class="btn05-s">대기</button></td>';
 			}
 			
 			if(item.update_date === null){
-				item.update_date = '없음';
+				item.update_date = '미응답';
 			}
 			
 			var member_profileImg = '';
@@ -313,19 +331,19 @@
 			}
             
             // 프로필 + 닉네임 (나중에 연결 필요)
-            content +='<td class="profileContainer"><img src="'+member_profileImg+'" width="32px" class="profileBox"/>'
-            + '<div class="profile-box2" style="' + member_icon_img + '"></div>'
-            + '<a class="user" style="cursor: pointer;"  data-id="' + item.member_id + '">'
-            +item.member_nickname+'</a></td>';
-            content +='<td class="profileContainer"><img src="'+leader_profileImg+'" width="32px" class="profileBox"/>'
-            + '<div class="profile-box3" style="' + leader_icon_img + '"></div>'
-            + '<a class="user" style="cursor: pointer;"  data-id="' + item.leader_id + '">'
-            +item.leader_nickname+'</a></td>';
+            content += '<tr class="trLayout">';
+            content += '<td class="profileContainer"><img src="' + member_profileImg + '" width="32px" class="profileBox onerror="this.src=\'/resources/img/common/profile.png\'"/>';
+            content += '<div class="profile-box2" style="' + member_icon_img + '"></div>';
+            content += '<a class="user" style="cursor: pointer;" data-id="' + item.member_id + '">' + item.member_nickname + '</a></td>';
             
-			content +='<td>'+item.create_date+'</td>'; // 신청일자
-			content +='<td>'+item.update_date+'</td>'; // 응답일자
-			content += '<td>'+btn+'</td>';
-	        content += '</tr>';
+            content += '<td class="profileContainer"><img src="' + leader_profileImg + '" width="32px" class="profileBox onerror="this.src=\'/resources/img/common/profile.png\'""/>';
+            content += '<div class="profile-box3" style="' + leader_icon_img + '"></div>';
+            content += '<a class="user" style="cursor: pointer;" data-id="' + item.leader_id + '">' + item.leader_nickname + '</a></td>';
+            
+            content += '<td>' + item.create_date + '</td>'; // 신청일자
+            content += '<td>' + item.update_date + '</td>'; // 응답일자
+            content += '<td>' + btn + '</td>';
+            content += '</tr>';
 
 		});
 		$('#list').html(content);

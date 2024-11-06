@@ -108,7 +108,7 @@
 		    <div class="btn-box">
 		    
 		    	<div class="crew-box">
-			    	<button class="btn01-l2" id="crew-btn-01" onclick="layerPopup('신청 및 취소하시겠습니까?', '확인', '취소', crewMemberUpdate, applBtn2Act)">러닝크루 신청하기</button>
+			    	<button class="btn01-l2" id="crew-btn-01" onclick="layerPopup('크루 상태를 변경하시겠습니까?', '확인', '취소', crewMemberUpdate, applBtn2Act)">러닝크루 신청하기</button>
 			    	<!-- 크루 페이지 로딩 시 가져오기 -->
 			    	<div class="btn-like btn02-s1" onclick="like()">
 			    		<img src="resources/img/common/ico_heart_no_act.png" onerror="this.src='/resources/img/common/ico_heart_no_act.png'" id="likeImg" alt="좋아요비활성">

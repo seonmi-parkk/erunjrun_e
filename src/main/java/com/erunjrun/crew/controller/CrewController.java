@@ -629,6 +629,26 @@ public class CrewController {
 		
 	}
 	
+	@GetMapping(value="/adminResultCheck")
+	public boolean crewAdminResultCheck(@RequestParam int crew_idx, @RequestParam String id) {
+		
+		logger.info("크루 권한 있는지 체크하는 메서드 실행!!!!!!!!!!!!!");
+		boolean success = false;
+		try {
+			Map<String, Object> param = new HashMap<>();
+			param.put("crew_idx", crew_idx);
+			param.put("id", id); // 크루장 id
+			if(crew_service.crewAdminResultCheck(param) == 0) { // 0일 경우 아직 아무도 승인 안한 상태
+				return true;
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return success;
+	}
+	
 	/*
 	 * @PostMapping(value="/likeChange") public boolean crewLikeChange(@RequestParam
 	 * int crew_idx, @RequestParam String currentStatus) {

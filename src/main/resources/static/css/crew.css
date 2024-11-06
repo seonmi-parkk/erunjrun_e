@@ -62,8 +62,9 @@
     /* 헤더 */
    	header {
 	    width: 100%;
+	    height: 80px;
 	    position: fixed;
-	    z-index: 999;
+	    z-index: 997;
 	    top: 0;
 	    left: 50%;
 	    transform: translateX(-50%);
@@ -73,21 +74,28 @@
 	}
 	
 	.header-inner {
+	    width: 100%;
 		max-width : 1300px;
 		margin : 0 auto;
 		display : flex; display: -moz-box; display: -ms-flexbox;
 		-webkit-box-pack: space-between; -ms-flex-pack: space-between; justify-content: space-between;
 		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
+	    position: absolute;
+    	top: 50%;
+	    left: 50%;
+	    transform: translate(-50%, -50%);
 	}
 	
 	header .menu {
 		display : flex; display: -webkit-box; display: -moz-box; display: -ms-flexbox;
+	    margin-bottom: 2px;
 	}
 	
 	header .menu li a{
 		padding: 10px 14px;
 		margin: 0 9px;
 		font-size: 18px;
+		color: var(--font-color);
 	}
 	
 	header .menu li a:hover{
@@ -131,16 +139,23 @@
 		margin-right : 20px;
 	}
 	
-	header .profile-box {
-		width : 46px;
-		height : 46px;
-		display : flex; display: -moz-box; display: -ms-flexbox;
-		-webkit-box-pack: center; -ms-flex-pack: center; justify-content: center;
-		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
+	header .profile-area{
+    	width: 44px; height: 44px;
+    	position: relative;
+    	margin-right: 8px;
+    	cursor: pointer;
+    }
+    header .profile-box{
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 44px; height: 44px;
+		margin-right: 2px;
 	}
-	
-	header .profile-box .profile-img{
-		width: 32px;
+	header .profile-img{
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 32px; height: 32px;
+		border-radius: 50%;
 	}
 	
 	header .notice{
@@ -151,9 +166,8 @@
 	
 	header .notice .num-box{
 		position: absolute;
-		right: -1px;
-   		top: 0px;
-		right: 6px;
+   		top: -1px;
+    	right: 0px;
 		width: 16px; 
 		height: 16px;
 		line-height: 16px;
@@ -164,6 +178,62 @@
 	header .notice .num-box span{
 		color: #fff;
 		font-size: 11px;
+		display: inline-block;
+	    transform: translate(0px, 1px);
+	}
+	
+	header .admin-menu {
+		display : flex; display: -moz-box; display: -ms-flexbox;
+	}
+	
+	header .admin-mod {
+		display : flex; display: -moz-box; display: -ms-flexbox;
+		-webkit-box-align: center; -ms-flex-align: center; align-items: center;  
+	}
+	
+	header .admin-mod .toggle-slider{
+	    display: inline-block;
+	    cursor: pointer;
+	    width: 48px;
+	    height: 24px;
+   		margin: 0 4px 0 18px;
+	    background-color: #e0e0e0;
+	    border-radius: 25px;
+	    position:relative;
+	    transition: 0.3s ease-out;
+	}
+	
+	header .admin-mod .toggle-slider::after {
+	    content: ''; 
+	    width: 18px; 
+	    height: 18px;
+	    background-color: #fff;
+	    position: absolute;
+	    border-radius: 50%;
+	    top: 3px;
+	    left: 2px;
+	    transition: 0.3s ease-out;
+	}
+	
+	header .admin-mod.on .toggle-slider{
+	    background-color: #444;
+	}
+
+	header .admin-mod.on .toggle-slider::after {
+	    left:calc(100% - 20px);
+	    background-color: #fff;
+	}
+	
+	header .admin-mod span {
+		display: inline-block;
+		width: 37px;
+		font-size: 14px;
+		font-weight: 600;
+	}
+	header .logout {
+		color: #777;
+		margin-left: 12px;
+		font-size: 14px;
 	}
 	
 	
@@ -195,7 +265,7 @@
 	}
 	.footer a{
 		font-size: 15px;
-		
+		color: var(--font-color);
 	}
 	.footer .col:last-child{
 		position: initial;
@@ -212,7 +282,6 @@
 		color: #999;
 		font-weight: 300;
 	}
-    
 
 	/* 공통 태그 */
 	.inner {

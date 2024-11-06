@@ -116,6 +116,8 @@ public interface CrewDAO {
 	Date crewNoticeDate(int crew_idx);
 
 	Integer crewChatMin(int crew_idx);
+
+	int crewAdminResultCheck(Map<String, Object> param);
 	
 	
 
