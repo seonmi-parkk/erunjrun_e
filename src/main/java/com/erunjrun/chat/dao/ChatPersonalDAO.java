@@ -51,5 +51,7 @@ public interface ChatPersonalDAO {
 
 	List<ChatCrewLeaderDTO> crewLeaderChatListFull(Map<String, Object> parmeterMap);
 
+	int checkBlock(String chatIdx, String baseUser);
+
 
 }

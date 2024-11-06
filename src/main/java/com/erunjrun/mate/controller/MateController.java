@@ -54,10 +54,14 @@ public class MateController {
 		
 		// 프로필 데이터 가져오기
 		MateProfileDTO profileDto = mateService.getProfile(toUserId);
+		
+		// 로그인 유저의 운동메이트 기능 활성여부 체크
+		String exerciseUse = mateService.getExerciseUse(fromUserId);
 
 		
 		model.addAttribute("profileDto", profileDto);
 		model.addAttribute("result", result);
+		model.addAttribute("exerciseUse", exerciseUse);
 
 		
 		return "mate/profileDetail";
@@ -193,6 +197,14 @@ public class MateController {
 		return result;
 	}
 	
+	@PostMapping(value="/mateOn")
+	@ResponseBody
+	public Map<String, Object> mateOn(HttpSession session){
+		Map<String, Object> result = new HashMap<String, Object>();
+		String userId = (String) session.getAttribute("loginId");
+		result.put("success", mateService.mateOn(userId));
+		return result;
+	}
 	
 	
 	

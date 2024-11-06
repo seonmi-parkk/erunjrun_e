@@ -460,9 +460,9 @@
 		    text.className = 'text';
 		    			
 		    if(positions[i].gender == '남'){
-		    	genderImage = 'ico_male.png'
+		    	genderImage = 'ico_male.png';
 	    	}else{
-	    		genderImage = 'ico_female.png'
+	    		genderImage = 'ico_female.png';
     		}
 		    text.innerHTML = positions[i].nickname + '<img class="gender" src="/resources/img/common/'+genderImage+'"/>';
 		    wrap.appendChild(text);
