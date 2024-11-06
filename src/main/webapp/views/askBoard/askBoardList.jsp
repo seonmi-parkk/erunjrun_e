@@ -249,7 +249,7 @@
 	 		var userId = "${sessionScope.loginId}";
 	 		
 	 		if(!userId){
-	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn1Act,secondBtn1Act);	
+	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn1Act,secondBtn2Act);	
 	 		}else{
 	 			location.href='/askBoardWrite';
 	 		}

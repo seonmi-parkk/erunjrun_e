@@ -213,7 +213,7 @@
                 data: formData,
                 success: function (data) {
                     console.log(data);
-                    location.href = "/askBoard";
+                    location.href = "/askBoard/"+data.ask_idx;
                 },
                 error: function (xhr, status, error) {
                     alert("게시글 등록 중 오류가 발생했습니다: " + error);
@@ -229,7 +229,18 @@
 	 	}
 
 	 	$('#writeRun').on('click',function(){
-	 		layerPopup('게시글을 등록 하시겠습니까?','등록','취소' ,secondBtn1Act , secondBtn2Act);
+	 		var sub = $("input[name='subject']").val();
+	 		var content = $('#summernote').summernote('code');
+            console.log('나오닝',content);
+	 		
+	 		if(!sub){
+	 			layerPopup('제목을 입력해 주세요.','확인',false ,secondBtn2Act , secondBtn2Act);	 			
+	 		}else if(!content){
+	 			layerPopup('내용을 입력해 주세요.','확인',false ,secondBtn2Act , secondBtn2Act);
+	 		}else{
+	 			layerPopup('게시글을 등록 하시겠습니까?','등록','취소' ,secondBtn1Act , secondBtn2Act);
+	 		}
+	 		
 	 	});
 	 	
 	 	$('#cancelWrite').on('click',function(){
