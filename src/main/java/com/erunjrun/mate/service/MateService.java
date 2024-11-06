@@ -173,6 +173,14 @@ public class MateService {
 	public List<MateProfileDTO> moveMateList(List<String> users, String fromUserId) {
 		return mateDAO.moveMateList(users, fromUserId);
 	}
+
+	public String getExerciseUse(String fromUserId) {
+		return mateDAO.getExerciseUse(fromUserId);
+	}
+
+	public boolean mateOn(String userId) {
+		return mateDAO.mateOn(userId) > 0 ? true : false;
+	}
 	
 //	public void getPos(String fromUserId) {
 //		logger.info("fromUserId"+fromUserId);

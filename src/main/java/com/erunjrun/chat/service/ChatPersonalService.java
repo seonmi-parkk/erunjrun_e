@@ -28,6 +28,8 @@ public class ChatPersonalService {
 	public Map<String, Object> getContent(String chatIdx, String baseUser) {
 		Map<String, Object> values = new HashMap<String, Object>();
 		
+		boolean blockYn = chatPersonalDAO.checkBlock(chatIdx, baseUser) > 0 ? true : false;
+		
 		List<ChatPersonalDTO> userList = chatPersonalDAO.getUserName(chatIdx);
 		logger.info("userNames: "+userList.get(0).getNickname());
 		// userNames들어오는지 check하고 위에 values에 아래 list랑 usernames넣어서 컨트롤러 보내기
@@ -60,6 +62,7 @@ public class ChatPersonalService {
         
         values.put("userList", userList);
         values.put("msgList", msgList);
+        values.put("blockYn", blockYn);
 		return values;
 	}
 

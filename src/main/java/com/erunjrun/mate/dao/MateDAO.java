@@ -43,6 +43,10 @@ public interface MateDAO {
 
 	List<MateProfileDTO> moveMateList(List<String> users, String fromUserId);
 
+	String getExerciseUse(String fromUserId);
+
+	int mateOn(String userId);
+
 
 
 }

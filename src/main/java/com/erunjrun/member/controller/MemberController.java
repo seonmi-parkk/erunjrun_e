@@ -48,6 +48,7 @@ public class MemberController {
 	        session.setAttribute("loginId", id);
 	        session.setAttribute("profileImage", member.getImage()); // 프로필 이미지
 	        session.setAttribute("iconImage", member.getIcon_image()); // 아이콘
+	        logger.info("member.getImage()"+member.getImage());
 	    } else {
 	        model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
 	    }

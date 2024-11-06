@@ -202,7 +202,7 @@
         <div class="btm-box">
             <textarea name="msg"></textarea>
             <div class="btn-area">
-            	<button class="btn01-s" onclick="sendMessage()">전송</button>
+            	<button id="btnSubmit" class="btn01-s" onclick="">전송</button>
            	</div>
         </div>
     </div>
@@ -240,6 +240,11 @@
 				drawContent(data.msgList);
 				drawTitle(data.userList);
 				scrollBtm();
+				if(blockYn = 'Y'){
+					$('.chat #btnSubmit').removeClass('btn01-s').end().addClass(' btn03-s');
+				}else {
+					
+				}
 			},
 			error: function(e){
 				console.log(e);
@@ -338,6 +343,11 @@
 		$('.msg-area').html(msgCont);		
 
 	}
+	
+	var btnSubmit = document.getElementById('btnSubmit');
+	btnSubmit.onclick = function(){
+		sendMessage();
+	};
 	
 	function sendMessage(){
 		console.log("전송클릭");
