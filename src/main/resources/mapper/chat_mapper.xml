@@ -28,6 +28,17 @@
 		WHERE 
 		    c.chat_idx = #{chatIdx}
 		    AND c.id = #{baseUser}
+		    AND b.id = #{otherUser}   
+	</select>
+	
+	<select id="getOtherUser" resultType="String">
+		SELECT id FROM chat_link 
+			WHERE chat_idx = #{chatIdx} AND id != #{baseUser}
+	</select>
+
+	<select id="getCrewLeaderOtherUser" resultType="String">
+		SELECT id FROM crew_chat_link
+			WHERE chat_idx = #{chatIdx} AND id != #{baseUser}
 	</select>
 	
 	

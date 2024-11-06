@@ -117,11 +117,11 @@ public class MateController {
 	}
 
 	// 차단해제하기
-	@PostMapping(value="/mateUnblock")
+	@PostMapping(value="/mateUnblock/{toUserId}")
 	@ResponseBody
-	public Map<String, Object> mateUnblock(String toUserId, HttpSession session) {
+	public Map<String, Object> mateUnblock(@PathVariable String toUserId, HttpSession session) {
 		String fromUserId = (String) session.getAttribute("loginId");
-		logger.info("[mateUnblock c]fromUserId : {}, toUserId : {}", fromUserId, toUserId);
+		logger.info("[mateUnblock c] fromUserId : {}, toUserId : {}", fromUserId, toUserId);
 		Map<String, Object> result = new HashMap<String, Object>();
 		boolean success = false;
 		if(mateService.mateUnblock(fromUserId,toUserId)) {

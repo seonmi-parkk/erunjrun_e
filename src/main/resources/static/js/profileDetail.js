@@ -122,10 +122,7 @@
 	function unblockBtnAct(){
 		$.ajax({
 			type:'POST',
-			url:'/mateUnblock',
-			data:{
-				toUserId: $('input[name="id"]')[0].defaultValue
-			},
+			url:'/mateUnblock/'+ $('input[name="id"]')[0].defaultValue,
 			dataType:'JSON',
 			success:function(data){
 				if(data.success){		
