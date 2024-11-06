@@ -1,6 +1,42 @@
 
 	
 	
+
+
+	/* 메이트기능 활성화 버튼 이벤트 */
+	$('.btn-mate-on').on('click',function(){
+		layerPopup('러닝메이트를 기능을 활성화 하시겠습니까?','활성화','취소', mateOnBtn1Act, mateOnBtn2Act);
+	});
+	
+	function mateOnBtn1Act() {
+		$.ajax({
+	    	type:'POST',
+			url:'/mateOn',
+			data:{},
+			dataType:'JSON',
+			success:function(data){
+				// 신청완료 팝업
+				if(data.success){
+					removeAlert(); // 기존 confirmBox 닫기
+			    	layerPopup('러닝메이트 기능이 활성화되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
+					updateCont();
+				}else{
+					removeAlert();  // 기존 confirmBox 닫기
+					layerPopup('러닝메이트 기능 활성화에 실패했습니다.', '재시도', '확인', mateOnBtn1Act, applBtn2Act);
+				}
+			},
+			error:function(e){
+				removeAlert();  // 기존 confirmBox 닫기
+				layerPopup('러닝메이트 기능 활성화에 실패했습니다.', '재시도', '확인', mateOnBtn1Act, applBtn2Act);
+			}
+	    });
+	}
+	
+	function mateOnBtn2Act() {
+		removeAlert(); // 기존 confirmBox 닫기
+	}
+	
+	
 	/* 메이트 신청하기 버튼 이벤트 */
 	$('.btn-mate-appl').on('click',function(){
 		var userName = $('.user-info .user-name').text();
@@ -25,6 +61,9 @@
 					removeAlert(); // 기존 confirmBox 닫기
 			    	layerPopup('운동메이트 신청이 완료되었습니다.', '확인','내 운동메이트로 이동',appl2Btn1Act , appl2Btn2Act);
 					updateCont();
+				}else{
+					removeAlert();  // 기존 confirmBox 닫기
+					layerPopup('운동메이트 신청 실패하였습니다.', '재신청','취소',applBtn1Act , applBtn2Act);
 				}
 			},
 			error:function(e){

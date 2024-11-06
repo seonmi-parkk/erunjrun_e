@@ -69,9 +69,14 @@ public class IconController {
    
    
      @GetMapping(value="/adminIconListView")
-     public String adminIconListView() {   
-      
-        return "/icon/adminIconList";
+     public String adminIconListView(HttpSession session, Model model) {   
+    	 String result = "/admin/adminLogin";
+    	 if(session.getAttribute("adminYn") == null) {
+    		 model.addAttribute("msg","관리자 로그인이 필요한 페이지입니다.");    		 
+    	 }else {
+    		 result = "/icon/adminIconList";
+    	 }
+        return result;
      }
      
      @GetMapping(value = "/adminIconList")
@@ -99,8 +104,14 @@ public class IconController {
      }
      
      @GetMapping(value = "/adminIconWriteView")  
-     public String adminIconWriteView() {   
-        return "/icon/adminIconWrite";
+     public String adminIconWriteView(HttpSession session, Model model) {   
+    	 String result = "/admin/adminLogin";
+    	 if(session.getAttribute("adminYn") == null) {
+    		 model.addAttribute("msg","관리자 로그인이 필요한 페이지입니다.");    		 
+    	 }else {
+    		 result = "/icon/adminIconWrite";
+    	 }
+        return result;
      }
      
      @PostMapping(value = "/adminIconWrite")  

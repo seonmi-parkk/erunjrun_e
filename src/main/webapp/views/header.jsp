@@ -161,8 +161,8 @@
 						
 							<div class="profile-area" onclick="location.href='/profileDetail'">
 				        		<c:choose>
-									<c:when test="${not empty sessionScope.profileImg}">  
-										<div class="profile-img" style="background: url(/photo/${sessionScope.profileImg}) center center / cover no-repeat;"></div>
+									<c:when test="${not empty sessionScope.profileImage}">  
+										<div class="profile-img" style="background: url(/photo/${sessionScope.profileImage}) center center / cover no-repeat;"></div>
 									</c:when>
 									<c:otherwise>
 										<div class="profile-img" style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>
@@ -217,6 +217,7 @@
 	</div>
 	
 <script>
+	console.log("sessionScope.profileImage",'${not empty sessionScope.profileImage}');
 	// 관리자 모드 체크
 	 window.onload = function() {
          const savedMode = localStorage.getItem('adminMode');
@@ -293,7 +294,7 @@
 	
 	console.log('${sessionScope.adminYn}');
 	console.log('${sessionScope.loginId}');
-	console.log('${sessionScope.profileImg}');
+	console.log('${sessionScope.profileImage}');
 	console.log('${sessionScope.iconImg}');
 	
 	

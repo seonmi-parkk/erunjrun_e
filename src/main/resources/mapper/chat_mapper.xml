@@ -16,6 +16,21 @@
 		SELECT c.id, nickname FROM chat_link c join member m on c.id = m.id WHERE chat_idx = #{chatIdx}
 	</select>
 	
+	<select id="checkBlock" resultType="int">
+		SELECT 
+		    count(b.id) AS blocked_user
+		FROM 
+		    chat_link c
+		JOIN 
+		    block_member b
+		ON 
+		    c.id = b.unlike_id
+		WHERE 
+		    c.chat_idx = #{chatIdx}
+		    AND c.id = #{baseUser}
+	</select>
+	
+	
 	<select id="getRoomNum" resultType="String">
 		SELECT c1.chat_idx 
 			FROM chat_link c1 JOIN chat_link c2 

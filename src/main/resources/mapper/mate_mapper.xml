@@ -38,9 +38,13 @@
 	
 	<select id="getProfile" resultType="com.erunjrun.mate.dto.MateProfileDTO"> 
 		SELECT 
-			image, icon_image, nickname, dong, shortsido, gender, birth, p.profile_use,
+			image, icon_image, nickname, dong, shortsido, gender, birth, p.profile_use, exercise_use,
 			m.id, exercise_min, exercise_dis, exercise, mate, content 
 			FROM member m LEFT JOIN profile p ON m.id = p.id WHERE m.id = #{toUserId}
+	</select>
+	
+	<select id="getExerciseUse" resultType="String">
+		SELECT exercise_use FROM profile WHERE id = #{fromUserId}
 	</select>
 
 	<insert id="like">
@@ -75,7 +79,10 @@
 	<select id="getPosList" resultType="com.erunjrun.mate.dto.MateProfileDTO">
 		SELECT p.id, nickname, image, icon_image, gender, latitude, longitude,
 		(SELECT mate_idx FROM mate WHERE id IN (p.id,#{fromUserId}) AND unlike_id IN (p.id,#{fromUserId})) AS mate_idx
-		FROM profile p JOIN member m ON p.id = m.id WHERE exercise_use = 'Y'
+		FROM profile p 
+		JOIN member m ON p.id = m.id 
+		WHERE exercise_use = 'Y' 
+		AND p.id NOT IN (SELECT id FROM block_member WHERE unlike_id = #{fromUserId})
 	</select>
 	
 	<select id="moveMateList" resultType="com.erunjrun.mate.dto.MateProfileDTO">
@@ -96,5 +103,9 @@
 	            #{nickname}
 	        </foreach>
 	</select>
+	
+	<update id="mateOn">
+		UPDATE profile SET exercise_use = 'Y' WHERE id = #{userId}
+	</update>
 
 </mapper>

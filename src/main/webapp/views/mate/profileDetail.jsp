@@ -157,14 +157,17 @@
 		       		<c:choose>
 		       			<c:when test="${result.isBlocked eq false}">
 			       			<c:choose>
-			       				<c:when test="${result.MateAppl eq 'apply'}">
+			       				<c:when test="${result.MateAppl eq 'apply' && exerciseUse eq 'Y'}">
 						           <a href="/requestingMateListView" class="btn01-s" style="cursor: default;">러닝메이트 신청중</a>
 								</c:when>
-			       				<c:when test="${result.MateAppl eq 'recieve'}">
+			       				<c:when test="${result.MateAppl eq 'recieve' && exerciseUse eq 'Y'}">
 						           <a href="/requestedMateListView" class="btn01-s">러닝메이트 신청수락</a>
 								</c:when>
-			       				<c:when test="${result.MateAppl eq 'none'}">
+			       				<c:when test="${result.MateAppl eq 'none' && profileDto.exercise_use eq 'Y' && exerciseUse eq 'Y'}">
 						           <div class="btn-mate-appl btn01-s">러닝메이트 신청</div>
+								</c:when>
+								<c:when test="${exerciseUse eq 'N'}">
+						           <div class="btn-mate-on btn01-s">러닝메이트 기능 ON</div>
 								</c:when>
 							</c:choose>
 				           <div class="btn-chat btn02-s" onclick="chat('${sessionScope.loginId}','${profileDto.id}')">채팅하기</div>
