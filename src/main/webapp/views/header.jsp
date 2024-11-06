@@ -316,18 +316,15 @@
 			data: {'loginId' : loginId},
 			dataType: 'JSON',
 			success: function(response){
-				console.log('알림 수 => ', response);
 				$('#alarmNum').html(response);
 				alarmNum = response;
 			},error: function(e){
-				//console.log('알림 수 에러 => ', e);
 			}
 		});
 	}
 	
 	// 알림 리스트 불러오기 (20개)
 	$('#alarmIcon').on('click', function(){
-		console.log('알림 리스트 실행');
 		alarmListPrint();
 	});
 	
@@ -350,17 +347,14 @@
 	                	if(alarm.code_name === 'AB100' || alarm.code_name === 'AM100' || alarm.code_name === 'AC102'){
 	                		change = 'onclick="location.href=\''+alarm.url+'\'"';
 	                	}else if(alarm.code_name === 'AN100' || alarm.code_name === 'AN101' || alarm.code_name === 'AN102'){
-	                		// 채팅방 열리게
-	                	/* 	var url = 'onclick="location.href=\''+alarm.url+'\'"'; */
 	                		change = 'onclick="chatWindowSet(\'' + alarm.url + '\')"';
-	                		/* alarmUpdate(alarm.alarm_idx); */
 	                	}else if(alarm.code_name === 'AC100'){
 	                		var url = alarm.url;
 	                		var idx = url.split('/').pop();
-	                		// 팝업
-	                		change = 'onclick="layerPopup(\'' + alarm.content + ' 크루장 권한을 승인하시겠습니까?\', \'승인\', \'거절\', function(){crewAdminUpdate(\'Y\', ' + idx + ',' +alarm.alarm_idx+')}, function(){crewAdminUpdate(\'N\', ' + idx + ')})"';
+	                		var from_id = alarm.from_id; 
+	                		var alarm_idx = alarm.alarm_idx;
+	                		change = 'onclick="crewAdminResultChack(\'' + idx + '\', \'' + from_id + '\', \'' + alarm_idx + '\')"';
 	                	}else{
-	                		// 퇴출 팝업 (크루에서 퇴출되었습니다.)
 	                		change = 'onclick="layerPopup(\'' + alarm.content + ' 크루에서 퇴출되었습니다.\', \'확인\', false, function(){alarmUpdate(' + alarm.alarm_idx + ')}, function(){alarmUpdate(' + alarm.alarm_idx + ')})"';
 	                	}
 						
@@ -380,36 +374,26 @@
 	                	alarmUpdate(alarm.alarm_idx);
 	                });
 	                
-	                // 알림 리스트 내용 업데이트
 	                $('#alarmListContent').html(alarmList);
 	                
-	                // 팝업 표시
 	                $('#alarmPopup').show();
 				},error: function(e){
-					//console.log('알림 리스트 에러 => ', e);
 				}
 			});
 		}else {
-	        // 알림이 없는 경우 팝업에 알림이 없다는 메시지 표시
 	        $('#alarmListContent').html('<p>새로운 알림이 없습니다.</p>');
 	        $('#alarmPopup').show();
 	    }
 	}
 	
-
-
-	// x 클릭 시 팝업 닫힘	
 	$('.close').on('click', function(){
 	    $('#alarmPopup').hide();
 	});
 	
 	
-	
-	// 상위 부모 요소인 #alarmBox 클릭 이벤트
 	$(document).on('click', '#alarmBox', function(event) {
 		var alarm_idx = $(this).data('alarm-idx');
 	    
-	    // 알림 박스 자체를 클릭한 경우 alarmUpdate 함수 실행
  	    if (alarm_idx) {
  	    	console.log('상위부모 알림 업데이트 실행');
 	        alarmUpdate(alarm_idx);
@@ -418,22 +402,15 @@
 	    console.log('상위 부모의 클릭 이벤트 실행');
 	});
 
-	// .alarmclose 요소 클릭 이벤트
 	$(document).on('click', '.alarmclose', function(event) {
 		console.log('x 표시 클릭됨')
-	    event.stopPropagation(); // 클릭 전파 방지
+	    event.stopPropagation(); 
 	    var alarm_idx = $(this).data('alarm-idx');
 	    
-	    // 특정 알림 업데이트 함수 호출
 	    alarmUpdate(alarm_idx);
-
-	    // 알림 리스트를 업데이트하기 위해 alarmIcon 클릭 이벤트 트리거
-	    //$('#alarmIcon').click();
 	});
 	
 	function alarmUpdate(alarm_idx){
-		console.log('알림 x표시 ㅇㅇㅇㅇㅇㅇㅇㅇㅇ=> ', alarm_idx);
-		
 		$.ajax({
 			type: 'GET',
 			url: 'alarmUseUpdate',
@@ -442,7 +419,6 @@
 			success: function(response){
 				if (response) {
 					alarmListPrint();
-	               // $('#alarmIcon').click(); // 알림 리스트를 다시 불러오기 위해 클릭 이벤트 트리거
 	            }
 			},error: function(e){
 				console.log('알림 update 중 에러 => ', e);
@@ -450,9 +426,39 @@
 		}); 
 	}
 	
-	// 크루장 권한 업데이트 함수
+	function crewAdminResultChack(idx, from_id, alarm_idx){
+		console.log('권한 실행');
+	 	$.ajax({
+			type: 'GET',
+			url: '/crew/adminResultCheck',
+			data: {'crew_idx' : idx,
+				'id' : from_id},
+			dataType: 'JSON',
+			success: function(response){
+				if(response){
+					// 권한 요청 팝업
+					layerPopup(
+                    '크루장 권한을 승인하시겠습니까?',
+                    '승인',
+                    '거절',
+                    function() {
+                        crewAdminUpdate('Y', idx, alarm_idx);
+                    },
+                    function() {
+                        crewAdminUpdate('N', idx);
+                    })
+					console.log('결과 받아옴!!');
+				}else{
+					layerPopup('완료된 요청입니다.', '확인', false, applBtn2Act, applBtn2Act);
+				}
+			},error: function(e){
+				console.log('권한 여부 확인 중 에러 => ', e);
+			}
+		}); 
+	}
+	
 	function crewAdminUpdate(result, idx, alarm_idx) {
-	    console.log('찍히니');
+		applBtn2Act(); // 팝업창 끄기 위해서 (나중에 체크 필요)
 	    alarmUpdate(alarm_idx);
 	    console.log('result => ', result);
 	    console.log('idx => ', idx);
@@ -473,10 +479,7 @@
 	                removeAlert();
 	                layerPopup('완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
 
-	                console.log('권한 업데이트 성공');
 	                alarmUpdate(alarm_idx);
-
-	                // 알림 리스트 다시 불러오기
 	                $('.close').click();
 	            }
 	        },

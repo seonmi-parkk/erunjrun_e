@@ -579,4 +579,9 @@
 		    ORDER BY ccc.create_date DESC 
 		    LIMIT 1
 	</select>
+	
+	<!-- 응답된 권한 요청인지 체크 -->
+	<select id="crewAdminResultCheck" resultType="int" parameterType="map">
+		SELECT COUNT(history_idx) FROM crew_application_history WHERE crew_idx = #{crew_idx} AND leader = #{id} AND is_agree = 'Y'
+	</select>
 </mapper>

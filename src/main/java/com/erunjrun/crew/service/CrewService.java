@@ -621,5 +621,9 @@ public class CrewService {
 		return crew_dao.crewChatMin(crew_idx);
 	}
 
+	public int crewAdminResultCheck(Map<String, Object> param) {
+		return crew_dao.crewAdminResultCheck(param);
+	}
+
 	
 }

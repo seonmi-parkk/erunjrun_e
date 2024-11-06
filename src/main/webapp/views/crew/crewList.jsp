@@ -5,7 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Crew List</title>
+<link rel="stylesheet" href="/resources/css/common.css">
 <link rel="stylesheet" href="/resources/css/crew.css">
+
 <link rel="stylesheet" href="/resources/css/crew/crewList.css">
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
