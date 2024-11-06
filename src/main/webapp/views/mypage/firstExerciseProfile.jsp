@@ -209,7 +209,7 @@ button:hover {
 .edit-icon {
 	position: relative;
 	bottom: -30px; /* 하단에서 5px */
-	right: 120px; /* 오른쪽에서 5px */
+	right: 150px; /* 오른쪽에서 5px */
 	width: 30px;
 	height: 30px;
 	background-color: #ff7f50;
