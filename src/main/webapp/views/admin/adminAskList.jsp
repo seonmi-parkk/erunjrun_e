@@ -111,9 +111,8 @@
       <p class="title1" >문의하기</p>
        <form id="searchForm" onsubmit="return false;">
           <select id="searchOption">
-              <option value="id">작성자</option>
+              <option value="nickname">작성자</option>
               <option value="subject">제목</option>
-              <option value="ask_use">답변</option>
               <option value="category">카테고리</option>
           </select>
           <input class="input-txt-l" type="text"  id="searchKeyword" placeholder="검색어를 입력하세요"/>
@@ -161,64 +160,88 @@
 
 
 <script>
+var show = 1; // 기본 페이지 번호
+var paginationInitialized = false;  // 페이지네이션 초기화 여부 확인 변수
 
-   var show = 1;
-   pageCall(show);
+// 페이지 로딩 시 호출
+$(document).ready(function () {
+    pageCall(show); // 첫 페이지 호출
+});
 
-   function pageCall(page) {
-      var keyword = $('#searchKeyword').val(); // 검색어 여기 추가부터 리스트 안옴
-        var opt = $('#searchOption').val(); // 검색옵션
-      $.ajax({
-         type:'POST',
-         url:'adminAskList',
-         data:{
-            'page':page,
-            'cnt':15,
+// 검색 버튼 클릭 시 이벤트 처리
+$('.btn-sch').on('click', function () {
+    show = 1; // 페이지를 첫 페이지로 초기화
+    paginationInitialized = false; // 페이지네이션 초기화 상태로 설정
+    pageCall(show); // 데이터 호출
+});
+
+// 페이지 호출 함수
+function pageCall(page) {
+    var keyword = $('#searchKeyword').val(); // 검색어
+    var opt = $('#searchOption').val(); // 검색 옵션
+
+    $.ajax({
+        type: 'POST',
+        url: 'adminAskList',
+        data: {
+            'page': page,
+            'cnt': 15,
             'opt': opt,
             'keyword': keyword
-         },
-         datatype:'JSON',
-         success:function(data){
+        },
+        dataType: 'JSON',
+        success: function (data) {
             console.log(data);
-            drawList(data.list)
-            $('#pagination').twbsPagination({ // 페이징 객체 만들기
-            startPage:1, 
-                 totalPages:data.totalPages, 
-                 visiblePages:10,
-           
-                 onPageClick:function(evt,page){
-                    console.log('evt',evt); 
-                    console.log('page',page); 
-                    pageCall(page);
-                 }
-            });
-         },
-         error:function(e){
-            console.log(e);
-         }
-      });
-   }
+            drawList(data.list);
 
-   function drawList(list) {
-      var content ='';
-       for (var view of list) {
-         
-         content +='<tr>';
-            content += '<td>'+view.category+'</td>';
-         content += '<td>'+view.nickname+'<a/></td>';
-          content += '<td><a href="askBoardDetail/' + view.ask_idx + '">' + view.subject + '</a></td>';
-         if (view.is_ask == 'Y') {
-                content += '<td style="color: green;">답변완료</td>';
-            } else {
-               content += '<td style="color: red;">미완료</td>';
+            // 페이지네이션 초기화 및 재설정
+            if (paginationInitialized) {
+                $('#pagination').twbsPagination('destroy'); // 기존 페이지네이션 제거
             }
-         content +='<td>'+view.create_date+'</td>';
-         content +='</tr>';
-        }
-         $('#list').html(content);
-      }
- 
 
+            if (data.totalPages > 0) { // 검색 결과가 있을 때만 페이지네이션 생성
+                $('#pagination').twbsPagination({
+                    totalPages: data.totalPages,
+                    visiblePages: 10,
+                    startPage: page,
+                    initiateStartPageClick: false, // 페이지네이션 초기 클릭 방지
+                    onPageClick: function (evt, page) {
+                        if (page !== show) { // 현재 페이지와 다를 경우에만 호출
+                            show = page; // 현재 페이지 업데이트
+                            pageCall(page); // 선택한 페이지 호출
+                        }
+                    }
+                });
+                paginationInitialized = true; // 페이지네이션 초기화 완료 상태로 설정
+            } else {
+                paginationInitialized = false; // 검색 결과가 없으면 초기화 상태로 설정
+            }
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+}
+
+
+// 리스트를 화면에 그리는 함수
+function drawList(list) {
+    var content = '';
+    for (var view of list) {
+        content += '<tr>';
+        content += '<td>' + view.category + '</td>';
+        content += '<td>' + view.nickname + '</td>';
+        content += '<td><a href="askBoardDetail/' + view.ask_idx + '">' + view.subject + '</a></td>';
+        if (view.is_ask == 'Y') {
+            content += '<td style="color: green;">답변완료</td>';
+        } else {
+            content += '<td style="color: red;">미완료</td>';
+        }
+        content += '<td>' + view.create_date + '</td>';
+        content += '</tr>';
+    }
+    $('#list').html(content);
+}
     
 </script>
 <script src="/resources/js/common.js" type="text/javascript"></script>

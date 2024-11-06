@@ -136,11 +136,9 @@
     <!-- 푸터 -->
     <jsp:include page="../footer.jsp"/>
 </body>
+
 <script>
-var msg = '${msg}';
-if (msg != '') {
-   alert(msg);
-}
+
 
 var show = 1;
 var currentSortField = '';
@@ -156,8 +154,8 @@ function pageCall(page, sortField = '', sortOrder = '') {
     var opt = $('#searchOption').val();
 
     $.ajax({
-        type: 'Get',
-        url: 'adminMemberList',
+        type: 'GET',
+        url: '/adminMemberList',
         data: {
             page: page,
             cnt: 15,

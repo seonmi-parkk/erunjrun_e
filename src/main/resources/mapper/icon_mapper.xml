@@ -112,7 +112,7 @@
 	   GROUP BY 
 	       i.icon_name, i.image
 	   ORDER BY 
-	       i.icon_idx ASC
+	      total_sales  DESC
 	   LIMIT #{limit} OFFSET #{offset};
 
    </select>

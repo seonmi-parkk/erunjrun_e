@@ -62,7 +62,7 @@ public interface AdminDAO {
 // 신고   
    public List<AdminDTO> reportlist(int limit, int offset,String category,String status);
 
-   public int reportcount(int cnt_);
+   public int reportcount(int cnt_, String category, String status);
 
    public AdminDTO reportdetail(String report_idx);
 
@@ -74,7 +74,7 @@ public interface AdminDAO {
 // 문의하기
    public List<AdminDTO> asklist(String opt, String keyword, int limit, int offset);
 
-   public int askcount(int cnt_);
+   public int askcount(int cnt_, String opt, String keyword);
    
    
    

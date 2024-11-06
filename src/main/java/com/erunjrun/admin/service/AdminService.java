@@ -151,9 +151,9 @@ public class AdminService {
       return admin_dao.reportlist(limit,offset,category,status);
    }
 
-   public int reportcount(int cnt_) {
+   public int reportcount(int cnt_, String category, String status) {
       
-      return admin_dao.reportcount(cnt_);
+      return admin_dao.reportcount(cnt_,category,status);
    }
 
    public void reportdetail(String report_idx, String code_name, Model model) {
@@ -182,9 +182,9 @@ public class AdminService {
       return admin_dao.asklist(opt, keyword ,limit, offset);
    }
    
-   public int askcount(int cnt_) {
+   public int askcount(int cnt_, String opt, String keyword) {
       
-      return admin_dao.askcount(cnt_);
+      return admin_dao.askcount(cnt_,opt,keyword);
    }
 
    

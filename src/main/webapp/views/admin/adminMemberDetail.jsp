@@ -17,7 +17,7 @@
 	}
 	table {
     margin-bottom: 100px;
-    margin-top: 100px;    /* 테이블 사이 간격을 20px로 설정 */
+    margin-top: 30px;    /* 테이블 사이 간격을 20px로 설정 */
     padding: 10px;          /* 테이블 내부 여백 */
 	}
 	.input-container {
@@ -195,6 +195,10 @@ font-size: 23px;
 		
 		
 		<div class="table-container"></div>
+	 	<div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">신고내역 리스트</p>
+		</div>	
 	 	<table>
 		<thead class="reportlist">
 
@@ -218,6 +222,10 @@ font-size: 23px;
 		 	</tbody>
    </table>
    
+		<div class="input-container">
+  			<p class="title2" id="dot">•</p>
+			<p class="title2" id="text">정지내역 리스트</p>
+		</div>	
    <table>
 		<thead>
 		
@@ -227,7 +235,6 @@ font-size: 23px;
 		 		<col width="40%"/>
 		 		<col width="30%"/>
 		 	</colgroup>
-			
 			<tr>
 				<th>카테고리</th>
 				<th>정지기간</th>

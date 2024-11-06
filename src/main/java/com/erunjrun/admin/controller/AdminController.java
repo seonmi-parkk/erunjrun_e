@@ -161,10 +161,16 @@ public class AdminController {
      
      @GetMapping(value = "/adminYn/{admin_id}" )
      public String adminyn(@PathVariable String admin_id,HttpSession session,Model model){
-
+     
      if (session.getAttribute("adminYn") != null) {
-        admin_service.adminyn(admin_id);
-         return "redirect:/admin"; 
+    	 String superAdminAuthority = (String) session.getAttribute("authority");
+    	 if (!superAdminAuthority.equals("s")) {
+    		 model.addAttribute("msg","슈퍼 관리자만 가능한 기능입니다.");
+			return "admin/adminList";
+		}else {
+			admin_service.adminyn(admin_id);
+			return "redirect:/admin"; 	
+		}
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
@@ -280,42 +286,48 @@ public class AdminController {
      
      @GetMapping(value = "/adminReport")
      public String report() {
-        return "admin/adminReportList";
+         return "admin/adminReportList";
      }
-     
-     @GetMapping(value = "/adminReportList")
-     @ResponseBody 
-     public Map<String,Object> reportlist(String page, String cnt,String category,String status) {
-        int page_ = Integer.parseInt(page);
-      int cnt_ = Integer.parseInt(cnt);
-      int limit = cnt_;
-      int offset = (page_ - 1) * cnt_;
-      int totalPages = admin_service.reportcount(cnt_);
-      logger.info("page: " + page_ + ", cnt: " + cnt_ + ", category: " + category + ", status: " + status);
-      // category와 status의 기본값 설정
-       if (category == null || category.isEmpty()) {
-           category = "all"; // 기본값 설정
-       }
-       if (status == null || status.isEmpty()) {
-           status = "all"; // 기본값 설정
-       }
 
-      
-      Map<String,Object> result = new HashMap<String, Object>();
-      List<AdminDTO> list =  admin_service.reportlist(limit, offset,category,status);
-      logger.info(status);
-      if (list == null || list.isEmpty()) {
-          logger.info("조회된 데이터가 없습니다.");
-      } else {
-          logger.info("조회된 데이터: " + list.size() + "건");
-      }
-      result.put("totalPages", totalPages);
-      result.put("currpage", page);
-      result.put("list", list);
-        
-        return result;
+     @GetMapping(value = "/adminReportList")
+     @ResponseBody
+     public Map<String, Object> reportlist(String page, String cnt, String category, String status) {
+         // 페이지 및 개수 파라미터를 정수로 변환
+         int page_ = Integer.parseInt(page);
+         int cnt_ = Integer.parseInt(cnt);
+         int limit = cnt_;
+         int offset = (page_ - 1) * cnt_;
+
+         // category와 status의 기본값 설정 및 필터링 처리
+         if (category == null || category.equals("all") || category.isEmpty()) {
+             category = null; // 기본값이 "all"일 경우 null로 설정하여 쿼리에서 조건을 무시하도록 설정
+         }
+         if (status == null || status.equals("all") || status.isEmpty()) {
+             status = null; // 기본값이 "all"일 경우 null로 설정하여 쿼리에서 조건을 무시하도록 설정
+         }
+
+         // 필터 조건에 맞는 페이지 수 계산
+         int totalPages = admin_service.reportcount(limit, category, status); // 필터를 적용한 총 개수 계산
+
+         // 결과 맵 생성 및 서비스 호출
+         Map<String, Object> result = new HashMap<>();
+         List<AdminDTO> list = admin_service.reportlist(limit, offset, category, status);
+
+         // 로그 출력
+         logger.info("page: " + page_ + ", cnt: " + cnt_ + ", category: " + category + ", status: " + status);
+         if (list == null || list.isEmpty()) {
+             logger.info("조회된 데이터가 없습니다.");
+         } else {
+             logger.info("조회된 데이터: " + list.size() + "건");
+         }
+
+         // 결과 맵에 데이터 추가
+         result.put("totalPages", totalPages);
+         result.put("currpage", page);
+         result.put("list", list);
+
+         return result;
      }
-     
      @GetMapping(value = "/adminReportDetail/{report_idx},{code_name}")
      public String reportdetail(@PathVariable String report_idx,@PathVariable String code_name,HttpSession session,Model model) {
        
@@ -380,7 +392,7 @@ public class AdminController {
       int cnt_ = Integer.parseInt(cnt);
       int limit = cnt_;
       int offset = (page_ - 1) * cnt_;
-      int totalPages = admin_service.askcount(cnt_);
+      int totalPages = admin_service.askcount(cnt_,opt,keyword);
       Map<String,Object> result = new HashMap<String, Object>();
       result.put("totalPages", totalPages);
       result.put("currpage", page);
@@ -389,7 +401,6 @@ public class AdminController {
       return result;
   
      }
-     
      
      // 태그
      

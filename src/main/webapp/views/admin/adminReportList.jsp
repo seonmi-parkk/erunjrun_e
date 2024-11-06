@@ -73,7 +73,7 @@
    
    <!-- inner 클래스 하위에 모두 요소들을 넣어서 만들어주십시오. -->
    <div class="content-wrapper">
-		<aside class="fixed-left">
+      <aside class="fixed-left">
             <div class="image">
                 <img class="profile-img" src="/resources/img/common/admin_profile.png" alt="관리자 프로필 이미지"/>
             </div>
@@ -145,64 +145,84 @@
 
 
 <script>
-var currentCategory = 'all'; // 기본값 설정
-var show = 1; // 기본 페이지 설정
-
-//버튼 클릭 시 스타일 변경
-$('.btn-category').on('click', function () {
-    // 모든 버튼에서 기존 스타일 제거
-    $('.btn-category').removeClass('btn02-l').addClass('btn03-l');
-    
-    // 클릭한 버튼에 스타일 추가
-    $(this).removeClass('btn03-l').addClass('btn02-l');
-});
-
-// 페이지 로딩 시 호출
-$(document).ready(function () {
-    const selectedStatus = $('select').val(); // 페이지 로딩 시 기본 상태 값 가져오기
-    pageCall(show, currentCategory, selectedStatus);
-});
+var currentCategory = 'all'; // 기본 카테고리 값
+var currentStatus = 'all';   // 기본 상태 값
+var show = 1;                // 기본 페이지 번호
+var paginationInitialized = false;  // 페이지네이션 초기화 여부 확인 변수
 
 // 카테고리 버튼 클릭 시 이벤트 처리
 $('.btn-category').on('click', function () {
-    currentCategory = $(this).data('category'); // 클릭한 버튼의 카테고리 값 가져오기
-    
-    show = 1; // 페이지를 초기화
-    const selectedStatus = $('select').val(); // 현재 선택된 상태 값 가져오기
-    pageCall(show, currentCategory, selectedStatus); // 페이지 호출
+    // 모든 버튼에서 기존 스타일 제거하고 클릭한 버튼에 스타일 추가
+    $('.btn-category').removeClass('btn02-l').addClass('btn03-l');
+    $(this).removeClass('btn03-l').addClass('btn02-l');
+
+    // 클릭한 버튼의 카테고리 값 가져오기
+    currentCategory = $(this).data('category');
+    show = 1; // 페이지를 항상 첫 페이지로 초기화
+
+    // 페이지네이션 초기화
+    if (paginationInitialized) {
+        $('#pagination').twbsPagination('destroy');
+    }
+    paginationInitialized = false; // 페이지네이션 초기화 상태로 설정
+
+    // 현재 상태 값을 가져와서 페이지 호출
+    const selectedStatus = $('select').val();
+    pageCall(show, currentCategory, selectedStatus); // 데이터 호출 및 페이지네이션 생성
 });
 
 // 상태 옵션 선택 시 이벤트 처리
 $('select').on('change', function () {
-    const selectedStatus = $(this).val() || 'all'; // 선택된 값이 없을 때 기본값으로 'all' 사용
+    currentStatus = $(this).val() || 'all'; // 선택된 상태 값이 없을 때 기본값 'all' 사용
+    show = 1; // 페이지를 첫 페이지로 초기화
 
-    show = 1; // 페이지를 초기화
-    pageCall(show, currentCategory, selectedStatus); // 페이지 호출
+    // 페이지네이션 초기화
+    if (paginationInitialized) {
+        $('#pagination').twbsPagination('destroy');
+    }
+    paginationInitialized = false; // 페이지네이션 초기화 상태로 설정
+
+    // 페이지 호출
+    pageCall(show, currentCategory, currentStatus);
 });
 
 // 페이지 호출 함수 수정
 function pageCall(page, category, status) {
+    const pageSize = 15;
+
+    // 필터링 조건을 null로 설정하여 불필요한 "all" 값을 처리
+    const filterCategory = category !== 'all' && category !== '' ? category : null;
+    const filterStatus = status !== 'all' && status !== '' ? status : null;
+
     $.ajax({
         type: 'GET',
         url: 'adminReportList',
         data: {
             page: page,
-            cnt: 15,
-            category: category,
-            status: status // 상태 필터 추가
+            cnt: pageSize,
+            category: filterCategory,
+            status: filterStatus
         },
         dataType: 'JSON',
         success: function (data) {
             console.log(data);
             drawList(data.list);
-            $('#pagination').twbsPagination({
-                startPage: page,
-                totalPages: data.totalPages,
-                visiblePages: 10,
-                onPageClick: function (evt, page) {
-                    pageCall(page, currentCategory, status);
-                }
-            });
+
+            // 페이지네이션 초기화 및 재설정
+            if (!paginationInitialized && data.totalPages > 0) { // 페이지네이션이 아직 초기화되지 않았을 때만 생성
+                $('#pagination').twbsPagination({
+                    totalPages: data.totalPages,
+                    visiblePages: 10,
+                    startPage: page,
+                    initiateStartPageClick: false, // 페이지네이션 초기 클릭 방지
+                    onPageClick: function (evt, page) {
+                        // 페이지 변경 이벤트에서 현재 페이지 호출
+                        show = page; // 현재 페이지 업데이트
+                        pageCall(page, currentCategory, currentStatus);
+                    }
+                });
+                paginationInitialized = true;
+            }
         },
         error: function (e) {
             console.log(e);
@@ -210,43 +230,44 @@ function pageCall(page, category, status) {
     });
 }
 
+// 페이지 로딩 시 호출
+$(document).ready(function () {
+    const selectedStatus = $('select').val(); // 페이지 로딩 시 기본 상태 값 가져오기
+    pageCall(show, currentCategory, selectedStatus);
+});
 
-   function drawList(list) {
-      var content ='';
-       for (var view of list) {
-         content +='<tr>';
-            content += '<td>'+view.category+'</td>';              
-         content += '<td><a href="/adminReportDetail/'+view.report_idx+','+view.code_name+'">'+view.unlike_id+'<a/></td>';
-          var admin_name = view.name ? view.name : '관리자';
-         content +='<td>'+admin_name+'</td>';
-         
-         var processValue = view.process ? view.process : '미확인';
-           var colorStyle = ''; // 색상 스타일을 담을 변수
-           
-           // 상태에 따른 색상 스타일 설정
-           if (processValue == '처리완료') {
-               colorStyle = 'color: green;'; // 초록색
-           } else if (processValue == '처리중') {
-               colorStyle = 'color: black;'; // 검은색
-           } else if (processValue == '미확인') {
-               colorStyle = 'color: red;'; // 빨간색
-           } else if (processValue == '처리전') {
-               colorStyle = 'color: gray;'; // 회색
-           }
+// 리스트를 화면에 그리는 함수
+function drawList(list) {
+    var content = '';
+    for (var view of list) {
+        content += '<tr>';
+        content += '<td>' + view.category + '</td>';
+        content += '<td><a href="/adminReportDetail/' + view.report_idx + ',' + view.code_name + '">' + view.unlike_id + '<a/></td>';
+        var admin_name = view.name ? view.name : '관리자';
+        content += '<td>' + admin_name + '</td>';
 
-           // 상태에 따른 색상을 갖은 텍스트 추가
-           content += '<td style="' + colorStyle + '">' + processValue + '</td>';
-         
-         
-         content +='<td>'+view.create_date+'</td>';
-         content +='</tr>';
+        var processValue = view.process ? view.process : '미확인';
+        var colorStyle = ''; // 색상 스타일을 담을 변수
+
+        // 상태에 따른 색상 스타일 설정
+        if (processValue == '처리완료') {
+            colorStyle = 'color: green;'; // 초록색
+        } else if (processValue == '처리중') {
+            colorStyle = 'color: black;'; // 검은색
+        } else if (processValue == '미확인') {
+            colorStyle = 'color: red;'; // 빨간색
+        } else if (processValue == '처리전') {
+            colorStyle = 'color: gray;'; // 회색
         }
-         $('#list').html(content);
-      }
 
-    
-   
-    
+        // 상태에 따른 색상을 갖은 텍스트 추가
+        content += '<td style="' + colorStyle + '">' + processValue + '</td>';
+        content += '<td>' + view.create_date + '</td>';
+        content += '</tr>';
+    }
+    $('#list').html(content);
+}
+
 </script>
 <script src="/resources/js/common.js" type="text/javascript"></script>
 <script src="/resources/js/layerPopup.js"></script>

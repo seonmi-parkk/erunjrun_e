@@ -130,16 +130,7 @@
       
        <div class="input-container">
          <p class="title2" id="dot">•</p>
-     	
-         <c:if test="${info.category eq '게시글 신고'}">
-	    	<p class="title2" id="text">게시글번호</p>
-		</c:if>
-
-		<c:if test="${info.category eq '댓글 신고'}">
-		    <p class="title2" id="text">댓글번호</p>
-		</c:if>
-     	
-     	
+	    <p class="title2" id="text">신고번호</p>
          <p class="title2" id="text" onclick="location.href='${info.url}'"  style="cursor: pointer;">${info.report_idx}</p> <!-- -- 특정 게시글로 이동 -->
       </div>   
       

@@ -61,7 +61,7 @@
    
    
    
-    <select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+      <select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
     WITH ranked_ban AS (
         SELECT 
             b.id,
@@ -85,7 +85,7 @@
         ranked_ban rb ON m.id = rb.id AND rb.rn = 1
     <where>
         <if test="keyword != null and keyword != '' and opt == 'id'">
-           AND  m.id LIKE CONCAT('%', #{keyword}, '%')
+            AND m.id LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="keyword != null and keyword != '' and opt == 'nickname'">
             AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
@@ -110,7 +110,8 @@
 
 
 
-      <select id="count" resultType="int">
+     
+     <select id="count" resultType="int">
        SELECT CEIL(COUNT(*) / #{param1}) AS pages
     FROM member m
     <where>
@@ -125,7 +126,6 @@
         </if>
     </where>
    </select>
-   
    
    <select id="memberdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
       SELECT id,icon_image,nickname,email,address,gender,birth,phone 
@@ -205,45 +205,62 @@
   
   
   
+   
    <select id="reportlist" resultType="com.erunjrun.admin.dto.AdminDTO">
-    SELECT 
-        rw.report_idx,
-        rw.code_name,
-        c1.content AS category,
-        rw.unlike_id,
-        rw.create_date,
-        a.name,
-        rp.code_name,
-        c2.content AS process
-    FROM 
-        report_write rw
-    LEFT JOIN 
-        code c1 ON rw.code_name = c1.code_name
-    LEFT JOIN 
-        report_process rp ON rw.report_idx = rp.report_idx
-    LEFT JOIN 
-        code c2 ON rp.code_name = c2.code_name
-    LEFT JOIN 
-        admin a ON rp.admin_id = a.admin_id
-    <where>
-        <if test="category != null and category != 'all'">
-            c1.content = #{category}
-        </if>
-        <if test="status != null and status != 'all'">
-            AND (
-                (c2.code_name = #{status}) OR
-                (#{status} = 'D101' AND c2.code_name IS NULL)
-            )
-        </if>
-    </where>
-    ORDER BY rw.report_idx DESC
-    LIMIT #{limit} OFFSET #{offset}
-</select>
+	    SELECT 
+	        rw.report_idx,
+	        rw.code_name,
+	        c1.content AS category,
+	        rw.unlike_id,
+	        rw.create_date,
+	        a.name,
+	        rp.code_name,
+	        c2.content AS process
+	    FROM 
+	        report_write rw
+	    LEFT JOIN 
+	        code c1 ON rw.code_name = c1.code_name
+	    LEFT JOIN 
+	        report_process rp ON rw.report_idx = rp.report_idx
+	    LEFT JOIN 
+	        code c2 ON rp.code_name = c2.code_name
+	    LEFT JOIN 
+	        admin a ON rp.admin_id = a.admin_id
+	    <where>
+	        1=1
+	        <if test="category != null and category != '' and category != 'all'">
+	            AND c1.content = #{category}
+	        </if>
+	        <if test="status != null and status != '' and status != 'all'">
+	            AND (
+	                (c2.code_name = #{status}) OR
+	                (#{status} = 'D101' AND c2.code_name IS NULL)
+	            )
+	        </if>
+	    </where>
+	    ORDER BY rw.report_idx DESC
+	    LIMIT #{limit} OFFSET #{offset}
+	</select>
 
      
      <select id="reportcount" resultType="int">
-      SELECT CEIL(count(report_idx)/#{param1}) AS pages FROM report_write
-   </select>
+	    SELECT CEIL(COUNT(*) / #{param1}) AS pages
+	    FROM report_write rw
+	    LEFT JOIN code c1 ON rw.code_name = c1.code_name
+	    LEFT JOIN report_process rp ON rw.report_idx = rp.report_idx
+	    LEFT JOIN code c2 ON rp.code_name = c2.code_name
+	    <where>
+	        <if test="category != null and category != 'all'">
+	            AND c1.content = #{category}
+	        </if>
+	        <if test="status != null and status != 'all'">
+	            AND (
+	                (c2.code_name = #{status}) OR
+	                (#{status} = 'D101' AND c2.code_name IS NULL)
+	            )
+	        </if>
+	    </where>
+	</select>
   
    <select id="reportdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
          SELECT 
@@ -302,23 +319,36 @@
          LEFT JOIN 
             member m ON a.id = m.id   
       <where>
-       <if test="keyword != null and !keyword.equals('') and opt.equals('category')">
-           a.category LIKE CONCAT('%', #{keyword}, '%')
-       </if>
-       <if test="keyword != null and !keyword.equals('') and opt.equals('id')">
-           a.id LIKE CONCAT('%', #{keyword}, '%')
-       </if>
-       <if test="keyword != null and !keyword.equals('') and opt.equals('email')">
-           a.subject LIKE CONCAT('%', #{keyword}, '%')
-       </if>
-      </where>   
+    <if test="keyword != null and !keyword.equals('') and opt.equals('nickname')">
+        m.nickname LIKE CONCAT('%', #{keyword}, '%')
+    </if>
+    <if test="keyword != null and !keyword.equals('') and opt.equals('subject')">
+        a.subject LIKE CONCAT('%', #{keyword}, '%')
+    </if>
+    <if test="keyword != null and !keyword.equals('') and opt.equals('category')">
+        c.content LIKE CONCAT('%', #{keyword}, '%')
+    </if>
+</where>
          ORDER BY a.ask_idx DESC LIMIT #{limit} OFFSET #{offset}
       </select>  
      
      <select id="askcount" resultType="int">
-      SELECT CEIL(count(ask_idx)/#{param1}) AS pages FROM ask
+       SELECT CEIL(COUNT(*) / #{param1}) AS pages
+       FROM ask a
+       LEFT JOIN code c ON a.code_name = c.code_name
+       LEFT JOIN member m ON a.id = m.id
+       <where>
+          <if test="keyword != null and !keyword.equals('') and opt.equals('nickname')">
+              m.nickname LIKE CONCAT('%', #{keyword}, '%')
+          </if>
+          <if test="keyword != null and !keyword.equals('') and opt.equals('subject')">
+              a.subject LIKE CONCAT('%', #{keyword}, '%')
+          </if>
+          <if test="keyword != null and !keyword.equals('') and opt.equals('category')">
+              c.content LIKE CONCAT('%', #{keyword}, '%')
+          </if>
+      </where>
    </select>
-   
    
    
    

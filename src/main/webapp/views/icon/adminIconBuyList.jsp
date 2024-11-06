@@ -144,6 +144,7 @@
 	         </th>
 	      </tr>
    </table>
+   <div class="btn01-l" onclick="location.href='/adminIconChart'">차트</div>
         </main>
 	</div>
 	
