@@ -57,7 +57,7 @@
 			success:function(data){
 				// 신청완료 팝업
 				if(data.success){
-					loadingComplete();
+					
 					removeAlert(); // 기존 confirmBox 닫기
 			    	layerPopup('운동메이트 신청이 완료되었습니다.', '확인','내 운동메이트로 이동',appl2Btn1Act , appl2Btn2Act);
 					updateCont();
@@ -71,7 +71,7 @@
 				layerPopup('운동메이트 신청 실패하였습니다.', '재신청','취소',applBtn1Act , applBtn2Act);
 			}
 	    });
-	    loading();
+	    
 	}
 	
 	function applBtn2Act() {
