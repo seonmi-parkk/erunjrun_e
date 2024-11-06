@@ -676,6 +676,22 @@ public class CrewController {
 		return resultMap;
 	}
 	
+	@GetMapping(value="/memberFullCheck")
+	public boolean crewMemberFullCheck(@RequestParam int crew_idx) {
+		
+		logger.info("멤버수 체크 실행");
+		try {
+			logger.info("try 안에서 ! 멤버수 체크 실행");
+			if(crew_service.crewMemberFullCheck(crew_idx)) {
+				return true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	
 	/*
 	 * @PostMapping(value="/likeChange") public boolean crewLikeChange(@RequestParam
