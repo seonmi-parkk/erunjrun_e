@@ -299,7 +299,7 @@
 				<div id="con">${info.content}</div>
 			</div>
 	    	<div class="repo">
-	    		<div id="pre" class="btn-like btn02-s" style="padding: 20px;" onclick="boardLike(${info.board_idx})">
+	    		<div id="pre" data-board-idx="${info.board_idx}" class="btn-like btn02-s" style="padding: 20px;">
 					<img class="icon" data-board-idx="${info.board_idx}" 
 							 src="${isLike ? '/resources/img/common/ico_heart_act.png' : '/resources/img/common/ico_heart_no_act.png'}" 
         					 alt="${isLlike ? '좋아요' : '안좋아요'}" 
@@ -474,16 +474,23 @@ function initializeMap() {
 	    return R * c; // 거리 (미터)
 	}
 	
+	$('#pre').on('click',function(board_idx){
+		var userId = "${sessionScope.loginId}";
+        console.log(userId);
+        var board_idx = $(this).data('board-idx');
+        if(!userId){
+			layerPopup('로그인이 필요한 서비스 입니다.','확인',false ,secondBtn2Act , secondBtn2Act);        	
+        }else{
+        	boardLike(board_idx);
+        }
+	});
+	
 	 // 추천 업데이트
 	 function boardLike(board_idx) {
 		 	 
 		 var userId = "${sessionScope.loginId}";
          console.log(userId);
-         if(!userId){
-         	alert("로그인이 필요한 서비스 입니다.");
-         	return;
-         }
-		 	 
+        	 	 
 	        $.ajax({
 	            type: 'POST',
 	            url: '/boardLike',
@@ -549,7 +556,7 @@ function initializeMap() {
 			var userId = "${sessionScope.loginId}";
 	 		
 	 		if(!userId){
-	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn0Act,secondBtn1Act);	
+	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn0Act,secondBtn2Act);	
 	 		}else{
 	 			layerPopup('정말 신고 하시겠습니까?','신고','취소' ,secondBtn3Act , secondBtn2Act);
 	 		}	 		
@@ -834,7 +841,7 @@ function initializeMap() {
 	 		var userId = "${sessionScope.loginId}";
 	 		
 	 		if(!userId){
-	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn1Act,secondBtn1Act);		
+	 			layerPopup('로그인이 필요한 서비스 입니다.','로그인 페이지','닫기',secondBtn0Act,secondBtn2Act);		
 	 		}else if('${sessionScope.loginId}' == '${ban.id}' && '${ban.code_name}' == 'A101' && '${ban.is_right}' == 'Y'){
 	 			rightLayerPopup('${ban.end_date} 까지 정지된 서비스 입니다.','확인',secondBtn2Act);
 	 		}else{

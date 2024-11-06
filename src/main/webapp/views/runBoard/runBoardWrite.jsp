@@ -13,6 +13,7 @@
     <script src="/resources/js/runSummerNote.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=26c56d5b3e89329f848d1188b85f2e3d"></script>
     <script src="/resources/js/layerPopup.js"></script>
+    <script src="/resources/js/rightLayerPopup.js"></script>
     <style>
         #dori {
             width: 1280px;
@@ -306,93 +307,7 @@
             return content;
         }
         
-        /*
-        // 게시글 등록
-        function writeRun() {
-            // formData 생성
-            var formData = new FormData($('form')[0]);
-            
-            var content = $('#summernote').summernote('code');
-            
-         // 게시글 에디터 이미지 검증을 위한 코드
-            var tempDom = $('<div>').html(content);
-            var imgsInEditor = [];
-
-            // 에디터의 이미지 태그에서 new_filename을 추출해 배열에 추가
-            tempDom.find('img').each(function () {
-                var src = $(this).attr('src');
-                if (src && src.includes('/photo-temp/')) {  // 경로 검증을 위해 추가
-                    var filename = src.split('/').pop();  // 파일명만 추출
-                    imgsInEditor.push(filename);  // 에디터에 있는 이미지의 new_filename 추출
-                }
-            });
-
-            // new_filename과 일치하는 항목만 필터링
-            var finalImgs = tempImg.filter(function (temp) {
-                return imgsInEditor.includes(temp.img_new);  // 에디터에 있는 파일과 tempImg의 new_filename 비교
-            });
-
-            console.log("최종 전송할 이미지 쌍:", finalImgs);
-
-            // 최종 이미지 파일명 배열을 JSON으로 변환하여 추가
-            formData.append('imgsJson', JSON.stringify(finalImgs));  // new_filename과 일치하는 값만 전
-            
-
-            // 게시글 제목과 내용 추가
-            var subject = $("input[name='subject']").val();
-            var content = $('#summernote').val();
-            var userId = "${sessionScope.loginId}";  // 세션에서 사용자 ID 가져오기
-
-            if (routeData.length == 0) {
-                alert("경로를 입력해 주세요.");
-                return;
-            }
-
-            formData.append('content', content);
-            formData.append('routeData', JSON.stringify(routeData));
-            formData.append('id', userId);
-
-            
-            console.log('게시글 등록 데이터:', {
-                subject: subject,
-                content: content,
-                routeData: routeData,
-                id: userId
-            });
-
-            // 서버에 데이터 전송
-            $.ajax({
-                type: "POST",
-                url: "/runBoardWrite",
-                contentType: false,
-                processData: false,
-                enctype: 'multipart/form-data',  // multipart/form-data 사용
-                data: formData,
-                success: function (data) {
-                    console.log(data);
-                    location.href = "/runBoard";
-                },
-                error: function (xhr, status, error) {
-                    alert("게시글 등록 중 오류가 발생했습니다: " + error);
-                }
-            });
-        }
-		
-        
-        // 등록 취소 버튼 - 작성 취소
-        function cancelWrite() {
-            if (confirm("작성을 취소하시겠습니까?")) {
-                history.back();
-                location.href = "runBoard";
-            }
-        }
-        */
-       
-
-        
-        
-          
-        
+              
         // 레이어 팝업
 	 	function secondBtn1Act() {
 	 	    // 두번째팝업 1번버튼 클릭시 수행할 내용
@@ -402,6 +317,10 @@
             
             var content = $('#summernote').summernote('code');
             
+            var sub = $("input[name='subject']").val();
+            var con = $("input[name='postContent']").val();
+            
+            
          // 게시글 에디터 이미지 검증을 위한 코드
             var tempDom = $('<div>').html(content);
             var imgsInEditor = [];
@@ -431,10 +350,7 @@
             var content = $('#summernote').val();
             var userId = "${sessionScope.loginId}";  // 세션에서 사용자 ID 가져오기
 
-            if (routeData.length == 0) {
-                alert("경로를 입력해 주세요.");
-                return;
-            }
+  
 
             formData.append('content', content);
             formData.append('routeData', JSON.stringify(routeData));
@@ -458,7 +374,7 @@
                 data: formData,
                 success: function (data) {
                     console.log(data);
-                    location.href = "/runBoard";
+                    location.href = "/runBoard/"+data.board_idx;
                 },
                 error: function (xhr, status, error) {
                     alert("게시글 등록 중 오류가 발생했습니다: " + error);
@@ -474,7 +390,21 @@
 	 	}
 
 	 	$('#writeRun').on('click',function(){
-	 		layerPopup('게시글을 등록 하시겠습니까?','등록','취소' ,secondBtn1Act , secondBtn2Act);
+	 		var sub = $("input[name='subject']").val();
+	 		var content = $('#summernote').summernote('code');
+            console.log('나오닝',content);
+	 		
+	 		if(!sub){
+	 			layerPopup('제목을 입력해 주세요.','확인',false ,secondBtn2Act , secondBtn2Act);	 			
+	 		}else if(!content){
+	 			layerPopup('내용을 입력해 주세요.','확인',false ,secondBtn2Act , secondBtn2Act);
+	 		}else if(routeData.length == 0){
+	 			layerPopup('경로를 입력해 주세요.','확인',false ,secondBtn2Act , secondBtn2Act);
+	 		}else{
+	 			layerPopup('게시글을 등록 하시겠습니까?','등록','취소' ,secondBtn1Act , secondBtn2Act);
+	 		}
+	 	
+	 	
 	 	});
 	 	
 	 	$('#cancelWrite').on('click',function(){
@@ -487,9 +417,8 @@
 	 	}
         
         
-        
-        
-        
+          
+      
         
         
         
