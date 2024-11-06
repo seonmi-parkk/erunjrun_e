@@ -317,6 +317,7 @@
     		 </div>
 	    	<div class="com">
 	    		<div>
+	    		
 	    			<c:choose>
 	    				<c:when test="${sessionScope.adminYn == 'Y'}">
 	    					<div class="nick">
@@ -325,14 +326,22 @@
 	    			   			${sessionScope.loginId}
 							</div>
 	    				</c:when>
+	    				<c:when test="${sessionScope.loginId == null}">
+	    					<div class="nick">
+	    					<div class="profile-area">
+							<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div></div>
+	    			   			비회원
+							</div>
+	    				</c:when>
 	    				<c:otherwise>
 	    					<div class="nick">
 	    					<div class="profile-area">
 							<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
 	    			   			${nickname.nickname}
-							</div>
+							</div>						
 	    				</c:otherwise>
 	    			</c:choose>
+	    			
 		    		<input type="text" class="tex" required>
 	    		</div>
 	    		<div>
