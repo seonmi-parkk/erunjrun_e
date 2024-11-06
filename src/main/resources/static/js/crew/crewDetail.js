@@ -11,58 +11,58 @@
 	
 
 	$(document).ready(function () {
-	    crewDetail();
 	    crewMemberList();
+	    crewDetail();
 	    likeList();
 	});
 	
-	    function crewDetail() {
-	        $.ajax({
-	            type: 'POST',
-	            url: '/crew/detail',
-	            data: { 'crew_idx': crew_idx },
-	            dataType: 'JSON',
-	            success: function (response) {
-	                if (response.success) {
-	                    var result = response.result;
-	                    
-	                    if(result.is_recruit === 'N'){
-	                    	is_recruit = result.is_recruit;
-	                    	$('#crew-btn-01').html('크루 모집완료');
-	                    	$('#crew-btn-01').css({'border' : '1px solid var(--btn-bd-g)', 'color' : 'var(--btn-bd-g)', 'background' : '#fff'});
-	                    }
-	                    
-	                    // 이미지 업데이트
-	                    if (result.img_new) {
-	                        $('#crew-img').attr('src', '/photo/' + result.img_new);
-	                    }
-	                    var day = result.days; // 예: "mon"
-	
-		                // replace를 사용해서 변환
-		                day = day.replace('mon', '월')
-		                         .replace('tue', '화')
-		                         .replace('wen', '수')
-		                         .replace('thu', '목')
-		                         .replace('fri', '금')
-		                         .replace('sat', '토')
-		                         .replace('sun', '일');
-	
-	                    // 크루명, 소개, 안내사항 등 업데이트
-	                    $('#crew-name').text(result.crew_name);
-	                    $('#crew-content').html(result.content);
-	                    $('#crew-address').text(result.address);
-	                    $('#crew-member').text(result.member);
-	                    $('#crew-days').text(day);
-	                    $('#crew-minute').text(result.minute);
-	                    $('#crew-distance').text(result.distance);
-	                    $('#crew-location').text(result.shortsido + ' ' + result.sigungu);
+	function crewDetail() {
+	    $.ajax({
+	        type: 'POST',
+	        url: '/crew/detail',
+	        data: { 'crew_idx': crew_idx },
+	        dataType: 'JSON',
+	        success: function (response) {
+	            if (response.success) {
+	                var result = response.result;
+	                
+	                if(result.is_recruit === 'N'){
+	                	is_recruit = result.is_recruit;
+	                	$('#crew-btn-01').html('크루 모집완료');
+	                	$('#crew-btn-01').css({'border' : '1px solid var(--btn-bd-g)', 'color' : 'var(--btn-bd-g)', 'background' : '#fff'});
 	                }
-	            },
-	            error: function (e) {
-	                console.log('에러 발생 => ', e);
+	                
+	                // 이미지 업데이트
+	                if (result.img_new) {
+	                    $('#crew-img').attr('src', '/photo/' + result.img_new);
+	                }
+	                var day = result.days; // 예: "mon"
+	
+	             // replace를 사용해서 변환
+	             day = day.replace('mon', '월')
+	                      .replace('tue', '화')
+	                      .replace('wen', '수')
+	                      .replace('thu', '목')
+	                      .replace('fri', '금')
+	                      .replace('sat', '토')
+	                      .replace('sun', '일');
+	
+	                // 크루명, 소개, 안내사항 등 업데이트
+	                $('#crew-name').text(result.crew_name);
+	                $('#crew-content').html(result.content);
+	                $('#crew-address').text(result.address);
+	                $('#crew-member').text(result.member);
+	                $('#crew-days').text(day);
+	                $('#crew-minute').text(result.minute);
+	                $('#crew-distance').text(result.distance);
+	                $('#crew-location').text(result.shortsido + ' ' + result.sigungu);
 	            }
-	        });
-	    }
+	        },
+	        error: function (e) {
+	            console.log('에러 발생 => ', e);
+	        }
+	    });
+	}
 	    
 	    function crewMemberList(){
 			console.log('크루 회원 리스트 요청');
@@ -197,7 +197,6 @@
 	  
 	    
 	    
-	
 	function likeList(){
 		$.ajax({
 			type: 'POST',
@@ -225,9 +224,8 @@
 
 	function crewApplication(application, result){
 		
-		 // 신청 리스트에서 로그인 ID와 일치하는 신청 내역이 있는지 확인
+		// 신청 리스트에서 로그인 ID와 일치하는 신청 내역이 있는지 확인
         var isApplied = application.some(app => app.id === loginId);
-
 		 
 		 if(is_recruit != 'N'){
 	        // 로그인 여부에 따라 버튼 텍스트 변경

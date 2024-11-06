@@ -98,6 +98,7 @@
 
     
 </body>
+<script src="/resources/js/common.js" type="text/javascript"></script>
 <script src="/resources/js/crew/crewNoticeDetail.js" type="text/javascript"></script>
 <script>
 

@@ -303,7 +303,7 @@
 	
 	if(loginId){
 		alarmCount();
-		setInterval(alarmCount, 10000);
+		setInterval(alarmCount, 10000); // 10초마다
 	}
 	
 	
@@ -323,6 +323,7 @@
 		});
 	}
 	
+	
 	// 알림 리스트 불러오기 (20개)
 	$('#alarmIcon').on('click', function(){
 		alarmListPrint();
@@ -331,8 +332,7 @@
 	
 	
 	function alarmListPrint(){
-		
-		if(alarmNum > 0){
+		if(alarmNum > 0){ // 알림이 0개 이상일 경우
 			$.ajax({
 				type: 'POST',
 				url: '/alarmList',
@@ -344,18 +344,25 @@
 					var alarmList = '';
 	                response.result.forEach(function(alarm) {
 	                	var change = '';
+	                	// 공지, 문의 이동
 	                	if(alarm.code_name === 'AB100' || alarm.code_name === 'AM100' || alarm.code_name === 'AC102'){
 	                		change = 'onclick="location.href=\''+alarm.url+'\'"';
+	                	
+	                	// 채팅방
 	                	}else if(alarm.code_name === 'AN100' || alarm.code_name === 'AN101' || alarm.code_name === 'AN102'){
 	                		change = 'onclick="chatWindowSet(\'' + alarm.url + '\')"';
+	                	
+	                	// 크루 권한
 	                	}else if(alarm.code_name === 'AC100'){
 	                		var url = alarm.url;
 	                		var idx = url.split('/').pop();
 	                		var from_id = alarm.from_id; 
 	                		var alarm_idx = alarm.alarm_idx;
 	                		change = 'onclick="crewAdminResultChack(\'' + idx + '\', \'' + from_id + '\', \'' + alarm_idx + '\')"';
+	                	
+	                	// 크루 퇴출
 	                	}else{
-	                		change = 'onclick="layerPopup(\'' + alarm.content + ' 크루에서 퇴출되었습니다.\', \'확인\', false, function(){alarmUpdate(' + alarm.alarm_idx + ')}, function(){alarmUpdate(' + alarm.alarm_idx + ')})"';
+	                		change = 'onclick="crewExpel(\'' + alarm.subject + '\', \'' + alarm_idx + '\')"';
 	                	}
 						
 	                	
@@ -391,6 +398,7 @@
 	});
 	
 	
+	// 알림 박스가 클릭되면 자동으로 읽음 처리(그 뒤에 리스트 업데이트)
 	$(document).on('click', '#alarmBox', function(event) {
 		var alarm_idx = $(this).data('alarm-idx');
 	    
@@ -410,6 +418,11 @@
 	    alarmUpdate(alarm_idx);
 	});
 	
+	function crewExpel(subject, alarm_idx){
+		layerPopup(subject+' 크루에서 퇴출되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
+		alarmUpdate(alarm_idx);
+	}
+	
 	function alarmUpdate(alarm_idx){
 		$.ajax({
 			type: 'GET',
@@ -426,8 +439,8 @@
 		}); 
 	}
 	
-	function crewAdminResultChack(idx, from_id, alarm_idx){
-		console.log('권한 실행');
+	function crewAdminResultChack(idx, from_id, alarm_idx){ // 크루 idx, leader, alarm_idx
+		console.log('권한 요청 체크 실행');
 	 	$.ajax({
 			type: 'GET',
 			url: '/crew/adminResultCheck',
@@ -437,18 +450,13 @@
 			success: function(response){
 				if(response){
 					// 권한 요청 팝업
-					layerPopup(
-                    '크루장 권한을 승인하시겠습니까?',
-                    '승인',
-                    '거절',
-                    function() {
-                        crewAdminUpdate('Y', idx, alarm_idx);
-                    },
-                    function() {
-                        crewAdminUpdate('N', idx);
-                    })
+					layerPopup('크루장 권한을 승인하시겠습니까?', '승인', '거절',
+                   		function() {crewAdminUpdate('Y', idx, from_id, alarm_idx);},
+                    	function() {crewAdminUpdate('N', idx, from_id, alarm_idx);})
+					
 					console.log('결과 받아옴!!');
 				}else{
+					// 이미 누가 요청을 승락한 경우
 					layerPopup('완료된 요청입니다.', '확인', false, applBtn2Act, applBtn2Act);
 				}
 			},error: function(e){
@@ -457,7 +465,7 @@
 		}); 
 	}
 	
-	function crewAdminUpdate(result, idx, alarm_idx) {
+	function crewAdminUpdate(result, idx, from_id, alarm_idx) {
 		applBtn2Act(); // 팝업창 끄기 위해서 (나중에 체크 필요)
 	    alarmUpdate(alarm_idx);
 	    console.log('result => ', result);
@@ -471,7 +479,8 @@
 	        data: {
 	            'result': result,
 	            'crew_idx': idx,
-	            'id': loginId
+	            'id': loginId,
+	            'leader' : from_id
 	        },
 	        dataType: 'JSON',
 	        success: function(response) {
@@ -480,7 +489,7 @@
 	                layerPopup('완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
 
 	                alarmUpdate(alarm_idx);
-	                $('.close').click();
+	                //$('.close').click();
 	            }
 	        },
 	        error: function(e) {
@@ -495,11 +504,10 @@
 	        $('#alarmPopup').hide();
 	    }
 	});
-
 	
 	// 팝업 취소
 	function applBtn2Act() {
 	    removeAlert(); 
-	    alarmUpdate(alarm_idx);
+	    //alarmUpdate(alarm_idx);
 	}
 </script>

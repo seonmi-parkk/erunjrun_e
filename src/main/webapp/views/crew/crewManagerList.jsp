@@ -20,7 +20,8 @@
 <body>
 	<jsp:include page="../header.jsp"/>
 	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
-	<input type="hidden" name="loginId" value="${loginId}"> 
+	<input type="hidden" name="loginId" value="${loginId}"/> 
+	<input type="hidden" name="leaderId" value="${leaderId}"/>
 	<div class="layoutbox"></div>
 	<div class="innerr">
 		<div class="one">
