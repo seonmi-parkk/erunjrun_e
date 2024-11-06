@@ -178,7 +178,7 @@
 		    c.use_yn = 'Y'
 		    <if test="filtering != null">
 		        <!-- is_recruit 조건 -->
-		        <if test="filtering.contains('option1')">
+		        <if test="filtering.contains('option0')">
 		            AND c.is_recruit = 'Y'
 		        </if>
 		        
@@ -203,7 +203,7 @@
 		        </if>
 		        
 		         <!-- 선택한 tag_idx를 포함한 모든 크루 데이터 조회 -->
-		        <if test="filtering.contains('option2')">
+		        <if test="filtering.contains('option1')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -211,7 +211,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option3')">
+		        <if test="filtering.contains('option2')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -219,7 +219,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option4')">
+		        <if test="filtering.contains('option3')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -227,7 +227,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option5')">
+		        <if test="filtering.contains('option4')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -235,7 +235,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option6')">
+		        <if test="filtering.contains('option5')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -243,7 +243,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option7')">
+		        <if test="filtering.contains('option6')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -251,7 +251,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option8')">
+		        <if test="filtering.contains('option7')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -259,7 +259,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option9')">
+		        <if test="filtering.contains('option8')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -267,7 +267,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option10')">
+		        <if test="filtering.contains('option9')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -275,7 +275,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option11')">
+		        <if test="filtering.contains('option10')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -283,7 +283,7 @@
 		            )
 		        </if>
 		        
-		        <if test="filtering.contains('option12')">
+		        <if test="filtering.contains('option11')">
 		            AND c.crew_idx IN (
 		                SELECT crew_idx
 		                FROM crew_tag
@@ -580,8 +580,32 @@
 		    LIMIT 1
 	</select>
 	
-	<!-- 응답된 권한 요청인지 체크 -->
+	<!-- (알림) 응답된 권한 요청인지 체크 -->
 	<select id="crewAdminResultCheck" resultType="int" parameterType="map">
 		SELECT COUNT(history_idx) FROM crew_application_history WHERE crew_idx = #{crew_idx} AND leader = #{id} AND is_agree = 'Y'
+	</select>
+	
+	<!-- (크루관리 페이지) 크루 권한 요청 중복체크 -->
+	<select id="crewAdminOverlay" resultType="int" parameterType="map">
+		SELECT COUNT(history_idx) FROM crew_application_history WHERE crew_idx = #{crew_idx} AND id = #{id} AND is_agree = 'W'
+	</select>
+	
+	<!-- 크루 권한 기존 요청자 상태 변경 -->
+	<update id="crewMemberAdminChange" parameterType="map">
+		UPDATE crew_application_history SET is_agree = 'N' WHERE crew_idx = #{crew_idx} AND leader = #{leader} AND id != #{id} 
+	</update>
+	
+	<!-- 리더 아이디 체크 -->
+	<select id="crewLocationLeaderCheck" resultType="String" parameterType="map">
+		SELECT id FROM crew_member WHERE crew_idx = #{crew_idx} AND id = #{id} AND is_leader = 'Y';
+	</select>
+	
+	<!-- 크루 공지 리더 아이디 체크 -->
+	<select id="crewNoticeLeaderCheck" resultType="String" parameterType="map">
+		SELECT id FROM crew_notice WHERE notice_idx = #{notice_idx} AND id = #{id}
+	</select>
+	
+	<select id="crewTagResult" resultType="com.erunjrun.crew.dto.CrewDTO">
+		SELECT tag_idx, tag_name FROM tag WHERE use_yn = 'Y'
 	</select>
 </mapper>

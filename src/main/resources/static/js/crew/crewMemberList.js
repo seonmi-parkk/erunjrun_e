@@ -3,7 +3,19 @@
 	var firstPage = 1;
 	var paginationInitialized = false;
 	
-	pageCall(firstPage);
+	var leaderId = $('input[name="leaderId"]').val();
+	$(document).ready(function(){
+		if(leaderId !== loginId){
+			alert('크루장만 접근 가능합니다');
+			location.href='/';
+		}else{
+			pageCall(firstPage);
+			
+		}
+	
+	}); 
+	
+	
 	
 	// 검색 폼 제출 시 AJAX 호출
 	$('#searchForm').on('submit', function(event) {

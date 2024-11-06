@@ -3,14 +3,20 @@
 	var crewLeader = '';
 	var crew_idx = $('input[name="crew_idx"]').val();
 	var crewone = [];
+	var leaderId = $('input[name="leaderId"]').val();
+	
+	$(document).ready(function(){
+		if(leaderId !== loginId){
+			alert('크루장만 접근 가능합니다');
+			location.href='/';
+		}else{
+			crewDetail(); 
+	   		crewMemberList();
+			
+		}
+	
+	}); 
 
-	$(document).ready(function () {
-	    
-	    console.log('crew_idx =>', crew_idx);
-	    crewDetail(); 
-	    crewMemberList();
-	    
-	});
 	
 	function crewMemberList() {
 	    console.log('크루 회원 리스트 요청');
@@ -207,6 +213,8 @@
 	    
 	}
 	
+	var crew_idx = $('input[name="crew_idx"]').val();
+	
 	// 선택된 체크박스의 ID 배열을 가져오는 함수
 	function getSelectedIds() {
 	    var selectedIds = [];
@@ -228,9 +236,30 @@
 	    } else {
 	        // 선택된 ID가 1개인 경우에만 권한 양도 팝업 띄우기
 	        layerPopup('권한을 양도하시겠습니까?', '확인', '취소', function() {
-	            sendCrewAdminUpdate(selectedIds[0]); // 선택된 ID를 서버에 전송
+	            crewAdminOverlay(selectedIds[0]); // 선택된 ID를 서버에 전송
 	        }, applBtn2Act);
 	    }
+	}
+	
+	function crewAdminOverlay(memberId){
+		console.log('중복 체크 해야하는 id =>', memberId);
+		$.ajax({
+			type: 'GET',
+			url: '/crew/adminOverlay',
+			data: {'id' : memberId,
+				'crew_idx' : crew_idx},
+			dataType: 'JSON',
+			success: function(response){
+				if(response){
+					sendCrewAdminUpdate(memberId);
+				}else{
+					removeAlert();
+					layerPopup('이미 요청한 크루원입니다.', '확인', false, applBtn2Act, applBtn2Act);
+				}
+			},error: function(e){
+				console.log('권한 중복 체크 중 에러 =>', e);
+			}
+		})
 	}
 
 	
@@ -241,9 +270,6 @@
 	    var leader = crewLeader;
 	    console.log('선택된 ID:', selectedIds[0]); // 콘솔에 선택된 ID 출력
 	    console.log('리더 아이디 => ', leader);
-	    
-	    var crew_idx = $('input[name="crew_idx"]').val();
-		
   		$.ajax({
 			type: 'POST',
 			url : '/crew/AdminUpdate',
@@ -279,6 +305,7 @@
 			dataType: 'JSON',
 			success: function(response){
 				if(response.success){
+					// loadingComplete()
 					removeAlert();
 					layerPopup('크루원 퇴출이 완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
 					crewMemberList();

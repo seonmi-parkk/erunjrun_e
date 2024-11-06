@@ -50,7 +50,6 @@
 			}
 			
 			if(loginId === result.id){
-				console.log('같은데?');
 				$('.btn01-m').css('visibility', 'visible');
 				$('.btn03-m').css('visibility', 'visible');
 			}

@@ -28,6 +28,7 @@
             <form enctype="multipart/form-data">
                 <p class="title1">러닝크루 수정</p>
                 <input type="hidden" name="loginId" value="${loginId}"> 
+                <input type="hidden" name="leaderId" value="${leaderId}"/>
 
                 <div id="dori22">
                     <div class="twobox">
@@ -49,17 +50,6 @@
 
                         <span class="title2">태그</span>
                         <span id="tagFilters">
-                            <label><input type="checkbox" name="tag_idx_list" value="1"/>🏃‍♂️러닝에 집중</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="2" />🙋‍♀️ 친목도 중요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="3" /><img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/> 남성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="4" /><img src="/resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 여성만 가능</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="5" /><img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/> 혼성</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="6" /> <b style='color: FD6F22'  class="tagImg-01">E</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="7" /> <b style='color: 116DCA'  class="tagImg-01">I</b> 환영해요</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="8" />🐂 소규모 크루</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="9" />🏆 대회 목적</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="10" />💦 러닝 고수만</label>
-                            <label><input type="checkbox" name="tag_idx_list" value="11" />🥳 초보도 환영</label>
                         </span> <br>
 
                         <div class="boxheigth">

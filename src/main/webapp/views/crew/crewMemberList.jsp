@@ -17,6 +17,7 @@
 	<div class="inner">
 	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
 	<input type="hidden" name="loginId" value="${loginId}"> 
+	<input type="hidden" name="leaderId" value="${leaderId}"/>
 	<p class="title1" onclick="location.href='/crewManagerList/${crew_idx}'">크루 신청자 관리</p>
 	<form id="searchForm">
     <select id="searchOption">

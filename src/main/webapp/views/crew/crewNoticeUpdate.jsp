@@ -24,7 +24,8 @@
 	    <form enctype="multipart/form-data">
 		    <input type="hidden" name="notice_idx" value="${notice_idx}"/>
 		    <input type="hidden" name="crew_idx" value="${result.crew_idx}"/>
-		    <input type="hidden" name="loginId" value="${loginId}"> 
+		    <input type="hidden" name="loginId" value="${loginId}"/> 
+		    <input type="hidden" name="leaderId" value="${leaderId}"/>
 	        <p class="title1">크루 공지사항 수정</p>
 	
 	        <div id="doricn">
@@ -81,31 +82,38 @@
 <script>
 	var notice_idx = $('input[name="notice_idx"]').val();
 	var crew_idx = $('input[name="crew_idx"]').val();
+	var leaderId = $('input[name="leaderId"]').val();
+	$(document).ready(function(){
+		if(leaderId !== loginId){
+			alert('작성자만 수정 가능합니다.');
+			location.href='/';
+		}else{
+		    // 서버에서 가져온 content 값을 에디터에 삽입
+		    var content = '<c:out value="${result.content}" escapeXml="false" />';
+		    if (content) {
+		        // summernote가 초기화된 후에만 내용을 설정
+		        $('#summernote').summernote('code', content);
+		    }
+		    
+		    var priorityValue = ${result.priority}; // 서버에서 전달된 priority 값
+		    
+		    if (priorityValue === 1 || priorityValue === 2 || priorityValue === 3) {
+		        $('#priorityOption').css('visibility', 'visible');
+		    } else {
+		        $('#priorityOption').css('visibility', 'hidden');
+		    }
+		    
+		    $('#priorityChack').on('change', function(){
+				$('#priorityOption').css('visibility', 'visible');
+		    });
+		    
+		    $('#checkReturn').on('change', function(){
+				$('#priorityOption').css('visibility', 'hidden');
+		    });
+		}
 	
-	$(document).ready(function() {
-	    // 서버에서 가져온 content 값을 에디터에 삽입
-	    var content = '<c:out value="${result.content}" escapeXml="false" />';
-	    if (content) {
-	        // summernote가 초기화된 후에만 내용을 설정
-	        $('#summernote').summernote('code', content);
-	    }
-	    
-	    var priorityValue = ${result.priority}; // 서버에서 전달된 priority 값
-	    
-	    if (priorityValue === 1 || priorityValue === 2 || priorityValue === 3) {
-	        $('#priorityOption').css('visibility', 'visible');
-	    } else {
-	        $('#priorityOption').css('visibility', 'hidden');
-	    }
-	    
-	    $('#priorityChack').on('change', function(){
-			$('#priorityOption').css('visibility', 'visible');
-	    });
-	    
-	    $('#checkReturn').on('change', function(){
-			$('#priorityOption').css('visibility', 'hidden');
-	    });
-	});	
+	});
+
 	
 	var loginId = $('input[name="loginId"]').val();
 	var overlayCheck = 'Y';
