@@ -82,6 +82,7 @@ aside {
 .icon-name {
 	font-size: 16px;
 	color: #555;
+	margin-top: -15px;
 }
 
 .modal {
@@ -231,6 +232,24 @@ h3 {
     border-radius: 5px; /* 둥근 모서리 */
 }
 
+.icon-list .card[data-id="null"] .icon-image {
+    width: 75px;  /* 기본 아이콘만 60px로 설정 */
+    height: 75px; /* 기본 아이콘만 60px로 설정 */
+    margin-top:15px;
+}
+
+.icon-list .card[data-id="null"] .icon-name {
+    margin-top:-4px;
+}
+
+.icon-list .card[data-id="null"] input[type="radio"] {
+    margin-top: 10px;  /* 기본 아이콘만 margin-top 추가 */
+}
+
+.icon-list .card input[type="radio"] {
+    margin-top: 10px;  /* 원하는 값을 넣으세요 (예: 10px) */
+}
+
 </style>
 </head>
 <body>
@@ -307,14 +326,33 @@ $(document).ready(function() {
                     if (data.list.length === 0) {
                         $('.no-icon-message').show(); // 데이터가 없을 경우 메시지 표시
                     } else {
+                        // 기본 이미지 카드 추가
+                        var defaultCard = '<div class="card default-icon-card" data-id="null">' +
+                            '<img class="icon-image" src="resources/img/common/profile.png" alt="기본 이미지" />' +
+                            '<p class="icon-name">기본 이미지</p>' +
+                            '<input type="radio" name="icon-radio" class="icon-radio" data-id="null" />' +
+                            '</div>';
+                        $('.icon-list').append(defaultCard); // 기본 카드 추가
+                        
+                        var selectedIconId = data.selectedIcon;  // 서버에서 보내준 selectedIcon (이미지 파일명) 받아옴
+                        
                         $.each(data.list, function(index, icon) {
                             var imageSrc = (icon.image && icon.image.trim()) ? '/resources/img/icon/' + icon.image : '/resources/img/icon/default.png';
                             var profileImageSrc = '/resources/img/common/profile.png'; // 기본 프로필 이미지
+                            
+                            // 선택된 아이콘인지 확인하고 checked 속성 추가
+                            var isChecked = (icon.image === selectedIconId); // icon.image와 selectedIconId를 비교 (파일명 비교)
+                            var checkedAttribute = isChecked ? 'checked' : ''; // 아이콘이 선택되었으면 checked 추가
+
+                            console.log("아이콘 이미지: ", icon.image);
+                            console.log("선택된 아이콘 이미지: ", selectedIconId);
+                            
+
                             var iconCard = '<div class="card" data-id="' + icon.icon_idx + '">' +
                                 '<img class="icon-image" src="' + imageSrc + '" alt="아이콘 이미지" />' +
-                                '<img class="profile-img2" src="' + profileImageSrc + '" alt="기본 프로필 이미지" />' +  // 기본 프로필 이미지 추가
+                                '<img class="profile-img2" src="' + profileImageSrc + '" alt="기본 프로필 이미지" />' +
                                 '<p class="icon-name">' + (icon.icon_name || '이름 없음') + '</p>' +
-                                '<input type="radio" name="icon-radio" class="icon-radio" data-id="' + icon.icon_idx + '" />' +  <!-- 라디오 버튼으로 변경 -->
+                                '<input type="radio" name="icon-radio" class="icon-radio" data-id="' + icon.icon_idx + '" ' + checkedAttribute + ' />' +
                                 '</div>';
                             $('.icon-list').append(iconCard);
                         });
@@ -345,35 +383,63 @@ $(document).ready(function() {
             }
         });
     }
-    
+
+    // 라디오 버튼 변경 시 수정 버튼 활성화/비활성화
     $(document).on('change', '.icon-radio', function() {
-        var checkedCount = $('.icon-radio:checked').length;
-        $('#updateIconBtn').prop('disabled', checkedCount === 0); // 라디오 버튼이 선택되면 수정 버튼 활성화
+        var selectedId = $('.icon-radio:checked').data('id'); // 선택된 라디오 버튼의 data-id를 가져옴
+        
+        // 기본 아이콘을 선택한 경우 수정 버튼을 비활성화하지 않음
+        var isDefaultIcon = selectedId === 'null'; // 기본 아이콘이 선택되었으면 true
+        $('#updateIconBtn').prop('disabled', false); // 기본 아이콘도 수정 가능하게끔 처리
     });
 
+    // 수정하기 버튼 클릭 시
     $('#updateIconBtn').click(function() {
         var selectedIcon = $('.icon-radio:checked').data('id'); // 선택된 아이콘의 ID를 가져옵니다.
 
-        if (selectedIcon) {
+        // 선택된 아이콘이 기본 아이콘 (null)인 경우
+        if (selectedIcon === 'null') {
             $.ajax({
                 type: 'POST',
-                url: 'iconImageUpdate.ajax', // 서버에 해당 요청을 보내기 위한 URL
-                data: { iconId: selectedIcon },  // 하나의 아이콘만 변경하므로 {iconId}로 보냄
+                url: 'iconImageUpdate.ajax',  // 기본 아이콘으로 업데이트 요청
+                data: { iconId: null },  // null 값을 서버로 전송
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        alert('아이콘 이미지가 성공적으로 변경되었습니다.');
-                        location.reload(); // 페이지 새로고침 (변경된 내용을 반영하기 위해)
+                        alert('기본 아이콘으로 변경되었습니다.');
+                        location.reload(); // 페이지 새로고침
                     } else {
-                        alert('아이콘 이미지 변경에 실패했습니다.');
+                        alert('기본 아이콘으로 변경하는 데 실패했습니다.');
                     }
                 },
                 error: function(error) {
-                    console.error('아이콘 이미지를 업데이트하는 중 오류 발생:', error);
+                    console.error('아이콘 변경 실패:', error);
+                }
+            });
+        } else {
+            // 실제 아이콘을 선택한 경우 (기존대로 아이콘을 변경)
+            $.ajax({
+                type: 'POST',
+                url: 'iconImageUpdate.ajax',
+                data: { iconId: selectedIcon }, // 선택된 아이콘 ID로 요청
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('아이콘 이미지가 변경되었습니다.');
+                        location.reload(); // 페이지 새로고침
+                    } else {
+                        alert('아이콘 이미지 변경 실패');
+                        console.log('Error response:', response);  // 응답 내용 확인
+                    }
+                },
+                error: function(error) {
+                    console.error('아이콘 변경 실패:', error);
+                    console.log('Error response:', error);  // 응답 내용 확인
                 }
             });
         }
     });
 });
+
 </script>
-</html>
+</html>  

@@ -269,7 +269,9 @@ h3 {
                 if (view) {
                     content += '<tr>';
                     content += '<td>' + view.comment_idx + '</td>'; // 댓글 번호
-                    content += '<td><a href="viewBoard?board_idx=' + view.board_idx + '#comment-' + view.comment_idx + '">' + view.content + '</a></td>'; // 댓글 내용에 링크 추가
+                    // 댓글 내용에 링크 추가
+                    // 링크에 board_idx와 comment_idx를 포함시켜 해당 게시글로 이동하도록
+                    content += '<td><a href="/boardDetail/' + view.code_name + '/' + view.board_idx + '#comment-' + view.comment_idx + '">' + view.content + '</a></td>'; 
                     content += '<td>' + new Date(view.create_date).toLocaleString('ko-KR') + '</td>'; // 작성일
                     content += '</tr>';
                 }

@@ -193,6 +193,10 @@ public class MypageService {
 	public boolean iconImageUpdate(Long iconId, String id) {
 		return mypageDAO.iconImageUpdate(iconId, id);
 	}
+	
+	public boolean iconImageUpdateToDefault(String userId) {
+		return mypageDAO.iconImageUpdateToDefault(userId);
+	}
 
 	public Map<String, Object> myMateList(int page, int cnt, String id) {
 		logger.info("Service getAppliedMates 호출됨: page={}, cnt={}, id={}", page, cnt, id);
