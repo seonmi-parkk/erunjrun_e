@@ -67,6 +67,8 @@ public interface MypageDAO {
 	List<Map<String, Object>> myIconList(int limit, int offset, String id);
 	
 	boolean iconImageUpdate(Long iconId, String id);
+	
+	boolean iconImageUpdateToDefault(String userId);
 
 	Map<String, Object> getProfileData(String toUserId);
 	
@@ -113,7 +115,5 @@ public interface MypageDAO {
 	List<Map<String, Object>> blockMemberList(int limit, int offset, String id);
 
 	int countBlockMemberList(String id, int cnt);
-
-
 
 }

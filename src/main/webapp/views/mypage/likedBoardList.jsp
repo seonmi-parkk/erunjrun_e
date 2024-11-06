@@ -271,7 +271,7 @@ h3 {
 
                     content += '<tr>';
                     content += '<td>' + view.board_idx + '</td>'; // 글번호
-                    content += '<td><a href="viewBoard?board_idx=' + view.board_idx + '">' + view.subject + '</a></td>'; // 제목에 링크 추가
+                    content += '<td><a href="/boardDetail/' + view.code_name + '/' + view.board_idx + '">' + view.subject + '</a></td>'; // 제목에 링크 추가
                     content += '<td>' + view.id + '</td>'; // 글쓴이
                     content += '<td>' + formattedDate + '</td>'; // 작성일자
                     content += '</tr>';

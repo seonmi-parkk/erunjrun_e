@@ -341,6 +341,12 @@
 		WHERE id = #{id};
 	</update>
 
+	<update id="iconImageUpdateToDefault" parameterType="map">
+		UPDATE member
+		SET icon_image = NULL
+		WHERE id = #{id};
+	</update>
+
 	<select id="myMateList" resultType="map">
 		SELECT id, unlike_id,
 		mate_date
@@ -364,10 +370,11 @@
 
 	<select id="myBoardList" resultType="map">
 		SELECT board_idx, id,
-		subject, create_date
+		subject, create_date, code_name
 		FROM board
 		WHERE id = #{id}
-		ORDER BY create_date
+		ORDER BY
+		create_date
 		DESC
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
@@ -383,14 +390,20 @@
 
 	<select id="myCommentList" resultType="map">
 		SELECT c.comment_idx,
-		c.board_idx, c.content, c.create_date, c.nickname,
+		c.board_idx,
+		c.content,
+		c.create_date,
+		c.nickname,
+		c.code_name,
 		b.id
-		FROM comment c
+		FROM
+		comment c
 		JOIN board b ON c.board_idx = b.board_idx
 		WHERE b.id = #{id}
-		ORDER BY
-		c.create_date DESC
-		LIMIT #{limit} OFFSET #{offset}
+		AND c.code_name IN ('B100', 'B101')
+		ORDER BY c.create_date DESC
+		LIMIT
+		#{limit} OFFSET #{offset}
 	</select>
 
 	<select id="countComment" resultType="int">
@@ -400,13 +413,16 @@
 		JOIN board b ON c.board_idx =
 		b.board_idx
 		WHERE b.id = #{id}
+		AND c.code_name IN ('B100', 'B101')
 	</select>
 
 	<select id="likedBoardList" resultType="map">
 		SELECT l.board_idx, l.id,
+		l.code_name,
 		b.create_date, b.subject
 		FROM likes l
-		JOIN board b ON l.board_idx =
+		JOIN board b ON
+		l.board_idx =
 		b.board_idx
 		WHERE l.id = #{id}
 		ORDER BY l.board_idx DESC
@@ -429,24 +445,28 @@
 		WHEN cl.id = u1.id THEN u2.id
 		ELSE u1.id
 		END AS other_id,
-		c.create_date
+		c.create_date,
+		cl.use_yn
 		FROM chat_link cl
-		JOIN chat c ON cl.chat_idx = c.chat_idx
+		JOIN chat c ON cl.chat_idx =
+		c.chat_idx
 		JOIN chat_link u1 ON u1.chat_idx = cl.chat_idx
-		JOIN chat_link u2 ON
-		u2.chat_idx = cl.chat_idx
-		WHERE cl.id = #{id} AND u1.id != #{id}
-		ORDER
-		BY c.create_date DESC LIMIT #{limit} OFFSET #{offset}
+		JOIN chat_link
+		u2 ON u2.chat_idx = cl.chat_idx
+		WHERE cl.id = #{id}
+		AND u1.id != #{id}
+		AND cl.use_yn = 'N'
+		ORDER BY c.create_date DESC
+		LIMIT #{limit} OFFSET
+		#{offset}
 	</select>
 
 	<select id="countMessage" resultType="int">
 		SELECT CEIL(COUNT(*) /
-		#{cnt})
-		AS
-		pages
+		#{cnt}) AS pages
 		FROM chat_link
 		WHERE id = #{id}
+		AND use_yn = 'N'
 	</select>
 
 	<select id="crewMasterMessageList" resultType="map">
@@ -455,29 +475,36 @@
 		CASE
 		WHEN ccl.id = u1.id THEN u2.id
 		ELSE u1.id
-		END AS other_id,
+		END AS
+		other_id,
 		MAX(ccc.create_date) AS message_date,
-		cc.crew_idx
-		FROM crew_chat_link ccl
+		cc.crew_idx,
+		ccl.use_yn
+		FROM
+		crew_chat_link ccl
 		JOIN crew_chat cc ON ccl.chat_idx = cc.chat_idx
 		JOIN crew_chat_content ccc ON ccl.chat_idx = ccc.chat_idx
-		JOIN crew_chat_link u1 ON u1.chat_idx = cc.chat_idx
-		JOIN crew_chat_link u2 ON u2.chat_idx = cc.chat_idx AND u2.id != ccl.id
+		JOIN
+		crew_chat_link u1 ON u1.chat_idx = cc.chat_idx
+		JOIN crew_chat_link u2
+		ON u2.chat_idx = cc.chat_idx AND u2.id != ccl.id
 		WHERE ccl.id = #{id}
 		AND cc.code_cp = 'p'
+		AND ccl.use_yn = 'N'
 		GROUP BY
-		ccl.chat_idx, other_id, cc.crew_idx -- crew_idx를 GROUP BY에 추가
+		ccl.chat_idx,
+		other_id, cc.crew_idx
 		ORDER BY message_date DESC
-		LIMIT #{limit} OFFSET #{offset}
+		LIMIT #{limit} OFFSET
+		#{offset}
 	</select>
 
 	<select id="countCrewMessage" resultType="int">
 		SELECT CEIL(COUNT(*) /
-		#{cnt})
-		AS
-		pages
+		#{cnt}) AS pages
 		FROM crew_chat_link
 		WHERE id = #{id}
+		AND use_yn = 'N'
 	</select>
 
 	<select id="memberCrewList" resultType="map">
@@ -625,7 +652,8 @@
 		SELECT
 		CEIL(COUNT(*) / #{cnt}) AS pages
 		FROM block_member
-		WHERE block_member.unlike_id = #{id}
+		WHERE
+		block_member.unlike_id = #{id}
 	</select>
 
 </mapper>   	

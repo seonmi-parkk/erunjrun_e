@@ -565,6 +565,7 @@ public class MypageController {
 
 		// 세션에서 사용자 ID를 가져오기
 		String id = (String) session.getAttribute("loginId");
+	    String selectedIcon = (String) session.getAttribute("iconImage"); // 세션에서 선택된 아이콘 정보 가져오기
 		if (id == null) {
 			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
 			return null; // 에러 응답 반환
@@ -576,6 +577,7 @@ public class MypageController {
 
 		// 서비스 호출 시 ID 전달
 		Map<String, Object> result = mypageService.myIconList(page_, cnt_, id);
+	    result.put("selectedIcon", selectedIcon);  // 세션에서 가져온 아이콘 정보를 응답에 추가
 		logger.info("Result from service: {}", result);
 
 		return result;
@@ -583,7 +585,7 @@ public class MypageController {
 	
 	@PostMapping(value = "/iconImageUpdate.ajax")
 	@ResponseBody
-	public Map<String, Object> iconImageUpdate(@RequestParam("iconId") Long iconId, HttpSession session, Model model) {
+	public Map<String, Object> iconImageUpdate(@RequestParam("iconId") String iconId, HttpSession session, Model model) {
 	    String id = (String) session.getAttribute("loginId");
 
 	    Map<String, Object> response = new HashMap<>();
@@ -592,12 +594,24 @@ public class MypageController {
 	        response.put("error", "로그인이 필요합니다.");
 	        return response; // 로그인되지 않은 경우 에러 메시지 반환
 	    }
-	    boolean updateSuccess = mypageService.iconImageUpdate(iconId, id);
 
-	    if (updateSuccess) {
-	        response.put("success", true);  // 아이콘 이미지 업데이트 성공
+	    // 아이콘 ID가 null 또는 "null" 문자열인 경우, 기본 아이콘으로 설정
+	    if (iconId == null || iconId.trim().isEmpty() || "null".equals(iconId)) {
+	        boolean updateSuccess = mypageService.iconImageUpdateToDefault(id);  // 기본 아이콘으로 업데이트하는 서비스 호출
+	        if (updateSuccess) {
+	            response.put("success", true);  // 기본 아이콘으로 변경 성공
+	        } else {
+	            response.put("error", "기본 아이콘 변경 실패");
+	        }
 	    } else {
-	        response.put("error", "아이콘 이미지 변경 실패");  // 아이콘 이미지 업데이트 실패
+	        // 실제 아이콘 ID로 변경
+	        Long iconIdLong = Long.parseLong(iconId);
+	        boolean updateSuccess = mypageService.iconImageUpdate(iconIdLong, id);
+	        if (updateSuccess) {
+	            response.put("success", true);  // 아이콘 이미지 업데이트 성공
+	        } else {
+	            response.put("error", "아이콘 이미지 변경 실패");
+	        }
 	    }
 
 	    return response;  // 결과를 JSON 형태로 반환
@@ -640,6 +654,22 @@ public class MypageController {
 		logger.info("Result from service: {}", result);
 
 		return result;
+	}
+	
+	@RequestMapping(value="/boardDetail/{boardType}/{board_idx}")
+	public String detail(@PathVariable String boardType, @PathVariable int board_idx) {
+	    // boardType (게시판 종류)에 따라 이동할 URL을 결정하고, 해당 게시판의 상세보기 페이지로 리다이렉트
+
+	    if ("B100".equals(boardType)) {
+	        // 자유게시판 게시글 상세보기 페이지로 이동
+	    	 return "redirect:/freeBoardDetail/" + board_idx;
+	    } else if ("B101".equals(boardType)) {
+	        // 런닝코스 게시글 상세보기 페이지로 이동
+	    	return "redirect:/runBoardDetail/" + board_idx;
+	    }
+
+	    // 예외 처리: 잘못된 boardType이 들어왔을 경우 (예: 'free' 또는 'run' 외의 값)
+	    return "error"; // 오류 페이지로 리턴
 	}
 
 	@GetMapping(value = "/myCommentListView")
