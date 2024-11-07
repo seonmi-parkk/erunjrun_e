@@ -6,10 +6,13 @@
 <meta charset="UTF-8">
 <title>내 게시글/댓글</title>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/common.css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
-<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+<script src="resources/js/jquery.twbsPagination.js"
+	type="text/javascript"></script>
 
 <style>
 body {
@@ -80,8 +83,7 @@ aside {
 table {
 	width: 100%;
 	border-collapse: collapse;
-	margin: 0;  /* 여백 없애기 */
-	
+	margin: 0; /* 여백 없애기 */
 }
 
 th, td {
@@ -106,11 +108,9 @@ tbody tr {
 	border-bottom: 1px solid #ccc; /* 검은색 하단 선 추가 */
 }
 
-
 tfoot tr {
-    border-bottom: none; /* tfoot의 하단 선 없애기 */
+	border-bottom: none; /* tfoot의 하단 선 없애기 */
 }
-
 
 .pagination-container {
 	background-color: #ffffff;
@@ -133,6 +133,11 @@ tfoot tr {
 	margin-left: -60px;
 }
 
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
+}
+
 .divider {
 	width: 2px; /* 선의 두께 */
 	background-color: #ccc; /* 선의 색상 */
@@ -147,9 +152,9 @@ h3 {
 }
 
 .title3.active {
-    color: #black; /* 활성화된 메뉴 항목의 색상 */
-    font-weight: bold; /* 강조 효과 */
-    background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
+	color: #black; /* 활성화된 메뉴 항목의 색상 */
+	font-weight: bold; /* 강조 효과 */
+	background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
 }
 
 .board-options {
@@ -176,28 +181,65 @@ h3 {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png" alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}"
+							alt="프로필 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png"
+							alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1"
+							src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png"
+							alt="기본 아이콘 이미지" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
-			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}" onclick="location.href='profileDetail'">회원정보</p>
-			<p class="title3 ${pageName == 'createExerciseProfile' || pageName == 'ExerciseProfile' ? 'active' : ''}" onclick="location.href='createExerciseProfile'">운동프로필</p>
-			<p class="title3 ${pageName == 'pointHistoryListView' ? 'active' : ''}" onclick="location.href='pointHistoryListView'">포인트 내역</p>
-			<p class="title3 ${pageName == 'memberCrewListView' ? 'active' : ''}" onclick="location.href='memberCrewListView'">크루 리스트</p>
-			<p class="title3 ${pageName == 'myMateListView' ? 'active' : ''}" onclick="location.href='myMateListView'">내 운동 메이트</p>
-			<p class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}" onclick="location.href='likedMemberListView'">내 관심/차단 회원</p>
-			<p class="title3 ${pageName == 'messageListView' ? 'active' : ''}" onclick="location.href='messageListView'">쪽지</p>
-			<p class="title3 ${pageName == 'myIconListView' ? 'active' : ''}" onclick="location.href='myIconListView'">아이콘</p>
-			<p class="title3 ${pageName == 'myBoardListView' ? 'active' : ''}" onclick="location.href='myBoardListView'">내 게시글/댓글</p>
-			<p class="title3 ${pageName == 'likedBoardListView' ? 'active' : ''}" onclick="location.href='likedBoardListView'">좋아요 게시글</p>
+			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
+				onclick="location.href='profileDetail'">회원정보</p>
+			<p
+				class="title3 ${pageName == 'createExerciseProfile' || pageName == 'ExerciseProfile' ? 'active' : ''}"
+				onclick="location.href='createExerciseProfile'">운동프로필</p>
+			<p
+				class="title3 ${pageName == 'pointHistoryListView' ? 'active' : ''}"
+				onclick="location.href='pointHistoryListView'">포인트 내역</p>
+			<p class="title3 ${pageName == 'memberCrewListView' ? 'active' : ''}"
+				onclick="location.href='memberCrewListView'">크루 리스트</p>
+			<p class="title3 ${pageName == 'myMateListView' ? 'active' : ''}"
+				onclick="location.href='myMateListView'">내 운동 메이트</p>
+			<p
+				class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
+				onclick="location.href='likedMemberListView'">내 관심/차단 회원</p>
+			<p class="title3 ${pageName == 'messageListView' ? 'active' : ''}"
+				onclick="location.href='messageListView'">쪽지</p>
+			<p class="title3 ${pageName == 'myIconListView' ? 'active' : ''}"
+				onclick="location.href='myIconListView'">아이콘</p>
+			<p class="title3 ${pageName == 'myBoardListView' ? 'active' : ''}"
+				onclick="location.href='myBoardListView'">내 게시글/댓글</p>
+			<p class="title3 ${pageName == 'likedBoardListView' ? 'active' : ''}"
+				onclick="location.href='likedBoardListView'">좋아요 게시글</p>
 		</aside>
-		<div class="divider"></div>	
+		<div class="divider"></div>
 		<div class="container">
 			<h3>내 게시글/댓글</h3>
 			<div class="board-options">
 				<p class="title3 ${pageName == 'myBoardListView' ? 'active' : ''}"
 					onclick="location.href='myBoardListView'">(내 게시글)</p>
-				<p class="title3" onclick="location.href='myCommentListView'">(내 댓글)</p>
-				</div>
+				<p class="title3" onclick="location.href='myCommentListView'">(내
+					댓글)</p>
+			</div>
 			<table>
 				<thead>
 					<tr>
@@ -249,6 +291,7 @@ h3 {
 	                window.location.href = 'member/login';
 	            } else {
 	                drawList(data.list); // data.list로 수정
+
 	                $('#pagination').twbsPagination({
 	                    startPage: 1,
 	                    totalPages: data.totalpages,
@@ -283,6 +326,7 @@ h3 {
 	        });
 	    }
 	    $('#list').html(content);
+	    
 	}
 </script>
 </html>

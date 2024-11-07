@@ -430,4 +430,8 @@ public class MypageService {
 		return result;
 	}
 
+	public String getSelectedIcon(String id) {
+		return mypageDAO.getSelectedIcon(id);
+	}
+
 }

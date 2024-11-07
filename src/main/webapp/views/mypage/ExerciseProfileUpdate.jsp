@@ -76,18 +76,17 @@ aside {
 	margin-bottom: -16px;
 	padding: 10px;
 	border-radius: 8px; /* 모서리 둥글게 */
-	
 }
 
 textarea {
-    width: 100%; /* 전체 너비 */
-    height: 100px; /* 원하는 높이 */
-    padding: 10px; /* 패딩 제거 */
-    margin: 0; /* 마진 제거 */
-    border: 1px solid #ccc; /* 테두리 */
-    border-radius: 4px; /* 모서리 둥글게 */
-    resize: none; /* 크기 조정 비활성화 */
-    box-sizing: border-box; /* 테두리와 패딩을 포함한 전체 너비 */
+	width: 100%; /* 전체 너비 */
+	height: 100px; /* 원하는 높이 */
+	padding: 10px; /* 패딩 제거 */
+	margin: 0; /* 마진 제거 */
+	border: 1px solid #ccc; /* 테두리 */
+	border-radius: 4px; /* 모서리 둥글게 */
+	resize: none; /* 크기 조정 비활성화 */
+	box-sizing: border-box; /* 테두리와 패딩을 포함한 전체 너비 */
 }
 
 h3 {
@@ -185,6 +184,23 @@ button:hover {
 	margin-left: -60px;
 }
 
+.profile-img2 {
+	max-width: 100px; /* 원하는 최대 너비 */
+	max-height: 100px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
+	margin-left: -1px;
+}
+
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
+}
+
+.icon-image2 {
+	margin-top: -2px;
+	margin-left: -137px;
+}
+
 .image-info {
 	display: flex; /* 수평 정렬 */
 	align-items: center; /* 세로 중앙 정렬 */
@@ -221,7 +237,7 @@ button:hover {
 .edit-icon {
 	position: relative;
 	bottom: -30px; /* 하단에서 5px */
-	right: 100px; /* 오른쪽에서 5px */
+	right: 175px; /* 오른쪽에서 5px */
 	width: 30px;
 	height: 30px;
 	background-color: #ff7f50;
@@ -241,13 +257,13 @@ button:hover {
 }
 
 .exercise-label {
-    margin-left: 5px; /* "km" 텍스트와 간격 조정 */
+	margin-left: 5px; /* "km" 텍스트와 간격 조정 */
 }
 
 .title3.active {
-    color: #black; /* 활성화된 메뉴 항목의 색상 */
-    font-weight: bold; /* 강조 효과 */
-    background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
+	color: #black; /* 활성화된 메뉴 항목의 색상 */
+	font-weight: bold; /* 강조 효과 */
+	background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
 }
 </style>
 </head>
@@ -256,8 +272,30 @@ button:hover {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png"
-					alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}"
+							alt="프로필 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png"
+							alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1"
+							src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png"
+							alt="기본 아이콘 이미지" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
@@ -272,7 +310,8 @@ button:hover {
 				onclick="location.href='memberCrewListView'">크루 리스트</p>
 			<p class="title3 ${pageName == 'myMateListView' ? 'active' : ''}"
 				onclick="location.href='myMateListView'">내 운동 메이트</p>
-			<p class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
+			<p
+				class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
 				onclick="location.href='likedMemberListView'">내 관심/차단 회원</p>
 			<p class="title3 ${pageName == 'messageListView' ? 'active' : ''}"
 				onclick="location.href='messageListView'">쪽지</p>
@@ -290,18 +329,38 @@ button:hover {
 				enctype="multipart/form-data">
 				<input type="hidden" name="id" value="${member.id}" />
 				<div class="image-info">
-					<c:choose>
-						<c:when test="${not empty profile.image}">
-							<img class="profile-image" src="/photo/${profile.image}"
-								alt="회원 이미지" id="previewImage" />
-						</c:when>
-						<c:otherwise>
-							<img class="profile-image" src="resources/img/common/profile.png"
-								alt="기본 프로필 이미지" id="previewImage" />
-						</c:otherwise>
-					</c:choose>
+					<div class="image">
+						<!-- 프로필 이미지 -->
+						<c:choose>
+							<c:when test="${not empty profile.image}">
+								<img class="profile-img2" src="/photo/${profile.image}"
+									alt="프로필 이미지" />
+							</c:when>
+							<c:otherwise>
+								<img class="profile-img2" src="resources/img/common/profile.png"
+									alt="기본 프로필 이미지" />
+							</c:otherwise>
+						</c:choose>
+					</div>
+					<div class="icon">
+						<!-- 아이콘 이미지 -->
+						<c:choose>
+							<c:when test="${not empty member.icon_image}">
+								<img class="icon-image2"
+									src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+							</c:when>
+							<c:otherwise>
+								<img class="icon-image2"
+									src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+							</c:otherwise>
+						</c:choose>
+					</div>
 					<div class="info">
 						<p class="title2" id="name">${member.nickname}</p>
+					</div>
+					<div class="image-preview">
+						<img id="previewImage" src="" alt="미리보기 이미지" class="profile-img2"
+							style="display: none;" />
 					</div>
 					<span id="changeImage" class="edit-icon" style="cursor: pointer;">✎</span>
 					<input type="file" name="imageFile" id="imageFile"
@@ -325,20 +384,17 @@ button:hover {
 				</div>
 				<div class="form-group">
 					<label for="exercise">나의 성향</label>
-					<textarea name="exercise" id="exercise"
-						required>${mypage.exercise}</textarea>
+					<textarea name="exercise" id="exercise" required>${mypage.exercise}</textarea>
 				</div>
 
 				<div class="form-group">
 					<label for="mate">원하는 메이트 성향</label>
-					<textarea name="mate" id="mate"
-						required>${mypage.mate}</textarea>
+					<textarea name="mate" id="mate" required>${mypage.mate}</textarea>
 				</div>
 
 				<div class="form-group">
 					<label for="content">소개글</label>
-					<textarea name="content" id="content"
-						required>${mypage.content}</textarea>
+					<textarea name="content" id="content" required>${mypage.content}</textarea>
 				</div>
 				<div class="form-group">
 					<label for="exercise">운동 시간 (분) / 운동 거리 (km)</label>
@@ -348,7 +404,8 @@ button:hover {
 							value="${mypage.exercise_min}" required /> <span>분</span> <input
 							type="number" name="exercise_dis" id="exercise_dis"
 							placeholder="km" style="width: 10%; margin-left: 5px;"
-							value="${mypage.exercise_dis}" required /> <span class="exercise-label">km</span>
+							value="${mypage.exercise_dis}" required /> <span
+							class="exercise-label">km</span>
 					</div>
 				</div>
 				<div class="form-group">

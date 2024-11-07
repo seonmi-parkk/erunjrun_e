@@ -123,6 +123,11 @@ tfoot tr {
 	margin-left: -60px;
 }
 
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
+}
+
 .divider {
 	width: 2px; /* 선의 두께 */
 	background-color: #ccc; /* 선의 색상 */
@@ -148,8 +153,26 @@ h3 {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png"
-					alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}" alt="프로필 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
@@ -194,11 +217,9 @@ h3 {
 				<tfoot>
 					<tr>
 						<td colspan="4" class="pagination-container">
-							<div class="container">
 								<nav aria-label="Page navigation">
 									<ul class="pagination" id="pagination"></ul>
 								</nav>
-							</div>
 						</td>
 					</tr>
 				</tfoot>
@@ -256,7 +277,6 @@ h3 {
             content += '<tr><td colspan="4" class="text-center">좋아요한 게시글이 없습니다.</td></tr>';
         } else {
             list.forEach(function(view) {
-            	console.log('code : ',view.code_name);
                 if (view) {
                     // 타임스탬프를 Date 객체로 변환 후 포맷팅
                     var date = new Date(view.create_date);
@@ -277,7 +297,6 @@ h3 {
                     }else{
                     	content += '<td><a href="/freeBoardDetail/'+ view.board_idx + '">' + view.subject + '</a></td>'; // 제목에 링크 추가
                     }
-                    content += '<td><a href="/boardDetail/' + view.code_name + '/' + view.board_idx + '">' + view.subject + '</a></td>'; // 제목에 링크 추가
                     content += '<td>' + view.id + '</td>'; // 글쓴이
                     content += '<td>' + formattedDate + '</td>'; // 작성일자
                     content += '</tr>';

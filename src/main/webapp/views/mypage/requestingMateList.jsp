@@ -82,6 +82,7 @@ aside {
 .friend-name {
 	font-size: 16px;
 	color: #555;
+	margin-bottom: 4px;
 }
 
 .modal {
@@ -164,6 +165,11 @@ h3 {
 	margin-left: -60px;
 }
 
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
+}
+
 .divider {
 	width: 2px; /* 선의 두께 */
 	background-color: #ccc; /* 선의 색상 */
@@ -206,6 +212,17 @@ h3 {
             transform: translateX(-50%);
             z-index: 996;
         }
+        
+.cancel-btn {
+	background-color: #d3d3d3; /* 연한 회색 */
+    color: #333; /* 어두운 텍스트 */
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}        
 </style>
 </head>
 <body>
@@ -213,8 +230,30 @@ h3 {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png"
-					alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}"
+							alt="프로필 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png"
+							alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1"
+							src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png"
+							alt="기본 아이콘 이미지" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
@@ -296,9 +335,10 @@ $(document).ready(function() {
                     $('.no-friends-message').hide(); // 초기에는 메시지 숨김
                     if (data.list.length === 0) {
                         $('.no-friends-message').show(); // 데이터가 없을 경우 메시지 표시
+                        $('.pagination-container').hide(); // 페이지네이션 숨기기
                     } else {
                         $.each(data.list, function(index, friend) {
-                            var imageSrc = (friend.image && friend.image.trim()) ? '/photo/' + friend.image : 'resources/img/common/profile.png';
+                            var imageSrc = (friend.friend_image && friend.friend_image.trim()) ? '/photo/' + friend.friend_image : 'resources/img/common/profile.png';
                             var friendCard = '<div class="card" data-id="' + friend.id + '">' +
                                 '<img class="friend-image" src="' + imageSrc + '" alt="친구 이미지" />' +
                                 '<p class="friend-name user">' +
@@ -311,7 +351,6 @@ $(document).ready(function() {
                                 
                             $('.friend-list').append(friendCard);
                         });
-                        $('.no-friends-message').hide(); // 데이터가 있을 경우 메시지 숨김
                         setupPagination(data.totalCount, page);
                         $('.pagination-container').show(); // 데이터가 있을 때 페이지네이션 표시           
 

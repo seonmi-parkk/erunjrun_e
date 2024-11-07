@@ -39,7 +39,8 @@
 		pw,
 		email,
 		birth,
-		gender
+		gender,
+		icon_image
 		FROM
 		member
 		WHERE
@@ -237,13 +238,19 @@
 	</select>
 
 	<select id="getFriendRequests" resultType="map">
-		SELECT id, unlike_id,
-		create_date
-		FROM mate_application
-		WHERE id= #{id}
-		ORDER BY create_date
-		DESC
-		LIMIT #{limit} OFFSET #{offset}
+		SELECT
+		ma.id,
+		ma.unlike_id,
+		ma.create_date,
+		p.image AS friend_image
+		FROM
+		mate_application ma
+		LEFT JOIN profile p ON p.id = ma.id OR p.id =
+		ma.unlike_id
+		WHERE ma.id = #{id}
+		ORDER BY ma.create_date DESC
+		LIMIT
+		#{limit} OFFSET #{offset}
 	</select>
 
 	<select id="countFriendRequests" resultType="int">
@@ -284,21 +291,28 @@
 		VALUES (#{id},
 		#{code_name}, #{unlikeId}, NOW());
 	</insert>
-	
-	
-	
+
+
+
 	<insert id="cancel" parameterType="map">
-		insert into mate_history(id,code_name,unlike_id)
-								values(#{unlikeId},'M104',#{id})
+		insert into
+		mate_history(id,code_name,unlike_id)
+		values(#{unlikeId},'M104',#{id})
 	</insert>
-	
-	
+
 	<select id="getAppliedMates" resultType="map">
-		SELECT id, create_date
-		FROM mate_application
-		WHERE unlike_id = #{id}
-		ORDER BY create_date DESC
-		LIMIT #{limit} OFFSET #{offset}
+		SELECT
+		ma.id,
+		ma.create_date,
+		p.image AS friend_image
+		FROM mate_application ma
+		LEFT
+		JOIN profile p ON p.id = ma.id
+		WHERE ma.unlike_id = #{id}
+		ORDER BY
+		ma.create_date DESC
+		LIMIT #{limit} OFFSET
+		#{offset}
 	</select>
 
 	<delete id="cancelMateApplication" parameterType="map">
@@ -350,18 +364,29 @@
 	</update>
 
 	<update id="iconImageUpdateToDefault" parameterType="map">
-		UPDATE member
+		UPDATE
+		member
 		SET icon_image = NULL
 		WHERE id = #{id};
 	</update>
 
 	<select id="myMateList" resultType="map">
-		SELECT id, unlike_id,
-		mate_date
-		FROM mate
-		WHERE id = #{id} OR unlike_id = #{id}
-		ORDER BY
-		mate_date DESC
+		SELECT m.id, m.unlike_id,
+		m.mate_date, p.image AS friend_image
+		FROM mate m
+		INNER JOIN profile p ON
+		p.id = m.id
+		WHERE m.unlike_id = #{id}
+
+		UNION
+
+		SELECT m.id, m.unlike_id,
+		m.mate_date, p.image AS friend_image
+		FROM mate m
+		INNER JOIN profile p ON
+		p.id = m.unlike_id
+		WHERE m.id = #{id}
+		ORDER BY mate_date DESC
 		LIMIT
 		#{limit}
 		OFFSET #{offset}
@@ -454,19 +479,18 @@
 		ELSE u1.id
 		END AS other_id,
 		c.create_date,
-		cl.use_yn
+		cl.use_yn,
+		cc.start_date
 		FROM chat_link cl
-		JOIN chat c ON cl.chat_idx =
-		c.chat_idx
+		JOIN chat c ON cl.chat_idx = c.chat_idx
 		JOIN chat_link u1 ON u1.chat_idx = cl.chat_idx
-		JOIN chat_link
-		u2 ON u2.chat_idx = cl.chat_idx
+		JOIN chat_link u2 ON u2.chat_idx = cl.chat_idx
+		LEFT JOIN chat_content cc ON cc.chat_idx = cl.chat_idx
 		WHERE cl.id = #{id}
 		AND u1.id != #{id}
 		AND cl.use_yn = 'N'
 		ORDER BY c.create_date DESC
-		LIMIT #{limit} OFFSET
-		#{offset}
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 	<select id="countMessage" resultType="int">
@@ -614,14 +638,17 @@
 		m.nickname,
 		m.address,
 		m.birth,
-		m.gender
+		m.gender,
+		p.image AS profile_image
 		FROM
 		interest_member im
 		JOIN
-		member m ON im.unlike_id = m.id
+		member m ON
+		im.unlike_id = m.id
+		LEFT JOIN
+		profile p ON p.id = m.id
 		WHERE
-		im.id =
-		#{id}
+		im.id = #{id}
 		ORDER BY
 		request_date DESC
 		LIMIT #{limit} OFFSET #{offset}
@@ -643,16 +670,20 @@
 		m.nickname,
 		m.address,
 		m.birth,
-		m.gender
+		m.gender,
+		p.image AS profile_image
 		FROM
 		block_member bm
 		JOIN
-		member m ON bm.id = m.id
+		member m ON
+		bm.unlike_id = m.id
+		LEFT JOIN
+		profile p ON p.id = m.id
 		WHERE
-		bm.unlike_id = #{id}
+		bm.unlike_id
+		= #{id}
 		ORDER BY
-		block_date
-		DESC
+		block_date DESC
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
@@ -662,6 +693,11 @@
 		FROM block_member
 		WHERE
 		block_member.unlike_id = #{id}
+	</select>
+
+	<select id="getSelectedIcon" resultType="String">
+		SELECT icon_image FROM
+		member WHERE id = #{id}
 	</select>
 
 </mapper>   	

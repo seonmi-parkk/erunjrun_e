@@ -188,12 +188,16 @@ h3 {
 }
 
 .profile-img1 {
-	max-width: 100px;
-	max-height: 100px;
-	border-radius: 4px;
+	max-width: 100px; /* 원하는 최대 너비 */
+	max-height: 100px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
 	margin-left: -60px;
 }
 
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
+}
 .divider {
 	width: 2px;
 	background-color: #ccc;
@@ -236,7 +240,26 @@ h3 {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png" alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}" alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}" onclick="location.href='profileDetail'">회원정보</p>
@@ -294,7 +317,7 @@ $(document).ready(function() {
                 $('.no-crew-message').hide(); // 초기에는 메시지 숨김
                 if (data.list.length === 0) {
                     $('.no-crew-message').show(); // 데이터가 없을 경우 메시지 표시
-                    setupPagination(0, 1); // 페이지네이션을 0으로 설정
+                    $('.pagination-container').hide(); // 초기에는 메시지 숨김
                 } else {
                     $.each(data.list, function(index, crew) {
                         // 크루 카드 HTML 구조 수정
