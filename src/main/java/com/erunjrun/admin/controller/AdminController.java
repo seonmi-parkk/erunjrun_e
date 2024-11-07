@@ -104,29 +104,30 @@ public class AdminController {
       }
          
          model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-         return "admin/adminLogin";
+         return "redirect:/adminLogin";
       }
          
       
-        @GetMapping(value = "/adminMemberList") //post?
-        @ResponseBody 
-        public Map<String,Object> memberlist(String page, String cnt,String opt, String keyword,String sortField,String sortOrder){
-           
-         int page_ = Integer.parseInt(page);
-         int cnt_ = Integer.parseInt(cnt);
-         int limit = cnt_;
-         int offset = (page_ - 1) * cnt_;
-         int totalPages = admin_service.count(cnt_,opt,keyword);
-         
+      @GetMapping(value = "/adminMemberList")
+      @ResponseBody
+      public Map<String, Object> memberlist(String page, String cnt, String opt, String keyword, String sortField, String sortOrder) {
+          int page_ = Integer.parseInt(page);
+          int cnt_ = Integer.parseInt(cnt);
+          int limit = cnt_;
+          int offset = (page_ - 1) * cnt_;
           
-         Map<String,Object> result = new HashMap<String, Object>();
-         result.put("totalPages", totalPages);
-         result.put("currpage", page);
-         result.put("list", admin_service.memberlist(opt, keyword,sortField,sortOrder, limit, offset));
-         
-         return result;
-        
-        }
+          // 검색 조건을 반영하여 페이지 수를 계산
+          int totalPages = admin_service.count(cnt_, opt, keyword);
+
+          Map<String, Object> result = new HashMap<>();
+          logger.info("총갯수"+totalPages);
+          logger.info(page);
+          result.put("totalPages", totalPages);
+          result.put("currpage", page);
+          result.put("list", admin_service.memberlist(opt, keyword, sortField, sortOrder, limit, offset));
+
+          return result;
+      }
    
      @GetMapping(value = "/admin")
      public String adminList(HttpSession session,Model model) {
@@ -146,7 +147,7 @@ public class AdminController {
       int cnt_ = Integer.parseInt(cnt);
       int limit = cnt_;
       int offset = (page_ - 1) * cnt_;
-      int totalPages = admin_service.admincount(cnt_);
+      int totalPages = admin_service.admincount(cnt_,opt,keyword);
       
       Map<String,Object> result = new HashMap<String, Object>();
       List<AdminDTO> list =  admin_service.adminlist(opt, keyword, limit, offset);
@@ -484,6 +485,7 @@ public class AdminController {
      
      
      // 구분코드
+  // 구분코드
      @GetMapping(value = "/adminCode")
      public String code(HttpSession session,Model model) {
      if (session.getAttribute("adminYn") != null) {
@@ -496,20 +498,20 @@ public class AdminController {
      
      
      @GetMapping(value = "/adminCodeList")
-     @ResponseBody
-     public Map<String, Object> codelist(String page, String cnt,String opt, String keyword) {
+     @ResponseBody 
+     public Map<String, Object> codeList(String page, String cnt, String opt, String keyword) {
          int page_ = Integer.parseInt(page);
          int cnt_ = Integer.parseInt(cnt);
          int limit = cnt_;
          int offset = (page_ - 1) * cnt_;
-         int totalPages = admin_service.codecount(cnt_);
-         Map<String,Object> result = new HashMap<String, Object>();
+         int totalPages = admin_service.codecount(cnt_, keyword, opt); // 쿼리에서 계산된 페이지 수 사용
+
+         Map<String, Object> result = new HashMap<>();
          result.put("totalPages", totalPages);
          result.put("currpage", page);
-         result.put("list", admin_service.codelist(limit, offset,opt,keyword));
-         
+         result.put("list", admin_service.codelist(opt, keyword, limit, offset));
+
          return result;
-     
      }
      
      @GetMapping(value = "/adminCodeWrite")

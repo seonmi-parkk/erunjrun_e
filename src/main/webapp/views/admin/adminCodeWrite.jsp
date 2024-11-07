@@ -125,20 +125,20 @@
 	 	
 		<p class="title1" >구분코드</p>
 		
-	  	<form action="adminCodeWrite" method="post" id="form">
+	  	<form action="/adminCodeWrite" method="post" id="form">
 		
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">유형내용</p>
-			<input type="text" name="content" id="text"/>
+			<input type="text" name="content" id="text" required="required"/>
 		</div>
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">구분코드명</p>
-			<input type="text" name="code_name" id="text"/>
-			<button type="button" class="btn01-m" id="overlay">중복체크</button>
+			<input type="text" name="code_name" id="text"  required="required"/>
+			<button type="button" class="btn01-m" id="overlay" >중복체크</button>
 			<p id="result"></p>
 		</div>
 		

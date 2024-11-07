@@ -35,33 +35,89 @@
    </select>
      
 
-     <select id="adminlist" resultType="com.erunjrun.admin.dto.AdminDTO">
-        SELECT * FROM admin  
-        <where>
-        is_admin IN ('a','A')
+    <select id="adminlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+    SELECT * FROM admin  
+    <where>
+        is_admin IN ('a', 'A')
         <if test="keyword != null and !keyword.equals('') and opt.equals('admin_id')">
             AND admin_id LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="keyword != null and !keyword.equals('') and opt.equals('name')">         
-            AND  name LIKE CONCAT('%', #{keyword}, '%')
+            AND name LIKE CONCAT('%', #{keyword}, '%')
         </if>
-        </where>
-        ORDER BY admin_id DESC LIMIT #{limit} OFFSET #{offset}
-     </select>
+       </where>
+       ORDER BY admin_id DESC
+       LIMIT #{limit} OFFSET #{offset}
+   </select>
+
   
      <select id="admincount" resultType="int">
-      SELECT CEIL(count(admin_id)/#{param1}) AS pages FROM admin
+       SELECT CEIL(COUNT(*) / #{param1}) AS pages
+       FROM admin
+       <where>
+           is_admin IN ('a', 'A')
+           <if test="keyword != null and !keyword.equals('') and opt.equals('admin_id')">
+               AND admin_id LIKE CONCAT('%', #{keyword}, '%')
+           </if>
+           <if test="keyword != null and !keyword.equals('') and opt.equals('name')">         
+               AND name LIKE CONCAT('%', #{keyword}, '%')
+           </if>
+       </where>
    </select>
    
    
-   <update id="adminyn" parameterType="String">
-      update admin set is_admin = 'n' where admin_id = #{admin_id}
-   </update>
    
    
-   
-   
-      <select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+    <select id="memberlist" resultType="com.erunjrun.admin.dto.AdminDTO">
+	    WITH ranked_ban AS (
+	        SELECT 
+	            b.id,
+	            b.is_right,
+	            ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY b.is_right DESC, b.start_date DESC) AS rn
+	        FROM 
+	            ban b
+	    )
+	    SELECT 
+	        m.id,
+	        m.nickname,
+	        m.email,
+	        m.join_date,
+	        COALESCE(rb.is_right, 'N') AS report_status,
+	        (SELECT COUNT(*) 
+	         FROM report_write rw 
+	         WHERE rw.id = m.id) AS report_count
+	    FROM 
+	        member m
+	    LEFT JOIN 
+	        ranked_ban rb ON m.id = rb.id AND rb.rn = 1
+	    <where>
+	        <if test="keyword != null and keyword != '' and opt == 'id'">
+	            m.id LIKE CONCAT('%', #{keyword}, '%')
+	        </if>
+	        <if test="keyword != null and keyword != '' and opt == 'nickname'">
+	          m.nickname LIKE CONCAT('%', #{keyword}, '%')
+	        </if>
+	        <if test="keyword != null and keyword != '' and opt == 'email'">
+	          m.email LIKE CONCAT('%', #{keyword}, '%')
+	        </if>
+	    </where>
+	    GROUP BY 
+	        m.id, m.nickname, m.email, m.join_date, report_status
+	    ORDER BY 
+	        <choose>
+	            <when test="sortField != null and sortField != ''">
+	                ${sortField} ${sortOrder}
+	            </when>
+	            <otherwise>
+	                m.join_date ASC
+	            </otherwise>
+	        </choose>
+	    LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+
+
+    <select id="count" resultType="int">
     WITH ranked_ban AS (
         SELECT 
             b.id,
@@ -70,62 +126,25 @@
         FROM 
             ban b
     )
-    SELECT 
-        m.id,
-        m.nickname,
-        m.email,
-        m.join_date,
-        COALESCE(rb.is_right, 'N') AS report_status,
-        (SELECT COUNT(*) 
-         FROM report_write rw 
-         WHERE rw.id = m.id) AS report_count
+    SELECT CEIL(COUNT(*) / #{param1}) AS pages
     FROM 
         member m
     LEFT JOIN 
         ranked_ban rb ON m.id = rb.id AND rb.rn = 1
     <where>
         <if test="keyword != null and keyword != '' and opt == 'id'">
-            AND m.id LIKE CONCAT('%', #{keyword}, '%')
+            m.id LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="keyword != null and keyword != '' and opt == 'nickname'">
-            AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
+            m.nickname LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="keyword != null and keyword != '' and opt == 'email'">
-            AND m.email LIKE CONCAT('%', #{keyword}, '%')
+            m.email LIKE CONCAT('%', #{keyword}, '%')
         </if>
     </where>
-    GROUP BY 
-        m.id, m.nickname, m.email, m.join_date, report_status
-    ORDER BY 
-        <choose>
-            <when test="sortField != null and sortField != ''">
-                ${sortField} ${sortOrder}
-            </when>
-            <otherwise>
-                m.join_date ASC
-            </otherwise>
-        </choose>
-    LIMIT #{limit} OFFSET #{offset}
 </select>
 
 
-
-     
-     <select id="count" resultType="int">
-       SELECT CEIL(COUNT(*) / #{param1}) AS pages
-    FROM member m
-    <where>
-        <if test="keyword != null and keyword != '' and opt == 'id'">
-            AND m.id LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-        <if test="keyword != null and keyword != '' and opt == 'nickname'">
-            AND m.nickname LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-        <if test="keyword != null and keyword != '' and opt == 'email'">
-            AND m.email LIKE CONCAT('%', #{keyword}, '%')
-        </if>
-    </where>
-   </select>
    
    <select id="memberdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
       SELECT id,icon_image,nickname,email,address,gender,birth,phone 
@@ -383,7 +402,7 @@
         
         
         
-        <select id="codelist" resultType="com.erunjrun.admin.dto.AdminDTO">
+              <select id="codelist" resultType="com.erunjrun.admin.dto.AdminDTO">
            select * from code
            <where>
        <if test="keyword != null and !keyword.equals('') and opt.equals('content')">
@@ -397,9 +416,18 @@
         </select>
         
        <select id="codecount" resultType="int">
-         SELECT CEIL(count(code_name)/#{param1}) AS pages FROM code
+          SELECT CEIL(COUNT(*) / #{param1}) AS pages
+          FROM code
+          <where>
+              <if test="keyword != null and !keyword.equals('') and opt.equals('content')">
+                  content LIKE CONCAT('%', #{keyword}, '%')
+              </if>
+              <if test="keyword != null and !keyword.equals('') and opt.equals('code_name')">
+                  code_name LIKE CONCAT('%', #{keyword}, '%')
+              </if>
+          </where>
       </select>
-   
+
         <insert id="codewrite" parameterType="Map">
            INSERT INTO code(content,code_name,use_yn)VALUES(#{content},#{code_name},#{use_yn})
         </insert>

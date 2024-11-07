@@ -34,7 +34,7 @@ public interface AdminDAO {
 //   관리자리스트
    public List<AdminDTO> adminlist(String opt, String keyword, int limit, int offset);
 
-   int admincount(int cnt_);
+   int admincount(int cnt_, String opt, String keyword);
 
    
 //   회원상세페이지
@@ -92,9 +92,9 @@ public interface AdminDAO {
    
    
 // 구분코드   
-   public List<AdminDTO> codelist(int limit, int offset, String opt, String keyword);
+   public List<AdminDTO> codelist(String opt, String keyword, int limit, int offset);
    
-   public int codecount(int cnt_);
+   public int codecount(int cnt_, String keyword, String opt);
 
    public int codewrite(Map<String, String> param);
 

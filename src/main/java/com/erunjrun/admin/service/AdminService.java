@@ -68,9 +68,9 @@ public class AdminService {
       return admin_dao.memberlist(opt, keyword, sortField,sortOrder,limit, offset);
    }
 
-   public int admincount(int cnt_) {
+   public int admincount(int cnt_, String opt, String keyword) {
    
-      return admin_dao.admincount(cnt_);
+      return admin_dao.admincount(cnt_,opt,keyword);
    }
 
    public List<AdminDTO> adminlist(String opt, String keyword, int limit, int offset) {
@@ -223,15 +223,15 @@ public class AdminService {
    
    
 // 구분코드   
-   public int codecount(int cnt_) {
+   public int codecount(int cnt_, String keyword, String opt) {
       
-      return admin_dao.codecount(cnt_);
+      return admin_dao.codecount(cnt_,keyword,opt);
    }
 
 
-   public List<AdminDTO> codelist(int limit, int offset, String opt, String keyword) {
+   public List<AdminDTO> codelist(String opt, String keyword, int limit, int offset) {
       
-      return admin_dao.codelist(limit, offset,opt,keyword);
+      return admin_dao.codelist(opt, keyword,limit,offset);
    }
    
    public void codewrite(Map<String, String> param) {

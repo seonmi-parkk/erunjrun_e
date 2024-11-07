@@ -34,7 +34,7 @@
 	/* 콘텐츠와 사이드바 감싸는 래퍼 */
 	.content-wrapper {
 	    display: flex;
-	    width: 90%;
+	    width: 100%;
 	    margin: 80px 10px; /* 헤더 높이만큼 여백 */
 	    flex-grow: 1; /* 남은 공간 채우기 */
 	}
@@ -68,7 +68,7 @@
 	/* 메인 콘텐츠 */
 	.main-content {
 	    flex: 1; /* 남은 공간 채우기 */
-	    padding: 20px;
+	    padding: 20px 100px 20px 40px;
 	    overflow: auto;
 	}
 	#content{
@@ -79,10 +79,11 @@
         padding: 10px; /* 내부 여백을 10픽셀로 설정 */
     
     }
-	
+	.btn-area {
+		text-align: right;
+	}
 	.btn01-l{
 	margin-top: 10px;
-	margin-left: 1450px;
 	margin-bottom: 10px;
 	}
 </style>
@@ -111,7 +112,9 @@
         
         <main class="main-content">
 		<p class="title1" >팝업</p>
-	    <div class="btn01-l" onclick="location.href='/adminPopupWrite'" >등록</div>
+		<div class="btn-area">
+		    <div class="btn01-l" onclick="location.href='/adminPopupWrite'" >등록</div>
+		</div>
 	    
 		 <table>
 			<colgroup>
@@ -160,7 +163,7 @@
 	function pageCall(page) {	
 		$.ajax({
 			type:'GET',
-			url:'adminPopupList',
+			url:'/adminPopupList',
 			data:{
 				'page':page,
 				'cnt':15

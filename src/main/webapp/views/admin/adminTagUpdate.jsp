@@ -126,21 +126,15 @@
 		<p class="title1" >태그</p>
 		
 		
-	  	<form action="adminTagUpdate" method="post" id="form">
+	  	<form action="/adminTagUpdate" method="post" id="form">
 		
 		
-		
-		
-		<div class="input-container">
-			<p class="title2" id="dot">•</p>
-			<p class="title2" id="text">태그 이름</p>
 			<input type="text" name="tag_idx"  value="${info.tag_idx}" hidden="hidden"/>
-		</div>
-		
+	
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">태그 이름</p>
-			<input type="text" name="tag_name"  value="${info.tag_name}"/>
+			<input type="text" name="tag_name"  value="${info.tag_name}" required/>
 		</div>
 		
 		<div class="input-container">

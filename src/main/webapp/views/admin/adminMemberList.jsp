@@ -136,9 +136,11 @@
     <!-- 푸터 -->
     <jsp:include page="../footer.jsp"/>
 </body>
-
 <script>
-
+var msg = '${msg}';
+if (msg != '') {
+   alert(msg);
+}
 
 var show = 1;
 var currentSortField = '';
@@ -154,11 +156,8 @@ function pageCall(page, sortField = '', sortOrder = '') {
     var opt = $('#searchOption').val();
 
     $.ajax({
-        type: 'GET',
-
-        url: '/adminMemberList',
-
- 
+        type: 'Get',
+        url: 'adminMemberList',
         data: {
             page: page,
             cnt: 15,
@@ -218,7 +217,7 @@ function drawList(list) {
         content += '<td style="' + (view.report_status == 'Y' ? 'color: blue;' : '') + '">' + view.id + '</td>';
         content += '<td><a href="/adminMemberDetail/' + view.id + '">' + view.nickname + '</a></td>';
         content += '<td>' + view.email + '</td>';
-        content += '<td><a href="/memberRight/'+view.nickname+'" style="color: orange;">권한</a></td>';
+        content += '<td><a href="/memberRight/' + view.nickname + '" style="color: orange;">권한</a></td>';
         content += '<td>' + view.report_count + '</td>';
         content += '<td>' + view.join_date + '</td>';
         content += '</tr>';

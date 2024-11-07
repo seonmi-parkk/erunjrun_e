@@ -125,20 +125,20 @@
 	 	
 		<p class="title1" >구분코드</p>
 		
-	  	<form action="adminCodeUpdate" method="post" id="form">
+	  	<form action="/adminCodeUpdate" method="post" id="form">
 	
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">유형내용</p>
-			<input type="text" name="content" id="text" value="${info.content}"/>
+			<input type="text" name="content" id="text" value="${info.content}"  required="required"/>
 		</div>
 		
-		<input type="text" name="code_name" id="text" value="${info.code_name}" hidden=""/>
+		<input type="text" name="code_name" id="text" value="${info.code_name}" hidden="" />
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">구분코드명</p>
-			<p class="title2"  id="text">${info.code_name}</p>
+			<p class="title2"  id="text" >${info.code_name}</p>
 		</div>
 		
 		<div class="input-container">
