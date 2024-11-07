@@ -6,13 +6,12 @@
 	var likeCrew = [];
 	var crewLikeStatus = {}; // 각 크루별 idx 와 y/n 정보를 담음 ex) 1 : Y, 2 : N ...
 	
-	var loginId = '${sessionScope.loginId}';
+	var loginId = $('input[name="loginId"]').val();
 	console.log(loginId, '');
 	
 	
 	// 크루가 홀수일 때 마지막 crowBox 왼쪽 정렬
 	$(document).ready(function() {
-		
 		if (loginId) {
 		    // 로그인된 경우 좋아요한 크루 데이터를 먼저 가져옴
 		    fetchLikedCrews();
@@ -20,27 +19,27 @@
 		
 		crewList(currentPage); // 1 전달 (현재 페이지)
 		
-        // IntersectionObserver 설정
-        var observer = new IntersectionObserver(function(entries) {
-            if (entries[0].isIntersecting && !isLoading) {
-            	console.log('loading 에 도착');
-                currentPage++; // 다음 페이지 요청
-                crewList(currentPage); // 페이지 호출
-            }
-        });
+	    // IntersectionObserver 설정
+	    var observer = new IntersectionObserver(function(entries) {
+	        if (entries[0].isIntersecting && !isLoading) {
+	        	console.log('loading 에 도착');
+	            currentPage++; // 다음 페이지 요청
+	            crewList(currentPage); // 페이지 호출
+	        }
+	    });
 		
-        observer.observe(document.getElementById('loading')); // 감시할 요소 지정
+	    observer.observe(document.getElementById('loading')); // 감시할 요소 지정
 	    
 	    $('input[name="tag_idx_list"]').on('click', function() {
-            currentPage = 1; // 페이지 초기화
-            hasMoreData = true;
-            $('.crewListBox').empty(); // 기존 목록 초기화
-            updateFiltering(); // 필터링 배열 업데이트
-            crewList(currentPage); // 필터링된 리스트 요청
-        });
-
+	        currentPage = 1; // 페이지 초기화
+	        hasMoreData = true;
+	        $('.crewListBox').empty(); // 기존 목록 초기화
+	        updateFiltering(); // 필터링 배열 업데이트
+	        crewList(currentPage); // 필터링된 리스트 요청
+	    });
+	
 	});
-
+	
 	// 필터 배열
 	function updateFiltering() {
 	    filtering = $('input[name="tag_idx_list"]:checked').map(function() {
@@ -74,7 +73,7 @@
 			},error: function(e){
 				console.log('에러 => ', e);
 				$('#loading').hide();
-                isLoading = false;
+	            isLoading = false;
 			}
 		}); 
 		
@@ -89,8 +88,8 @@
 			result.forEach(function(item, idx){
 				
 				var day = item.days.replace(/mon|tue|wen|thu|fri|sat|sun/gi, function(match) {
-                    return { mon: '월', tue: '화', wen: '수', thu: '목', fri: '금', sat: '토', sun: '일' }[match.toLowerCase()];
-                });
+	                return { mon: '월', tue: '화', wen: '수', thu: '목', fri: '금', sat: '토', sun: '일' }[match.toLowerCase()];
+	            });
 					
 				var is_recruit = '';
 				
@@ -109,20 +108,20 @@
 					imgElem = '/photo/'+item.img_new;
 				}
 				
-                // 태그 처리
-                var tagNamesArray = item.tag_names ? item.tag_names.split(',') : [];
-                var displayedTags = '';
-                
-                tagNamesArray.slice(0, 3).forEach(function(tag, index) {
-                    var styleClass = index === 1 ? 'highlight-tag' : 'normal-tag';
-                    displayedTags += '<span class="tag ' + styleClass + '">' + tag + '</span>';
-                });
-                
-                
-
+	            // 태그 처리
+	            var tagNamesArray = item.tag_names ? item.tag_names.split(',') : [];
+	            var displayedTags = '';
+	            
+	            tagNamesArray.slice(0, 3).forEach(function(tag, index) {
+	                var styleClass = index === 1 ? 'highlight-tag' : 'normal-tag';
+	                displayedTags += '<span class="tag ' + styleClass + '">' + tag + '</span>';
+	            });
+	            
+	            
+	
 				content += '<div class="crewBox" onclick="crewDetail('+item.crew_idx+')">';
 				content += '<div class="crewImg"><img class="crew-img" id="crew-image" src="' + imgElem + '" onerror="this.src=\'/resources/img/crew/crewImg300.png\'"/>';
-					// 좋아요 이미지
+				// 좋아요 이미지
 				content += '<div onclick="crewLikeCheck('+item.crew_idx+')"><img id="crewLikes-'+item.crew_idx+'" class="crew-like" src="/resources/img/common/ico_heart_no_act.png"/></div></div>';
 				// 크루 tag
 				content += '<div class="crewContentBox"><div class="tagBox2">' + displayedTags + '</div>';
@@ -148,25 +147,25 @@
 			
 			$('.crewListBox').append(content);
 			$('#loading').css('opacity', '0'); // loading 요소를 투명하게 설정
-            isLoading = false; // 로딩 상태 해제
-            
-            
-    	    var crewBoxes = $('.crewListBox .crewBox');
-    	    var crewListBox = $('.crewListBox');
-    	    // crewBox가 홀수일 때 마지막 요소에 left-align-last 클래스를 추가하고, 전체 왼쪽 정렬
-    	    if (crewBoxes.length % 2 !== 0) {
-    	        crewBoxes.last().addClass('left-align-last');
-    	        crewListBox.css('justify-content', 'flex-start'); // 전체를 왼쪽 정렬
-    	    } else {
-    	        crewListBox.css('justify-content', 'center'); // 짝수일 때는 중앙 정렬 유지
-    	    }
+	        isLoading = false; // 로딩 상태 해제
+	        
+	        
+		    var crewBoxes = $('.crewListBox .crewBox');
+		    var crewListBox = $('.crewListBox');
+		    // crewBox가 홀수일 때 마지막 요소에 left-align-last 클래스를 추가하고, 전체 왼쪽 정렬
+		    if (crewBoxes.length % 2 !== 0) {
+		        crewBoxes.last().addClass('left-align-last');
+		        crewListBox.css('justify-content', 'flex-start'); // 전체를 왼쪽 정렬
+		    } else {
+		        crewListBox.css('justify-content', 'center'); // 짝수일 때는 중앙 정렬 유지
+		    }
 			
 		}else{
 			hasMoreData = false;
 			$('#loading').text('모든 크루 정보를 불러왔습니다.').css('opacity', '1');
 		}
 	}
-
+	
 	
 	function crewDetail(crew_idx){
 		console.log('이동 =>', crew_idx)
@@ -175,7 +174,7 @@
 	}
 	
 	var checkboxes = document.querySelectorAll('#tagFilter input[type="checkbox"]');
-
+	
 	checkboxes.forEach(function(checkbox){
 	  checkbox.addEventListener('click', function() {
 	    if (this.checked) {
@@ -197,40 +196,32 @@
 				console.log(response);
 				var result = response.result;
 				result.forEach(function(item){
-					/* likeCrew = item.crew_idx; */
 					likeCrew.push(item.crew_idx);
-					console.log('idx값 => ',likeCrew);
 				});
-				
-				
-				
 			},error: function(e){
 				console.log('관심 크루 에러 => ', e);
 			}
 		});
 	}
-
+	
 	function updateHeartIcons(result) {
-		
-/* 		likeCrew.forEach(function(item){
-			console.log("crew_idx : ", item.crew_idx, "타입", typeof item.crew_idx);
-		}); */
-
+	
+		console.log("likeCrew 배열 확인:", likeCrew);
 	    result.forEach(function(item) {
 	        // crew_idx 타입 확인
-	        console.log("item.crew_idx:", item.crew_idx, "타입:", typeof item.crew_idx);
-			console.log("likeCrew 배열 확인:", likeCrew);
-
+	        // console.log("item.crew_idx:", item.crew_idx, "타입:", typeof item.crew_idx);
+	
 	         if (likeCrew.includes(item.crew_idx)) {
 	        	 $('#crewLikes-'+item.crew_idx).attr('src', '/resources/img/common/ico_heart_act.png');
+	        	 console.log('오니?');
 	        	 crewLikeStatus[item.crew_idx] = 'Y';
-	            console.log('같은거 있음', item.crew_idx);
 	        } else {
 	        	crewLikeStatus[item.crew_idx] = 'N';
-	            console.log('같은거 없음', item.crew_idx);
+	        	console.log('여기는');
+	        	$('#crewLikes-'+item.crew_idx).attr('src', '/resources/img/common/ico_heart_no_act.png');
 	        } 
 	    });
-
+	
 	}	 
 	
 	function crewLikeCheck(crew_idx){
@@ -242,15 +233,24 @@
 	    	
 	    	var currentStatus = crewLikeStatus[crew_idx] || 'N'; // crew_idx 별 값 가져오기
 	    	
-	    /* 	if()
-	    	var currentStatus = crewLikeStatus[crew_idx] || 'N';  */// 현재 상태 없을 시 기본값
-	    	
 	    	if(currentStatus === 'Y'){
 	    		console.log('좋아요 취소 신청');
-	    		crewLikeChange(crew_idx, currentStatus);
+	    		//crewLikeChange(crew_idx, currentStatus);
+	    		 console.log('좋아요 취소 신청');
+        	    crewLikeChange(crew_idx, currentStatus, function() {
+                // 좋아요 취소 후 이미지 업데이트
+                $('#crewLikes-' + crew_idx).attr('src', '/resources/img/common/ico_heart_no_act.png');
+                crewLikeStatus[crew_idx] = 'N'; // 상태 업데이트
+                });
 	    	}else{
-	    		console.log('좋아요 등록 신청');
-	    		crewLikeChange(crew_idx, currentStatus);
+	    		//console.log('좋아요 등록 신청');
+	    		//crewLikeChange(crew_idx, currentStatus); // 'N'
+	    		 console.log('좋아요 등록 신청');
+       		     crewLikeChange(crew_idx, currentStatus, function() {
+                // 좋아요 등록 후 이미지 업데이트
+                $('#crewLikes-' + crew_idx).attr('src', '/resources/img/common/ico_heart_act.png');
+                crewLikeStatus[crew_idx] = 'Y'; // 상태 업데이트
+            });
 	    	}
 	    }else{
 	    	layerPopup('로그인이 필요한 서비스입니다.', '로그인 하기', '취소', loginPageLocation, applBtn2Act);
@@ -258,7 +258,7 @@
 	}
 	
 	function loginPageLocation(){
-		location.href='/loginView'; // 로그인 페이지로 수정 필요
+		location.href='/loginView'; 
 	}
 	
 	// 팝업 취소
@@ -281,7 +281,7 @@
 			success: function(response){
 				var result = response.result;
 				if(response.success){
-					alert(response.msg);
+					likeCrew.length = 0;
 					fetchLikedCrews();
 					crewList(currentPage);
 					console.log('좋아요 상태 변경 성공');

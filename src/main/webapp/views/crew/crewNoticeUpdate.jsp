@@ -78,7 +78,7 @@
 </body>
 
 <script src="/resources/js/common.js"></script>
-
+<script src="/resources/js/chatting.js"></script>
 <script>
 	var notice_idx = $('input[name="notice_idx"]').val();
 	var crew_idx = $('input[name="crew_idx"]').val();
@@ -121,7 +121,11 @@
 	
 	function sendUpdatePost(){
 		if(overlayCheck === 'Y'){
-			layerPopup('공지사항을 수정하시겠습니까?', '확인', '취소', updatePost, applBtn2Act);
+			if(!sub){
+	    		layerPopup('제목을 입력해주세요.', '확인',false, applBtn2Act, applBtn2Act);
+	    	}else{
+				layerPopup('공지사항을 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act);
+	    	}
 		}else{
 			layerPopup('기존 공지 순위를 변경하시겠습니까?', '확인', '취소', updatePriority, applBtn2Act);
 		}

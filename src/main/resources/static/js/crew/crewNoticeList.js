@@ -7,10 +7,13 @@
     var crew_idx = $('input[name="crew_idx"]').val();
 	
 	$(document).ready(function () {
+
 		pageCall(firstPage);
 	    console.log('crew_idx =>', crew_idx);
 	    leaderCheck();
+
 	});
+	
 	
 	// 검색 폼 제출 시 AJAX 호출
 	$('#searchForm').on('submit', function(event) {

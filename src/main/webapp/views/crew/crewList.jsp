@@ -12,9 +12,18 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="/resources/js/layerPopup.js"></script>
+<style>
+	.crewBox:hover{
+		transform: translateY(-10px); /* 박스를 위로 살짝 이동 */
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* 더 진한 그림자 */
+		cursor: pointer;.
+	}
+</style>
+
 </head>
 <body>
 	<jsp:include page="../header.jsp"/>
+	<input type="hidden" name="loginId" value="${sessionScope.loginId}">
 	
 	<div class="innerr">
 	
@@ -59,4 +68,7 @@
 <script src="/resources/js/common.js"></script>
 <script src="/resources/js/crew/crew.js"></script>
 <script src="/resources/js/chatting.js"></script>
+<script>
+
+</script>
 </html>
