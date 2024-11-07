@@ -253,6 +253,14 @@
 		    });
 			
 			list.forEach(function(member) {
+				console.log('member.id =', member.id);
+				console.log('sessionId = ','${sessionScope.loginId}');
+				if(member.id == '${sessionScope.loginId}'){
+					console.log('member.id == 로그인 id');
+					return;
+				 }
+				
+				
 				userCont +='<a class="user">';
 				userCont+='<input type="hidden" name="toUserId" value="'+member.id+'"/>';
 	

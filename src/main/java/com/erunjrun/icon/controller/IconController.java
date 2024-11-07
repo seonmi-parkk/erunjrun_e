@@ -117,6 +117,7 @@ public class IconController {
      @PostMapping(value = "/adminIconWrite")  
      public String adminIconWrite(MultipartFile file, @RequestParam Map<String, String> param) {   
         iconService.adminIconWrite(file, param);
+        logger.info("icon_name : "+param.get("icon_name"));
         logger.info("use_yn : "+param.get("use_yn"));
         return "redirect:/adminIconListView";
      }

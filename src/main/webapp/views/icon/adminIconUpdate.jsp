@@ -166,7 +166,8 @@
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">이미지</p>
 			<div id="img_miri"></div>
-			<input type="file" name="file" onchange="readFile(this)">	
+			<input type="hidden" name="bfImage" value="${iconDto.image}"/>	
+			<input type="file" name="file" onchange="readFile(this)"/>	
 			</div>
 			
 			<div class="input-container">
@@ -186,7 +187,7 @@
 			</div>
 			
 			
-		   	<button class="btn01-l" type="submit" id="text">등록</button>
+		   	<button class="btn01-l" type="submit" id="text">수정</button>
 			<div class="btn02-l" onclick="location.href='/adminIconListView'">취소</div> <!-- 클릭시 색깔변경 -->
 	</form>
 	 </main>

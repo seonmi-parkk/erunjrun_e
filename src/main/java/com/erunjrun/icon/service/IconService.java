@@ -57,6 +57,7 @@ public class IconService {
 
 	
 	public void FileSave(MultipartFile file, Map<String, String> param) {
+		logger.info("******file oriname : "+file.getOriginalFilename());
 		String fileName = file.getOriginalFilename();
 		String ext = fileName.substring(fileName.lastIndexOf("."));
 		String newFileName = UUID.randomUUID().toString()+ext;
@@ -66,13 +67,16 @@ public class IconService {
 
 			Path path = Paths.get("C:/upload/"+newFileName);
 			Files.write(path, arr);
-			param.put("newFileName", newFileName);
+			//param.put("newFileName", newFileName);
 			param.put("path", newFileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		
 	}
 	
+	@Transactional
 	public void adminIconWrite(MultipartFile file, Map<String, String> param) {
 		FileSave(file,param);
 		iconDAO.adminIconWrite(param);
@@ -82,8 +86,13 @@ public class IconService {
 		return iconDAO.adminIconData(icon_idx);
 	}
 
+	@Transactional
 	public void adminIconUpdate(MultipartFile file, Map<String, String> param) {
-		FileSave(file,param);
+		if(file == null || file.isEmpty()) {
+			param.put("path", param.get("bfImage"));
+		}else {
+			FileSave(file,param);		
+		}
 		iconDAO.adminIconUpdate(param);
 	}
 
