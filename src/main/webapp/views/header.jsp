@@ -212,6 +212,7 @@
 	        	<span id="alarmInfo">※ 최대 20개 까지 노출됩니다.</span>
 	        </div>
 	        <div id="alarmListContent">
+	        <input type="hidden" name="loginId" value="${sessionScope.loginId}"> 
 	        </div>
 	    </div>
 	</div>
@@ -299,15 +300,9 @@
 	
 	
 		
-	var loginId = '${sessionScope.loginId}';
+	var loginId = $('input[name="loginId"]').val();
 	var alarmNum = 0;
-	
-	if(loginId){
-		alarmCount();
-		setInterval(alarmCount, 10000); // 10초마다
-	}
-	
-	
+	var alarmTime;
 	
 	// 총 알림 수
 	function alarmCount(){
@@ -323,6 +318,24 @@
 			}
 		});
 	}
+	
+	function startAlarmInterval() {
+	    if (alarmTime) {
+	        clearInterval(alarmTime);
+	    }
+	    alarmCount();
+	    alarmTime = setInterval(alarmCount, 10000); 
+	}
+	
+	if(loginId){
+		alarmCount();
+		alarmTime = setInterval(alarmCount, 10000);
+	}else{
+		clearInterval(alarmTime);
+	}
+	
+	
+	
 	
 	
 	// 알림 리스트 불러오기 (20개)
@@ -406,6 +419,7 @@
  	    if (alarm_idx) {
  	    	console.log('상위부모 알림 업데이트 실행');
 	        alarmUpdate(alarm_idx);
+	        startAlarmInterval();
 	    } 
 
 	    console.log('상위 부모의 클릭 이벤트 실행');
@@ -417,6 +431,7 @@
 	    var alarm_idx = $(this).data('alarm-idx');
 	    
 	    alarmUpdate(alarm_idx);
+	    startAlarmInterval();
 	});
 	
 	function crewExpel(subject, alarm_idx){
@@ -427,7 +442,7 @@
 	function alarmUpdate(alarm_idx){
 		$.ajax({
 			type: 'GET',
-			url: 'alarmUseUpdate',
+			url: '/alarmUseUpdate',
 			data: {'alarm_idx' : alarm_idx},
 			dataType: 'JSON',
 			success: function(response){
@@ -436,6 +451,7 @@
 	            }
 			},error: function(e){
 				console.log('알림 update 중 에러 => ', e);
+				console.log('에러 상세 정보:', e.responseText); 
 			}
 		}); 
 	}
@@ -511,4 +527,6 @@
 	    removeAlert(); 
 	    //alarmUpdate(alarm_idx);
 	}
+	
+
 </script>

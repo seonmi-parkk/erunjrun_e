@@ -133,7 +133,7 @@
 	
 	<select id="like" resultType="int">
         SELECT COUNT(*) > 0 FROM likes 
-        WHERE id = #{loginId} AND code_name = 'B100' AND board_idx = #{board_idx}
+        WHERE id = #{loginId} AND code_name = 'B101' AND board_idx = #{board_idx}
     </select>
     
     <!-- 댓글수 -->

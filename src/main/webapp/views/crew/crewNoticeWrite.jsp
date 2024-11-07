@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>crewWrite</title>
+<title>이런저런</title>
 	<link rel="stylesheet" href="/resources/css/crew.css">
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
@@ -74,8 +74,11 @@
 </body>
 
 <script src="/resources/js/common.js"></script>
+<script src="/resources/js/chatting.js"></script>
 
 <script>
+
+	var sub = $('input[name="subject"]').val();
 
 	var loginId = '${sessionScope.loginId}';
 	var overlayCheck = 'Y';
@@ -92,7 +95,12 @@
 	
 	function sendSubmitPost(){
 		if(overlayCheck === 'Y'){
-			layerPopup('공지사항을 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act);
+	    	if(!sub){
+	    		layerPopup('제목을 입력해주세요.', '확인',false, applBtn2Act, applBtn2Act);
+	    	}else{
+				layerPopup('공지사항을 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act);
+	    	}
+	    	
 		}else{
 			layerPopup('기존 공지 순위를 변경하시겠습니까?', '확인', '취소', updatePriority, applBtn2Act);
 		}

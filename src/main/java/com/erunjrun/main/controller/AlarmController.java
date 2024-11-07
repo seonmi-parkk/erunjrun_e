@@ -37,7 +37,7 @@ public class AlarmController {
 	public Map<String, Object> alarmList(@RequestParam String loginId){
 		
 //		logger.info("알림 리스트 : loginId => " + loginId);
-		logger.info("알림 업데이트!!!!!!!!!!!!!!!!!!!!!!");
+		logger.info("알림 업데이트!!!!!");
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("result", alarm_service.alarmList(loginId));

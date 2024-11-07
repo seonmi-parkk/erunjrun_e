@@ -222,6 +222,7 @@
 	
 	<jsp:include page="../footer.jsp"/>
 </body>
+<script src="/resources/js/chatting.js"></script>
 <script>
 	var firstPage = 1;
 	var paginationInitialized = false;

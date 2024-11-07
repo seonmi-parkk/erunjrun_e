@@ -4,8 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>CrewDetail</title>
+<title>이런저런</title>
 <link rel="stylesheet" href="/resources/css/crew.css">
+<link rel="stylesheet" href="resources/css/common.css">
 <link rel="stylesheet" href="/resources/css/crew/crewDetail.css">
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -13,6 +14,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <script src="/resources/js/layerPopup.js"></script>
+<script src="/resources/js/chatting.js" type="text/javascript"></script>
 <style>
 </style>
 </head>
@@ -118,7 +120,7 @@
 	
 	<jsp:include page="../footer.jsp"/>
 </body>
-<script src="/resources/js/chatting.js" type="text/javascript"></script>
+<script src="/resources/js/common.js" type="text/javascript"></script>
 <script src="/resources/js/crew/crewDetail.js" type="text/javascript"></script>
 <script>
     var crewChatMin = ${crewChatMin};
