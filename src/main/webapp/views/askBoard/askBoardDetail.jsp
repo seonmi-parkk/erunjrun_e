@@ -323,7 +323,17 @@
 				<p class="title2-3">${info.subject}</p>
 					<div class="are">
 						 <div class="profile-area">
-						 <div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${info.icon_image}) center center / 100% 100% no-repeat;"></div></div>
+						 
+						 <c:choose>
+								<c:when test="${not empty info.image}">  
+									<div class="profile-img" style="background: url(/photo/${info.image}) center center / cover no-repeat;"></div>
+								</c:when>
+								<c:otherwise>
+									<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>
+								</c:otherwise>
+							</c:choose>
+						 
+						 <div class="profile-box" style="background: url(/resources/img/icon/${info.icon_image}) center center / 100% 100% no-repeat;"></div></div>
 						  <p class="title3-1">
 						  ${info.nickname}
 					  	  </p>
@@ -397,6 +407,8 @@
 </body>
 <script>
 
+
+loadingComplete();
 	 	
 	 	/* 레이어팝업 */
 

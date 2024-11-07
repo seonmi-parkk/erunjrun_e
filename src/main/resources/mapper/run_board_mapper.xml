@@ -147,11 +147,17 @@
     		VALUES (#{code_name}, #{id},#{point})
     </insert>
     
+	<update id="updatePoint">
+		UPDATE member set point = point +5 WHERE id = #{userId}
+	</update>
+    
     <!-- 게시글 상세보기 -->
     <select id="detail" resultType="com.erunjrun.board.dto.RunBoardDTO">
-    	SELECT m.id, b.board_idx, b.subject, b.content, m.nickname, b.create_date , b.bHit ,b.likes, m.icon_image
+    	SELECT m.id, b.board_idx, b.subject, b.content, m.nickname, b.create_date , b.bHit ,b.likes, m.icon_image,p.image 
 			FROM board b
-		LEFT JOIN member m ON b.id = m.id WHERE b.board_idx = #{param1}
+		LEFT JOIN member m ON b.id = m.id 
+		LEFT JOIN profile p on b.id = p.id 
+		WHERE b.board_idx = #{param1}
     </select>
     
     <!-- 닉네임 가져오기 -->

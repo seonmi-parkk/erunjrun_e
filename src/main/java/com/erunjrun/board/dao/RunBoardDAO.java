@@ -66,6 +66,8 @@ public interface RunBoardDAO {
 
 	RightDTO ban(String loginId);
 
+	int updatePoint(String userId);
+
 
 
 

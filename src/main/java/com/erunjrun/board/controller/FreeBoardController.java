@@ -122,7 +122,7 @@ public class FreeBoardController {
     // 게시글 등록
     @PostMapping(value = "/freeBoardWrite")
     @ResponseBody
-    public Map<String, Object> submitPost(@RequestParam("imgsJson") String imgsJson, @ModelAttribute RunBoardDTO runBoardDto) {
+    public Map<String, Object> submitPost(@RequestParam("imgsJson") String imgsJson, @ModelAttribute RunBoardDTO runBoardDto,HttpSession session) {
         Map<String, Object> resultMap = new HashMap<>();
         
 
@@ -149,7 +149,7 @@ public class FreeBoardController {
         logger.info("imgDTO : " + runBoardDto.toString());
                 
         // 게시글 등록 서비스 호출
-        int ask_idx = freeBoardService.submitPost(runBoardDto);
+        int ask_idx = freeBoardService.submitPost(runBoardDto,session);
         
         // 게시글 등록 서비스 호출
         if (ask_idx > 0) {
