@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>이런저런</title>
 	<link rel="stylesheet" href="/resources/css/crew.css">
+	<link rel="stylesheet" href="/resources/css/common.css"></link>
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 	
@@ -78,13 +79,14 @@
 
 <script>
 
-	var sub = $('input[name="subject"]').val();
+	
 
 	var loginId = '${sessionScope.loginId}';
 	var overlayCheck = 'Y';
 	var notice_idx = '';
 	var crew_idx = $('input[name="crew_idx"]').val();
 	var leaderId = $('input[name="leaderId"]').val();
+	var sub = '';
 	$(document).ready(function(){
 		if(leaderId !== loginId){
 			alert('크루장만 접근 가능합니다');
@@ -94,6 +96,7 @@
 	});
 	
 	function sendSubmitPost(){
+		sub = $('input[name="subject"]').val();
 		if(overlayCheck === 'Y'){
 	    	if(!sub){
 	    		layerPopup('제목을 입력해주세요.', '확인',false, applBtn2Act, applBtn2Act);
@@ -107,6 +110,7 @@
 	}
 	
     function submitPost() {
+    	loading();
         var formData = new FormData($('form')[0]); 
 
         var content = $('#summernote').summernote('code');
@@ -149,11 +153,13 @@
 	            if(response.success){
 	            	console.log('왜?');
 	            	removeAlert();
+		            loadingComplete();
 	            	layerPopup('공지사항 등록이 완료되었습니다.', '확인',false, function(){locationHref(response.notice_idx)} ,locationHref);
 	            }
 	        },
 	        error: function (e) {
 	            console.log('글 전송 에러:', e);
+	            loadingComplete();
 	        }
 	    });
        
@@ -162,7 +168,7 @@
 	function updatePriority(){
 		var priority = $('#priorityOption').val();
 		var notice_idx = notice_idx;
-		
+		loading();
 		$.ajax({
 			type: 'PUT',
     		url: '/crew/noticePriorityUpdate',
@@ -170,6 +176,7 @@
     				'priority' : priority},
     		dataType: 'JSON',
     		success: function(response){
+    			
     			if(response.success){
 	    			submitPost();
     			}
