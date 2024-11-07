@@ -443,6 +443,8 @@
 	 	function secondBtn1Act() {
 	 	    // 두번째팝업 1번버튼 클릭시 수행할 내용
 	 		// formData 생성
+	 		loading();
+	 		
             var formData = new FormData($('form')[0]);
             
             var content = $('#summernote').summernote('code');

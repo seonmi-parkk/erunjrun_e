@@ -38,4 +38,6 @@ public interface CommentDAO {
 
 	int addAskComment(int board_idx, String content, String nickname);
 
+	int updatePoint(String userId);
+
 }

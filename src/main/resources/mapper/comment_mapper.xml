@@ -5,9 +5,11 @@
 
 <mapper namespace="com.erunjrun.comment.dao.CommentDAO">
 	
-	<select id="list" resultType="com.erunjrun.comment.dto.CommentDTO">
-		SELECT * FROM comment c LEFT JOIN member m on c.nickname = m.nickname 
-			WHERE board_idx = #{board_idx} ORDER BY create_date ${order}
+	<select id="list" resultType="com.erunjrun.comment.dto.CommentDTO">		
+		SELECT * FROM comment c 
+			LEFT JOIN member m on c.nickname = m.nickname 
+			LEFT JOIN profile p on m.id = p.id 
+			WHERE board_idx = #{board_idx} ORDER BY create_date ${order}	
 	</select>
 	
 	<!-- 러닝코스 댓글 등록 -->
@@ -16,10 +18,18 @@
 							VALUES('B100', #{board_idx}, #{content}, #{nickname})
 	</insert>
 	
+	<!-- 댓글 등록시 포인트 지급 -->
 	 <insert id="commPoint" parameterType="map">
     	INSERT INTO member_point (code_name, id, point)
     		VALUES (#{code_name}, #{id},#{point})
     </insert>
+    
+    <!-- 멤버 테이블에 업데이트 -->
+    <update id="updatePoint">
+		UPDATE member set point = point +2 WHERE id = #{userId}
+	</update>
+    
+    
     
     <update id="update" parameterType="com.erunjrun.comment.dto.CommentDTO">
     	UPDATE comment SET content = #{content} WHERE comment_idx = #{comment_idx}

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,8 +88,9 @@ public class RunBoardService {
 
     // 게시글 등록 로직 구현
     @Transactional
-    public boolean submitPost(RunBoardDTO runBoard) {
+    public boolean submitPost(RunBoardDTO runBoard, HttpSession session) {
     	 	
+    	String userId = (String) session.getAttribute("loginId");
     	
         try {
             boolean success = false;
@@ -132,6 +135,8 @@ public class RunBoardService {
             boardPoint.put("code_name", "P101");
             boardPoint.put("id", runBoard.getId());
             boardPoint.put("point", 5);
+            
+            runBoardDAO.updatePoint(userId);
             
             runBoardDAO.boardPoint(boardPoint);
        

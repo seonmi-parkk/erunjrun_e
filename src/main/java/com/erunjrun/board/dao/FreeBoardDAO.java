@@ -55,6 +55,8 @@ public interface FreeBoardDAO {
 	RightDTO right(String userId);
 
 	RightDTO ban(String loginId);
+
+	int updatePoint(String userId);
 	
 	
 

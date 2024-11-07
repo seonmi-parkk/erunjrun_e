@@ -25,7 +25,7 @@
 
 	<select id="getUserInfo" resultType="com.erunjrun.icon.dto.IconDTO">
 		SELECT image, point, count(icon_idx) AS icon_quantity FROM member m 
-			JOIN icon_buy i ON m.id = i.id 
+			LEFT JOIN icon_buy i ON m.id = i.id 
 			JOIN profile p ON m.id = p.id 
 			WHERE m.id = #{userId}
 	</select>

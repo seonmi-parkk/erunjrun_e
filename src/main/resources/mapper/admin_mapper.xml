@@ -122,7 +122,7 @@
 	</select>
 
 
-
+	
     <select id="count" resultType="int">
        SELECT CEIL(COUNT(*) / #{param1}) AS pages
     FROM member 
@@ -137,8 +137,14 @@
             AND email LIKE CONCAT('%', #{keyword}, '%')
         </if>
     </where>
+
    </select>
 
+
+ 
+
+ 
+ 
    
    <select id="memberdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
       SELECT id,icon_image,nickname,email,address,gender,birth,phone 

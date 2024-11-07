@@ -220,14 +220,14 @@
 							<img src="/resources/img/iconMall/ico_point.png" alt="포인트"/>
 							<p class="tit">보유 포인트</p>
 							<p class="num">${userInfoList.point}p</p>
-							<a class="link" href="">상세내역</a>
+							<a class="link" onclick="location.href='/pointHistoryListView'">상세내역</a>
 						</div>
 					
 						<div class="icon-area">
 							<img src="/resources/img/iconMall/ico_emoji.png" alt="아이콘"/>
 							<p class="tit">보유 아이콘</p>
 							<p class="num">${userInfoList.icon_quantity}개</p>
-							<a class="link" href="">상세내역</a>
+							<a class="link" onclick="location.href='/myIconListView'">상세내역</a>
 						</div>
 					</c:if>
 					<c:if test="${empty sessionScope.loginId}">
@@ -358,7 +358,7 @@
 	}
 	
 	function secondBtn2Act() {
-		location.href="/";
+		location.href='/myIconListView';
 		removeAlert();
 	}
 	

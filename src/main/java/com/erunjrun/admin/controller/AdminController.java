@@ -90,9 +90,11 @@ public class AdminController {
       public String adminJoin(Model model, HttpSession session, String id, String pw, String name, HttpServletRequest request) {
          
          String requestIp = request.getRemoteAddr(); // 요청 IP 가져오기
+         logger.info("슈퍼관리자 아이피 : "+requestIp);
          String superAdminId = (String) session.getAttribute("loginId");
-          String superAdminAuthority = (String) session.getAttribute("authority"); // 로그인한 슈퍼관리자 권한
-
+         logger.info("슈퍼관리자 아이디 : "+superAdminId);
+         String superAdminAuthority = (String) session.getAttribute("authority"); // 로그인한 슈퍼관리자 권한
+         logger.info("슈퍼관리자 권한 : "+superAdminAuthority);
           // 1. 슈퍼관리자 권한 확인
           if (!superAdminAuthority.equals("s")) {
               model.addAttribute("msg", "슈퍼관리자만 회원가입을 할 수 있습니다.");
@@ -108,10 +110,12 @@ public class AdminController {
 
           // 회원가입 처리 로직 // 가입시 아이피는 슈퍼어드민의 아이피가 되고, 가입된 어드민은 디폴드값 아이피를 사용하도록 한다. 회사 내 ip로.
           if (admin_service.adminJoin(id, pw, name,requestIp)) { // 회원가입 메서드 호출
-          model.addAttribute("msg", "회원가입이 완료되었습니다!");
+	          model.addAttribute("msg", "회원가입이 완료되었습니다!");
+	          logger.info("성공");
           } else {
             model.addAttribute("msg", "회원가입에 실패했습니다.");
-            return "";
+            logger.info("실패");
+            return "admin/adminMember";
          }
           return "redirect:/adminJoin"; 
       }

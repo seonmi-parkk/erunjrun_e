@@ -325,7 +325,9 @@
 	<!-- 헤더 -->
 	<jsp:include page="header.jsp"/> 
 	
- 	<c:forEach var="popup" items="${popups}">
+
+<c:forEach var="popup" items="${popups}">
+
         <div id="popup_${popup.popup_idx}" 
              style="position:fixed; top:${popup.y}px; left:${popup.x}px; 
                     width:${popup.width}px; height:${popup.height}px; 
@@ -335,7 +337,9 @@
             <p>${popup.content}</p>
             <button class="btn01-m" onclick="closePopup(${popup.popup_idx})">오늘 하루 그만 보기</button>
         </div>
+
     </c:forEach> 
+
 	
 	
 	   <div class="sec sec1">

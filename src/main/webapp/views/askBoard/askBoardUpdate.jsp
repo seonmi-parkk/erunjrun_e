@@ -154,6 +154,8 @@
         /* 레이어팝업 */
 	 	function secondBtn1Act() {
 	 	    // 두번째팝업 1번버튼 클릭시 수행할 내용
+	 	    loading();
+	 	    
 	 		// formData 생성
             var formData = new FormData($('form')[0]);
             

@@ -276,7 +276,19 @@
 					<p class="title3-1">
 					 <div class="are">
 						 <div class="profile-area">
-						 <div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${info.icon_image}) center center / 100% 100% no-repeat;"></div></div>
+						 
+						 	<c:choose>
+								<c:when test="${not empty info.image}">  
+									<div class="profile-img" style="background: url(/photo/${info.image}) center center / cover no-repeat;"></div>
+								</c:when>
+								<c:otherwise>
+									<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>
+								</c:otherwise>
+							</c:choose>
+						 	
+						 				 	
+						 	<div class="profile-box" style="background: url(/resources/img/icon/${info.icon_image}) center center / 100% 100% no-repeat;"></div>
+						 </div>
 						  <p>
 						  ${info.nickname}
 					  	  </p>
@@ -336,7 +348,7 @@
 	    				<c:otherwise>
 	    					<div class="nick">
 	    					<div class="profile-area">
-							<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
+							<div class="profile-img" style="background: url(/resources/img/common/${sessionScope.profileImage}) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
 	    			   			${nickname.nickname}
 							</div>						
 	    				</c:otherwise>
@@ -610,10 +622,15 @@ function initializeMap() {
 		    xhr.send();
 		}
 		
-		// 팝업 닫기
+		/* 팝업 닫기
 		document.getElementsByClassName("close")[0].onclick = function() {
 		    document.getElementById("reportPopup").style.display = "none";
 		};
+		*/
+		
+		$(document).on('click','#reportPopup .close',function(){
+		    document.getElementById("reportPopup").style.display = "none";
+		});
 		
 		// 댓글 리스트 부르는 함수
 		commentCall('ASC');
@@ -648,11 +665,23 @@ function initializeMap() {
 				var comment_idx = view.comment_idx;
 				console.log(view.icon_image);
 				var user = '${sessionScope.loginId}';
+				console.log(view.image);
 				
 				content +='<div id="sort-area">';
 				content +='<div class="sort" id="sort-update'+comment_idx+'">';
 				content +='<div>';
-				content +='<div class="nick"><div class="profile-area"><div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/'+view.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+view.nickname+'</div>';
+				
+				content +='<div class="nick">';
+				content +='<div class="profile-area">';
+				
+				if(view.image != null){
+					content +='<div class="profile-img" style="background: url(/resources/img/common/'+view.image+') center center / cover no-repeat;"></div>';					
+				}else{
+					content +='<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>';
+				}
+				
+				content +='<div class="profile-box" style="background: url(/resources/img/icon/'+view.icon_image+') center center / 100% 100% no-repeat;"></div></div>'+view.nickname+'</div>';
+				
 				if(view.use_yn == 'N'){
 					content +='<p class="coco" style="color: #999;" >(삭제된 댓글 입니다.)</p>';
 				}else{

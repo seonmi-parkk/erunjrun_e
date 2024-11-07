@@ -143,7 +143,7 @@ public class RunBoardController {
     @PostMapping(value = "/runBoardWrite")
     @ResponseBody
     public Map<String, Object> submitPost(@RequestParam("imgsJson") String imgsJson,@RequestParam("routeData") String routeData,
-                                          @ModelAttribute RunBoardDTO runBoardDto) {
+                                          @ModelAttribute RunBoardDTO runBoardDto,HttpSession session) {
         Map<String, Object> resultMap = new HashMap<>();
         
 
@@ -199,7 +199,7 @@ public class RunBoardController {
         }
         
         // 게시글 등록 서비스 호출
-        if (runBoardService.submitPost(runBoardDto)) {
+        if (runBoardService.submitPost(runBoardDto,session)) {
             logger.info("글 업로드 완료");
             resultMap.put("success", true);
             resultMap.put("board_idx", runBoardDto.getBoard_idx());
