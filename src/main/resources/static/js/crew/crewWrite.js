@@ -100,6 +100,7 @@
     }
 
     function submitPost() {
+    	loading();
         // formData 생성
         var formData = new FormData($('form')[0]);
 
@@ -169,11 +170,13 @@
                 if(response.success){
                 	console.log('크루 생성 성공');
                 	removeAlert();
+                	loadingComplete();
                 	layerPopup('크루 등록이 완료되었습니다.', '확인', false, locationCrewList, locationCrewList); 
                 }
             },
             error: function (e) {
                 console.log('글 전송 에러:', e);
+                loadingComplete();
             }
         });
     }
