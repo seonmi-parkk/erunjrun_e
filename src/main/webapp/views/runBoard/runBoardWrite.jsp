@@ -312,7 +312,7 @@
 	 	function secondBtn1Act() {
 	 	    // 두번째팝업 1번버튼 클릭시 수행할 내용
 	 	    console.log('두번째팝업 1번 버튼 동작');
-	 	// formData 생성
+	 		// formData 생성
             var formData = new FormData($('form')[0]);
             
             var content = $('#summernote').summernote('code');
@@ -321,7 +321,7 @@
             var con = $("input[name='postContent']").val();
             
             
-         // 게시글 에디터 이미지 검증을 위한 코드
+         	// 게시글 에디터 이미지 검증을 위한 코드
             var tempDom = $('<div>').html(content);
             var imgsInEditor = [];
 
@@ -333,7 +333,7 @@
                     imgsInEditor.push(filename);  // 에디터에 있는 이미지의 new_filename 추출
                 }
             });
-
+	
             // new_filename과 일치하는 항목만 필터링
             var finalImgs = tempImg.filter(function (temp) {
                 return imgsInEditor.includes(temp.img_new);  // 에디터에 있는 파일과 tempImg의 new_filename 비교
@@ -374,7 +374,7 @@
                 data: formData,
                 success: function (data) {
                     console.log(data);
-                    location.href = "/runBoard/"+data.board_idx;
+                    location.href = "/runBoardDetail/"+data.board_idx;
                 },
                 error: function (xhr, status, error) {
                     alert("게시글 등록 중 오류가 발생했습니다: " + error);
@@ -419,7 +419,6 @@
         
           
       
-        
         
         
     </script>

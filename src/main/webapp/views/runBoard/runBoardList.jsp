@@ -105,7 +105,7 @@
 	<table>
 		<thead>
 			<tr>
-				<th>글번호</th>
+				<th><p style="cursor:pointer; font-size: 18px;" onclick="sortBy('board_idx')">글번호</p></th>
 				<th>작성자</th>
 				<th>제목</th>
 				<th><p style="cursor:pointer; font-size: 18px;" onclick="sortBy('bHit')">조회수</p></th>
@@ -141,7 +141,7 @@
 <script>
 	var show = 1;
 	var paginationInitialized = false;
-	var sortColumn = 'create_date'; // 기본 정렬 기준을 작성일로 설정
+	var sortColumn = 'board_idx'; // 기본 정렬 기준을 작성일로 설정
 	var sortOrder = 'DESC'; // 기본 정렬 순서를 오름차순으로 설정
 	
 	pageCall(show);

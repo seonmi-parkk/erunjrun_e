@@ -166,6 +166,7 @@ public class MypageService {
 
 	public void cancelMateApplication(String id, String unlikeId) {
 	    logger.info("Cancelling mate application for user ID: {}, unlikeId: {}", id, unlikeId);
+	    mypageDAO.cancel(unlikeId, id);
 		mypageDAO.cancelMateApplication(id, unlikeId);
 	}
 

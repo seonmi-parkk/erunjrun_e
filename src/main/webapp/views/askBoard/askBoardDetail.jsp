@@ -368,16 +368,22 @@
 	    </div>
 	    <div class="bubu">
 	    	<div class="bbs">
+	    	
 	    		<c:if test="${sessionScope.loginId == info.id || sessionScope.adminYn == 'Y'}">
 	    		<c:if test="${info.is_ask != 'Y'}">
 	    			<button type="button" id="upda" class="btn01-l" onclick="location.href='/askBoardUpdate/${info.ask_idx}'">수정</button>
-	    		</c:if>        
-				    <button type="button" class="btn03-l btn-popup" >삭제</button>	    	    	
 	    		</c:if>
+	    		<c:if test="${sessionScope.adminYn == 'Y'}">
+	    			<button type="button" class="btn03-l btn-popup" >삭제</button>
+	    		</c:if>        			    	    	    	
+	    		</c:if>
+	    		
 	    	</div>
+	    	
 		    <c:if test="${sessionScope.adminYn == 'Y'}">
 		    	<button type="button" class="btn01-l" style="margin-left: 820px;" onclick="location.href='/adminAsk'" >돌아가기</button>
 		    </c:if>
+		    
 		    <button type="button" class="btn02-l"  onclick="location.href='/askBoard'" >목록</button>
 	    </div>
 	    

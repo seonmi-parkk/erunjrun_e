@@ -107,6 +107,7 @@ public class MateService {
 	public String checkMateAppl(String fromUserId, String toUserId) {
 		String MateAppl = "none";		
 		MateDTO mateDto = mateDAO.checkMateAppl(fromUserId,toUserId);
+		logger.info("받1111오아와 : {}",mateDto);
 		//check!! .getCode_name() null일 경우 추가해야하는데?? => null point exception 잡아야함...
 		//(원래 checkMateAppl mapper의 id들이 고정값으로 들어가있었음. 
 		
@@ -137,7 +138,7 @@ public class MateService {
 //		}else{
 //			MateAppl = "none";
 //		}
-		logger.info("[checkMateAppl s]MateAppl"+MateAppl);
+		logger.info("[checkMateAppl s]MateAppl : {}",MateAppl);
 		return MateAppl;
 	}
 

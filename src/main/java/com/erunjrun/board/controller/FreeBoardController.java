@@ -225,12 +225,12 @@ public class FreeBoardController {
         model.addAttribute("post", run);
          
         String page ="";
-  		String userId = (String) session.getAttribute("loginId");
-  		if(userId == null) {
-  			page = "member/login";
-  		}else {
-  			page ="freeBoard/freeBoardUpdate";
-  		}
+		String userId = (String) session.getAttribute("loginId");
+		if(userId != null && userId.equals(run.getId())) {
+			page ="freeBoard/freeBoardUpdate";
+ 		}else {
+ 			page = "redirect:/loginView";
+ 		}
   		
   		return page;
     	

@@ -133,7 +133,7 @@
 	
 	<select id="like" resultType="int">
         SELECT COUNT(*) > 0 FROM likes 
-        WHERE id = #{loginId} AND code_name = 'B100' AND board_idx = #{board_idx}
+        WHERE id = #{loginId} AND code_name = 'B101' AND board_idx = #{board_idx}
     </select>
     
     <!-- 댓글수 -->
@@ -143,12 +143,12 @@
     
     <insert id="addLike">
         INSERT INTO likes (id, code_name, board_idx) 
-        	VALUES (#{loginId}, 'B100', #{board_idx})
+        	VALUES (#{loginId}, 'B101', #{board_idx})
     </insert>
     
     <delete id="disLike">
         DELETE FROM likes 
-        	WHERE id = #{loginId} AND code_name = 'B100' AND board_idx = #{board_idx}
+        	WHERE id = #{loginId} AND code_name = 'B101' AND board_idx = #{board_idx}
     </delete>
     
     <update id="updateDelLike">
