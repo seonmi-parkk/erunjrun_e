@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>crewWrite</title>
 	<link rel="stylesheet" href="/resources/css/crew.css">
+	<link rel="stylesheet" href="/resources/css/common.css"></link>
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 	
@@ -15,6 +16,7 @@
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="/resources/js/summernote.js"></script>
 	<script src="/resources/js/layerPopup.js"></script>
+	<script src="/resources/js/common.js"></script>
 </head>
 <body>
     <jsp:include page="../header.jsp" />
@@ -98,7 +100,7 @@
     <jsp:include page="../footer.jsp" />
 </body>
 
-<script src="/resources/js/common.js"></script>
+
 <script src="/resources/js/daumapi.js"></script>
 <script src="/resources/js/crew/crewWrite.js"></script>
 <script src="/resources/js/chatting.js"></script>

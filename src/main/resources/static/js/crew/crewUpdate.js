@@ -174,6 +174,7 @@
 		
 	// 수정 데이터 전송
     function submitUpdatePost() {
+  		loading();
         var formData = new FormData($('form')[0]);
         var content = $('#summernote').summernote('code'); // summernote 코드
 
@@ -245,10 +246,12 @@
                 if(response.success){
 	                removeAlert();
 	                layerPopup('크루 수정이 완료되었습니다.', '확인', false, locationHrdf, locationHrdf);
+                	loadingComplete();
                 }
             },
             error: function (e) {
                 console.log('글 수정 에러:', e);
+                loadingComplete();
             }
         });
     }

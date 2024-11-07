@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>crew Notice Update</title>
 	<link rel="stylesheet" href="/resources/css/crew.css">
+	<link rel="stylesheet" href="/resources/css/common.css"></link>
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 	
@@ -83,6 +84,7 @@
 	var notice_idx = $('input[name="notice_idx"]').val();
 	var crew_idx = $('input[name="crew_idx"]').val();
 	var leaderId = $('input[name="leaderId"]').val();
+	
 	$(document).ready(function(){
 		if(leaderId !== loginId){
 			alert('작성자만 수정 가능합니다.');
@@ -115,16 +117,18 @@
 	});
 
 	
-	var loginId = $('input[name="loginId"]').val();
 	var overlayCheck = 'Y';
 	var notice_idx = '';
+	var loginId = $('input[name="loginId"]').val();
+	var sub = '';
 	
 	function sendUpdatePost(){
+		sub = $('input[name="subject"]').val();
 		if(overlayCheck === 'Y'){
 			if(!sub){
 	    		layerPopup('제목을 입력해주세요.', '확인',false, applBtn2Act, applBtn2Act);
 	    	}else{
-				layerPopup('공지사항을 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act);
+				layerPopup('공지사항을 수정하시겠습니까?', '확인', '취소', updatePost, applBtn2Act);
 	    	}
 		}else{
 			layerPopup('기존 공지 순위를 변경하시겠습니까?', '확인', '취소', updatePriority, applBtn2Act);
@@ -132,6 +136,7 @@
 	}
 	
 	function updatePost() {
+		loading();
 	    var formData = new FormData($('form')[0]); 
 	    var content = $('#summernote').summernote('code');
 	    var priority = $('#priorityOption').val();
@@ -176,11 +181,13 @@
 	            if(response.success){
 	            	removeAlert();
 	            	layerPopup('공지사항 수정이 완료되었습니다.', '확인',false, locationHref ,locationHref);
+	            	loadingComplete();
 	            }
 	        },
 	        error: function (e) {
 	            console.log('글 전송 에러:', e);
 	            removeAlert();
+	            loadingComplete();
 	        }
 	    });
 	}
