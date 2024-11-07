@@ -57,5 +57,9 @@ public interface ChatPersonalDAO {
 
 	String getCrewLeaderOtherUser(String chatIdx, String baseUser);
 
+	int crewLeadercheckBlock(String chatIdx, String baseUser, String otherUser);
+
+	int checkBlocked(String from_id, String id);
+
 
 }

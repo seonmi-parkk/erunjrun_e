@@ -30,6 +30,21 @@
 		    AND c.id = #{baseUser}
 		    AND b.id = #{otherUser}   
 	</select>
+
+	<select id="crewLeadercheckBlock" resultType="int">
+		SELECT 
+		    count(b.id) AS blocked_user
+		FROM 
+		     crew_chat_link c
+		JOIN 
+		    block_member b
+		ON 
+		    c.id = b.unlike_id
+		WHERE 
+		    c.chat_idx = #{chatIdx}
+		    AND c.id = #{baseUser}
+		    AND b.id = #{otherUser}   
+	</select>
 	
 	<select id="getOtherUser" resultType="String">
 		SELECT id FROM chat_link 
@@ -199,6 +214,11 @@
 		
 		
 		
+	</select>
+	
+	<!--check!!  -->
+	<select id="checkBlocked">
+		select count(id) from block_member bm where unlike_id =#{otherUser} and id=#{baseUser}
 	</select>
 	
 

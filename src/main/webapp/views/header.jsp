@@ -165,7 +165,7 @@
 										<div class="profile-img" style="background: url(/photo/${sessionScope.profileImage}) center center / cover no-repeat;"></div>
 									</c:when>
 									<c:otherwise>
-										<div class="profile-img" style="background: url(resources/img/common/profile.png) center center / cover no-repeat;"></div>
+										<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>
 									</c:otherwise>
 								</c:choose>
 								<c:if test="${not empty sessionScope.iconImage}">
