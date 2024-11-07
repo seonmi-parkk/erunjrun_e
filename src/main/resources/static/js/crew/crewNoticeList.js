@@ -47,6 +47,7 @@
 	            }
 	            
 	            var result = response.result;
+	            
 	            var totalCount = 15;
 	            if(response.result){
 	            	if(response.result.totalpage){
