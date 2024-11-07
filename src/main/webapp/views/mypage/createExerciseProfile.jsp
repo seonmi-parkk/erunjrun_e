@@ -40,7 +40,7 @@ aside {
 	background: white; /* 흰색 배경 */
 	border-top-right-radius: 8px; /* 오른쪽 위 모서리 둥글게 */
 	border-bottom-right-radius: 8px; /* 오른쪽 아래 모서리 둥글게 */
-	height: 600px;
+	height: 635px;
 }
 
 .image {
@@ -136,6 +136,23 @@ input[readonly] {
 	margin-left: -60px;
 }
 
+.profile-img2 {
+	max-width: 100px; /* 원하는 최대 너비 */
+	max-height: 100px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
+	margin-left: -1px;
+}
+
+.icon-image1 {
+	margin-top: -122px;
+	margin-left: 2px;
+}
+
+.icon-image2 {
+	margin-top: 0px;
+	margin-left: -138px;
+}
+
 .image-info {
 	display: flex; /* 수평 정렬 */
 	align-items: center; /* 세로 중앙 정렬 */
@@ -168,9 +185,9 @@ input[readonly] {
 }
 
 .title3.active {
-    color: #black; /* 활성화된 메뉴 항목의 색상 */
-    font-weight: bold; /* 강조 효과 */
-    background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
+	color: #black; /* 활성화된 메뉴 항목의 색상 */
+	font-weight: bold; /* 강조 효과 */
+	background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
 }
 </style>
 </head>
@@ -179,8 +196,30 @@ input[readonly] {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png"
-					alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}"
+							alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png"
+							alt="" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1"
+							src="/resources/img/icon/${member.icon_image}" alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png"
+							alt="" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
@@ -195,7 +234,8 @@ input[readonly] {
 				onclick="location.href='memberCrewListView'">크루 리스트</p>
 			<p class="title3 ${pageName == 'myMateListView' ? 'active' : ''}"
 				onclick="location.href='myMateListView'">내 운동 메이트</p>
-			<p class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
+			<p
+				class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
 				onclick="location.href='likedMemberListView'">내 관심/차단 회원</p>
 			<p class="title3 ${pageName == 'messageListView' ? 'active' : ''}"
 				onclick="location.href='messageListView'">쪽지</p>
@@ -210,20 +250,34 @@ input[readonly] {
 		<div class="container">
 			<h3>운동 프로필</h3>
 			<input type="hidden" name="id" value="${member.id}" />
-			<div class="image-info">
-				<c:choose>
-					<c:when test="${not empty profile.image}">
-						<img class="profile-image" src="/photo/${profile.image}"
-							alt="회원 이미지" />
-					</c:when>
-					<c:otherwise>
-						<img class="profile-image" src="resources/img/common/profile.png"
-							alt="기본 프로필 이미지" />
-					</c:otherwise>
-				</c:choose>
-				<div class="info">
-					<p class="title2" id="nickname">${member.nickname}</p>
+			<div class="image-info">				
+				<div class="image">
+					<!-- 프로필 이미지 -->
+					<c:choose>
+						<c:when test="${not empty profile.image}">
+							<img class="profile-img2" src="/photo/${profile.image}"
+								alt="" />
+						</c:when>
+						<c:otherwise>
+							<img class="profile-img2" src="resources/img/common/profile.png"
+								alt="" />
+						</c:otherwise>
+					</c:choose>
 				</div>
+				<div class="icon">
+					<!-- 아이콘 이미지 -->
+					<c:choose>
+						<c:when test="${not empty member.icon_image}">
+							<img class="icon-image2"
+								src="/resources/img/icon/${member.icon_image}" alt="" />
+						</c:when>
+						<c:otherwise>
+							<img class="icon-image2"
+								src="resources/img/icon/default-icon.png" alt="" />
+						</c:otherwise>
+					</c:choose>
+				</div>
+				<p class="title2" id="name">${member.nickname}</p>
 			</div>
 			<div class="horizontal-divider"></div>
 			<div class="message">

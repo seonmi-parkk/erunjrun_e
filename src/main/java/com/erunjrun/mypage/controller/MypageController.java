@@ -128,6 +128,7 @@ public class MypageController {
 		if (id != null) {
 			// 회원 정보 조회
 			MemberDTO member = mypageService.findSessionId(id);
+			ProfileDTO profile = mypageService.ProfileImage(id);
 
 			if ("Y".equals(member.getProfile_use())) {
 				MypageDTO mypage = mypageService.mypageDetail(id);
@@ -135,6 +136,7 @@ public class MypageController {
 				// 운동 프로필이 이미 작성된 경우
 				return "redirect:/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
 			}
+			model.addAttribute("profile", profile);
 			model.addAttribute("loginId", id);
 			model.addAttribute("member", member); // 모델에 MypageDTO 추가
 			String profileImage = (String) session.getAttribute("profileImage");
@@ -154,10 +156,12 @@ public class MypageController {
 		if (id != null) {
 			// 회원 정보 조회
 			MemberDTO member = mypageService.profileDetail(id); // 여기서 회원 정보를 가져옴
+			ProfileDTO profile = mypageService.ProfileImage(id);
 			if ("Y".equals(member.getProfile_use())) {
 				// 운동 프로필이 이미 작성된 경우
 				return "mypage/ExerciseProfile"; // 운동 프로필 페이지로 리다이렉트
 			}
+			model.addAttribute("profile", profile);
 			model.addAttribute("loginId", id);
 			model.addAttribute("member", member); // member를 모델에 추가
 			logger.info("Member Birth: {}", member.getBirth());
@@ -336,7 +340,9 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
 		model.addAttribute("member", member);
+		model.addAttribute("profile", profile);
 		model.addAttribute("pageName", "pointHistoryListView");
 		return "mypage/pointHistoryList"; // 로그인된 경우 리스트 페이지로 이동
 	}
@@ -374,6 +380,8 @@ public class MypageController {
 			return "member/login";
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "myMateListView");
 		return "mypage/myMateList";
@@ -391,6 +399,8 @@ public class MypageController {
 
 		int page_ = Integer.parseInt(page);
 		int cnt_ = Integer.parseInt(cnt);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		Map<String, Object> result = mypageService.myMateList(page_, cnt_, id);
 		logger.info("Service에서 반환된 결과: {}", result); // 로그 추가
 		return result;
@@ -407,6 +417,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "myMateListView");
 		return "mypage/requestedMateList"; // JSP 페이지 이름
@@ -503,6 +515,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "myMateListView");
 		return "mypage/requestingMateList";
@@ -554,6 +568,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "myIconListView");
 		return "mypage/myIconList";
@@ -565,7 +581,6 @@ public class MypageController {
 
 		// 세션에서 사용자 ID를 가져오기
 		String id = (String) session.getAttribute("loginId");
-	    String selectedIcon = (String) session.getAttribute("iconImage"); // 세션에서 선택된 아이콘 정보 가져오기
 		if (id == null) {
 			model.addAttribute("msg", "로그인이 필요합니다."); // 모델에 메시지 추가
 			return null; // 에러 응답 반환
@@ -577,7 +592,8 @@ public class MypageController {
 
 		// 서비스 호출 시 ID 전달
 		Map<String, Object> result = mypageService.myIconList(page_, cnt_, id);
-	    result.put("selectedIcon", selectedIcon);  // 세션에서 가져온 아이콘 정보를 응답에 추가
+	    String selectedIconId = mypageService.getSelectedIcon(id);  // 사용자가 설정한 아이콘 ID
+	    result.put("selectedIcon", selectedIconId);
 		logger.info("Result from service: {}", result);
 
 		return result;
@@ -627,6 +643,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "myBoardListView");
 		return "mypage/myBoardList"; // 로그인된 경우 리스트 페이지로 이동
@@ -682,6 +700,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "myBoardListView");
 		return "mypage/myCommentList"; // 로그인된 경우 리스트 페이지로 이동
@@ -721,6 +741,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "likedBoardListView");
 		return "mypage/likedBoardList"; // 로그인된 경우 리스트 페이지로 이동
@@ -760,6 +782,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "messageListView");
 		return "mypage/messageList"; // 로그인된 경우 리스트 페이지로 이동
@@ -804,6 +828,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "messageListView");
 		return "mypage/crewMasterMessageList"; // 로그인된 경우 리스트 페이지로 이동
@@ -965,6 +991,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "likedMemberListView");
 		return "mypage/likedMemberList"; // 로그인된 경우 리스트 페이지로 이동
@@ -1004,6 +1032,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "likedMemberListView");
 		return "mypage/blockMemberList"; // 로그인된 경우 리스트 페이지로 이동

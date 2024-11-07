@@ -133,6 +133,11 @@ tfoot tr {
 	margin-left: -60px;
 }
 
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
+}
+
 .divider {
 	width: 2px; /* 선의 두께 */
 	background-color: #ccc; /* 선의 색상 */
@@ -176,7 +181,26 @@ h3 {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png" alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}" alt="프로필 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}" onclick="location.href='profileDetail'">회원정보</p>
@@ -250,7 +274,7 @@ h3 {
                     window.location.href = 'member/login';
                 } else {
                     drawList(data.list);
-                    setupPagination(data.totalpages, page);
+                    setupPagination(data.totalpages, page); // 페이지네이션 설정
                 }
             },
             error: function(e) {
@@ -272,7 +296,7 @@ h3 {
                     // 댓글 내용에 링크 추가
                     // 링크에 board_idx와 comment_idx를 포함시켜 해당 게시글로 이동하도록
                     content += '<td><a href="/boardDetail/' + view.code_name + '/' + view.board_idx + '#comment-' + view.comment_idx + '">' + view.content + '</a></td>'; 
-                    content += '<td>' + new Date(view.create_date).toLocaleString('ko-KR') + '</td>'; // 작성일
+                    content += '<td>' + new Date(view.create_date).toLocaleDateString('ko-KR') + '</td>'; // 작성일
                     content += '</tr>';
                 }
             });

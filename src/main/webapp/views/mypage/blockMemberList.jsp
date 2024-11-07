@@ -183,10 +183,15 @@ h3 {
 }
 
 .profile-img1 {
-    max-width: 100px;
-    max-height: 100px;
-    border-radius: 4px;
-    margin-left: -60px;
+	max-width: 100px; /* 원하는 최대 너비 */
+	max-height: 100px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
+	margin-left: -60px;
+}
+
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
 }
 
 .divider {
@@ -236,9 +241,28 @@ h3 {
     <jsp:include page="../header.jsp" />
     <div class="main-container">
         <aside>
-            <div class="image">
-                <img class="profile-img1" src="resources/img/common/profile.png" alt="프로필 이미지" />
-            </div>
+           <div class="image">
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}" alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="" />
+					</c:otherwise>
+				</c:choose>
+			</div>
             <p class="username" id="name">${member.id}</p>
             <p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}" onclick="location.href='profileDetail'">회원정보</p>
             <p class="title3 ${pageName == 'createExerciseProfile' || pageName == 'ExerciseProfile' ? 'active' : ''}" onclick="location.href='createExerciseProfile'">운동프로필</p>
@@ -261,7 +285,7 @@ h3 {
             <div class="liked-list">
                 <!-- 리스트가 여기에 동적으로 추가됩니다. -->
             </div>
-            <div class="no-liked-message" style="display: none;">
+            <div class="no-liked-message" style="display: none; margin-top:100px;">
                 차단한 회원이 없습니다.
             </div>
             <div class="pagination-container">
@@ -323,7 +347,7 @@ $(document).ready(function() {
 
                             var memberCard = 
                                 '<div class="card" data-id="' + member.id + '">' +
-                                    '<img src="resources/img/common/profile.png" alt="' + member.nickname + ' 이미지" class="friend-image" />' +
+                                    '<img src="/photo/ + profile.image" alt="' + member.nickname + ' 이미지" class="friend-image" />' +
                                     '<div class="friend-details">' +
                                         '<p class="friend-name">' + member.nickname + '</p>' +
                                         '<p class="friend-info"> | 연령대: ' + ageGroup + ' | 주소: ' + member.address + ' | 성별: ' + member.gender + '</p>' + // 성별과 주소 위치 변경

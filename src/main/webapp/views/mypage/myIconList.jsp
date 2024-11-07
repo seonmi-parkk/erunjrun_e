@@ -159,11 +159,15 @@ h3 {
 }
 
 .profile-img1 {
-	max-width: 100px;
-	max-height: 100px;
-	border-radius: 4px;
+	max-width: 100px; /* 원하는 최대 너비 */
+	max-height: 100px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
 	margin-left: -60px;
-	
+}
+
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
 }
 
 .profile-img2 {
@@ -214,7 +218,7 @@ h3 {
 
 .action-buttons {
     display: flex;
-    justify-content: space-between; /* 버튼 간격을 자동으로 조절 */
+    justify-content: center; /* 버튼을 오른쪽으로 정렬 */
     margin-top: 10px; /* 버튼과 카드 간의 간격 추가 */
 }
 
@@ -257,8 +261,26 @@ h3 {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png"
-					alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}" alt="프로필 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
@@ -292,7 +314,7 @@ h3 {
 				<!-- 아이콘 리스트는 AJAX로 동적으로 추가됩니다 -->
 			</div>
 			<div class="no-icon-message"
-				style="display: none; text-align: center; margin-top: -100px;">
+				style="display: none; text-align: center; margin-top: -35px;">
 				구매한 아이콘이 없습니다.</div>
 				<div class="action-buttons">
                 <button id="updateIconBtn" class="btn btn-primary" disabled>수정하기</button>
@@ -323,8 +345,11 @@ $(document).ready(function() {
                 } else {
                     $('.icon-list').empty(); // 기존 리스트 초기화
                     $('.no-icon-message').hide(); // 초기에는 메시지 숨김
+                    $('#updateIconBtn').prop('disabled', true); // 수정 버튼 비활성화
+
                     if (data.list.length === 0) {
                         $('.no-icon-message').show(); // 데이터가 없을 경우 메시지 표시
+                        $('#updateIconBtn').hide(); // 수정하기 버튼 숨김
                     } else {
                         // 기본 이미지 카드 추가
                         var defaultCard = '<div class="card default-icon-card" data-id="null">' +
@@ -359,6 +384,10 @@ $(document).ready(function() {
                         $('.no-icon-message').hide(); // 데이터가 있을 경우 메시지 숨김
                         setupPagination(data.totalCount, page); // 페이지네이션 생성
                         $('.pagination-container').show(); // 데이터가 있을 경우 페이지네이션 표시
+
+                        // 수정 버튼을 활성화 (아이콘이 있을 경우)
+                        $('#updateIconBtn').prop('disabled', false);
+                        $('#updateIconBtn').show(); // 버튼이 활성화되면 보이도록 설정
                     }
                 }
             },
@@ -440,6 +469,7 @@ $(document).ready(function() {
         }
     });
 });
+
 
 </script>
 </html>  

@@ -173,6 +173,23 @@ button:hover {
 	margin-left: -60px;
 }
 
+.profile-img2 {
+	max-width: 100px; /* 원하는 최대 너비 */
+	max-height: 100px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
+	margin-left: -1px;
+}
+
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
+}
+
+.icon-image2 {
+	margin-top: -2px;
+	margin-left: -137px;
+}
+
 .image-info {
 	display: flex; /* 수평 정렬 */
 	align-items: center; /* 세로 중앙 정렬 */
@@ -209,7 +226,7 @@ button:hover {
 .edit-icon {
 	position: relative;
 	bottom: -30px; /* 하단에서 5px */
-	right: 150px; /* 오른쪽에서 5px */
+	right: 110px; /* 오른쪽에서 5px */
 	width: 30px;
 	height: 30px;
 	background-color: #ff7f50;
@@ -229,9 +246,9 @@ button:hover {
 }
 
 .title3.active {
-    color: #black; /* 활성화된 메뉴 항목의 색상 */
-    font-weight: bold; /* 강조 효과 */
-    background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
+	color: #black; /* 활성화된 메뉴 항목의 색상 */
+	font-weight: bold; /* 강조 효과 */
+	background-color: #f0f0f0; /* 배경 색상 (선택 사항) */
 }
 </style>
 </head>
@@ -240,8 +257,30 @@ button:hover {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png"
-					alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}"
+							alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png"
+							alt="" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1"
+							src="/resources/img/icon/${member.icon_image}" alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png"
+							alt="" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
@@ -256,7 +295,8 @@ button:hover {
 				onclick="location.href='memberCrewListView'">크루 리스트</p>
 			<p class="title3 ${pageName == 'myMateListView' ? 'active' : ''}"
 				onclick="location.href='myMateListView'">내 운동 메이트</p>
-			<p class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
+			<p
+				class="title3 ${pageName == 'likedMemberListView' ? 'active' : ''}"
 				onclick="location.href='likedMemberListView'">내 관심/차단 회원</p>
 			<p class="title3 ${pageName == 'messageListView' ? 'active' : ''}"
 				onclick="location.href='messageListView'">쪽지</p>
@@ -274,16 +314,20 @@ button:hover {
 				enctype="multipart/form-data">
 				<input type="hidden" name="id" value="${member.id}" />
 				<div class="image-info">
-					<c:choose>
-						<c:when test="${not empty profile.image}">
-							<img class="profile-image" src="/photo/${profile.image}"
-								alt="회원 이미지" id="previewImage" />
-						</c:when>
-						<c:otherwise>
-							<img class="profile-image" src="resources/img/common/profile.png"
-								alt="기본 프로필 이미지" id="previewImage" />
-						</c:otherwise>
-					</c:choose>
+					<div class="image">
+						<!-- 프로필 이미지 미리보기 -->
+						<img id="previewImage" class="profile-img2"
+							src="/photo/${profile.image}" alt="미리보기 이미지" />
+					</div>
+					<div class="icon">
+						<!-- 아이콘 이미지 -->
+						<c:choose>
+							<c:when test="${not empty member.icon_image}">
+								<img class="icon-image2"
+									src="/resources/img/icon/${member.icon_image}" alt="" />
+							</c:when>
+						</c:choose>
+					</div>
 					<div class="info">
 						<p class="title2" id="name">${member.nickname}</p>
 					</div>
@@ -343,20 +387,20 @@ button:hover {
 				<div class="form-group">
 					<label>프로필 공개 여부</label>
 					<div class="radio-group">
-						<label> <input type="radio"
-							name="profileVisibility" value="Y" checked> 공개
-						</label> <label> <input type="radio"
-							name="profileVisibility" value="N"> 비공개
+						<label> <input type="radio" name="profileVisibility"
+							value="Y" checked> 공개
+						</label> <label> <input type="radio" name="profileVisibility"
+							value="N"> 비공개
 						</label>
 					</div>
 				</div>
 				<div class="form-group">
 					<label>운동 메이트 찾기 여부</label>
 					<div class="radio-group">
-						<label> <input type="radio"
-							name="mateSearch" value="Y" checked> 찾기
-						</label> <label> <input type="radio"
-							name="mateSearch" value="N"> 찾지 않기
+						<label> <input type="radio" name="mateSearch" value="Y"
+							checked> 찾기
+						</label> <label> <input type="radio" name="mateSearch" value="N">
+							찾지 않기
 						</label>
 					</div>
 				</div>

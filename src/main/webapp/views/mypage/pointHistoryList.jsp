@@ -35,6 +35,7 @@ aside {
 	width: 80%; /* 전체 너비의 80%로 조정 */
 	max-width: 1100px; /* 최대 너비 설정 */
 	margin: 120px auto; /* 상하 여백 추가, 중앙 정렬 */
+	
 }
 
 .container {
@@ -43,6 +44,7 @@ aside {
 	background: white; /* 흰색 배경 */
 	border-top-right-radius: 8px; /* 오른쪽 위 모서리 둥글게 */
 	border-bottom-right-radius: 8px; /* 오른쪽 아래 모서리 둥글게 */
+	
 }
 
 .image {
@@ -123,6 +125,11 @@ tfoot tr {
 	margin-left: -60px;
 }
 
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
+}
+
 .divider {
 	width: 2px; /* 선의 두께 */
 	background-color: #ccc; /* 선의 색상 */
@@ -148,8 +155,26 @@ h3 {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png"
-					alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}" alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"

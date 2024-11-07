@@ -157,10 +157,15 @@ h3 {
 }
 
 .profile-img1 {
-	max-width: 100px;
-	max-height: 100px;
-	border-radius: 4px;
+	max-width: 100px; /* 원하는 최대 너비 */
+	max-height: 100px; /* 원하는 최대 높이 */
+	border-radius: 4px; /* 모서리 둥글게 */
 	margin-left: -60px;
+}
+
+.icon-image1 {
+	margin-top: -123px;
+	margin-left: 2px;
 }
 
 .divider {
@@ -212,8 +217,26 @@ h3 {
 	<div class="main-container">
 		<aside>
 			<div class="image">
-				<img class="profile-img1" src="resources/img/common/profile.png"
-					alt="프로필 이미지" />
+				<!-- 프로필 이미지 -->
+				<c:choose>
+					<c:when test="${not empty profile.image}">
+						<img class="profile-img1" src="/photo/${profile.image}" alt="프로필 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div class="icon">
+				<!-- 아이콘 이미지 -->
+				<c:choose>
+					<c:when test="${not empty member.icon_image}">
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+					</c:when>
+					<c:otherwise>
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<p class="username" id="name">${member.id}</p>
 			<p class="title3 ${pageName == 'profileDetail' ? 'active' : ''}"
@@ -314,7 +337,9 @@ h3 {
                             $('.no-friends-message').show(); // 데이터가 없을 경우 메시지 표시
                         } else {
                             $.each(data.list, function(index, friend) {
-                                var imageSrc = (friend.image && friend.image.trim()) ? '/photo/' + friend.image : 'resources/img/common/profile.png';
+                                var imageSrc = (friend.friend_image && friend.friend_image.trim()) ? '/photo/' + friend.friend_image : 'resources/img/common/profile.png';
+                                console.log("friend.image: ", friend.friend_image); // friend.image 값 확인
+                                console.log("imageSrc: ", imageSrc); // 최종 imageSrc 값 확인
                                 var currentUserId = '${sessionScope.loginId}'; // JSP에서 세션 변수 가져오기
                                 var friendName;
 
@@ -324,7 +349,7 @@ h3 {
                                     friendName = friend.id; // 상대방의 ID
                                 }
 
-                                var friendCard = '<div class="card" data-id="' + friend.id + '">' +
+                                var friendCard = '<div class="card" data-id="' + friend.idx + '">' +
                                     '<input type="hidden" name="toUserId" value="' + friend.id + '" />' +
                                     '<img class="friend-image" src="' + imageSrc + '" alt="친구 이미지" />' +
                                     '<p class="friend-name user">' + (friendName ? friendName : '이름 없음') + '</p>' +
@@ -357,7 +382,6 @@ h3 {
                 startPage: currentPage,
                 visiblePages: 5,
                 onPageClick: function(evt, page) {
-                    loadFriendList(page); // 선택한 페이지의 친구 리스트 로드
                 }
             });
         }

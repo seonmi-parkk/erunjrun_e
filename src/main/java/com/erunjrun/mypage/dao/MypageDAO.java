@@ -118,4 +118,6 @@ public interface MypageDAO {
 
 	int cancel(String unlikeId, String id);
 
+	String getSelectedIcon(String id);
+
 }
