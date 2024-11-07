@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,9 +81,11 @@ public class FreeBoardService {
 		    }
 		
 		// 게시글 등록
-		public int submitPost(RunBoardDTO runBoard) {
+		public int submitPost(RunBoardDTO runBoard, HttpSession session) {
 			
 			int row = freeBoardDAO.insertFreeBoard(runBoard);
+			
+			String userId = (String) session.getAttribute("loginId");
 			
 			 try {
 		            	            
@@ -108,6 +112,8 @@ public class FreeBoardService {
 		            boardPoint.put("point", 5);
 		            
 		            freeBoardDAO.boardPoint(boardPoint);
+		            
+		            freeBoardDAO.updatePoint(userId);
 		            
 		            	              
 		        } catch (Exception e) {

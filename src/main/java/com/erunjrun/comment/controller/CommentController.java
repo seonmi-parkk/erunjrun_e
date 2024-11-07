@@ -51,6 +51,9 @@ public class CommentController {
 		Map<String,Object> result = new HashMap<String, Object>();
 		
 		String userId = (String) session.getAttribute("loginId");
+		
+		commentService.updatePoint(userId);
+		
 		int add = commentService.addComment(board_idx,content,nickname, userId);
 		
 		try {
@@ -179,13 +182,15 @@ public class CommentController {
 		public Map<String, Object> addFreeComment(int board_idx,String content,HttpSession session,String nickname){
 				
 			Map<String,Object> result = new HashMap<String, Object>();
-			String id = (String) session.getAttribute("loginId");
+			String userId = (String) session.getAttribute("loginId");
+			
+			commentService.updatePoint(userId);
 			
 			int add = commentService.addFreeComment(board_idx,content,nickname, session);
 			try {
-		        if (id != null && !id.isEmpty()) {
+		        if (userId != null && !userId.isEmpty()) {
 		            String board_name = "F";
-		            alarm_controller.boardComment(board_idx, id, board_name);
+		            alarm_controller.boardComment(board_idx, userId, board_name);
 		        } else {
 		            System.out.println("id가 null이거나 비어 있습니다.");
 		        }

@@ -34,14 +34,22 @@ public class CommentDTO {
     private String profile_use;
     
     private String icon_image;
+    private String image;
     
     
+    
 	
 	
 	
 	
 	
 	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	public String getIcon_image() {
 		return icon_image;
 	}

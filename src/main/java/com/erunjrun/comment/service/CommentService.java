@@ -89,6 +89,11 @@ public class CommentService {
 		
 		return commentDao.addAskComment(board_idx,content,nickname);
 	}
+
+	public void updatePoint(String userId) {
+		commentDao.updatePoint(userId);
+		
+	}
 	
 	
 	
