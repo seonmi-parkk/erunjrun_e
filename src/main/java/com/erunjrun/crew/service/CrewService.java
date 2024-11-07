@@ -360,10 +360,12 @@ public class CrewService {
 	public boolean crewMemberCencel(Map<String, Object> parmeterMap) {
 		
 		int row = crew_dao.crewMemberCencel(parmeterMap);
+		int crew_idx = (int) parmeterMap.get("crew_idx");
 		
 		if(row>0) {
 			logger.info("크루 탈퇴 =>" + row);
 			crewHistoryWrite(parmeterMap);
+			crew_dao.crewCurrentMemberDelete(crew_idx);
 			return true;
 		}
 		
@@ -470,12 +472,14 @@ public class CrewService {
 	public boolean crewExpel(Map<String, Object> params) {
 
 		int row = crew_dao.crewExpel(params);
+		int crew_idx = (int) params.get("crew_idx");
 		
 		if(row>0) {
 			logger.info("크루 퇴출 =>" + row);
 			
 			int historyrow = crew_dao.crewExpelHistoryWrite(params);
 			logger.info("퇴출 히스토리 insert=> " + historyrow);
+			crew_dao.crewCurrentMemberDelete(crew_idx);
 			return true;
 		}
 		

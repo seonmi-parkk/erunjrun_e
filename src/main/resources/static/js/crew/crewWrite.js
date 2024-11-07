@@ -90,7 +90,7 @@
 	    
     function writeCheck(){
     	
-    	if($('input[name="crew_name"]').val !== '' && $('input[name="crew_img"]').val() !== '' && dayCheckboxes.length >= 1 && tagCheckboxes.length >= 1 && $('input[name="member"]').val() !== '' && $('input[name="minute"]').val() !== '' && $('input[name="distance"]').val() !== '' && $('input[name="address"]').val() !== ''){
+    	if($('input[name="crew_name"]').val() !== '' && $('input[name="crew_img"]').val() !== '' && dayCheckboxes.length >= 1 && tagCheckboxes.length >= 1 && $('input[name="member"]').val() !== '' && $('input[name="minute"]').val() !== '' && $('input[name="distance"]').val() !== '' && $('input[name="address"]').val() !== ''){
     		layerPopup('크루를 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act)
     		console.log('글 전송 함수 실행');
     	}else{

@@ -130,6 +130,8 @@ public interface CrewDAO {
 	List<CrewDTO> crewTagResult();
 
 	int crewMemberFullCheck(int crew_idx);
+
+	int crewCurrentMemberDelete(int crew_idx);
 	
 	
 
