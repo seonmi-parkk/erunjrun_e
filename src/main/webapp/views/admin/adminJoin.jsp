@@ -139,8 +139,8 @@
         <h3>관리자 회원가입</h3>
         <form id="adminJoinForm" action="adminJoin" method="post">
             <div class="form-group">
-                <label for="id">아이디 *</label>
-                <input type="text" name="id" required placeholder="예시) admin123" />
+                <label for="admin_id">아이디 *</label>
+                <input type="text" name="admin_id" required placeholder="예시) admin123" />
                 <button type="button" id="idCheck">중복확인</button>
                 <span id="idResult" class="result"></span>
             </div>
@@ -167,11 +167,11 @@
     <script>
         // ID 중복 체크
         $('#idCheck').click(function() {
-            var id = $('input[name="id"]').val();
+            var id = $('input[name="admin_id"]').val();
             $.ajax({
                 type: 'get',
-                url: 'idOverlay', // 중복 확인 API URL
-                data: { 'id': id },
+                url: '/adminIdOverlay', // 중복 확인 API URL
+                data: { 'admin_id': admin_id},
                 dataType: 'JSON',
                 success: function(data) {
                     if (data.overlay > 0) {

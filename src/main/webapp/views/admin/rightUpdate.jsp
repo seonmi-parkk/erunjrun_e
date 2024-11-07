@@ -148,7 +148,7 @@
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">정지내용</p>
 		
-			<textarea name="ban_content" id="content" >${info.ban_content}</textarea>
+			<textarea name="ban_content" id="content" required="required">${info.ban_content}</textarea>
 		</div>
 		
    			<input type="text" name="ban_idx" id="text" value="${info.ban_idx}" hidden=""/>

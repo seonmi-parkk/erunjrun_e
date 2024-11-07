@@ -152,7 +152,7 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">제목</p>
-			<input type="text" name="subject" id="text"/>
+			<input type="text" name="subject" id="text" required="required"/>
 		</div>
 		
 		<input type="text" name="code_name" id="text" value="PP100" hidden=""/>
@@ -160,8 +160,11 @@
 		<div class="input-container">
 		<p class="title2" id="dot">•</p>
 		<p class="title2" id="text">이미지</p>
-		<input type="file" name="file" multiple="multiple">
+		<input type="file" name="file" id="fileInput" multiple="multiple" onchange="previewImage(event)">  
 		
+		<div id="newImageContainer" style="display: none;">
+	        <img id="newImagePreview" style="max-width: 200px;">
+	    </div>
 		
 			
 		</div>
@@ -180,16 +183,16 @@
 			<p class="title2" id="text">사용여부</p>
 			<input type="radio" name="use_yn" value="Y" class="raido" id="radio"/>사용
 		
-			<input type="radio" name="use_yn" value="N" class="raido" id="radio"/>미사용
+			<input type="radio" name="use_yn" value="N" class="raido" id="radio" checked="checked"/>미사용
 		</div>
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">위치</p>
 			<p class="title2" id="text"> X: </p>
-			<input type="text" name="x" id="short"/>
+			<input type="text" name="x" id="short" required="required"/>
 			<p class="title2" id="text"> Y: </p>
-			<input type="text" name="y" id="short"/>
+			<input type="text" name="y" id="short" required="required"/>
 		</div>
 		
 		
@@ -197,24 +200,24 @@
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">크기</p>
 			<p class="title2" id="text"> 가로: </p>
-			<input type="text" name="width" id="short"/>
+			<input type="text" name="width" id="short" required="required"/>
 			<p class="title2" id="text"> 세로: </p>
-			<input type="text" name="height" id="short"/>
+			<input type="text" name="height" id="short" required="required"/>
 		</div>
 		
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">기간</p>
-			<input type="date" name="start_date" id="start_date"/>
+			<input type="date" name="start_date" id="start_date" required="required"/>
 			<p class="title2" id=""> ~ </p>
-			<input type="date" name="end_date" id="end_date"/>
+			<input type="date" name="end_date" id="end_date" required="required"/>
 		</div>
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">내용</p>
-			<textarea name="content" id="content"></textarea>
+			<textarea name="content" id="content" required="required"></textarea>
 			
 			
 		</div>
@@ -236,7 +239,17 @@
 
 
 <script>
-
+	function previewImage(event) {
+	    var file = event.target.files[0];
+	    if (file) {
+	        var reader = new FileReader();
+	        reader.onload = function(e) {
+	            $('#newImagePreview').attr('src', e.target.result);
+	            $('#newImageContainer').show(); // 새 이미지 컨테이너 표시
+	        };
+	        reader.readAsDataURL(file);
+	    }
+	}
     
 </script>
 <script src="/resources/js/common.js" type="text/javascript"></script>

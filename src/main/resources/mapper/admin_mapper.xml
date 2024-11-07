@@ -33,7 +33,13 @@
       SELECT ip FROM admin WHERE
       admin_id = #{id}
    </select>
-     
+	
+	 <select id="adminidoverlay" resultType="int">
+           SELECT COUNT(admin_id) FROM admin WHERE admin_id = #{param1}
+     </select>
+	
+	
+	     
 
     <select id="adminlist" resultType="com.erunjrun.admin.dto.AdminDTO">
     SELECT * FROM admin  
@@ -118,32 +124,20 @@
 
 
     <select id="count" resultType="int">
-    WITH ranked_ban AS (
-        SELECT 
-            b.id,
-            b.is_right,
-            ROW_NUMBER() OVER (PARTITION BY b.id ORDER BY b.is_right DESC, b.start_date DESC) AS rn
-        FROM 
-            ban b
-    )
-    SELECT CEIL(COUNT(*) / #{param1}) AS pages
-    FROM 
-        member m
-    LEFT JOIN 
-        ranked_ban rb ON m.id = rb.id AND rb.rn = 1
+       SELECT CEIL(COUNT(*) / #{param1}) AS pages
+    FROM member 
     <where>
         <if test="keyword != null and keyword != '' and opt == 'id'">
-            m.id LIKE CONCAT('%', #{keyword}, '%')
+            AND id LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="keyword != null and keyword != '' and opt == 'nickname'">
-            m.nickname LIKE CONCAT('%', #{keyword}, '%')
+            AND nickname LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="keyword != null and keyword != '' and opt == 'email'">
-            m.email LIKE CONCAT('%', #{keyword}, '%')
+            AND email LIKE CONCAT('%', #{keyword}, '%')
         </if>
     </where>
-</select>
-
+   </select>
 
    
    <select id="memberdetail" resultType="com.erunjrun.admin.dto.AdminDTO">

@@ -35,11 +35,7 @@ public class MainController {
 			}
 	     model.addAttribute("popups", popups);
 		
-		if (popups.isEmpty()) {
-			logger.info("팝업X");
-		}else {
-			logger.info("팝업 O");
-		}
+		
 	     
 	     
 		return "main";

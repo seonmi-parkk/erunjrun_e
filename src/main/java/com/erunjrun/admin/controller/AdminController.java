@@ -48,7 +48,7 @@ public class AdminController {
                session.setAttribute("authority", admin_service.getAuthority(id)); // 권한 저장
                session.setAttribute("requestIp", requestIp); // 요청 IP 저장
                session.setAttribute("adminYn", "Y"); // 로그인시 관리자 여부
-
+               	
             } else {
                model.addAttribute("msg", "허용되지 않은 IP에서 로그인 시도입니다.");
             }
@@ -60,7 +60,28 @@ public class AdminController {
       }
       
       @GetMapping(value = "/adminJoin")
-      public String adminJoin(HttpSession session) {
+      public String adminJoin(Model model, HttpSession session, HttpServletRequest request) {
+    	  
+    	  String requestIp = request.getRemoteAddr(); // 요청 IP 가져오기
+          String superAdminId = (String) session.getAttribute("loginId");
+          String superAdminAuthority = (String) session.getAttribute("authority"); // 로그인한 슈퍼관리자 권한
+          logger.info(superAdminAuthority);
+          logger.info(requestIp);
+           // 1. 슈퍼관리자 권한 확인
+           if (!superAdminAuthority.equals("s")) {
+               model.addAttribute("msg", "슈퍼관리자만 회원가입을 할 수 있습니다.");
+               return "admin/adminMemberList"; // 회원가입 페이지로 리턴
+           }
+
+           // 2. 요청 IP 확인
+           String allowedIp = admin_service.SgetAllowedIp(superAdminId); // 슈퍼관리자 IP 조회
+           logger.info(allowedIp);
+           
+           if (!allowedIp.equals(requestIp)) {
+               model.addAttribute("msg", "허용되지 않은 IP에서 요청하였습니다.");
+               return "redirect:/adminMember";  // 회원가입 페이지로 리턴
+           }
+
          
          return"admin/adminJoin";
       }
@@ -92,8 +113,16 @@ public class AdminController {
             model.addAttribute("msg", "회원가입에 실패했습니다.");
             return "";
          }
-          return "admin/adminMember"; // 로그인 페이지로 리턴
+          return "redirect:/adminJoin"; 
       }
+      
+      @GetMapping(value = "adminIdOverlay")
+      public Map<String, Object> adminidoverlay(String admin_id) {
+          
+          Map<String, Object> map = new HashMap<String, Object>();
+          map.put("overlay",admin_service.adminidoverlay(admin_id));
+          return map;
+       }
       
       
       
@@ -110,12 +139,15 @@ public class AdminController {
       
       @GetMapping(value = "/adminMemberList")
       @ResponseBody
-      public Map<String, Object> memberlist(String page, String cnt, String opt, String keyword, String sortField, String sortOrder) {
+      public Map<String, Object> memberlist(String page, String cnt,@RequestParam String opt, @RequestParam String keyword, String sortField, String sortOrder) {
           int page_ = Integer.parseInt(page);
           int cnt_ = Integer.parseInt(cnt);
           int limit = cnt_;
           int offset = (page_ - 1) * cnt_;
           
+          logger.info("opt: {}", opt);
+          logger.info("keyword: {}", keyword);
+
           // 검색 조건을 반영하여 페이지 수를 계산
           int totalPages = admin_service.count(cnt_, opt, keyword);
 
@@ -370,7 +402,7 @@ public class AdminController {
       }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-      return "admin/adminLogin";
+      return "redirect:/adminLogin";
       }
      //문의하기
      
@@ -381,7 +413,7 @@ public class AdminController {
      }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-      return "admin/adminLogin";
+      return "redirect:/adminLogin";
       }
      
      
@@ -627,7 +659,7 @@ public class AdminController {
         
         
         model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
-     return "admin/adminLogin";
+        return "redirect:/adminLogin";
      }
      
      @PostMapping(value = "/adminPopupUpdate")

@@ -88,7 +88,7 @@
 	}
    
    .selector{
-   margin-left: 1300px;
+  margin-left: 800px;
    display: inline-block;
    top: 10px;
    
@@ -97,12 +97,13 @@
    /* 공통 버튼 스타일 */
 	.selectmwd {
 	    display: flex;
-	  
+	  	margin-left: 1050px;
 	   
 	    /* 버튼 그룹 전체에 하단선을 제거합니다 */
 	}
 	
 	.selectmwd button {
+		
 	    background: none;
 	    border: none;
 	    color: #ccc; /* 기본 색상 */

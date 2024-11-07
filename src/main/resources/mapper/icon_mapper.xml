@@ -122,49 +122,44 @@
    </select>
    
    
-   
    <select id="getMonthlySalesData" resultType="com.erunjrun.icon.dto.IconDTO">
-       SELECT 
-        MONTH(ib.buy_date) AS timePeriod, 
-        COUNT(*) AS purchaseCount, 
-        i.icon_name
-       FROM icon_buy ib
-       LEFT JOIN icon i ON i.icon_idx = ib.icon_idx
-       WHERE YEAR(ib.buy_date) = #{year}
-       GROUP BY i.icon_name, MONTH(ib.buy_date)
-       ORDER BY MONTH(ib.buy_date)
+        SELECT MONTH(ib.buy_date) AS timePeriod, COUNT(*) AS purchaseCount, i.icon_name
+        FROM icon_buy ib
+        RIGHT JOIN icon i ON i.icon_idx = ib.icon_idx
+        AND YEAR(ib.buy_date) = #{year}
+        GROUP BY i.icon_name, MONTH(ib.buy_date)
+        ORDER BY MONTH(ib.buy_date)
     </select>
 
     <select id="getWeeklySalesData" resultType="com.erunjrun.icon.dto.IconDTO">
-         SELECT 
+        SELECT 
         WEEK(ib.buy_date, 1) - WEEK(DATE_SUB(ib.buy_date, INTERVAL DAYOFMONTH(ib.buy_date) - 1 DAY), 1) + 1 AS timePeriod,
         COUNT(*) AS purchaseCount,
         i.icon_name
-    FROM icon_buy ib
-    LEFT JOIN icon i ON i.icon_idx = ib.icon_idx
-    WHERE YEAR(ib.buy_date) = #{year} AND MONTH(ib.buy_date) = #{month}
-    GROUP BY i.icon_name, timePeriod
-    ORDER BY timePeriod
-   </select>
+        FROM icon_buy ib
+        RIGHT JOIN icon i ON i.icon_idx = ib.icon_idx
+        AND YEAR(ib.buy_date) = #{year} AND MONTH(ib.buy_date) = #{month}
+        GROUP BY i.icon_name, timePeriod
+        ORDER BY timePeriod
+    </select>
 
 
     <select id="getDailySalesData" resultType="com.erunjrun.icon.dto.IconDTO">
         SELECT DAY(ib.buy_date) AS timePeriod, COUNT(*) AS purchaseCount, i.icon_name
         FROM icon_buy ib
-        LEFT JOIN icon i ON i.icon_idx = ib.icon_idx
-        WHERE YEAR(ib.buy_date) = #{year} AND MONTH(ib.buy_date) = #{month}
+        RIGHT JOIN icon i ON i.icon_idx = ib.icon_idx
+        AND YEAR(ib.buy_date) = #{year} AND MONTH(ib.buy_date) = #{month}
         GROUP BY i.icon_name, DAY(ib.buy_date)
     </select>
 
     <select id="getAvailableYears" resultType="int">
-        SELECT DISTINCT YEAR(ib.buy_date) AS year
-        FROM icon_buy ib
+        SELECT DISTINCT YEAR(buy_date) AS year
+        FROM icon_buy 
         ORDER BY year
     </select>
-	 
-	
-	
-	
+   
+   
+   
 	
 	
 	

@@ -24,11 +24,13 @@ public interface AdminDAO {
 
    String SgetAllowedIp(String superAdminId);
    
+   public int adminidoverlay(String admin_id);
+   
    
 //   회원리스트
    public List<AdminDTO> memberlist(String opt, String keyword,String sortField,String sortOrder, int limit, int offset);
    
-   int count(int cnt_, String keyword,String opt);
+   int count(int cnt_, String opt,String keyword);
 
    
 //   관리자리스트
@@ -127,6 +129,7 @@ public interface AdminDAO {
    public int adminyn(String admin_id);
 
    public void ExistingPopupPriority(String newPriority);
+
 
 
 

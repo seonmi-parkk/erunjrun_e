@@ -132,7 +132,7 @@
 		<p class="title1" >팝업</p>
 		
 		
-	  	<form action="adminPopupUpdate" method="post" id="form" enctype="multipart/form-data">
+	  	<form action="/adminPopupUpdate" method="post" id="form" enctype="multipart/form-data">
 	  	
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>

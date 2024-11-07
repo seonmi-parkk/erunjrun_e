@@ -172,7 +172,7 @@ $('#overlay').on('click',function(){
 	console.log(code_name);
 	$.ajax({
 		type:'POST',
-		url:'adminCodeOverlay',
+		url:'/adminCodeOverlay',
 		data:{'code_name':code_name},
 		dataType:'JSON',
 		success:function(data){

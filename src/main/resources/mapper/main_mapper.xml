@@ -9,7 +9,7 @@
         WHERE use_yn = 'Y' 
           AND start_date &lt;= #{today}
           AND end_date &gt;= #{today}
-        ORDER BY `priority` ASC;
+        ORDER BY priority ASC;
     </select>
     
     <select id="image" resultType="com.erunjrun.image.dto.ImageDTO">

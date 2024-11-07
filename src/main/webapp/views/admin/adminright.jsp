@@ -154,7 +154,7 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">정지내용</p>
-			<textarea name="content" id="content"></textarea>
+			<textarea name="content" id="content" required="required"></textarea>
 		</div>
 		
    	<button class="btn01-l" type="submit" id="text">정지</button>

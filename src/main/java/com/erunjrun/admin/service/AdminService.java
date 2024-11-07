@@ -57,9 +57,16 @@ public class AdminService {
       }
    
    
-   public int count(int cnt_, String keyword,String opt) {
+	
+	public int adminidoverlay(String admin_id) {
+		
+		return admin_dao.adminidoverlay(admin_id);
+	}
+   
+   
+   public int count(int cnt_, String opt,String keyword) {
       
-      return admin_dao.count(cnt_,keyword,opt);
+      return admin_dao.count(cnt_,opt,keyword);
    }
 
 
@@ -422,6 +429,7 @@ public class AdminService {
       admin_dao.adminyn(admin_id);
       
    }
+
 
  
 
