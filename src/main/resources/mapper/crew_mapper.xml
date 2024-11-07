@@ -183,23 +183,31 @@
 		        </if>
 		        
 		        <!-- shortsido_area 조건 -->
-		        <if test="filtering.contains('option13')">
+		        <if test="filtering.contains('option13') and !filtering.contains('option14')">
 		            AND c.shortsido IN ('서울', '경기', '인천')
 		        </if>
 		        
 		        <!-- shortsido_etc 조건 -->
-		        <if test="filtering.contains('option14')">
+		        <if test="filtering.contains('option14') and !filtering.contains('option13')">
 		            AND c.shortsido NOT IN ('서울', '경기', '인천')
 		        </if>
 		        
+		        <if test="filtering.contains('option13') and filtering.contains('option14')">
+		        	AND c.shortsido NOT IN ('')
+		        </if>
+		        
 		        <!-- weekdays 조건 -->
-		        <if test="filtering.contains('option15')">
+		        <if test="filtering.contains('option15') and !filtering.contains('option16')">
 		            AND c.days NOT REGEXP 'sat|sun'
 		        </if>
 		        
 		        <!-- weekend 조건 -->
-		        <if test="filtering.contains('option16')">
+		        <if test="filtering.contains('option16') and !filtering.contains('option15')">
 		            AND (c.days like '%sat%' OR c.days like '%sun%')
+		        </if>
+		        
+		        <if test="filtering.contains('option15') and filtering.contains('option16')">
+		        	AND c.days NOT IN ('')
 		        </if>
 		        
 		         <!-- 선택한 tag_idx를 포함한 모든 크루 데이터 조회 -->
@@ -500,9 +508,9 @@
 	        <choose>
 	            <when test="priority != null and priority != ''">
 	                <choose>
-	                    <when test="priority == 'pr1'">1</when>
-	                    <when test="priority == 'pr2'">2</when>
-	                    <when test="priority == 'pr3'">3</when>
+	                    <when test="priority == ',pr1'">1</when>
+	                    <when test="priority == ',pr2'">2</when>
+	                    <when test="priority == ',pr3'">3</when>
 	                    <otherwise>0</otherwise>
 	                </choose>
 	            </when>
@@ -532,6 +540,11 @@
 	<!-- 신청자 승인 시 크루 현재 회원 수 업데이트 -->
 	<update id="crewCurrentMemberUpdate" parameterType="int">
 		UPDATE crew SET current_member = current_member + 1 WHERE crew_idx = #{crew_idx}
+	</update>
+	
+	<!-- 크루 탈퇴, 퇴출 시 크루 현재 회원 수 업데이트 -->
+	<update id="crewCurrentMemberDelete" parameterType="int">
+		UPDATE crew SET current_member = current_member - 1 WHERE crew_idx = #{crew_idx}
 	</update>
 	
 	<!-- 로그인한 유저 닉네임 추출 -->
