@@ -259,7 +259,7 @@
  		}else if('${sessionScope.loginId}' == '${right.id}' && '${right.code_name}' == 'A100' && '${right.is_right}' == 'Y'){
  			rightLayerPopup('${right.end_date} 까지 정지된 서비스 입니다.','확인',secondBtn2Act);
  		}else{
- 			location.href='runBoardWrite';
+ 			location.href='freeBoardWrite';
  		}
  		
  	});
