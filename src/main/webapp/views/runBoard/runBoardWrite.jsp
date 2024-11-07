@@ -310,8 +310,12 @@
               
         // 레이어 팝업
 	 	function secondBtn1Act() {
+        	
+	 		loading();
+        	
 	 	    // 두번째팝업 1번버튼 클릭시 수행할 내용
 	 	    console.log('두번째팝업 1번 버튼 동작');
+	 	    
 	 		// formData 생성
             var formData = new FormData($('form')[0]);
             
@@ -375,13 +379,17 @@
                 success: function (data) {
                     console.log(data);
                     location.href = "/runBoardDetail/"+data.board_idx;
+                    
                 },
                 error: function (xhr, status, error) {
                     alert("게시글 등록 중 오류가 발생했습니다: " + error);
+                    loadingComplete();
                 }
             });
+            
 	 	}
         
+	 	
         
 	 	function secondBtn2Act() {
 	 	    // 두번째팝업 2번버튼 클릭시 수행할 내용
@@ -402,6 +410,7 @@
 	 			layerPopup('경로를 입력해 주세요.','확인',false ,secondBtn2Act , secondBtn2Act);
 	 		}else{
 	 			layerPopup('게시글을 등록 하시겠습니까?','등록','취소' ,secondBtn1Act , secondBtn2Act);
+	 			
 	 		}
 	 	
 	 	

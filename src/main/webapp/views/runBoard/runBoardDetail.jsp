@@ -376,7 +376,7 @@
 </body>
 <script>
 
-
+loadingComplete();
 
 // 지도가 로드된 후 경로 표시 및 거리 계산을 수행하는 함수
 function initializeMap() {

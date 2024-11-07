@@ -343,7 +343,7 @@
 		    		<input type="text" class="tex">
 	    		</div>
 	    		<div>
-	    			<div id="ins" class=btn01-s onclick="comment()">등록</div>	    		
+	    			<div id="ins" class=btn01-s >등록</div>	    		
 	    		</div>
 	    	</div>
 	    </div>
@@ -753,6 +753,7 @@
 	 		}
 	 		
 	 	});
+		
 		
 		
 		

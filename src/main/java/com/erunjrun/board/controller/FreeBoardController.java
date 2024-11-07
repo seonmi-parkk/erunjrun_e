@@ -187,7 +187,7 @@ public class FreeBoardController {
     	model.addAttribute("info", run);
     	model.addAttribute("nickname", nickname);
     	model.addAttribute("coun", countComment);
-    	
+    	model.addAttribute("ban", ban);
 
     	return "freeBoard/freeBoardDetail";
     }
