@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,12 +26,10 @@ import com.erunjrun.crew.dto.CrewMemberDTO;
 import com.erunjrun.crew.dto.CrewNoticeDTO;
 import com.erunjrun.crew.service.CrewService;
 import com.erunjrun.image.dto.ImageDTO;
-import com.erunjrun.member.dto.MemberDTO;
+import com.erunjrun.main.controller.AlarmController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
-
-import com.erunjrun.main.controller.*;
 
 
 

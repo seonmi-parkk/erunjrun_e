@@ -251,6 +251,8 @@
 	            $('#crew-btn-01').html('크루 탈퇴하기');
 	            $('#crew-btn-01').css({'border' : '1px solid var(--main-color)', 'color' : 'var(--main-color)', 'background' : '#fff'});
 	            $('#crew-btn-01').click(function(){
+	            	removeAlert();
+		        	layerPopup('크루에서 탈퇴하시겠습니까?', '확인', '취소' ,crewMemberUpdate ,applBtn2Act);
 		        	code_name = 'C105';
 	        	});
 	            
@@ -259,6 +261,8 @@
 	            $('#crew-btn-01').html('신청 취소하기');
 	        	$('#crew-btn-01').css({'border' : '1px solid var(--main-color)', 'color' : 'var(--main-color)', 'background' : '#fff'});
 	        	$('#crew-btn-01').click(function(){
+		        	removeAlert();
+		        	layerPopup('가입 신청을 취소하시겠습니까?', '확인', '취소' ,crewMemberUpdate ,applBtn2Act);
 		        	code_name = 'C104';
 	        	});
 	        	
@@ -266,6 +270,8 @@
 	        } else { // 로그인 o, 크루원 x => 완료
 	            $('#crew-btn-01').html('러닝크루 신청하기');
 	        	$('#crew-btn-01').click(function(){
+	        		removeAlert();
+		        	layerPopup('크루를 신청하시겠습니까?', '확인', '취소' ,crewMemberUpdate ,applBtn2Act);
 		        	code_name = 'C100';
 	        	});
 	        }

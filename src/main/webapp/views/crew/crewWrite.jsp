@@ -101,6 +101,7 @@
 <script src="/resources/js/common.js"></script>
 <script src="/resources/js/daumapi.js"></script>
 <script src="/resources/js/crew/crewWrite.js"></script>
+<script src="/resources/js/chatting.js"></script>
 
 <script>
 

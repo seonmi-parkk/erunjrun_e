@@ -17,6 +17,7 @@
 <body>
 	<jsp:include page="../header.jsp"/>
 	
+		
 	<input type="hidden" name="crew_idx" value="${crew_idx}"/>
 	<input type="hidden" name="loginId" value="${loginId}"> 
 	<div class="inner">
@@ -71,5 +72,10 @@
 	
 	<jsp:include page="../footer.jsp"/>
 </body>
+
 <script src="/resources/js/crew/crewNoticeList.js" type="text/javascript"></script>
+<script src="/resources/js/chatting.js"></script>
+<script>
+
+</script>
 </html>

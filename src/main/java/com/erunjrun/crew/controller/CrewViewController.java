@@ -101,6 +101,7 @@ public class CrewViewController {
     public String crewNoticeListView(@PathVariable int crew_idx, Model model, HttpSession session) {
     	if(session.getAttribute("loginId") != null) {
     		model.addAttribute("crew_idx", crew_idx);
+    	//	model.addAttribute("crewMember", crew_service.crewMemberList(crew_idx));
     		return "/crew/crewNoticeList";
     	}
     	return "redirect:/loginView";

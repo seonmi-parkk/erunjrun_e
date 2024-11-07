@@ -64,4 +64,5 @@
 	<jsp:include page="../footer.jsp"/>
 </body>
 <script src="/resources/js/crew/crewMemberList.js" type="text/javascript"></script>
+<script src="/resources/js/chatting.js"></script>
 </html>
