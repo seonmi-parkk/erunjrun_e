@@ -133,11 +133,12 @@ public class AskBoardController {
 			
 			String page ="";
 			String userId = (String) session.getAttribute("loginId");
-			if(userId == null) {
-				page = "member/login";
-			}else {
+			String admin = (String) session.getAttribute("adminYn");
+			if(userId != null && userId.equals(info.getId()) || admin.equals("Y")) {
 				page ="askBoard/askBoardDetail";
-			}
+	 		}else {
+	 			page = "redirect:/loginView";
+	 		}
 			
 			return page;
 		}
@@ -151,11 +152,11 @@ public class AskBoardController {
 			
 			String page ="";
 			String userId = (String) session.getAttribute("loginId");
-			if(userId == null) {
-				page = "member/login";
-			}else {
-				page ="askBoard/askBoardUpdate";
-			}
+			if(userId != null && post.getId() == userId) {
+	 			page ="askBoard/askBoardUpdate";
+	 		}else {
+	 			page = "redirect:/loginView";
+	 		}
 			
 			return page;
 						

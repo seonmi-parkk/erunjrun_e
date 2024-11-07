@@ -662,10 +662,10 @@ public class MypageController {
 
 	    if ("B100".equals(boardType)) {
 	        // 자유게시판 게시글 상세보기 페이지로 이동
-	    	 return "redirect:/freeBoardDetail/" + board_idx;
+	    	 return "redirect:/runBoardDetail/" + board_idx;
 	    } else if ("B101".equals(boardType)) {
 	        // 런닝코스 게시글 상세보기 페이지로 이동
-	    	return "redirect:/runBoardDetail/" + board_idx;
+	    	return "redirect:/freeBoardDetail/" + board_idx;
 	    }
 
 	    // 예외 처리: 잘못된 boardType이 들어왔을 경우 (예: 'free' 또는 'run' 외의 값)

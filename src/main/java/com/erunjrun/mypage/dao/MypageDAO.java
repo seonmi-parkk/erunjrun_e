@@ -116,4 +116,6 @@ public interface MypageDAO {
 
 	int countBlockMemberList(String id, int cnt);
 
+	int cancel(String unlikeId, String id);
+
 }

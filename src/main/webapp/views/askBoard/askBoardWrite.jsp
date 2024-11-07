@@ -191,7 +191,7 @@
 
 			
             formData.append('content', content);
-            formData.append('subject', subject);
+            //formData.append('subject', subject);
             formData.append('id', userId);
             formData.append('code_name', code_name);
 
@@ -213,7 +213,7 @@
                 data: formData,
                 success: function (data) {
                     console.log(data);
-                    location.href = "/askBoard/"+data.ask_idx;
+                    location.href = "/askBoardDetail/"+data.ask_idx;
                 },
                 error: function (xhr, status, error) {
                     alert("게시글 등록 중 오류가 발생했습니다: " + error);

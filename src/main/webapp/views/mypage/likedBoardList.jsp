@@ -256,6 +256,7 @@ h3 {
             content += '<tr><td colspan="4" class="text-center">좋아요한 게시글이 없습니다.</td></tr>';
         } else {
             list.forEach(function(view) {
+            	console.log('code : ',view.code_name);
                 if (view) {
                     // 타임스탬프를 Date 객체로 변환 후 포맷팅
                     var date = new Date(view.create_date);
@@ -271,6 +272,11 @@ h3 {
 
                     content += '<tr>';
                     content += '<td>' + view.board_idx + '</td>'; // 글번호
+                    if(view.code_name === 'B100'){
+                    	content += '<td><a href="/runBoardDetail/'+ view.board_idx + '">' + view.subject + '</a></td>'; // 제목에 링크 추가
+                    }else{
+                    	content += '<td><a href="/freeBoardDetail/'+ view.board_idx + '">' + view.subject + '</a></td>'; // 제목에 링크 추가
+                    }
                     content += '<td><a href="/boardDetail/' + view.code_name + '/' + view.board_idx + '">' + view.subject + '</a></td>'; // 제목에 링크 추가
                     content += '<td>' + view.id + '</td>'; // 글쓴이
                     content += '<td>' + formattedDate + '</td>'; // 작성일자

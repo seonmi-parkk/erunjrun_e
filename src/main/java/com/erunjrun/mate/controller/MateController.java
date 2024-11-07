@@ -45,6 +45,7 @@ public class MateController {
 		
 		// 운동메이트 신청 여부 체크
 		result.put("MateAppl", mateService.checkMateAppl(fromUserId,toUserId));
+		logger.info("나11와11 : {}",mateService.checkMateAppl(fromUserId,toUserId));
 		
 		// 차단 여부 체크
 		result.put("isBlocked", mateService.checkBlock(fromUserId,toUserId));

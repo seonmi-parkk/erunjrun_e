@@ -647,7 +647,7 @@ function initializeMap() {
 				var addName = view.nickname;
 				var comment_idx = view.comment_idx;
 				console.log(view.icon_image);
-				
+				var user = '${sessionScope.loginId}';
 				
 				content +='<div id="sort-area">';
 				content +='<div class="sort" id="sort-update'+comment_idx+'">';
@@ -662,8 +662,10 @@ function initializeMap() {
 				content +='<div class="date">'+view.create_date+'</div>';
 				content +='</div>';
 				if(view.use_yn == 'Y'){
-					content +='<div class="ard" id="dis">';					
-					content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
+					if(user){
+						content +='<div class="ard" id="dis">';					
+						content +='<div class="detail" style=" cursor: pointer;" onclick="toggleActions(' + comment_idx + ')"><img style="height: 5; margin-top: 25px;" src="/resources/img/run/Group 308.png" alt="상세"></div>';
+					}
 					if(${sessionScope.adminYn == 'Y'}){
 						content +='<div id ="bih" class=btn03-s onclick="del('+comment_idx+')">비활성화</div>';
 					}

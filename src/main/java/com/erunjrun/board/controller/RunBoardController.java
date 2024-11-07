@@ -202,7 +202,7 @@ public class RunBoardController {
         if (runBoardService.submitPost(runBoardDto)) {
             logger.info("글 업로드 완료");
             resultMap.put("success", true);
-            resultMap.put("page", "runBoardUpdate");
+            resultMap.put("board_idx", runBoardDto.getBoard_idx());
             logger.info("제목3 : "+runBoardDto.getSubject());
         }
 
@@ -312,13 +312,13 @@ public class RunBoardController {
          model.addAttribute("post", run);
          model.addAttribute("mapData", mapDataJson); // 경로 데이터도 함께 전달
          
-        String page ="";
+         String page ="";
  		String userId = (String) session.getAttribute("loginId");
- 		if(userId == null) {
- 			page = "member/login";
- 		}else {
+ 		if(userId != null && userId.equals(run.getId())) {
  			page ="runBoard/runBoardUpdate";
- 		}
+  		}else {
+  			page = "redirect:/loginView";
+  		}
  		
  		return page;
     	

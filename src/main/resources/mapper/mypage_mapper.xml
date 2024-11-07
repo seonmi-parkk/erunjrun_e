@@ -284,7 +284,15 @@
 		VALUES (#{id},
 		#{code_name}, #{unlikeId}, NOW());
 	</insert>
-
+	
+	
+	
+	<insert id="cancel" parameterType="map">
+		insert into mate_history(id,code_name,unlike_id)
+								values(#{unlikeId},'M104',#{id})
+	</insert>
+	
+	
 	<select id="getAppliedMates" resultType="map">
 		SELECT id, create_date
 		FROM mate_application
