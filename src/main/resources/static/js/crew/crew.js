@@ -36,6 +36,7 @@
 	        $('.crewListBox').empty(); // 기존 목록 초기화
 	        updateFiltering(); // 필터링 배열 업데이트
 	        crewList(currentPage); // 필터링된 리스트 요청
+	        
 	    });
 	
 	});
@@ -47,6 +48,10 @@
 	    }).get(); // 체크된 값만 배열로 가져옴
 	    console.log('필터 =>', filtering);
 	}
+	
+	
+	
+	
 	
 	// 크루리스트 불러오기
 	function crewList(page){

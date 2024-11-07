@@ -6,7 +6,6 @@
 <meta charset="UTF-8">
 <title>crewUpdate</title>
 	<link rel="stylesheet" href="/resources/css/crew.css">
-	<link rel="stylesheet" href="/resources/css/common.css"></link>
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 	
@@ -21,9 +20,20 @@
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 </head>
+<style>
+	.title2 {
+        color: var(--main-color);
+        font-family: "Pretendard Variable", sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+        display: inline-block;
+   		width: 115px;
+   		float: left;
+    }
+</style>
 <body>
     <jsp:include page="../header.jsp" />
-    <div class="crewWriteView"> <!-- 체크박스 순위 올리기 위함 -->
+    <div class="crewWriteView">
 
         <div class="inner">
             <form enctype="multipart/form-data">
@@ -100,7 +110,7 @@
 
                 <div class="btn-parent">
                     <button type="button" class="btn03-l" onclick="locationHrdf()">수정 취소하기</button>
-                    <button type="button" class="btn01-l" onclick="layerPopup('크루를 수정하시겠습니까?', '확인', '취소', submitUpdatePost, applBtn2Act)">크루 수정하기</button>
+                    <button type="button" class="btn01-l" onclick="writeCheck()">크루 수정하기</button>
                 </div>
             </form>
         </div>
@@ -109,8 +119,8 @@
 </body>
 
 <script src="/resources/js/common.js"></script>
-<script src="/resources/js/daumapi.js"></script>
 <script src="/resources/js/crew/crewUpdate.js"></script>
+<script src="/resources/js/daumapi.js"></script>
 <script src="/resources/js/chatting.js"></script>
 <script>
 

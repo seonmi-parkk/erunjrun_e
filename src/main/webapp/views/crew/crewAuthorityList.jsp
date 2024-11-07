@@ -313,7 +313,7 @@
 				btn = '<button class="btn05-s">대기</button></td>';
 			}
 			
-			if(item.update_date === null){
+			if(item.is_agree === 'W'){
 				item.update_date = '미응답';
 			}
 			

@@ -508,9 +508,12 @@ public class CrewController {
 	@PostMapping(value="/sendNoticeUpdate")
 	public Map<String, Object> crewNoticeUpdate(@ModelAttribute CrewNoticeDTO crewNoticeDto, @RequestParam("imgsJson") String imgsJson){
 		Map<String, Object> resultMap = new HashMap<>();
-		
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<ImageDTO> imgs = null;
+		
+		String sun = crewNoticeDto.getPriority();
+		logger.info("순위 ====> " + sun); // 순위는 잘 받아옴!
+		
 		try {
 			// TypeFactory를 사용하여 제네릭 타입을 처리
 	        imgs = objectMapper.readValue(imgsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, ImageDTO.class));

@@ -376,7 +376,7 @@
 	                	
 	                	// 크루 퇴출
 	                	}else{
-	                		change = 'onclick="crewExpel(\'' + alarm.subject + '\', \'' + alarm_idx + '\')"';
+	                		change = 'onclick="crewExpel(\'' + alarm.content + '\', \'' + alarm_idx + '\')"';
 	                	}
 						
 	                	
@@ -434,8 +434,8 @@
 	    startAlarmInterval();
 	});
 	
-	function crewExpel(subject, alarm_idx){
-		layerPopup(subject+' 크루에서 퇴출되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
+	function crewExpel(content, alarm_idx){
+		layerPopup(content+'크루에서 퇴출되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
 		alarmUpdate(alarm_idx);
 	}
 	

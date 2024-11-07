@@ -6,9 +6,9 @@
 <meta charset="UTF-8">
 <title>crewWrite</title>
 	<link rel="stylesheet" href="/resources/css/crew.css">
-	<link rel="stylesheet" href="/resources/css/common.css"></link>
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/resources/css/common.css"></link>
 	
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -17,6 +17,17 @@
 	<script src="/resources/js/summernote.js"></script>
 	<script src="/resources/js/layerPopup.js"></script>
 	<script src="/resources/js/common.js"></script>
+<style>
+	.title2 {
+        color: var(--main-color);
+        font-family: "Pretendard Variable", sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+        display: inline-block;
+   		width: 115px;
+   		float: left; 
+    }
+</style>
 </head>
 <body>
     <jsp:include page="../header.jsp" />

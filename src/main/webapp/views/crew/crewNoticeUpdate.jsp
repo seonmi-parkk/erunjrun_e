@@ -117,7 +117,7 @@
 	});
 
 	
-	var overlayCheck = 'Y';
+	var overlayCheck = 'Y'; // 일반공지일 경우
 	var notice_idx = '';
 	var loginId = $('input[name="loginId"]').val();
 	var sub = '';
@@ -205,7 +205,7 @@
 			dataType: 'JSON',
 			success: function(response){
 				if(response.success){
-	    			submitPost();
+					updatePost();
 				}
 			},error: function(e){
 				console.log('순위 수정 중 에러 => ', e);

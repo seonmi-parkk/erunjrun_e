@@ -4,6 +4,7 @@
 	var crew_idx = $('input[name="crew_idx"]').val();
 	var crewone = [];
 	var leaderId = $('input[name="leaderId"]').val();
+	var firstPage = 1;
 	
 	$(document).ready(function(){
 		if(leaderId !== loginId){
@@ -193,8 +194,10 @@
 	            dataType: 'JSON',
 	            success: function(response){
 	                if(response){
-	                    memberResultUpdate(id, nickname, value);
+	                	console.log('여기는');
+	                    memberResultUpdate(id, nickname, code_name);
 	                } else {
+	                	console.log('여기인가');
 	                	removeAlert();
 	                    layerPopup('크루원이 가득 찼습니다.', '확인', false, applBtn2Act, applBtn2Act);
 	                }
@@ -204,11 +207,11 @@
 	            }
 	        });
 	    } else {
-	        memberResultUpdate(id, nickname, value);
+	        memberResultUpdate(id, nickname, code_name);
 	    }
 	}
 	
-	function memberResultUpdate(id, nickname, value){
+	function memberResultUpdate(id, nickname, code_name){
 	    $.ajax({
 	        type: 'POST',
 	        url: '/crew/applicationWrite',
@@ -223,8 +226,8 @@
 	            
 	            if(response.success){
 	                removeAlert();
+	                crewMemberList();
 	                layerPopup(response.msg + ' 완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
-	                pageCall(firstPage);
 	            } else {
 	                removeAlert();
 	                layerPopup(response.msg + ' 미완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
