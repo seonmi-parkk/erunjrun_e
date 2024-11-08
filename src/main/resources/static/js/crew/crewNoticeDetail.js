@@ -24,7 +24,7 @@
 			
 			var result = response.result;
 			crew_idx = result.crew_idx;
-			var nickName = response.nickname
+			//var nickName = response.nickname
 			
 			$('#subject').html(result.subject);
 			
