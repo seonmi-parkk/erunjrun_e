@@ -367,6 +367,44 @@ $(document).ready(function() {
         });
     }
 
+ // 친구 이름 클릭 시, 상대방의 프로필을 여는 함수
+    $(document).on('click', '.user', function() {
+        var toUserId = $(this).closest('.card').data('id'); // data-id로 상대방의 ID 가져오기
+        console.log('toUserId:', toUserId);
+        openProfile(toUserId); // 클릭한 친구의 프로필 열기
+    });
+
+    // 운동프로필 레이어 팝업 열기
+    function openProfile(toUserId) {
+        var modal = document.getElementById("profilePopup");
+        var PopupBody = document.getElementById("PopupBody");
+
+        // AJAX 요청
+        $.ajax({
+            url: "/mate/" + toUserId, // 상대방 ID에 해당하는 프로필 정보 요청
+            method: "GET",
+            success: function(response) {
+                PopupBody.innerHTML = response; // 응답을 모달에 넣기
+                modal.style.display = "block"; // 모달 열기
+
+                // JS 파일을 동적으로 로드 (필요시 추가적인 스크립트 로딩)
+                var script = document.createElement('script');
+                script.src = '/resources/js/profileDetail.js'; // 프로필 디테일 JS 파일 로드
+                document.body.appendChild(script);
+            },
+            error: function(error) {
+                console.error("프로필 정보를 불러오는 중 오류 발생:", error);
+                alert("프로필을 불러오는 데 문제가 발생했습니다.");
+            }
+        });
+    }
+
+    // 팝업 닫기
+    $(document).on('click', '.close', function() {
+        document.getElementById("profilePopup").style.display = "none";
+    });
+
+    
     // 페이지네이션 설정
     function setupPagination(totalPages, currentPage) {
         totalPages = parseInt(totalPages, 10) || 0; // NaN일 경우 0으로 처리

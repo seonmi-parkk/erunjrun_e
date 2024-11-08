@@ -321,7 +321,7 @@ function drawList(list) {
                         contentDescription = '좋아요 +2 ';
                         break;
                     case 'P104':
-                        contentDescription = '아이콘 구매 - 100';
+                        contentDescription = '아이콘 구매 - ';
                         break;
                     default:
                         contentDescription = view.code_name; // 기본적으로 코드 그대로 출력

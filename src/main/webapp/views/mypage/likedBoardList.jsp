@@ -156,10 +156,10 @@ h3 {
 				<!-- 프로필 이미지 -->
 				<c:choose>
 					<c:when test="${not empty profile.image}">
-						<img class="profile-img1" src="/photo/${profile.image}" alt="프로필 이미지" />
+						<img class="profile-img1" src="/photo/${profile.image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="profile-img1" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -167,10 +167,10 @@ h3 {
 				<!-- 아이콘 이미지 -->
 				<c:choose>
 					<c:when test="${not empty member.icon_image}">
-						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -207,7 +207,6 @@ h3 {
 					<tr>
 						<th>글번호</th>
 						<th>제목</th>
-						<th>글쓴이</th>
 						<th>작성일자</th>
 					</tr>
 				</thead>
@@ -216,7 +215,7 @@ h3 {
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="4" class="pagination-container">
+						<td colspan="3" class="pagination-container">
 								<nav aria-label="Page navigation">
 									<ul class="pagination" id="pagination"></ul>
 								</nav>
@@ -274,7 +273,7 @@ h3 {
 
         // 데이터가 없을 경우 빈 행 추가
         if (list.length === 0) {
-            content += '<tr><td colspan="4" class="text-center">좋아요한 게시글이 없습니다.</td></tr>';
+            content += '<tr><td colspan="3" class="text-center">좋아요한 게시글이 없습니다.</td></tr>';
         } else {
             list.forEach(function(view) {
                 if (view) {
@@ -297,7 +296,6 @@ h3 {
                     }else{
                     	content += '<td><a href="/freeBoardDetail/'+ view.board_idx + '">' + view.subject + '</a></td>'; // 제목에 링크 추가
                     }
-                    content += '<td>' + view.id + '</td>'; // 글쓴이
                     content += '<td>' + formattedDate + '</td>'; // 작성일자
                     content += '</tr>';
                 } else {

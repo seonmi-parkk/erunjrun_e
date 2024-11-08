@@ -236,10 +236,10 @@ h3 {
 				<!-- 프로필 이미지 -->
 				<c:choose>
 					<c:when test="${not empty profile.image}">
-						<img class="profile-img1" src="/photo/${profile.image}" alt="프로필 이미지" />
+						<img class="profile-img1" src="/photo/${profile.image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="profile-img1" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -247,10 +247,10 @@ h3 {
 				<!-- 아이콘 이미지 -->
 				<c:choose>
 					<c:when test="${not empty member.icon_image}">
-						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -336,11 +336,11 @@ h3 {
                             console.error("Invalid date format for chat.message_date:", chat.message_date);
                             formattedDate = "날짜 형식 오류";
                         }
-                        var chatCard = '<div class="card" data-id="' + chat.chat_idx + '" onclick="openCrewChatWindow(' + chat.crew_idx + ',' + chat.chat_idx + ')">'
-                            + '<img src="resources/img/common/profile.png" alt="상대방 이미지" class="profile-img" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 480px;"/>'
-                            + '<p style="margin: -30px; margin-right: 100px;">' + chat.other_id + '님과의 대화</p>'
-                            + '<p style="margin: 7px; color: #777; margin-right: -330px;">발송일: ' + formattedDate + '</p>'
-                            + '</div>';
+                        var chatCard = '<div class="card" data-id="' + chat.chat_idx + '" onclick="openLeaderChat(' + chat.chat_idx + ')">'
+                        + '<img src="resources/img/common/profile.png" alt="상대방 이미지" class="profile-img" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 480px;"/>'
+                        + '<p style="margin: -30px; margin-right: 100px;">' + (chat.other_id || '상대방 이름 없음') + '님과의 대화</p>'
+                        + '<p style="margin: 7px; color: #777; margin-right: -330px;">발송일: ' + formattedDate + '</p>'
+                        + '</div>';
                         $('.chat-list').append(chatCard);
                     });
                     $('.no-chat-message').hide(); // 데이터가 있을 경우 메시지 숨김
@@ -374,6 +374,12 @@ function setupPagination(totalPages, currentPage) {
     });
 }
 
+function openLeaderChat(roomNum){
+	 // 새 창의 URL
+   var url = '/crewLdchat/open/'+roomNum;
+   chatWindowSet(url);
+}
+
 function openCrewLeaderChat(){
 	$.ajax({
 		type:'GET',
@@ -389,6 +395,8 @@ function openCrewLeaderChat(){
 		}
 	});
 }
+
+
 //채팅방 나가기
 $('.exit').on('click',function(){
    layerPopup('채팅방을 나가시겠습니까?','나가기','취소',exitBtn1Act,exitBtn2Act);

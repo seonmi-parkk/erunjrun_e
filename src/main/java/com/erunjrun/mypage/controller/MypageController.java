@@ -296,6 +296,7 @@ public class MypageController {
 		if (id != null) {
 			// 이미지 파일 처리
 			if (imageFile != null && !imageFile.isEmpty()) {
+
 				String originalFileName = imageFile.getOriginalFilename();
 				String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
 

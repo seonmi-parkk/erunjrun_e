@@ -67,7 +67,9 @@ aside {
     width: 115px; /* 이미지 너비 조정 */
     height: 115px; /* 이미지 높이 조정 */
     margin-right: 20px; /* 이미지와 텍스트 간의 간격 */
-    margin-top: -9px;
+    margin-top: 0px;
+   	margin-bottom: 10px;
+    
 }
 
 .crew-details {
@@ -233,6 +235,9 @@ h3 {
 	background-color: #f0f0f0;
 }
 
+.crew-details p {
+    font-size: 15px;
+}
 </style>
 </head>
 <body>
@@ -322,7 +327,7 @@ $(document).ready(function() {
                     $.each(data.list, function(index, crew) {
                         // 크루 카드 HTML 구조 수정
 							var crewCard = '<div class="card" onclick="location.href=\'/crewDetail/' + crew.crew_idx + '\'">' + // 상세 페이지로 이동
-                            '<img src="' + (crew.crew_image || 'default-image.png') + '" class="crew-image" alt="크루 이미지" />' + // 크루 이미지 추가
+                            '<img src="' + (crew.crew_image || '/resources/img/crew/crewImg300.png') + '" class="crew-image" alt="크루 이미지" />' + // 크루 이미지 추가
                             '<div class="crew-details">' +
                             '<p class="title2">' + (crew.crew_name || '크루 이름 없음') + '</p>' +
                             '<p>총 인원: ' + (crew.member || '정보 없음') + '명</p>' +
