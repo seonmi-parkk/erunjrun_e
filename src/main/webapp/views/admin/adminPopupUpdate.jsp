@@ -137,7 +137,7 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">제목</p>
-			<input type="text" name="subject" id="text" value="${info.subject}"/>
+			<input type="text" name="subject" id="text" value="${info.subject}" required="required"/>
 		</div>
 		
 		<input type="text" name="popup_idx" id="text" value="${info.popup_idx}" hidden=""/>
@@ -195,9 +195,9 @@
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">위치</p>
 			<p class="title2" id="text"> X: </p>
-			<input type="text" name="x" id="short" value="${info.x}"/>
+			<input type="text" name="x" id="short" value="${info.x}"required="required"/>
 			<p class="title2" id="text"> Y: </p>
-			<input type="text" name="y" id="short" value="${info.y}"/>
+			<input type="text" name="y" id="short" value="${info.y}"required="required"/>
 		</div>
 		
 		
@@ -205,24 +205,24 @@
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">크기</p>
 			<p class="title2" id="text"> 가로: </p>
-			<input type="text" name="width" id="short" value="${info.width}"/>
+			<input type="text" name="width" id="short" value="${info.width}"required="required"/>
 			<p class="title2" id="text"> 세로: </p>
-			<input type="text" name="height" id="short" value="${info.height}"/>
+			<input type="text" name="height" id="short" value="${info.height}"required="required"/>
 		</div>
 		
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">기간</p>
-			<input type="date" name="start_date" id="start_date" value="${info.start_date}"/>
+			<input type="date" name="start_date" id="start_date" value="${info.start_date}" required="required"/>
 			<p class="title2" id=""> ~ </p>
-			<input type="date" name="end_date" id="end_date" value="${info.end_date}"/>
-		</div>
+			<input type="date" name="end_date" id="end_date" value="${info.end_date}"required= "required"/>
+		</div> 
 		
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">내용</p>
-			<textarea name="content" id="content" >${info.content}</textarea>
+			<textarea name="content" id="content" required="required">${info.content}</textarea>
 		</div>
 		
 

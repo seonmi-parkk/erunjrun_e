@@ -332,7 +332,7 @@
              style="position:fixed; top:${popup.y}px; left:${popup.x}px; 
                     width:${popup.width}px; height:${popup.height}px; 
                     z-index:${popup.priority}; background-color:white;">
-             <img alt="${file.img_ori}" src="/photo/${file.img_new}">	
+             <img alt="${file.img_ori}" src="photo/${file.img_new}">	
              <h1>${popup.subject}</h1>       
             <p>${popup.content}</p>
             <button class="btn01-m" onclick="closePopup(${popup.popup_idx})">오늘 하루 그만 보기</button>

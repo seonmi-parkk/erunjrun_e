@@ -12,11 +12,11 @@ public interface IconDAO {
 
 	public List<IconDTO> iconbuylist(int icon_idx,int limit, int offset);
 
-	public int iconbuycount(int cnt_);
+	public int iconbuycount(int cnt_, String icon_idx);
 
 	public List<IconDTO> iconchart(int limit, int offset, int startAge, int endAge);
 
-	public int iconchartcount(int cnt_);
+	public int iconchartcount(int cnt_, int startAge, int endAge);
 
 	public List<IconDTO> getIconList(String userId);
 

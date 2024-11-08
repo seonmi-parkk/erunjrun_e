@@ -177,7 +177,21 @@
 
 
 <script>
+//'처리완료' 버튼 클릭 시 실행
+document.querySelector('button[name="code_name"][value="D103"]').addEventListener('click', function() {
+    var contentTextarea = document.getElementById('content');
+    contentTextarea.setAttribute('required', true);  // '처리완료' 클릭 시 content 필수 입력으로 설정
+});
 
+// '처리중', '취소' 버튼 클릭 시 실행
+document.querySelectorAll('button[name="code_name"]').forEach(function(button) {
+    button.addEventListener('click', function(event) {
+        if (button.value !== 'D103') {  // '처리완료' 버튼이 아닌 경우
+            var contentTextarea = document.getElementById('content');
+            contentTextarea.removeAttribute('required');  // '처리중' 또는 '취소' 버튼 클릭 시 content 필수 입력을 해제
+        }
+    });
+});
     
 </script>
 <script src="/resources/js/common.js" type="text/javascript"></script>

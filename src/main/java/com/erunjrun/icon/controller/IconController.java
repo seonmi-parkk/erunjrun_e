@@ -157,7 +157,7 @@ public class IconController {
           int endAge = (agegroup != null && !agegroup.isEmpty()) ? startAge + 9 : 100;
            int limit = cnt_;
            int offset = (page_ - 1) * cnt_;
-           int totalPages = iconService.iconchartcount(cnt_);
+           int totalPages = iconService.iconchartcount(cnt_,startAge,endAge);
            logger.info("쿼리 파라미터: startAge={}, endAge={}, limit={}, offset={}", startAge, endAge, limit, offset);
          Map<String,Object> result = new HashMap<String, Object>();
          List<IconDTO> list = iconService.iconchart(limit,offset,startAge,endAge);
@@ -195,7 +195,7 @@ public class IconController {
         int icon_idx_ =Integer.parseInt(icon_idx);
         int limit = cnt_;
         int offset = (page_ - 1) * cnt_;
-        int totalPages = iconService.iconbuycount(cnt_);
+        int totalPages = iconService.iconbuycount(cnt_,icon_idx);
         
         
         Map<String,Object> result = new HashMap<String, Object>();

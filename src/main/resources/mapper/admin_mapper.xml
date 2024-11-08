@@ -6,38 +6,37 @@
      
      <select id="getAllowedIp" resultType="String">
       SELECT ip FROM admin WHERE
-      admin_id = #{id}
+      admin_id = #{admin_id}
    </select>
 
    <select id="adminLogin" parameterType="map" resultType="boolean">
       SELECT
       COUNT(admin_id) > 0
       FROM admin
-      WHERE admin_id = #{id} AND admin_pw = #{pw}
+      WHERE admin_id = #{admin_id} AND admin_pw = #{pw}
    </select>
 
    <select id="getAuthority" parameterType="String"
       resultType="String">
       SELECT is_admin
       FROM admin
-      WHERE admin_id = #{id}
+      WHERE admin_id = #{admin_id}
    </select> 
      
      <insert id="adminJoin" parameterType="String">
       INSERT INTO admin
       (admin_id, admin_pw, name, ip)
-      VALUES (#{id}, #{pw}, #{name}, #{ip})
+      VALUES (#{admin_id}, #{pw}, #{name}, #{ip})
    </insert>
    
    <select id="SgetAllowedIp" resultType="String">
       SELECT ip FROM admin WHERE
-      admin_id = #{id}
+      admin_id = #{admin_id}
    </select>
 	
 	 <select id="adminidoverlay" resultType="int">
            SELECT COUNT(admin_id) FROM admin WHERE admin_id = #{param1}
      </select>
-	
 	
 	     
 
@@ -71,6 +70,10 @@
        </where>
    </select>
    
+   
+	<update id="adminyn" parameterType="String">
+      update admin set is_admin = 'n' where admin_id = #{admin_id}
+   </update>
    
    
    
