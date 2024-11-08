@@ -183,6 +183,10 @@ public class MateService {
 	public boolean mateOn(String userId) {
 		return mateDAO.mateOn(userId) > 0 ? true : false;
 	}
+
+	public boolean hasProfile(String fromUserId) {
+		return mateDAO.hasProfile(fromUserId) > 0 ? true : false;
+	}
 	
 //	public void getPos(String fromUserId) {
 //		logger.info("fromUserId"+fromUserId);

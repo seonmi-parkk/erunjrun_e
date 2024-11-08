@@ -107,6 +107,7 @@
 		border-radius: 0 10px 10px 0;
 		background: #fbfbfb;
 	    box-shadow: rgba(0, 0, 0, 0.12) 4px 4px 13px -4px;
+	    opacity: 1;
 	}
  	.list-area .minimize.close + .list{
 		width: 0;
@@ -238,6 +239,7 @@
 <script src="/resources/js/common.js" type="text/javascript"></script>
 <script src="/resources/js/layerPopup.js"></script>
 <script>
+
 	
 	// 리스트 태그 생성			   
 	function closeList(list, loginYn){

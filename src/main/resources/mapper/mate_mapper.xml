@@ -63,6 +63,10 @@
 		DELETE FROM block_member WHERE id = #{toUserId} AND unlike_id = #{fromUserId}
 	</insert>
 	
+	<select id="hasProfile" resultType="int">
+		SELECT count(id) FROM profile WHERE id = #{fromUserId}
+	</select>
+	
 	<select id="getUserPos" resultType="com.erunjrun.mate.dto.MateProfileDTO">
 		SELECT shortsido, dong, latitude, longitude FROM profile WHERE id = #{fromUserId} 
 	</select>
