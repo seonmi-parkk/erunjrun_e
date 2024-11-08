@@ -265,6 +265,8 @@
 					msg.addEventListener("keypress", function(event) {
 			            if (event.key === "Enter") {
 			                // 엔터 키가 눌리면 실행할 코드
+			                // 내용이 있으면
+			                
 			                layerPopup( "차단해제 하시겠습니까?","차단해제","취소",unblockBtnAct,exitBtn2Act);
 			            }
 			        });
