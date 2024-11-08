@@ -139,7 +139,7 @@ public class MateController {
 		
 		//mateService.getPos(fromUserId);
 
-		logger.info("fromUserId", fromUserId);
+		logger.info("fromUserId :"+ fromUserId);
 		MateProfileDTO userPos = null;
 		if(fromUserId == null) {
 			// 로그인 안한 경우 임의의 주소 설정 (check!! 나중에 바꾸기 -> 해당 위치 가져오기?)
