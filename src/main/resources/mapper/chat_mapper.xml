@@ -167,6 +167,13 @@
 		) AS gg
 		JOIN member AS m ON gg.id = m.id
 		LEFT JOIN profile p ON gg.id = p.id
+		WHERE (
+			SELECT create_date 
+	       		FROM crew_chat_content 
+	       		WHERE chat_idx = gg.chat_idx 
+	      		 ORDER BY content_idx DESC LIMIT 1
+      		 ) 
+	        IS NOT NULL
 		ORDER BY create_date DESC
 
 	</select>

@@ -47,6 +47,8 @@ public interface MateDAO {
 
 	int mateOn(String userId);
 
+	int hasProfile(String fromUserId);
+
 
 
 }

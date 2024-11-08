@@ -137,6 +137,20 @@ public class MateController {
 	public String mateList(HttpSession session, Model model) {
 		String fromUserId = (String) session.getAttribute("loginId");
 		
+		// 운동프로필 작성하지 않은 경우 튕기도록 처리
+		if(fromUserId != null) {
+			logger.info("여기 실행1 ??????");
+			boolean hasProfile = mateService.hasProfile(fromUserId);
+			if(!hasProfile) {				
+				logger.info("여기 실행2 ??????");
+				model.addAttribute("msg", "운동프로필을 작성한 후 이용 가능합니다.");
+				return "mypage/createExerciseProfile";
+			}
+		}
+		
+		
+		
+		
 		//mateService.getPos(fromUserId);
 
 		logger.info("fromUserId", fromUserId);
