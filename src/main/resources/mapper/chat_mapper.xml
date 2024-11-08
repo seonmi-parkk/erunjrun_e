@@ -79,7 +79,7 @@
 	</insert>
 	
 	<insert id="sendMessage" parameterType="map">
-		INSERT INTO  chat_content (chat_idx,content,sender,recipient) 
+		INSERT INTO chat_content (chat_idx,content,sender,recipient) 
 			VALUES (#{chatIdx},#{message},#{baseUser},#{otherUser})
 	</insert>
 	

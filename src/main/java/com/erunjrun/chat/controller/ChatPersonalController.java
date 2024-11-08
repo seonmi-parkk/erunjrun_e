@@ -79,7 +79,7 @@ public class ChatPersonalController {
 		        int idx = Integer.parseInt(param.get("chatIdx").toString());
 		        String id = (String) param.get("otherUser");
 		        String from_id = param.get("baseUser").toString();
-		        chatPersonalService.checkBlocked(from_id,id);
+		        //chatPersonalService.checkBlocked(from_id,id);
 		        
 		        alarm_controller.personalChat(idx, id, from_id);
 		    } catch (NullPointerException | NumberFormatException e) {
