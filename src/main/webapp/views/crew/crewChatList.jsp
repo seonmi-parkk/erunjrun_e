@@ -143,6 +143,8 @@
 			</th>
 		</tr>
 	</table>
+	<br/>
+	<button class="btn02-m" onclick="location.href='/crewManagerList/${crew_idx}'">목록</button>
 	
 	<!-- 모달 -->
 		<div id="profilePopup" class="modal">
