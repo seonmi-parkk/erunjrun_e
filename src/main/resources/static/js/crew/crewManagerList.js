@@ -416,6 +416,7 @@
 			if(idx<5){
 
 				var createDateTime = item.create_date;
+				console.log("createDateTime : ", createDateTime);
 				var createDate = createDateTime.split('T')[0];
 				var createDateList = createDate.split('-');
 				var createDateForm = createDateList[0]+'. '+createDateList[1]+'. '+createDateList[2];

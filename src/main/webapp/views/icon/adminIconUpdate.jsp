@@ -153,12 +153,12 @@
 			<div class="input-container">
 				<p class="title2" id="dot">•</p>
 				<p class="title2" id="text">아이콘명</p>
-				<input type="text" name="icon_name" id="text" value="${iconDto.icon_name}"/>
+				<input type="text" name="icon_name" id="text" value="${iconDto.icon_name}" required/>
 			</div>
 			<div class="input-container">
 				<p class="title2" id="dot">•</p>
 				<p class="title2" id="text">가격</p>
-				<input type="text" name="cost" id="text" value="${iconDto.cost}"/>P
+				<input type="text" name="cost" id="text" value="${iconDto.cost}" required/>P
 			</div>
 			<!-- <input type="text" name="code_name" id="text" value="PP100" hidden=""/> -->
 			
@@ -167,7 +167,7 @@
 			<p class="title2" id="text">이미지</p>
 			<div id="img_miri"></div>
 			<input type="hidden" name="bfImage" value="${iconDto.image}"/>	
-			<input type="file" name="file" onchange="readFile(this)"/>	
+			<input type="file" name="file" onchange="readFile(this)" required/>	
 			</div>
 			
 			<div class="input-container">

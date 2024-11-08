@@ -294,4 +294,10 @@ input[readonly] {
 	<jsp:include page="../footer.jsp" />
 
 </body>
+<script>
+	var msg = '${msg}';
+	if (msg != '') {
+	   alert(msg);
+	}
+</script>
 </html>
