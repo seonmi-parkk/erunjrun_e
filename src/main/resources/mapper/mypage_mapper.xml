@@ -471,13 +471,14 @@
 	</select>
 
 	<select id="likedBoardList" resultType="map">
-		SELECT l.board_idx,
+		SELECT
+		l.board_idx,
 		l.code_name,
-		b.create_date, b.subject, b.id
+		b.create_date,
+		b.subject,
+		b.id AS board_writer_id
 		FROM likes l
-		JOIN board b ON
-		l.board_idx =
-		b.board_idx
+		JOIN board b ON l.board_idx = b.board_idx
 		WHERE l.id = #{id}
 		ORDER BY l.board_idx DESC
 		LIMIT #{limit}
@@ -504,15 +505,18 @@
 		cl.use_yn,
 		cc.start_date
 		FROM chat_link cl
-		JOIN chat c ON cl.chat_idx = c.chat_idx
+		JOIN chat c ON
+		cl.chat_idx = c.chat_idx
 		JOIN chat_link u1 ON u1.chat_idx = cl.chat_idx
 		JOIN chat_link u2 ON u2.chat_idx = cl.chat_idx
-		LEFT JOIN chat_content cc ON cc.chat_idx = cl.chat_idx
+		LEFT JOIN chat_content
+		cc ON cc.chat_idx = cl.chat_idx
 		WHERE cl.id = #{id}
 		AND u1.id != #{id}
 		AND cl.use_yn = 'N'
 		ORDER BY cc.start_date DESC
-		LIMIT #{limit} OFFSET #{offset}
+		LIMIT #{limit} OFFSET
+		#{offset}
 	</select>
 
 	<select id="countMessage" resultType="int">
@@ -525,19 +529,19 @@
 
 	<select id="crewMasterMessageList" resultType="map">
 		SELECT
-		ccl.chat_idx,
+		ccl.chat_idx, cc.crew_idx,
 		CASE
 		WHEN ccl.id = u1.id THEN u2.id
 		ELSE u1.id
 		END AS
 		other_id,
 		MAX(ccc.create_date) AS message_date,
-		cc.crew_idx,
 		ccl.use_yn
 		FROM
 		crew_chat_link ccl
 		JOIN crew_chat cc ON ccl.chat_idx = cc.chat_idx
-		JOIN crew_chat_content ccc ON ccl.chat_idx = ccc.chat_idx
+		JOIN
+		crew_chat_content ccc ON ccl.chat_idx = ccc.chat_idx
 		JOIN
 		crew_chat_link u1 ON u1.chat_idx = cc.chat_idx
 		JOIN crew_chat_link u2
@@ -665,7 +669,8 @@
 		FROM
 		interest_member im
 		JOIN
-		member m ON im.unlike_id = m.id
+		member m ON im.id =
+		m.id
 		LEFT JOIN
 		profile p ON p.id = m.id
 		WHERE
@@ -697,7 +702,7 @@
 		block_member bm
 		JOIN
 		member m ON
-		bm.unlike_id = m.id
+		bm.id = m.id
 		LEFT JOIN
 		profile p ON p.id = m.id
 		WHERE

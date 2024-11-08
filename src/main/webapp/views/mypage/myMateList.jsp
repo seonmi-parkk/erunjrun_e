@@ -232,10 +232,10 @@ background-color: #d3d3d3; /* 연한 회색 */
 				<!-- 프로필 이미지 -->
 				<c:choose>
 					<c:when test="${not empty profile.image}">
-						<img class="profile-img1" src="/photo/${profile.image}" alt="프로필 이미지" />
+						<img class="profile-img1" src="/photo/${profile.image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="profile-img1" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -243,10 +243,10 @@ background-color: #d3d3d3; /* 연한 회색 */
 				<!-- 아이콘 이미지 -->
 				<c:choose>
 					<c:when test="${not empty member.icon_image}">
-						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -361,7 +361,7 @@ background-color: #d3d3d3; /* 연한 회색 */
                                     friendName = friend.id; // 상대방의 ID
                                 }
 
-                                var friendCard = '<div class="card" data-id="' + friend.mate_idx + '">' +
+                                var friendCard = '<div class="card" data-id="' + friend.id + '">' +
                                     '<input type="hidden" name="toUserId" value="' + friend.id + '" />' +
                                     '<img class="friend-image" src="' + imageSrc + '" alt="친구 이미지" />' +
                                     '<p class="friend-name user">' + (friendName ? friendName : '이름 없음') + '</p>' +

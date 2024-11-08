@@ -235,6 +235,14 @@ h3 {
     align-items: center; /* 가운데 정렬 */
 }
 
+#profilePopup {
+            width: fit-content;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 996;
+}
+
 </style>
 </head>
 <body>
@@ -245,10 +253,10 @@ h3 {
 				<!-- 프로필 이미지 -->
 				<c:choose>
 					<c:when test="${not empty profile.image}">
-						<img class="profile-img1" src="/photo/${profile.image}" alt="프로필 이미지" />
+						<img class="profile-img1" src="/photo/${profile.image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="profile-img1" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -256,10 +264,10 @@ h3 {
 				<!-- 아이콘 이미지 -->
 				<c:choose>
 					<c:when test="${not empty member.icon_image}">
-						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -295,6 +303,15 @@ h3 {
             </div>
         </div>
     </div>
+    <!-- 모달 구조 -->
+	<div id="profilePopup" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<div id="PopupBody">
+				<!-- 프로필 내용이 여기에 동적으로 추가됩니다 -->
+			</div>
+		</div>
+	</div>
     <jsp:include page="../footer.jsp" />
 </body>
 
@@ -347,6 +364,7 @@ $(document).ready(function() {
 
                             var memberCard = 
                                 '<div class="card" data-id="' + member.id + '">' +
+                                '<input type="hidden" name="toUserId" value="' + member.id + '" />' +
                                     '<img src="/photo/ + profile.image" alt="' + member.nickname + ' 이미지" class="friend-image" />' +
                                     '<div class="friend-details">' +
                                         '<p class="friend-name">' + member.nickname + '</p>' +
@@ -368,6 +386,44 @@ $(document).ready(function() {
         });
     }
 
+ // 친구 이름 클릭 시, 상대방의 프로필을 여는 함수
+    $(document).on('click', '.user', function() {
+        var toUserId = $(this).closest('.card').data('id'); // data-id로 상대방의 ID 가져오기
+        console.log('toUserId:', toUserId);
+        openProfile(toUserId); // 클릭한 친구의 프로필 열기
+    });
+
+    // 운동프로필 레이어 팝업 열기
+    function openProfile(toUserId) {
+        var modal = document.getElementById("profilePopup");
+        var PopupBody = document.getElementById("PopupBody");
+
+        // AJAX 요청
+        $.ajax({
+            url: "/mate/" + toUserId, // 상대방 ID에 해당하는 프로필 정보 요청
+            method: "GET",
+            success: function(response) {
+                PopupBody.innerHTML = response; // 응답을 모달에 넣기
+                modal.style.display = "block"; // 모달 열기
+
+                // JS 파일을 동적으로 로드 (필요시 추가적인 스크립트 로딩)
+                var script = document.createElement('script');
+                script.src = '/resources/js/profileDetail.js'; // 프로필 디테일 JS 파일 로드
+                document.body.appendChild(script);
+            },
+            error: function(error) {
+                console.error("프로필 정보를 불러오는 중 오류 발생:", error);
+                alert("프로필을 불러오는 데 문제가 발생했습니다.");
+            }
+        });
+    }
+
+    // 팝업 닫기
+    $(document).on('click', '.close', function() {
+        document.getElementById("profilePopup").style.display = "none";
+    });
+
+    
     // 페이지네이션 설정
     function setupPagination(totalPages, currentPage) {
         totalPages = parseInt(totalPages, 10) || 0; // NaN일 경우 0으로 처리

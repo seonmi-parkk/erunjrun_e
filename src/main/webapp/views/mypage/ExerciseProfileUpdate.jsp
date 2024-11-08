@@ -12,7 +12,6 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=26c56d5b3e89329f848d1188b85f2e3d&libraries=services&autoload=false"></script>
-
 <style>
 body {
 	font-family: Arial, sans-serif;
@@ -237,7 +236,7 @@ button:hover {
 .edit-icon {
 	position: relative;
 	bottom: -30px; /* 하단에서 5px */
-	right: 175px; /* 오른쪽에서 5px */
+	right: 130px; /* 오른쪽에서 5px */
 	width: 30px;
 	height: 30px;
 	background-color: #ff7f50;
@@ -330,29 +329,16 @@ button:hover {
 				<input type="hidden" name="id" value="${member.id}" />
 				<div class="image-info">
 					<div class="image">
-						<!-- 프로필 이미지 -->
-						<c:choose>
-							<c:when test="${not empty profile.image}">
-								<img class="profile-img2" src="/photo/${profile.image}"
-									alt="" />
-							</c:when>
-							<c:otherwise>
-								<img class="profile-img2" src="resources/img/common/profile.png"
-									alt="" />
-							</c:otherwise>
-						</c:choose>
+						<!-- 프로필 이미지 미리보기 -->
+						<img id="previewImage" class="profile-img2"
+							src="/photo/${profile.image}" alt="미리보기 이미지" />
 					</div>
 					<div class="icon">
-						<!-- 아이콘 이미지 -->
 						<c:choose>
 							<c:when test="${not empty member.icon_image}">
 								<img class="icon-image2"
 									src="/resources/img/icon/${member.icon_image}" alt="" />
 							</c:when>
-							<c:otherwise>
-								<img class="icon-image2"
-									src="resources/img/icon/default-icon.png" alt="" />
-							</c:otherwise>
 						</c:choose>
 					</div>
 					<div class="info">

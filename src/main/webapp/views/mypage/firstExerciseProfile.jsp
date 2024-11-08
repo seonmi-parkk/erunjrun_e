@@ -331,6 +331,10 @@ button:hover {
 					<div class="info">
 						<p class="title2" id="name">${member.nickname}</p>
 					</div>
+					<div class="image-preview">
+						<img id="previewImage" src="" alt="미리보기 이미지" class="profile-img2"
+							style="display: none;" />
+					</div>
 					<span id="changeImage" class="edit-icon" style="cursor: pointer;">✎</span>
 					<input type="file" name="imageFile" id="imageFile"
 						style="display: none;" />
