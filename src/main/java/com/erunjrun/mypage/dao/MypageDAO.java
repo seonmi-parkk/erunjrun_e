@@ -120,4 +120,9 @@ public interface MypageDAO {
 
 	String getSelectedIcon(String id);
 
+	boolean myMateDelete(String mateIdx);
+
+	Map<String, String> getMateIdsByIdx(String mateIdx);
+	
+
 }

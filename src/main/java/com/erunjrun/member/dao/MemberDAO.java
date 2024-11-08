@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.erunjrun.admin.dto.RightDTO;
 import com.erunjrun.member.dto.MemberDTO;
 
 @Mapper
@@ -25,5 +26,7 @@ public interface MemberDAO {
 
 	MemberDTO findPw(MemberDTO dto);
 
-	void pwUpdate(String id, String tempPw);	
+	void pwUpdate(String id, String tempPw);
+
+	RightDTO isBan(String id);	
 }

@@ -19,18 +19,22 @@
 		WHERE
 		id = #{id} AND pw = #{pw}
 	</select>
-	
+
+	<select id="isBan" resultType="com.erunjrun.admin.dto.RightDTO">
+		select * from ban where id = #{param1} and is_right = 'Y'
+	</select>
+
 	<select id="findSessionId" parameterType="String"
 		resultType="com.erunjrun.member.dto.MemberDTO">
 		SELECT
 		member.id,
 		member.use_yn,
-		profile.image AS image, 
-		member.icon_image 
+		profile.image AS image,
+		member.icon_image
 		FROM
 		member
 		LEFT JOIN
-		profile ON member.id = profile.id 
+		profile ON member.id = profile.id
 		WHERE
 		member.id = #{id} LIMIT 1;
 	</select>

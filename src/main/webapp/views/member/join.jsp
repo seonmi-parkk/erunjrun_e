@@ -176,147 +176,238 @@ button:hover {
 </body>
 
 <script>
-	var msg = '${msg}';
-	if (msg != '') {
-		alert(msg);
-	}
-	
-        // ID 중복 체크
-        $('#idCheck').click(function() {
-            var id = $('input[name="id"]').val();
-            $.ajax({
-                type: 'get',
-                url: 'idOverlay',
-                data: { 'id': id },
-                dataType: 'JSON',
-                success: function(data) {
-                    if (data.overlay > 0) {
-                        $('#idResult').html(id + ' 는 이미 사용중 입니다.').css('color', 'red');
-                    } else {
-                        $('#idResult').html(id + ' 는 사용 가능합니다.').css('color', 'green');
-                    }
-                },
-                error: function(e) {
-                    console.log(e);
-                }
-            });
-        });
+    var msg = '${msg}';
+    if (msg != '') {
+        alert(msg);
+    }
 
-        // 닉네임 중복 체크
-        $('#nickNameCheck').click(function() {
-            var nickName = $('input[name="nickName"]').val();
-            $.ajax({
-                type: 'get',
-                url: 'nickNameOverlay',
-                data: { 'nickName': nickName },
-                dataType: 'JSON',
-                success: function(data) {
-                    if (data.overlay > 0) {
-                        $('#nickNameResult').html(nickName + ' 는 이미 사용중 입니다.').css('color', 'red');
-                    } else {
-                        $('#nickNameResult').html(nickName + ' 는 사용 가능합니다.').css('color', 'green');
-                    }
-                },
-                error: function(e) {
-                    console.log(e);
-                }
-            });
-        });
+    // 중복 체크 상태 변수
+    var isIdChecked = false;
+    var isNickNameChecked = false;
+    var isEmailChecked = false;
 
-        // 이메일 중복 체크
-        $('#emailCheck').click(function() {
-            var email = $('input[name="email"]').val();
-            $.ajax({
-                type: 'get',
-                url: 'emailOverlay',
-                data: { 'email': email },
-                dataType: 'JSON',
-                success: function(data) {
-                    if (data.overlay > 0) {
-                        $('#emailResult').html(email + ' 는 이미 사용중 입니다.').css('color', 'red');
-                    } else {
-                        $('#emailResult').html(email + ' 는 사용 가능합니다.').css('color', 'green');
-                    }
-                },
-                error: function(e) {
-                    console.log(e);
-                }
-            });
-        });
+    // ID 중복 체크
+    $('#idCheck').click(function() {
+        var id = $('input[name="id"]').val().trim();
         
-     // 유효성 검사
-		$('#joinForm').on('submit', function(event) {
-			var valid = true;
-			var id = $('input[name="id"]').val().trim();
-			var pw = $('input[name="pw"]').val().trim();
-			var pwConfirm = $('input[name="pwConfirm"]').val().trim();
-			var nickName = $('input[name="nickName"]').val().trim();
-			var address = $('input[name="address"]').val().trim();
-			var birth = $('input[name="birth"]').val();
-			var email = $('input[name="email"]').val().trim();
-			var phoneNumber = $('input[name="phoneNumber"]').val().trim();
+        // 입력값이 비어있는지 체크
+        if (id === '') {
+            alert('아이디를 먼저 입력해주세요.');
+            return;
+        }
 
-			// id유효성 검사 
-			var idPattern = /^[a-zA-Z0-9]+$/;
-			if (id.length < 4 || id.length > 20 || !idPattern.test(id)) {
-    			if (id.length < 4 || id.length > 20) {
-        			alert('ID는 4자리 이상 20자리 이하이어야 합니다.');
-   				}
-    			if (!idPattern.test(id)) {
-        			alert('ID는 영어와 숫자만 포함할 수 있습니다.');
-    			}
-    			valid = false;
-			}
+        // 한글과 특수문자를 모두 포함한 정규식
+        var idPattern = /[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7A3]/;  // 한글 자모와 완성형 한글
+        var specialCharPattern = /[^a-zA-Z0-9]/; // 특수문자 포함 여부 체크 (영문, 숫자 외)
 
-			// pw유효성 검사
-			var passwordPattern = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[\W_]).{8,16}$/;
-			if (!passwordPattern.test(pw)) {
-			    alert('비밀번호는 숫자, 영문, 특수문자를 포함하여 8자 이상 16자 이하이어야 합니다.');
-			    valid = false;
-			}
-			
-			// pw 확인
-			if (pw !== pwConfirm) {
-				alert('비밀번호가 일치하지 않습니다.');
-				valid = false;
-			}
-			
-			// 닉네임 영문, 숫자, 한글만 허용 특수문자 x!
-			var nickNamePattern = /^[a-zA-Z0-9가-힣]+$/;
-			if (!nickNamePattern.test(nickName)) {
-			    alert('닉네임은 영문, 숫자, 한글만 포함할 수 있습니다.');
-			    valid = false;
-			}
-			
-			// 주소는 따로 만들 필요가 있을 듯..?
-			
-			// 생년월일 유효성 검사
-			var birth = $('input[name="birth"]').val().trim();
-			var birthPattern = /^\d{8}$/; // 숫자 8자리
+        // 한글이 포함된 경우
+        if (idPattern.test(id)) {
+            $('#idResult').html('아이디에 한글 사용은 불가합니다.').css('color', 'red');
+            isIdChecked = false;  // 중복 확인 상태 리셋
+            return;
+        }
 
-			if (!birthPattern.test(birth)) {
-    			alert('생년월일은 8자리 숫자로 입력해야 합니다.');
-    			valid = false;
-			}
+        // 특수문자가 포함된 경우
+        if (specialCharPattern.test(id)) {
+            $('#idResult').html('아이디에 특수문자 사용은 불가합니다.').css('color', 'red');
+            isIdChecked = false;  // 중복 확인 상태 리셋
+            return;
+        }
 
-			// 이메일 유효성 검사
-			var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			if (!emailPattern.test(email)) {
-				alert('유효한 이메일 주소를 입력하세요.');
-				valid = false;
-			}
-			
-			 var phonePattern = /^\d{3}-\d{4}-\d{4}$/;
-			    if (!phonePattern.test(phoneNumber)) {
-			        alert('유효한 전화번호(010-1234-5678)을 입력하세요.');
-			        valid = false;
-			    }
+        $.ajax({
+            type: 'get',
+            url: 'idOverlay',
+            data: { 'id': id },
+            dataType: 'JSON',
+            success: function(data) {
+                if (data.overlay > 0) {
+                    $('#idResult').html(id + ' 는 이미 사용중 입니다.').css('color', 'red');
+                    isIdChecked = false;  // 중복 확인 실패 상태
+                } else {
+                    $('#idResult').html(id + ' 는 사용 가능합니다.').css('color', 'green');
+                    isIdChecked = true;  // 중복 확인 성공 상태
+                }
+            },
+            error: function(e) {
+                console.log(e);
+            }
+        });
+    });
 
-			// 유효하지 않으면 폼 제출 중단
-			if (!valid) {
-				event.preventDefault();
-			}
-		});
-		
-    </script>
+    // 닉네임 중복 체크
+    $('#nickNameCheck').click(function() {
+        var nickName = $('input[name="nickName"]').val().trim();
+
+        // 입력값이 비어있는지 체크
+        if (nickName === '') {
+            alert('닉네임을 먼저 입력해주세요.');
+            return;
+        }
+        
+        // 특수문자 포함 여부 체크
+        var specialCharPattern = /[^a-zA-Z0-9가-힣]/; // 특수문자 포함 여부 체크 (영문, 숫자, 한글 외)
+        if (specialCharPattern.test(nickName)) {
+            $('#nickNameResult').html('닉네임에 특수문자는 사용할 수 없습니다.').css('color', 'red');
+            isNickNameChecked = false;  // 중복 확인 상태 리셋
+            return;
+        }
+
+        $.ajax({
+            type: 'get',
+            url: 'nickNameOverlay',
+            data: { 'nickName': nickName },
+            dataType: 'JSON',
+            success: function(data) {
+                if (data.overlay > 0) {
+                    $('#nickNameResult').html(nickName + ' 는 이미 사용중 입니다.').css('color', 'red');
+                    isNickNameChecked = false;  // 중복 확인 실패 상태
+                } else {
+                    $('#nickNameResult').html(nickName + ' 는 사용 가능합니다.').css('color', 'green');
+                    isNickNameChecked = true;  // 중복 확인 성공 상태
+                }
+            },
+            error: function(e) {
+                console.log(e);
+            }
+        });
+    });
+
+    // 이메일 중복 체크
+    $('#emailCheck').click(function() {
+        var email = $('input[name="email"]').val().trim();
+
+     // 이메일 형식 체크
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email === '') {
+            $('#emailResult').html('이메일을 먼저 입력해주세요.').css('color', 'red');
+            return;
+        }
+
+        if (!emailPattern.test(email)) {
+            $('#emailResult').html('유효한 이메일 주소를 입력해주세요.').css('color', 'red');
+            return;
+        }
+
+        $.ajax({
+            type: 'get',
+            url: 'emailOverlay',
+            data: { 'email': email },
+            dataType: 'JSON',
+            success: function(data) {
+                if (data.overlay > 0) {
+                    $('#emailResult').html(email + ' 는 이미 사용중 입니다.').css('color', 'red');
+                    isEmailChecked = false;  // 중복 확인 실패 상태
+                } else {
+                    $('#emailResult').html(email + ' 는 사용 가능합니다.').css('color', 'green');
+                    isEmailChecked = true;  // 중복 확인 성공 상태
+                }
+            },
+            error: function(e) {
+                console.log(e);
+            }
+        });
+    });
+
+    // 입력 시 공백 제거
+    $('input').on('input', function() {
+        var value = $(this).val();
+        $(this).val(value.replace(/\s+/g, '')); // 공백 제거
+    });
+
+    // 유효성 검사 및 중복 체크 상태 확인
+    $('#joinForm').on('submit', function(event) {
+        var valid = true;
+        var id = $('input[name="id"]').val().trim();
+        var pw = $('input[name="pw"]').val().trim();
+        var pwConfirm = $('input[name="pwConfirm"]').val().trim();
+        var nickName = $('input[name="nickName"]').val().trim();
+        var address = $('input[name="address"]').val().trim();
+        var birth = $('input[name="birth"]').val();
+        var email = $('input[name="email"]').val().trim();
+        var phoneNumber = $('input[name="phoneNumber"]').val().trim();
+
+        // 중복 체크 상태가 모두 true여야만 진행
+        if (!isIdChecked) {
+            alert('아이디 중복 확인을 해주세요.');
+            valid = false;
+        } else if (!isNickNameChecked) {
+            alert('닉네임 중복 확인을 해주세요.');
+            valid = false;
+        } else if (!isEmailChecked) {
+            alert('이메일 중복 확인을 해주세요.');
+            valid = false;
+        }
+
+        // 입력값이 비어있으면 제출을 방지
+        if (id === '' || pw === '' || pwConfirm === '' || nickName === '' || address === '' || birth === '' || email === '') {
+            alert('모든 필드를 채워주세요.');
+            valid = false;
+        }
+
+        // ID 유효성 검사
+        var idPattern = /^[a-zA-Z0-9]+$/;
+        if (id.length < 4 || id.length > 20 || !idPattern.test(id)) {
+            if (id.length < 4 || id.length > 20) {
+                alert('ID는 4자리 이상 20자리 이하이어야 합니다.');
+            } else if (!idPattern.test(id)) {
+                alert('ID는 영어와 숫자만 포함할 수 있습니다.');
+            }
+            valid = false;
+        } else if (valid) { // ID가 유효한 경우에만 진행
+            // 비밀번호 유효성 검사
+            var passwordPattern = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[\W_]).{8,16}$/;
+            if (!passwordPattern.test(pw)) {
+                alert('비밀번호는 숫자, 영문, 특수문자를 포함하여 8자 이상 16자 이하이어야 합니다.');
+                valid = false;
+            }
+        }
+
+        // 비밀번호 확인
+        if (valid && pw !== pwConfirm) {
+            alert('비밀번호가 일치하지 않습니다.');
+            valid = false;
+        }
+
+        // 닉네임 유효성 검사
+        if (valid) {
+            var nickNamePattern = /^[a-zA-Z0-9가-힣]+$/;
+            if (!nickNamePattern.test(nickName)) {
+                alert('닉네임은 영문, 숫자, 한글만 포함할 수 있습니다.');
+                valid = false;
+            }
+        }
+
+        // 생년월일 유효성 검사
+        if (valid) {
+            var birthPattern = /^\d{8}$/;
+            if (!birthPattern.test(birth)) {
+                alert('생년월일은 8자리 숫자로 입력해야 합니다.');
+                valid = false;
+            }
+        }
+
+        // 이메일 유효성 검사
+        if (valid) {
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                alert('유효한 이메일 주소를 입력하세요.');
+                valid = false;
+            }
+        }
+
+        if (valid && phoneNumber !== '') {
+            var phonePattern = /^010-\d{4}-\d{4}$/;
+            if (!phonePattern.test(phoneNumber)) {
+                alert('유효한 전화번호(010-1234-5678)을 입력하세요.');
+                valid = false;
+            }
+        }
+
+        // 유효하지 않으면 폼 제출 중단
+        if (!valid) {
+            event.preventDefault();
+        }
+    });
+</script>
+
 </html>
