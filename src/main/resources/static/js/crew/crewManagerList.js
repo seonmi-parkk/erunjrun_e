@@ -170,6 +170,7 @@
 	}
 	
 	function memberResult(id, nickname, value) {
+		loading();
 	    console.log('ID:', id);
 	    console.log('Nickname:', nickname);
 	    console.log('value:', value);
@@ -184,9 +185,7 @@
 	    }
 	
 	    console.log('code_name : ', code_name);			
-	    console.log('실행됨>');
 	    if(code_name === 'C101'){
-	    console.log('실행??');
 	        $.ajax({
 	            type: 'GET',
 	            url: '/crew/memberFullCheck',
@@ -194,16 +193,16 @@
 	            dataType: 'JSON',
 	            success: function(response){
 	                if(response){
-	                	console.log('여기는');
 	                    memberResultUpdate(id, nickname, code_name);
 	                } else {
-	                	console.log('여기인가');
 	                	removeAlert();
 	                    layerPopup('크루원이 가득 찼습니다.', '확인', false, applBtn2Act, applBtn2Act);
+	                    loadingComplete();
 	                }
 	            }, 
 	            error: function(e){
 	                console.log('멤버수 체크 중 에러 => ', e);
+	                loadingComplete();
 	            }
 	        });
 	    } else {
@@ -228,13 +227,16 @@
 	                removeAlert();
 	                crewMemberList();
 	                layerPopup(response.msg + ' 완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
+	                loadingComplete();
 	            } else {
 	                removeAlert();
 	                layerPopup(response.msg + ' 미완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
+	                loadingComplete();
 	            }
 	        },
 	        error: function(e){
 	            console.log('에러남 => ', e);
+	            loadingComplete();
 	        }
 	    });
 	} 
@@ -268,6 +270,7 @@
 	}
 	
 	function crewAdminOverlay(memberId){
+		loading();
 		console.log('중복 체크 해야하는 id =>', memberId);
 		$.ajax({
 			type: 'GET',
@@ -281,9 +284,11 @@
 				}else{
 					removeAlert();
 					layerPopup('이미 요청한 크루원입니다.', '확인', false, applBtn2Act, applBtn2Act);
+					loadingComplete();
 				}
 			},error: function(e){
 				console.log('권한 중복 체크 중 에러 =>', e);
+				loadingComplete();
 			}
 		})
 	}
@@ -291,6 +296,7 @@
 	
 	
 	function sendCrewAdminUpdate(memberId){
+		
 		var selectedIds = getSelectedIds();
 	    
 	    var leader = crewLeader;
@@ -307,12 +313,15 @@
 				if(response.success){
 					removeAlert();
 					layerPopup('권한 양도 요청이 완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
+					loadingComplete();
 				}else{
 					removeAlert();
 					layerPopup('권한 양도 요청이 미완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
+					loadingComplete();
 				}
 			}, error: function(e){
 				console.log('권한 전송 중 에러 => ', e);
+				loadingComplete();
 			}
 		});  
 		

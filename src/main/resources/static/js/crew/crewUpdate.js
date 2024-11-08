@@ -174,15 +174,7 @@
 		
 		
 	function writeCheck(){
-    	console.log($('input[name="crew_name"]').val());
-    	console.log($('#crew_img').attr('src'));
-    	console.log(dayCheckboxes);
-    	console.log(tagCheckboxes);
-    	console.log($('input[name="member"]').val());
-    	console.log($('input[name="minute"]').val());
-    	console.log($('input[name="minute"]').val());
-    	console.log($('input[name="distance"]').val());
-    	console.log($('input[name="address"]').val());
+
     	if($('input[name="crew_name"]').val() !== '' && $('#crew_img').attr('src') !== '' && dayCheckboxes.length >= 1 && tagCheckboxes.length >= 1 && $('input[name="member"]').val() !== '' && $('input[name="minute"]').val() !== '' && $('input[name="distance"]').val() !== '' && $('input[name="address"]').val() !== ''){
     		layerPopup('크루를 수정하시겠습니까?', '확인', '취소', submitUpdatePost, applBtn2Act)
     		console.log('글 전송 함수 실행');

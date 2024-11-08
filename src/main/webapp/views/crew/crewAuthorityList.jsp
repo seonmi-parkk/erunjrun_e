@@ -146,7 +146,7 @@
 	
 	.profile-box3 {
 	    position: absolute;
-	    top: -4px; /* profileBox와 같은 높이에 위치 */
+	    top: -8px; /* profileBox와 같은 높이에 위치 */
 	    left: 65px; /* profileBox 오른쪽에 배치 */
 	    width: 44px;
 	    height: 44px;
