@@ -434,4 +434,32 @@ public class MypageService {
 		return mypageDAO.getSelectedIcon(id);
 	}
 
+	public boolean myMateDelete(String mateIdx, String currentUserId) {
+	    // mateIdx로 userId와 unlikeId를 조회
+	    Map<String, String> mateIds = mypageDAO.getMateIdsByIdx(mateIdx);
+	    String userId = mateIds.get("user_id");
+	    String unlikeId = mateIds.get("unlike_id");
+
+	    // 로그인한 사용자가 userId인 경우
+	    if (currentUserId.equals(userId)) {
+	        // 로그인한 사용자가 userId라면 상대방은 unlikeId가 된다.
+	        unlikeId = mateIds.get("unlike_id");
+	    } else if (currentUserId.equals(unlikeId)) {
+	        // 로그인한 사용자가 unlikeId라면 userId가 상대방이다.
+	        userId = mateIds.get("user_id");
+	    }
+
+	    // 메이트 끊기 이력 기록
+	    mypageDAO.insertMateHistory(userId, "M103", unlikeId);
+
+	    // 메이트 관계를 끊는 로직 호출
+	    return mypageDAO.myMateDelete(mateIdx);
+	}
+	
+	public Map<String, String> getMateIdsByIdx(String mateIdx) {
+		return mypageDAO.getMateIdsByIdx(mateIdx);
+	}
+
+	
+
 }

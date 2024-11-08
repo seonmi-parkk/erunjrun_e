@@ -374,11 +374,20 @@ function setupPagination(totalPages, currentPage) {
     });
 }
 
-// 대화방 열기
-function openCrewChatWindow(crew_idx, chat_idx) {
-    // chat_idx와 crew_idx를 사용하여 URL을 생성
-    var url = '/crewChat/open/' + crew_idx + '/' + chat_idx;
-    chatWindowSet(url); // chatWindowSet 함수가 해당 URL로 새 창을 열도록 설정
+function openCrewLeaderChat(){
+	$.ajax({
+		type:'GET',
+		url:'/crewLdchat/'+crew_idx,
+		data:{},
+		dataType:'JSON',
+		success:function(data){
+			console.log(data.roomNum);
+			openLeaderChat(data.roomNum);
+		},
+		error:function(e){
+			console.log(e);
+		}
+	});
 }
 //채팅방 나가기
 $('.exit').on('click',function(){

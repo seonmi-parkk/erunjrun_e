@@ -406,6 +406,28 @@ public class MypageController {
 		return result;
 	}
 
+	@RequestMapping(value = "/myMateDelete.ajax")
+	@ResponseBody
+	public Map<String, Object> myMateDelete(@RequestParam String mateIdx, HttpSession session) {
+	    Map<String, Object> response = new HashMap<>();
+	    String currentUserId = (String) session.getAttribute("loginId");  // 세션에서 로그인한 사용자 ID 가져오기
+	    try {
+	        logger.info("Deleting mate relationship for mateIdx: " + mateIdx);
+	        boolean success = mypageService.myMateDelete(mateIdx, currentUserId);  // 로그인 ID도 함께 전달
+
+	        if (success) {
+	            response.put("success", true);
+	        } else {
+	            response.put("success", false);
+	            response.put("message", "메이트 끊기 실패");
+	        }
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", "서버 오류: " + e.getMessage());
+	    }
+	    return response;
+	}
+	
 	// 친구 요청 페이지로 이동
 	@GetMapping(value = "/requestedMateListView")
 	public String requestedMateListView(HttpSession session, Model model) {
@@ -874,6 +896,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "memberCrewListView");
 		return "mypage/memberCrewList"; // 로그인된 경우 리스트 페이지로 이동
@@ -913,6 +937,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "memberCrewListView");
 		return "mypage/requestedCrewList"; // 로그인된 경우 리스트 페이지로 이동
@@ -952,6 +978,8 @@ public class MypageController {
 			return "member/login"; // 로그인 페이지로 리다이렉트
 		}
 		MemberDTO member = mypageService.profileDetail(id);
+		ProfileDTO profile = mypageService.ProfileImage(id);
+		model.addAttribute("profile", profile);
 		model.addAttribute("member", member);
 		model.addAttribute("pageName", "memberCrewListView");
 		return "mypage/likedCrewList"; // 로그인된 경우 리스트 페이지로 이동

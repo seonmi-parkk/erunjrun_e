@@ -210,6 +210,18 @@ h3 {
 	transform: translateX(-50%);
 	z-index: 996;
 }
+
+.btn-danger {
+background-color: #d3d3d3; /* 연한 회색 */
+    color: #333; /* 어두운 텍스트 */
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
 </style>
 </head>
 <body>
@@ -349,12 +361,13 @@ h3 {
                                     friendName = friend.id; // 상대방의 ID
                                 }
 
-                                var friendCard = '<div class="card" data-id="' + friend.idx + '">' +
+                                var friendCard = '<div class="card" data-id="' + friend.mate_idx + '">' +
                                     '<input type="hidden" name="toUserId" value="' + friend.id + '" />' +
                                     '<img class="friend-image" src="' + imageSrc + '" alt="친구 이미지" />' +
                                     '<p class="friend-name user">' + (friendName ? friendName : '이름 없음') + '</p>' +
+                                    '<button class="btn btn-danger unfriend-btn" data-id="' + friend.mate_idx + '">메이트 끊기</button>' +
                                 '</div>';
-
+								
                                 $('.friend-list').append(friendCard);
                             });
                             $('.no-friends-message').hide(); // 데이터가 있을 경우 메시지 숨김
@@ -369,6 +382,27 @@ h3 {
                 }
             });
         }
+        
+        $(document).on('click', '.unfriend-btn', function() {
+            var mateIdx = $(this).closest('.card').data('id');  // .card의 data-id 속성에 mate_idx 값 저장됨
+            
+            $.ajax({
+                type: 'GET',
+                url: 'myMateDelete.ajax',
+                data: { mateIdx: mateIdx },
+                success: function(response) {
+                    if (response.success) {
+                        alert("메이트 관계가 끊어졌습니다.");
+                        location.reload();  // 페이지를 새로고침하여 목록을 갱신
+                    } else {
+                        alert(response.message || "메이트 끊기 실패");
+                    }
+                },
+                error: function(error) {
+                    console.error('메이트 관계 끊기 중 오류 발생:', error);
+                }
+            });
+        });
 
         // 페이지네이션 설정
         function setupPagination(totalCount, currentPage) {
