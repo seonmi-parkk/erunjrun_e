@@ -268,6 +268,7 @@ public class AdminController {
      if (session.getAttribute("adminYn") != null) {
         String admin_id = (String)session.getAttribute("loginId");
          param.put("admin_id", admin_id);// 관리자 로그인 ID 저장
+        
          admin_service.rightwrite(param);
          return "redirect:/adminMember";
    }

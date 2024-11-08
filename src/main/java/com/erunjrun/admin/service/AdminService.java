@@ -110,20 +110,68 @@ public class AdminService {
       
       return admin_dao.right(nickname);
    }
-
+   
+   
    public void rightwrite(Map<String, String> param) {
-      admin_dao.rightwrite(param);
-   }
+       String startDateStr = param.get("start_date");
+       logger.info("Start Date: {}", startDateStr);
 
+       // 현재 날짜 구하기
+       LocalDate today = LocalDate.now();
+       Date sqlToday = Date.valueOf(today);
+
+       // 시작일 확인 후 권한을 'Y'로 설정
+       if (startDateStr != null) {
+           Date startDate = Date.valueOf(startDateStr);
+           // 시작일이 오늘이거나 과거일 경우 'Y'로 설정
+           if (!startDate.after(sqlToday)) {
+               param.put("is_right", "Y");
+           } else {
+               param.put("is_right", "N");  // 시작일이 미래면 'N'으로 설정
+           }
+       }
+
+       try {
+           admin_dao.rightwrite(param); // 권한 등록 쿼리 실행
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+   
+   
    public AdminDTO rightdetail(String ban_idx) {
       
       return admin_dao.rightdetail(ban_idx);
    }
+   
+   
 
+  
    public void rightupdate(Map<String, String> param) {
-      admin_dao.rightupdate(param);
-      
-   }
+	    String startDateStr = param.get("start_date");
+	    String endDateStr = param.get("end_date");
+
+	    LocalDate today = LocalDate.now();
+
+	    // 시작일과 종료일이 null이 아닌 경우 확인
+	    if (startDateStr != null && endDateStr != null) {
+	        LocalDate startDate = LocalDate.parse(startDateStr);
+	        LocalDate endDate = LocalDate.parse(endDateStr);
+
+	        // 시작일이 오늘 또는 그 이전이고 종료일이 오늘 또는 그 이후인 경우
+	        if (!startDate.isAfter(today) && !endDate.isBefore(today)) {
+	            param.put("is_right", "Y"); // 조건을 만족하면 'Y'로 설정
+	        } else {
+	            param.put("is_right", "N"); // 조건을 만족하지 않으면 'N'으로 설정
+	        }
+	    }
+
+	    try {
+	        admin_dao.rightupdate(param); // 권한 수정 쿼리 실행
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
    
    @PostConstruct
     public void init() {

@@ -174,40 +174,32 @@
      
   
      <insert id="rightwrite" parameterType="Map">
-        INSERT INTO ban(id, admin_id, code_name, start_date, end_date, ban_content)
-                    VALUES(#{id},#{admin_id},#{code_name},#{start_date},#{end_date},#{ban_content})
-     </insert>
+    INSERT INTO ban(id, is_right, admin_id, code_name, start_date, end_date, ban_content)
+    VALUES (#{id}, #{is_right}, #{admin_id}, #{code_name}, #{start_date}, #{end_date}, #{ban_content})
+</insert>
   <!-- id,admin_id,is_ban 추가해야됌 -->
   
   <select id="rightdetail" resultType="com.erunjrun.admin.dto.AdminDTO">
-        SELECT b.ban_idx,b.id,m.nickname,b.start_date,b.end_date,b.ban_content,b.code_name,c.content FROM ban b
+        SELECT b.is_right,b.ban_idx,b.id,m.nickname,b.start_date,b.end_date,b.ban_content,b.code_name,c.content FROM ban b
       LEFT JOIN  code c ON b.code_name = c.code_name  
       LEFT JOIN  member m ON b.id = m.id WHERE b.ban_idx = #{param1}
   </select>
   
   <update id="rightupdate" parameterType="Map">
-     UPDATE ban <set>
-         <if test= "id != null">
-         id = #{id},
-      </if>
-      <if test="admin_id != null">
-         admin_id = #{admin_id},
-      </if>
-      <if test="code_name != null">
-         code_name = #{code_name},
-      </if>
-      <if test="start_date != null">
-         start_date = #{start_date},
-      </if>
-      <if test="end_date != null">
-         end_date = #{end_date} ,
-      </if>
-      <if test="ban_content != null">
-         ban_content = #{ban_content} 
-      </if>
-     </set>
-           WHERE ban_idx = #{ban_idx}
-  </update>
+    UPDATE ban
+    <set>
+        <if test="id != null">id = #{id},</if>
+        <if test="admin_id != null">admin_id = #{admin_id},</if>
+        <if test="code_name != null">code_name = #{code_name},</if>
+        <if test="start_date != null">start_date = #{start_date},</if>
+        <if test="end_date != null">end_date = #{end_date},</if>
+        <if test="ban_content != null">ban_content = #{ban_content},</if>
+        
+        <!-- is_right 값이 null이 아닐 때만 업데이트 -->
+        <if test="is_right != null">is_right = #{is_right}</if>
+    </set>
+    WHERE ban_idx = #{ban_idx}
+</update>
   
        <!-- 시작일이 오늘 또는 과거인 권한을 'Y'로 업데이트 -->
     <update id="updateRightY" parameterType="date">

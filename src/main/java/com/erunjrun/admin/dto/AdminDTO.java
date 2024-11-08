@@ -42,7 +42,19 @@ public class AdminDTO {
    private String subject;
    private int ask_idx;
    private String is_ask;
+   private String is_right;
    private String url;
+   
+   
+   
+   
+   
+   public String getIs_right() {
+	return is_right;
+}
+public void setIs_right(String is_right) {
+	this.is_right = is_right;
+}
    
    
    

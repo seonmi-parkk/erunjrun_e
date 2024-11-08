@@ -166,7 +166,7 @@
         <form id="adminJoinForm" action="/adminJoin" method="post">
             <div class="form-group">
                 <label for="admin_id">아이디 *</label>
-                <input type="text" name="admin_id" id="admin_id" required="required" placeholder="예시) admin123" />
+                <input type="text" name="admin_id" id="admin_id" required placeholder="영문자만 입력 가능" oninput="validateEnglishOnly(this)" />
                 <button type="button" id="idCheck">중복확인</button>
                 <span id="idResult" class="result"></span>
             </div>
@@ -194,87 +194,82 @@
    </body>
     <script>
     
-    var idChecked = false;
     
-    
+    var idChecked = false;  // 아이디 중복체크 여부 저장
+    var idAvailable = false; // 사용 가능한 아이디 여부 저장
+
     $(document).ready(function() {
-        $('#adminJoinForm').on('submit', function(event) {
-            // 아이디와 비밀번호 필드를 가져옵니다.
-            var pw = $('input[name="pw"]').val();
-           var pwConfirm = $('input[name="pwConfirm"]').val();
-            var admin_id = $('#admin_id').val().trim();
-            var password = $('#password').val().trim();
+       $('#adminJoinForm').on('submit', function(event) {
+          var pw = $('input[name="pw"]').val();
+          var pwConfirm = $('input[name="pwConfirm"]').val();
+          var admin_id = $('#admin_id').val().trim();
+          var password = $('#password').val().trim();
 
-            // 공백 확인 (아이디와 비밀번호에 공백이 있으면 경고창을 띄움)
-            if (admin_id === '' || password === '') {
-                alert('아이디와 비밀번호는 공백이 될 수 없습니다.');
-                event.preventDefault(); // 폼 제출을 막습니다.
-                return;
-            }
+          if (admin_id === '' || password === '') {
+             alert('아이디와 비밀번호는 공백이 될 수 없습니다.');
+             event.preventDefault();
+             return;
+          }
 
-            if (admin_id.includes(' ') || password.includes(' ')) {
-                alert('아이디와 비밀번호에는 공백이 포함될 수 없습니다.');
-                event.preventDefault(); // 폼 제출을 막습니다.
-                return;
-            }
-            
-            if (pw != pwConfirm) {
-                alert("비밀번호가 다릅니다! 비밀번호를 확인하세요!");
-                return false;  // 폼 제출을 막음
-            }
-            // 중복 체크 여부 확인
-            if (!idChecked) {
-                alert("아이디 중복 체크해주세요!");
-                return false;  // 폼 제출을 막음
-            }
-            
-        });
+          if (admin_id.includes(' ') || password.includes(' ')) {
+             alert('아이디와 비밀번호에는 공백이 포함될 수 없습니다.');
+             event.preventDefault();
+             return;
+          }
+
+          if (pw !== pwConfirm) {
+             alert("비밀번호가 다릅니다! 비밀번호를 확인하세요!");
+             event.preventDefault();
+             return;
+          }
+
+          // 중복체크가 완료되지 않았거나 사용 불가능한 아이디일 경우 가입 방지
+          if (!idChecked || !idAvailable) {
+             alert("아이디 중복 체크를 하고, 사용 가능한 아이디만 가입할 수 있습니다.");
+             event.preventDefault();
+             return;
+          }
+       });
     });
 
-   
-    
     $('#idCheck').on('click', function() {
-        var admin_id = $('input[name="admin_id"]').val();
+       var admin_id = $('input[name="admin_id"]').val().trim();
 
-        // 전체 공백 확인
-        if (admin_id.trim() === '') {
-            alert("아이디를 입력하세요.");
-            return false;
-        }
+       if (admin_id === '') {
+          alert("아이디를 입력하세요.");
+          return false;
+       }
 
-        // 앞뒤 공백이 있거나 중간에 공백이 포함된 경우 확인
-        if (admin_id !== admin_id.trim() || /\s/.test(admin_id)) {
-            alert("아이디에 앞뒤 공백이나 중간 공백이 포함될 수 없습니다.");
-            return false;
-        }
-        
-        idChecked = true;
-        console.log(admin_id);
-        $.ajax({
-            type: 'GET',
-            url: '/adminIdOverlay',
-            data: {'admin_id': admin_id},
-            dataType: 'JSON',
-            success: function(data) {
-                console.log(data);
-                if (data.overlay > 0) {
-                    $('#idResult').html('이미 사용중인 아이디 입니다.');
-                    $('#idResult').css({'color': 'red'});
-                } else {
-                    $('#idResult').html('사용 가능한 아이디 입니다.');
-                    $('#idResult').css({'color': 'green'});   
-                }
-            },
-            error: function(e) {
-                console.log(e);
-            }
-        });
+       if (admin_id !== admin_id.trim() || /\s/.test(admin_id)) {
+          alert("아이디에 앞뒤 공백이나 중간 공백이 포함될 수 없습니다.");
+          return false;
+       }
+
+       idChecked = true;
+       $.ajax({
+          type: 'GET',
+          url: '/adminIdOverlay',
+          data: {'admin_id': admin_id},
+          dataType: 'JSON',
+          success: function(data) {
+             if (data.overlay > 0) {
+                $('#idResult').html('이미 사용중인 아이디 입니다.').css({'color': 'red'});
+                idAvailable = false;
+             } else {
+                $('#idResult').html('사용 가능한 아이디 입니다.').css({'color': 'green'});
+                idAvailable = true;
+             }
+          },
+          error: function(e) {
+             console.log(e);
+          }
+       });
     });
-        
-        var msg = '${msg}';
-        if (msg != '') {
-            alert(msg);
-        }
+
+    var msg = '${msg}';
+    if (msg != '') {
+       alert(msg);
+    }
         
         </script>
         <script src="resources/js/common.js" type="text/javascript"></script>

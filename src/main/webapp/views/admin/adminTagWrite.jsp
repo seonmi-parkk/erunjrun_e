@@ -131,7 +131,7 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">태그 이름</p>
-			<input type="text" name="tag_name" id="tag_name"/>
+			<input type="text" name="tag_name" id="tag_name" required="required"/>
 		</div>
 		
 		<div class="input-container">

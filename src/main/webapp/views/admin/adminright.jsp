@@ -76,7 +76,7 @@
     	 transform: scale(1.5);
     }
     
-     #content{
+     #ban_content{
     	width: 750px; /* 너비를 250픽셀로 설정 */
         height: 350px;
         resize: none; /* 높이를 50픽셀로 설정 */
@@ -154,7 +154,7 @@
 		<div class="input-container">
 			<p class="title2" id="dot">•</p>
 			<p class="title2" id="text">정지내용</p>
-			<textarea name="content" id="content" required="required"></textarea>
+			<textarea name="ban_content" id="ban_content" required="required"></textarea>
 		</div>
 		
    	<button class="btn01-l" type="submit" id="text">정지</button>

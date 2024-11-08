@@ -83,7 +83,8 @@
 	color: #FB7E3A;
 	}
 	.btn01-l{
-	margin-left: 265px;
+	margin-top: 50px;
+	margin-left: 650px;
 	}
 </style>
 </head>
@@ -152,6 +153,8 @@
 		</div>
 		
    			<input type="text" name="ban_idx" id="text" value="${info.ban_idx}" hidden=""/>
+   			<input type="text" name="is_right" id="text" value="${info.is_right}" hidden=""/>
+   			
    	<button class="btn01-l" type="submit">수정</button>
 	<div class="btn02-l" onclick="location.href='/adminMemberDetail/${info.id}'">취소</div> <!-- 클릭시 색깔변경 -->
 	</form>
