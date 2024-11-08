@@ -37,6 +37,7 @@ public class RunBoardDTO {
     // 이미지 리스트
     private List<ImageDTO> imageList;
     
+    
     // 포인트 테이블
     private int point_idx;
     private int point;

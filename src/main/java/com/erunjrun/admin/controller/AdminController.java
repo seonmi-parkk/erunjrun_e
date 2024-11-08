@@ -35,25 +35,33 @@ public class AdminController {
       }
 
       @PostMapping(value = "/adminLogin")
-      public String login(Model model, HttpSession session, String id, String pw, HttpServletRequest request) {
+      public String login(Model model, HttpSession session, String admin_id, String pw, HttpServletRequest request) {
          String requestIp = request.getRemoteAddr(); // 요청 IP 가져오기
          logger.info("ip가져왔니?" + requestIp);
-         String allowedIp = admin_service.getAllowedIp(id); // 데이터베이스에서 허용된 IP 조회
+         String allowedIp = admin_service.getAllowedIp(admin_id); // 데이터베이스에서 허용된 IP 조회
          logger.info("저장된 아이피 가져 옴?" + allowedIp);
-         if (admin_service.adminLogin(id, pw)) {
-            logger.info("id, pw?" + id + pw);
+         if (admin_service.adminLogin(admin_id, pw)) {
+            logger.info("id, pw?" + admin_id + pw);
             if (allowedIp.equals(requestIp)) {
+            	String authority = admin_service.getAuthority(admin_id);
+            	session.setAttribute("authority", admin_service.getAuthority(admin_id)); // 권한 저장
+            	 logger.info(authority);
+            	if (!authority.equals("n")) {
                model.addAttribute("msg", "로그인 되었습니다!");
-               session.setAttribute("loginId", id); // 로그인 ID 저장
-               session.setAttribute("authority", admin_service.getAuthority(id)); // 권한 저장
+               session.setAttribute("loginId", admin_id); // 로그인 ID 저장
                session.setAttribute("requestIp", requestIp); // 요청 IP 저장
                session.setAttribute("adminYn", "Y"); // 로그인시 관리자 여부
-               	
+            	}else {
+            		model.addAttribute("msg","비활성화된 관리자 입니다.");
+            		return "admin/adminLogin";
+            	}
             } else {
                model.addAttribute("msg", "허용되지 않은 IP에서 로그인 시도입니다.");
+               return "admin/adminLogin";
             }
          } else {
             model.addAttribute("msg", "아이디 또는 비밀번호를 확인해.");
+            return "admin/adminLogin";
          }
 
          return "redirect:/adminMember";
@@ -87,7 +95,7 @@ public class AdminController {
       }
       
       @PostMapping(value = "/adminJoin")
-      public String adminJoin(Model model, HttpSession session, String id, String pw, String name, HttpServletRequest request) {
+      public String adminJoin(Model model, HttpSession session, String admin_id, String pw, String name, HttpServletRequest request) {
          
          String requestIp = request.getRemoteAddr(); // 요청 IP 가져오기
          logger.info("슈퍼관리자 아이피 : "+requestIp);
@@ -109,7 +117,7 @@ public class AdminController {
           }
 
           // 회원가입 처리 로직 // 가입시 아이피는 슈퍼어드민의 아이피가 되고, 가입된 어드민은 디폴드값 아이피를 사용하도록 한다. 회사 내 ip로.
-          if (admin_service.adminJoin(id, pw, name,requestIp)) { // 회원가입 메서드 호출
+          if (admin_service.adminJoin(admin_id, pw, name,requestIp)) { // 회원가입 메서드 호출
 	          model.addAttribute("msg", "회원가입이 완료되었습니다!");
 	          logger.info("성공");
           } else {
@@ -120,7 +128,8 @@ public class AdminController {
           return "redirect:/adminJoin"; 
       }
       
-      @GetMapping(value = "adminIdOverlay")
+      @GetMapping(value = "/adminIdOverlay")
+      @ResponseBody
       public Map<String, Object> adminidoverlay(String admin_id) {
           
           Map<String, Object> map = new HashMap<String, Object>();
@@ -237,19 +246,19 @@ public class AdminController {
      
      @GetMapping(value = "/memberRight/{nickname}")
      public String right(@PathVariable String nickname,HttpSession session,Model model) {
-        
+
     if (session.getAttribute("adminYn") != null) {
        String id = admin_service.right(nickname);
          model.addAttribute("info",nickname);
          model.addAttribute("id",id);
 
          return "admin/adminright";
+
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
       return "redirect:/adminLogin";
    }
-
      
      
      @GetMapping(value = "/memberRightWrite")

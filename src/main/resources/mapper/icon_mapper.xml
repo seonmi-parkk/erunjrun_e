@@ -89,8 +89,10 @@
    </select>
    
    <select id="iconbuycount" resultType="int">
-      SELECT CEIL(count(buy_idx)/#{param1}) AS pages FROM icon_buy
-   </select>
+	    SELECT CEIL(COUNT(buy_idx)/#{param1}) AS pages
+	    FROM icon_buy
+	    WHERE icon_idx = #{icon_idx}
+	</select>
    
    <select id="iconchart" resultType="com.erunjrun.icon.dto.IconDTO">
 	    SELECT 
@@ -119,9 +121,12 @@
    </select>
    
    <select id="iconchartcount" resultType="int">
-      SELECT CEIL(count(icon_idx)/#{param1}) AS pages FROM icon_buy
-   </select>
-   
+	    SELECT CEIL(COUNT(DISTINCT i.icon_idx) / #{param1}) AS pages
+	    FROM icon i
+	    JOIN icon_buy ib ON i.icon_idx = ib.icon_idx
+	    JOIN member m ON ib.id = m.id
+	    WHERE YEAR(CURDATE()) - YEAR(m.birth) BETWEEN #{startAge} AND #{endAge}
+	</select>
    
    <select id="getMonthlySalesData" resultType="com.erunjrun.icon.dto.IconDTO">
         SELECT MONTH(ib.buy_date) AS timePeriod, COUNT(*) AS purchaseCount, i.icon_name

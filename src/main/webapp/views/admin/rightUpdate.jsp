@@ -153,7 +153,7 @@
 		
    			<input type="text" name="ban_idx" id="text" value="${info.ban_idx}" hidden=""/>
    	<button class="btn01-l" type="submit">수정</button>
-	<div class="btn02-l" onclick="location.href='/adminMemberDetail?id=${info.id}'">취소</div> <!-- 클릭시 색깔변경 -->
+	<div class="btn02-l" onclick="location.href='/adminMemberDetail/${info.id}'">취소</div> <!-- 클릭시 색깔변경 -->
 	</form>
          </main>
 	</div>
@@ -166,7 +166,6 @@
 
 <script>
 
-    
 </script>
 <script src="/resources/js/common.js" type="text/javascript"></script>
 <script src="/resources/js/layerPopup.js"></script>

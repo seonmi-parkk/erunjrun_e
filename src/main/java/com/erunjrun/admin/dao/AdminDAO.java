@@ -14,13 +14,13 @@ import com.erunjrun.image.dto.ImageDTO;
 public interface AdminDAO {
    
 // login,join   
-   public String getAllowedIp(String id);
+   public String getAllowedIp(String admin_id);
 
-   public boolean adminLogin(String id, String pw); 
+   public boolean adminLogin(String admin_id, String pw); 
       
-   public String getAuthority(String id);
+   public String getAuthority(String admin_id);
     
-   public boolean adminJoin(String id, String pw, String name, String ip);
+   public boolean adminJoin(String admin_id, String pw, String name,String ip);
 
    String SgetAllowedIp(String superAdminId);
    
@@ -38,6 +38,7 @@ public interface AdminDAO {
 
    int admincount(int cnt_, String opt, String keyword);
 
+   public int adminyn(String admin_id);
    
 //   회원상세페이지
    public AdminDTO memberdetail(String id);
@@ -126,7 +127,7 @@ public interface AdminDAO {
 
    public int filedelete(int popup_idx, String code_name);
 
-   public int adminyn(String admin_id);
+
 
    public void ExistingPopupPriority(String newPriority);
 

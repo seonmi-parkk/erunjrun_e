@@ -80,9 +80,9 @@ button:hover {
 <body>
    <div class="container">
       <h3>관리자 로그인</h3>
-      <form action="adminLogin" method="post">
+      <form action="/adminLogin" method="post">
          <div class="form-group">
-            <label for="userId"></label> <input type="text" name="id"
+            <label for="userId"></label> <input type="text" name="admin_id"
                id="userId" placeholder="아이디" required />
          </div>
          <div class="form-group">
@@ -98,6 +98,12 @@ button:hover {
    </div>
 
    <script>
+   
+   // 경고 메시지 처리
+   var msg = '${msg}';
+   if (msg != '') {
+      alert(msg);
+   }
       // 폼 제출 시 쿠키에 ID 저장
       $('form').on('submit', function() {
          if ($('#saveId').is(':checked')) {
@@ -141,11 +147,7 @@ button:hover {
          }
       });
 
-      // 경고 메시지 처리
-      var msg = '${msg}';
-      if (msg != '') {
-         alert(msg);
-      }
+    
    </script>
 </body>
 </html>

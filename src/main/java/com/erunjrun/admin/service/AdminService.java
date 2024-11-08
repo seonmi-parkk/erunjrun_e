@@ -34,16 +34,16 @@ public class AdminService {
    
    @Autowired AdminDAO admin_dao;
 
-   public String getAllowedIp(String id) {
-        return admin_dao.getAllowedIp(id);
+   public String getAllowedIp(String admin_id) {
+        return admin_dao.getAllowedIp(admin_id);
     }
 
-   public boolean adminLogin(String id, String pw) {
-      return admin_dao.adminLogin(id, pw);
+   public boolean adminLogin(String admin_id, String pw) {
+      return admin_dao.adminLogin(admin_id, pw);
    }
    
-   public String getAuthority(String id) {
-       return admin_dao.getAuthority(id);
+   public String getAuthority(String admin_id) {
+       return admin_dao.getAuthority(admin_id);
    }
    
    public String SgetAllowedIp(String superAdminId) {
@@ -51,9 +51,9 @@ public class AdminService {
          
       }
 
-   public boolean adminJoin(String id, String pw, String name,String ip) {
+   public boolean adminJoin(String admin_id, String pw, String name,String ip) {
       
-         return admin_dao.adminJoin(id,pw,name,ip);
+         return admin_dao.adminJoin(admin_id, pw, name,ip);
       }
    
    
@@ -75,6 +75,7 @@ public class AdminService {
       return admin_dao.memberlist(opt, keyword, sortField,sortOrder,limit, offset);
    }
 
+   
    public int admincount(int cnt_, String opt, String keyword) {
    
       return admin_dao.admincount(cnt_,opt,keyword);
@@ -85,6 +86,7 @@ public class AdminService {
       return admin_dao.adminlist(opt, keyword, limit, offset);
    }
 
+  
 
    public List<AdminDTO> memberreportlist(String id) {
       
@@ -125,7 +127,7 @@ public class AdminService {
    
    @PostConstruct
     public void init() {
-        logger.info("서버 시작 시 권한 업데이트 실행");
+     
         checkAndUpdateStatus(); // 서버가 시작될 때 권한 업데이트
     }
    
@@ -140,13 +142,13 @@ public class AdminService {
         try {
             // 1. 오늘 또는 과거의 시작일에 해당하는 권한을 'Y'로 변경
             admin_dao.updateRightY(sqlDate);
-            System.out.println("지난 시작일 포함 모든 권한을 'Y'로 변경했습니다.");
+            
 
             // 2. 오늘 또는 과거의 종료일에 해당하는 권한을 'N'으로 변경
             admin_dao.updateRightN(sqlDate);
-            System.out.println("지난 종료일 포함 모든 권한을 'N'으로 변경했습니다.");
+           
         } catch (Exception e) {
-            System.err.println("스케줄러 실행 중 오류 발생: " + e.getMessage());
+           e.printStackTrace();
         }
     }
    

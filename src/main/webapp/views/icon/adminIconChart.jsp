@@ -10,6 +10,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 <script src="/resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
 <style>
+
    .input-container {
     display: flex;        /* Flexbox 사용 */
     align-items: center; /* 수직 중앙 정렬 */

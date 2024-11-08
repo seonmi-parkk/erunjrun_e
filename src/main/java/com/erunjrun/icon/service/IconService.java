@@ -103,9 +103,9 @@ public class IconService {
       return iconDAO.iconbuylist(icon_idx,limit,offset);
 	 }
 
-	   public int iconbuycount(int cnt_) {
+	   public int iconbuycount(int cnt_, String icon_idx) {
       
-      return iconDAO.iconbuycount(cnt_);
+      return iconDAO.iconbuycount(cnt_,icon_idx);
 	   }
 
 
@@ -115,9 +115,9 @@ public class IconService {
       return  iconDAO.iconchart(limit,offset,startAge,endAge);
 	   }
 
-	   public int iconchartcount(int cnt_) {
+	   public int iconchartcount(int cnt_, int startAge, int endAge) {
 	   
-      return iconDAO.iconchartcount(cnt_);
+      return iconDAO.iconchartcount(cnt_,startAge,endAge);
 	   }
 
        public List<IconDTO> getMonthlySalesData(Integer year) {
