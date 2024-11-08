@@ -246,20 +246,19 @@ public class AdminController {
      
      @GetMapping(value = "/memberRight/{nickname}")
      public String right(@PathVariable String nickname,HttpSession session,Model model) {
-        logger.info("경로 닉 : "+nickname);
+
     if (session.getAttribute("adminYn") != null) {
        String id = admin_service.right(nickname);
          model.addAttribute("info",nickname);
          model.addAttribute("id",id);
-         logger.info("페이지 이동 :"+id);
+
          return "admin/adminright";
+
    }
       
       model.addAttribute("msg","관리자 로그인이 필요한 서비스 입니다.");
       return "redirect:/adminLogin";
    }
-
-     
      
      
      @GetMapping(value = "/memberRightWrite")

@@ -521,7 +521,7 @@
 	
 	<!-- 크루 공지 상세보기 -->
 	<select id="crewNoticeDetail" resultType="com.erunjrun.crew.dto.CrewNoticeDTO" parameterType="int">
-		SELECT cn.*, m.nickname, m.icon_image, p.image 
+		SELECT cn.*, m.nickname, COALESCE(m.icon_image, '') AS icon_image, COALESCE(p.image, '') AS image 
 			FROM crew_notice cn join `member` m on cn.id = m.id
 			JOIN profile p on p.id = m.id 
 			where notice_idx = #{notice_idx}

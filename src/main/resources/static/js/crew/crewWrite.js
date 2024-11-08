@@ -35,7 +35,7 @@
 					}else if(item.tag_idx == 4){
 						tag_img = '<img src="/resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
 					}else if(item.tag_idx == 5){
-						tag_img = '<img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
+						tag_img = '<img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="/resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
 					}
 				
 					content += '<label>';
