@@ -467,6 +467,7 @@
 			success: function(response){
 				if(response){
 					// 권한 요청 팝업
+					
 					layerPopup('크루장 권한을 승인하시겠습니까?', '승인', '거절',
                    		function() {crewAdminUpdate('Y', idx, from_id, alarm_idx);},
                     	function() {crewAdminUpdate('N', idx, from_id, alarm_idx);})
@@ -483,7 +484,7 @@
 	}
 	
 	function crewAdminUpdate(result, idx, from_id, alarm_idx) {
-		applBtn2Act(); // 팝업창 끄기 위해서 (나중에 체크 필요)
+		loading();
 	    alarmUpdate(alarm_idx);
 	    console.log('result => ', result);
 	    console.log('idx => ', idx);
@@ -504,7 +505,7 @@
 	            if (response) {
 	                removeAlert();
 	                layerPopup('완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
-
+	                loadingComplete();
 	                alarmUpdate(alarm_idx);
 	                //$('.close').click();
 	            }
