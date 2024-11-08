@@ -262,6 +262,11 @@
 		WHERE id = #{id}
 	</select>
 
+	<delete id="myMateDelete">
+		DELETE FROM mate
+		WHERE mate_idx = #{mateIdx}
+	</delete>
+
 	<select id="getProfileData" parameterType="String"
 		resultType="map">
 		SELECT * FROM profile WHERE id = #{toUserId}
@@ -292,7 +297,13 @@
 		#{code_name}, #{unlikeId}, NOW());
 	</insert>
 
-
+	<select id="getMateIdsByIdx" resultType="map">
+		SELECT
+		id, unlike_id
+		FROM
+		mate
+		WHERE mate_idx = #{mateIdx}
+	</select>
 
 	<insert id="cancel" parameterType="map">
 		insert into
@@ -372,21 +383,26 @@
 
 	<select id="myMateList" resultType="map">
 		SELECT m.id, m.unlike_id,
+		m.mate_idx,
 		m.mate_date, p.image AS friend_image
 		FROM mate m
-		INNER JOIN profile p ON
+		INNER JOIN
+		profile p ON
 		p.id = m.id
 		WHERE m.unlike_id = #{id}
 
 		UNION
 
-		SELECT m.id, m.unlike_id,
+		SELECT m.id,
+		m.unlike_id, m.mate_idx,
 		m.mate_date, p.image AS friend_image
-		FROM mate m
+		FROM mate
+		m
 		INNER JOIN profile p ON
 		p.id = m.unlike_id
 		WHERE m.id = #{id}
-		ORDER BY mate_date DESC
+		ORDER BY
+		mate_date DESC
 		LIMIT
 		#{limit}
 		OFFSET #{offset}
@@ -403,9 +419,11 @@
 
 	<select id="myBoardList" resultType="map">
 		SELECT board_idx, id,
+		use_yn,
 		subject, create_date, code_name
 		FROM board
-		WHERE id = #{id}
+		WHERE id = #{id} AND
+		use_yn = 'Y'
 		ORDER BY
 		create_date
 		DESC
@@ -428,15 +446,18 @@
 		c.create_date,
 		c.nickname,
 		c.code_name,
+		c.use_yn,
 		b.id
 		FROM
 		comment c
 		JOIN board b ON c.board_idx = b.board_idx
-		WHERE b.id = #{id}
+		WHERE b.id =
+		#{id}
 		AND c.code_name IN ('B100', 'B101')
-		ORDER BY c.create_date DESC
-		LIMIT
-		#{limit} OFFSET #{offset}
+		AND c.use_yn = 'Y'
+		ORDER BY
+		c.create_date DESC
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 	<select id="countComment" resultType="int">
@@ -450,9 +471,9 @@
 	</select>
 
 	<select id="likedBoardList" resultType="map">
-		SELECT l.board_idx, l.id,
+		SELECT l.board_idx,
 		l.code_name,
-		b.create_date, b.subject
+		b.create_date, b.subject, b.id
 		FROM likes l
 		JOIN board b ON
 		l.board_idx =
@@ -462,6 +483,7 @@
 		LIMIT #{limit}
 		OFFSET #{offset}
 	</select>
+
 
 	<select id="countLike" resultType="int">
 		SELECT CEIL(COUNT(*) /
@@ -489,16 +511,16 @@
 		WHERE cl.id = #{id}
 		AND u1.id != #{id}
 		AND cl.use_yn = 'N'
-		ORDER BY c.create_date DESC
+		ORDER BY cc.start_date DESC
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 	<select id="countMessage" resultType="int">
-		SELECT CEIL(COUNT(*) /
-		#{cnt}) AS pages
-		FROM chat_link
-		WHERE id = #{id}
-		AND use_yn = 'N'
+		SELECT CEIL(COUNT(DISTINCT
+		cl.chat_idx) / #{cnt}) AS pages
+		FROM chat_link cl
+		WHERE cl.id = #{id}
+		AND cl.use_yn = 'N'
 	</select>
 
 	<select id="crewMasterMessageList" resultType="map">
@@ -643,12 +665,11 @@
 		FROM
 		interest_member im
 		JOIN
-		member m ON
-		im.unlike_id = m.id
+		member m ON im.unlike_id = m.id
 		LEFT JOIN
 		profile p ON p.id = m.id
 		WHERE
-		im.id = #{id}
+		im.unlike_id = #{id}
 		ORDER BY
 		request_date DESC
 		LIMIT #{limit} OFFSET #{offset}
@@ -659,7 +680,7 @@
 		CEIL(COUNT(*) / #{cnt}) AS pages
 		FROM interest_member
 		WHERE
-		interest_member.id = #{id}
+		interest_member.unlike_id = #{id}
 	</select>
 
 	<select id="blockMemberList" resultType="map">

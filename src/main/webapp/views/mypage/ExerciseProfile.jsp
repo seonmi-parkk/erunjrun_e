@@ -272,10 +272,10 @@ textarea {
 				<!-- 프로필 이미지 -->
 				<c:choose>
 					<c:when test="${not empty profile.image}">
-						<img class="profile-img1" src="/photo/${profile.image}" alt="프로필 이미지" />
+						<img class="profile-img1" src="/photo/${profile.image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="profile-img1" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+						<img class="profile-img1" src="resources/img/common/profile.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -283,10 +283,10 @@ textarea {
 				<!-- 아이콘 이미지 -->
 				<c:choose>
 					<c:when test="${not empty member.icon_image}">
-						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+						<img class="icon-image1" src="/resources/img/icon/${member.icon_image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+						<img class="icon-image1" src="resources/img/icon/default-icon.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -325,10 +325,10 @@ textarea {
 				<!-- 프로필 이미지 -->
 				<c:choose>
 					<c:when test="${not empty profile.image}">
-						<img class="profile-img2" src="/photo/${profile.image}" alt="프로필 이미지" />
+						<img class="profile-img2" src="/photo/${profile.image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="profile-img2" src="resources/img/common/profile.png" alt="기본 프로필 이미지" />
+						<img class="profile-img2" src="resources/img/common/profile.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -336,10 +336,10 @@ textarea {
 				<!-- 아이콘 이미지 -->
 				<c:choose>
 					<c:when test="${not empty member.icon_image}">
-						<img class="icon-image2" src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+						<img class="icon-image2" src="/resources/img/icon/${member.icon_image}" alt="" />
 					</c:when>
 					<c:otherwise>
-						<img class="icon-image2" src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+						<img class="icon-image2" src="resources/img/icon/default-icon.png" alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>

@@ -276,11 +276,11 @@ button:hover {
 				<c:choose>
 					<c:when test="${not empty profile.image}">
 						<img class="profile-img1" src="/photo/${profile.image}"
-							alt="프로필 이미지" />
+							alt="" />
 					</c:when>
 					<c:otherwise>
 						<img class="profile-img1" src="resources/img/common/profile.png"
-							alt="기본 프로필 이미지" />
+							alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -289,11 +289,11 @@ button:hover {
 				<c:choose>
 					<c:when test="${not empty member.icon_image}">
 						<img class="icon-image1"
-							src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+							src="/resources/img/icon/${member.icon_image}" alt="" />
 					</c:when>
 					<c:otherwise>
 						<img class="icon-image1" src="resources/img/icon/default-icon.png"
-							alt="기본 아이콘 이미지" />
+							alt="" />
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -325,7 +325,7 @@ button:hover {
 		<div class="divider"></div>
 		<div class="container">
 			<h3>운동 프로필 수정</h3>
-			<form id="profileCreate" action="firstExerciseProfile" method="post"
+			<form id="profileCreate" action="ExerciseProfileUpdate" method="post"
 				enctype="multipart/form-data">
 				<input type="hidden" name="id" value="${member.id}" />
 				<div class="image-info">
@@ -334,11 +334,11 @@ button:hover {
 						<c:choose>
 							<c:when test="${not empty profile.image}">
 								<img class="profile-img2" src="/photo/${profile.image}"
-									alt="프로필 이미지" />
+									alt="" />
 							</c:when>
 							<c:otherwise>
 								<img class="profile-img2" src="resources/img/common/profile.png"
-									alt="기본 프로필 이미지" />
+									alt="" />
 							</c:otherwise>
 						</c:choose>
 					</div>
@@ -347,11 +347,11 @@ button:hover {
 						<c:choose>
 							<c:when test="${not empty member.icon_image}">
 								<img class="icon-image2"
-									src="/resources/img/icon/${member.icon_image}" alt="아이콘 이미지" />
+									src="/resources/img/icon/${member.icon_image}" alt="" />
 							</c:when>
 							<c:otherwise>
 								<img class="icon-image2"
-									src="resources/img/icon/default-icon.png" alt="기본 아이콘 이미지" />
+									src="resources/img/icon/default-icon.png" alt="" />
 							</c:otherwise>
 						</c:choose>
 					</div>

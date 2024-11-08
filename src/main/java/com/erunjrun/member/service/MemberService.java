@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erunjrun.member.dto.MemberDTO;
+import com.erunjrun.admin.dto.RightDTO;
 import com.erunjrun.member.dao.MemberDAO;
 
 @Service
@@ -61,6 +62,10 @@ public class MemberService {
 
 	public void pwUpdate(String id, String tempPw) {
 		memberDAO.pwUpdate(id, tempPw);
+	}
+
+	public RightDTO isBan(String id) {
+		return memberDAO.isBan(id);
 	}
 
 }
