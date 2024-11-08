@@ -190,7 +190,7 @@
         </div>
 
         <div class="btm-box">
-            <textarea name="msg"></textarea>
+            <textarea id="msg" name="msg"></textarea>
             <div class="btn-area">
             	<button class="btn01-s" onclick="sendMessage()">전송</button>
            	</div>
@@ -323,6 +323,14 @@
 		$('.msg-area').html(msgCont);		
 		callback();
 	}
+	
+	var msg = document.getElementById('msg');
+	msg.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            // 엔터 키가 눌리면 실행할 코드
+            sendMessage();
+        }
+    });
 	
 	function sendMessage(){
 		console.log("전송클릭");

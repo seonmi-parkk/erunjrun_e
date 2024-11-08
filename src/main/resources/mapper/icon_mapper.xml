@@ -53,9 +53,10 @@
 	
 	<select id="adminIconList" resultType="com.erunjrun.icon.dto.IconDTO">
 		SELECT icon_idx, icon_name, image, cost, use_yn,
+			(SELECT count(icon_idx) FROM icon_buy WHERE icon_idx = i.icon_idx) AS sales_count,
 			COUNT(*) OVER() AS total_count
-			FROM icon
-			ORDER BY icon_idx LIMIT #{limit} OFFSET #{offset}
+			FROM icon i
+			ORDER BY sales_count DESC, icon_idx LIMIT #{limit} OFFSET #{offset}
 	</select>
 	
 	<insert id="adminIconWrite" parameterType="map">

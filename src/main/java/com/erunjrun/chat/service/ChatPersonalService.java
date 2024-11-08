@@ -31,7 +31,7 @@ public class ChatPersonalService {
 		boolean blockYn = chatPersonalDAO.checkBlock(chatIdx, baseUser,otherUser) > 0 ? true : false;
 		
 		List<ChatPersonalDTO> userList = chatPersonalDAO.getUserName(chatIdx);
-		logger.info("userNames: "+userList.get(0).getNickname());
+		//logger.info("userNames: "+userList.get(0).getNickname());
 		// userNames들어오는지 check하고 위에 values에 아래 list랑 usernames넣어서 컨트롤러 보내기
 		// 컨트롤러도 수정해야함.
 		List<ChatPersonalDTO> msgList = chatPersonalDAO.getContent(chatIdx, baseUser);
@@ -118,16 +118,16 @@ public class ChatPersonalService {
 		 logger.info("/crewLdchat/data service 시작");
 		Map<String, Object> values = new HashMap<String, Object>();
 		String otherUser = chatPersonalDAO.getCrewLeaderOtherUser(chatIdx, baseUser);
-		logger.info("otherUser!!!"+otherUser);
+		//logger.info("otherUser!!!"+otherUser);
 		boolean blockYn = chatPersonalDAO.crewLeadercheckBlock(chatIdx, baseUser,otherUser) > 0 ? true : false;
 		
 		List<ChatCrewLeaderDTO> userList = chatPersonalDAO.getCrewLeaderUserName(chatIdx);
-		logger.info("userNames"+userList.get(0).getNickname());
+		//logger.info("userNames"+userList.get(0).getNickname());
 		//logger.info("1user is leader"+userList.get(0).getIs_leader());
 		//logger.info("2user is leader"+userList.get(1).getIs_leader());
 
 		List<ChatCrewLeaderDTO> msgList = chatPersonalDAO.getCrewLeaderContent(chatIdx);
-		logger.info("메세지 내용: " + msgList.get(0).getContent());
+		//logger.info("메세지 내용: " + msgList.get(0).getContent());
 		
 		// 날짜 비교 (날짜 바뀔경우 체크)
 		LocalDate previousDate = null;
@@ -135,16 +135,16 @@ public class ChatPersonalService {
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 	    
         for(ChatCrewLeaderDTO msg : msgList) {
-        	logger.info("msg.getContent() : "+msg.getContent());
+        	//logger.info("msg.getContent() : "+msg.getContent());
 
         	LocalDate msgDate = msg.getCreate_date().toLocalDate();
-        	logger.info("msg.getStart_date(): "+msg.getCreate_date());
-        	logger.info("msgDate: "+msgDate);
+        	//logger.info("msg.getStart_date(): "+msg.getCreate_date());
+        	//logger.info("msgDate: "+msgDate);
         	
         	if(previousDate == null || !msgDate.equals(previousDate)) {
-        		logger.info("previousDate: "+previousDate);
-        		logger.info("msgDate: "+msgDate);
-        		logger.info("msgDate.format(dateFormatter): "+msgDate.format(dateFormatter));
+        	//	logger.info("previousDate: "+previousDate);
+        	//	logger.info("msgDate: "+msgDate);
+        	//	logger.info("msgDate.format(dateFormatter): "+msgDate.format(dateFormatter));
         		msg.setFirstOfDay(msgDate.format(dateFormatter));
         		previousDate = msgDate;
         	}
