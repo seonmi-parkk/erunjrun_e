@@ -190,7 +190,7 @@
         </div>
 
         <div class="btm-box">
-            <textarea name="msg"></textarea>
+            <textarea id="msg" name="msg"></textarea>
             <div class="btn-area">
             	<button id="btnSubmit">전송</button>
            	</div>
@@ -230,6 +230,8 @@
 				drawContent(data.msgList, callback);
 				
 				
+				var msg = document.getElementById('msg');
+				console.log("msg : "+msg);
 				
 				if(data.blockYn){
 					console.log('차단');
@@ -237,12 +239,29 @@
 					$('.chat #btnSubmit').addClass(' btn03-s');
 					$('.chat #btnSubmit').text('차단해제');
 					$('.chat #btnSubmit').attr('onclick','layerPopup( "차단해제 하시겠습니까?","차단해제","취소",unblockBtnAct,exitBtn2Act)');
+					
+					
+					msg.addEventListener("keypress", function(event) {
+			            if (event.key === "Enter") {
+			                // 엔터 키가 눌리면 실행할 코드
+			            	layerPopup( "차단해제 하시겠습니까?","차단해제","취소",unblockBtnAct,exitBtn2Act);
+			            }
+			        });
+					
 				}else {
 					console.log('미차단');
 					$('.chat #btnSubmit').removeClass('btn03-s');
 					$('.chat #btnSubmit').addClass('btn01-s');
 					$('.chat #btnSubmit').text('전송');
 					$('.chat #btnSubmit').attr('onclick','sendMessage()');  
+					
+					
+					msg.addEventListener("keypress", function(event) {
+			            if (event.key === "Enter") {
+			                // 엔터 키가 눌리면 실행할 코드
+			                sendMessage();
+			            }
+			        });
 					
 				}
 				
