@@ -181,7 +181,7 @@
 		color: #fff;
 		font-size: 11px;
 		display: inline-block;
-	    transform: translate(0px, 1px);
+	    transform: translate(0px, -1px);
 	}
 	
 	header .admin-menu {

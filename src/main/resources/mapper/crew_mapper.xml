@@ -595,10 +595,10 @@
 	
 	<!-- (알림) 응답된 권한 요청인지 체크 -->
 	<select id="crewAdminResultCheck" resultType="int" parameterType="map">
-		SELECT COUNT(history_idx) FROM crew_application_history WHERE crew_idx = #{crew_idx} AND leader = #{id} AND is_agree = 'Y'
+		SELECT COUNT(history_idx) FROM crew_application_history WHERE crew_idx = #{crew_idx} AND leader = #{id} AND is_agree = 'Y' AND create_date = update_date
 	</select>
 	
-	<!-- (크루관리 페이지) 크루 권한 요청 중복체크 -->
+	<!-- (크루관리 페이지) 크루 권한 요청 중복체크 *리더 네임 추가 필요-->
 	<select id="crewAdminOverlay" resultType="int" parameterType="map">
 		SELECT COUNT(history_idx) FROM crew_application_history WHERE crew_idx = #{crew_idx} AND id = #{id} AND is_agree = 'W'
 	</select>
