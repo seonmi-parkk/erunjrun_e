@@ -229,7 +229,6 @@ function sortby(field) {
     paginationInitialized = false;
     pageCall(1, currentSortField, currentSortOrder);
 }
-
 function drawList(list) {
     var content = '';
     for (var view of list) {
@@ -237,13 +236,14 @@ function drawList(list) {
         content += '<td style="' + (view.report_status == 'Y' ? 'color: blue;' : '') + '">' + view.id + '</td>';
         content += '<td><a href="/adminMemberDetail/' + view.id + '">' + view.nickname + '</a></td>';
         content += '<td>' + view.email + '</td>';
-        content += '<td><a href="/memberRight/' + view.nickname + '" style="color: orange;">권한</a></td>';
+        content += '<td><a href="/memberRight/' + view.nickname + '" style="color: orange;"  id="locationAdmin">권한</a></td>';
         content += '<td>' + view.report_count + '</td>';
         content += '<td>' + view.join_date + '</td>';
         content += '</tr>';
     }
     $('#list').html(content);
 }
+
 
 </script>
 <script src="/resources/js/common.js" type="text/javascript"></script>

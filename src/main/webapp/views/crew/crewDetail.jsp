@@ -108,7 +108,7 @@
 
 		</div>
 		<!-- 모달 -->
-		<div id="profilePopup" class="modal">
+		<div id="profilePopup" class="modal" style="display : none">
 		    <div class="modal-content">
 		        <span class="close">&times;</span>
 		        <div id="PopupBody"></div>
