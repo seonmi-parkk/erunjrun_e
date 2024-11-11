@@ -293,7 +293,7 @@
 					userCont+='<span class="distance">'+getDistance(member.latitude,member.longitude,${userPos.latitude},${userPos.longitude})+'</span><span>km</span>';
 				}
 				userCont+='<span>';
-				if(member.mate_idx > 0){
+				if(member.mate_idx > 0 && loginYn == "Y"){
 					userCont+='<span class="tag-mate">메이트</span>';
 				}else{
 					userCont+='</span></a>';

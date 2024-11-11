@@ -288,7 +288,7 @@ public class MypageController {
 
 	@PostMapping(value = "/ExerciseProfileUpdate")
 	public String ExerciseProfileUpdate(Model model, HttpSession session, @RequestParam Map<String, String> params,
-			@RequestParam(value = "fileInput", required = false) MultipartFile imageFile) {
+			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile) {
 		logger.info("Received params: {}", params);
 		logger.info("Image parameter added to params: {}", params.get("image"));
 		String id = (String) session.getAttribute("loginId");

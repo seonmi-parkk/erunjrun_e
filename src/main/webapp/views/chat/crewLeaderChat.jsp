@@ -219,7 +219,7 @@
 
 	var chatIdx = $('input[name="chatIdx"]').val();
  	getChat(scrollBtm);
-	function getChat(callback){
+	function getChat(){
 		$.ajax({
 			type: 'GET',
 			url: '/crewLdchat/data/'+chatIdx,
@@ -227,7 +227,7 @@
 			success: function(data){
 				console.log(data);
 				drawTitle(data.userList);
-				drawContent(data.msgList, callback);
+				drawContent(data.msgList);
 				
 				
 				var msg = document.getElementById('msg');
@@ -272,6 +272,26 @@
 		});
 	}
 
+	// 차단 해제하기 버튼 클릭시
+	function unblockBtnAct(){
+		$.ajax({
+			type:'POST',
+			url:'/mateUnblock/'+ $('.chat input[name="otherUser"]').val(),
+			dataType:'JSON',
+			success:function(data){
+				if(data.success){		
+					removeAlert();
+					layerPopup('차단이 해제되었습니다.', '확인',false,exitBtn2Act,exitBtn2Act);
+					updateCont();
+				}else{
+					removeAlert();
+					layerPopup('차단해제 실패하였습니다.', '해제 재시도','취소',unblockBtnAct,exitBtn2Act);
+				}
+			},
+			error:function(e){
+			}
+		});
+	}
 
 	// 채팅방제목(참여 유저닉네임)
 	function drawTitle(userList){
@@ -300,7 +320,7 @@
 	}
 	
 	
-	function drawContent(list,callback){
+	function drawContent(list){
 		var msgCont = '';
 		if(list.length>0){
 			list.forEach(function(cont){
@@ -370,7 +390,7 @@
 		
 		
 		$('.msg-area').html(msgCont);		
-		callback();
+		//callback();
 	} 
 	
 	function sendMessage(){
@@ -439,9 +459,9 @@
 	
 	
 	// 실시간 데이터 불러오기
- 	//setInterval(function(){
-	//	getChat();
-	//}, 3000);  
+ 	setInterval(function(){
+		getChat();
+	}, 3000);  
 	
 	
 	// db변동 발생시 업데이트

@@ -115,6 +115,7 @@ table tbody tr td.profileContainer {
 /* 프로필 이미지 */
 .profileBox {
     margin-right: 10px;
+    border-radius: 50%;
 }
 
 /* 아이콘 이미지 */
