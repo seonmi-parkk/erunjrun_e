@@ -343,7 +343,7 @@
 	    				<c:otherwise>
 	    					<div class="nick">
 	    					<div class="profile-area">
-							<div class="profile-img" style="background: url(/resources/img/common/${sessionScope.profileImage}) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
+							<div class="profile-img" style="background: url(/photo/${sessionScope.profileImage}) center center / cover no-repeat;"></div><div class="profile-box" style="background: url(/resources/img/icon/${nickname.icon_image}) center center / 100% 100% no-repeat;"></div></div>
 	    			   			${nickname.nickname}
 							</div>
 	    				</c:otherwise>
@@ -574,7 +574,7 @@ loadingComplete();
 				content +='<div class="profile-area">';
 				
 				if(view.image != null){
-					content +='<div class="profile-img" style="background: url(/resources/img/common/'+view.image+') center center / cover no-repeat;"></div>';					
+					content +='<div class="profile-img" style="background: url(/photo/'+view.image+') center center / cover no-repeat;"></div>';					
 				}else{
 					content +='<div class="profile-img" style="background: url(/resources/img/common/profile.png) center center / cover no-repeat;"></div>';
 				}
