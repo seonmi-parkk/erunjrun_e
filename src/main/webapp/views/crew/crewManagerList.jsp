@@ -15,6 +15,9 @@
 <script src="/resources/js/layerPopup.js"></script>
 <script src="/resources/js/common.js"></script>
 <style>
+	.profileImg03 {
+		border-radius: 50%;
+	}
 </style>
 </head>
 <body>
