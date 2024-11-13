@@ -304,6 +304,7 @@ public class MypageController {
 
 				// 파일 저장 경로
 				String uploadDir = "/usr/local/tomcat/webapps/upload/"; // 실제 경로
+
 				Path path = Paths.get(uploadDir + newFileName);
 
 				try {
