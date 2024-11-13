@@ -35,7 +35,7 @@
 					}else if(item.tag_idx == 4){
 						tag_img = '<img src="/resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
 					}else if(item.tag_idx == 5){
-						tag_img = '<img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="/resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
+						tag_img = '<img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
 					}
 				
 					content += '<label>';
@@ -90,7 +90,7 @@
 	    
     function writeCheck(){
     	
-    	if($('input[name="crew_name"]').val() !== '' && $('input[name="crew_img"]').val() !== '' && dayCheckboxes.length >= 1 && tagCheckboxes.length >= 1 && $('input[name="member"]').val() !== '' && $('input[name="minute"]').val() !== '' && $('input[name="distance"]').val() !== '' && $('input[name="address"]').val() !== ''){
+    	if($('input[name="crew_name"]').val !== '' && $('input[name="crew_img"]').val() !== '' && dayCheckboxes.length >= 1 && tagCheckboxes.length >= 1 && $('input[name="member"]').val() !== '' && $('input[name="minute"]').val() !== '' && $('input[name="distance"]').val() !== '' && $('input[name="address"]').val() !== ''){
     		layerPopup('크루를 등록하시겠습니까?', '확인', '취소', submitPost, applBtn2Act)
     		console.log('글 전송 함수 실행');
     	}else{
@@ -100,7 +100,6 @@
     }
 
     function submitPost() {
-    	loading();
         // formData 생성
         var formData = new FormData($('form')[0]);
 
@@ -170,13 +169,11 @@
                 if(response.success){
                 	console.log('크루 생성 성공');
                 	removeAlert();
-                	loadingComplete();
                 	layerPopup('크루 등록이 완료되었습니다.', '확인', false, locationCrewList, locationCrewList); 
                 }
             },
             error: function (e) {
                 console.log('글 전송 에러:', e);
-                loadingComplete();
             }
         });
     }

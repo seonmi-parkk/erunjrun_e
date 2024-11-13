@@ -25,10 +25,10 @@
 	    pageCall(firstPage);  // 검색어가 추가된 상태에서 호출
 	});
 	
-    var crew_idx = $('input[name="crew_idx"]').val(); // 나중에 변경 필요
 
 	function pageCall(page) {
 	    var keyword = $('#searchKeyword').val();  // 검색어
+	    var crew_idx = $('input[name="crew_idx"]').val(); // 나중에 변경 필요
 	
 	    $.ajax({
 	        type: 'POST',
@@ -46,17 +46,9 @@
 	            console.log(response.result.totalpage);
 	            
 	            var result = response.result;
-	            var totalCount = 15;
-	            if(response.result){
-	            	if(response.result.totalpage){
-	            	}if(response.result.totalpage  >= 15){
-		            	totalCount = response.result[0].totalpage;  // 총 게시글 수를 서버에서 가져옴
-	            	}
-	            	
-	            }
 	            
 	            
-	           // var totalCount = response.result[0].totalpage;  // 총 게시글 수를 서버에서 가져옴
+	            var totalCount = response.result[0].totalpage;  // 총 게시글 수를 서버에서 가져옴
 	            var pageSize = 15;  // 한 페이지당 게시글 수
 	            var totalPages = Math.ceil(totalCount / pageSize);  // 총 페이지 수 계산
 	            console.log('총 페이지 수=> ', totalPages);
@@ -213,7 +205,7 @@
 	            dataType: 'JSON',
 	            success: function(response){
 	                if(response){
-	                    memberResultUpdate(id, nickname, code_name);
+	                    memberResultUpdate(id, nickname, value);
 	                } else {
 	                	removeAlert();
 	                    layerPopup('크루원이 가득 찼습니다.', '확인', false, applBtn2Act, applBtn2Act);
@@ -224,11 +216,11 @@
 	            }
 	        });
 	    } else {
-	        memberResultUpdate(id, nickname, code_name);
+	        memberResultUpdate(id, nickname, value);
 	    }
 	}
 	
-	function memberResultUpdate(id, nickname, code_name){
+	function memberResultUpdate(id, nickname, value){
 	    $.ajax({
 	        type: 'POST',
 	        url: '/crew/applicationWrite',
