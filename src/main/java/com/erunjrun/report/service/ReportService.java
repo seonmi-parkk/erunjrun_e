@@ -36,7 +36,7 @@ public class ReportService {
 
 	            try {
 	                // 파일 저장
-	                Path path = Paths.get("C:/upload/" + newFileName);
+	                Path path = Paths.get("/usr/local/tomcat/webapps/upload" + newFileName);
 	                Files.write(path, report_img.getBytes());
 
 	                // 이미지 정보 DTO 생성 및 설정
@@ -83,7 +83,7 @@ public class ReportService {
 
             try {
                 // 파일 저장
-                Path path = Paths.get("C:/upload/" + newFileName);
+                Path path = Paths.get("/usr/local/tomcat/webapps/upload" + newFileName);
                 Files.write(path, report_img.getBytes());
 
                 // 이미지 정보 DTO 생성 및 설정
@@ -117,7 +117,7 @@ public class ReportService {
 
             try {
                 // 파일 저장
-                Path path = Paths.get("C:/upload/" + newFileName);
+                Path path = Paths.get("/usr/local/tomcat/webapps/upload" + newFileName);
                 Files.write(path, report_img.getBytes());
 
                 // 이미지 정보 DTO 생성 및 설정
