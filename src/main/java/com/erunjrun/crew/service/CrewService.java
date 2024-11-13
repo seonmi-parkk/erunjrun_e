@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,9 @@ public class CrewService {
     Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired CrewDAO crew_dao;
     
+    @Value("${upload.path}") String paths;
+    @Value("${uploadTem.path}") String tem_path;
+    
     // 파일 임시저장
 	public Map<String, Object> saveFile(MultipartFile file) throws IllegalStateException, IOException {
 		
@@ -42,7 +46,7 @@ public class CrewService {
 		Map<String, Object> resultFileMap = new HashMap<>();
 		
 		// 파일 경로
-		String uploadDir = "C:/uploadTemporary/";
+		String uploadDir = tem_path;
 		File dir = new File(uploadDir);
 		
 		if(!dir.exists()) {
@@ -135,7 +139,7 @@ public class CrewService {
 		byte[] arr;
 		try {
 			arr = crew_img.getBytes();
-			Path path = Paths.get("C:/upload/"+img_new);
+			Path path = Paths.get(paths + img_new);
 			Files.write(path, arr);
 			crew_dao.fileUpload(imageDto);
 		} catch (IOException e) {
@@ -151,9 +155,9 @@ public class CrewService {
 		logger.info("파일까지 가는 경로 가능하냐!!");
 		
 		// 복사할 파일
-		File srcFile = new File("C:/uploadTemporary/"+img.getImg_new());
+		File srcFile = new File(tem_path+img.getImg_new());
 		// 목적지 (파일명을 그대로 복사하기 위해 파일명 붙여줌
-		File descDir = new File("C:/upload/"+img.getImg_new());
+		File descDir = new File(paths+img.getImg_new());
 		
 		try {
 			// Directory 는 폴더 복사 , File 은 파일 복사
@@ -290,7 +294,7 @@ public class CrewService {
 		byte[] arr;
 		try {
 			arr = crew_img.getBytes();
-			Path path = Paths.get("C:/upload/"+img_new);
+			Path path = Paths.get(paths+img_new);
 			Files.write(path, arr);
 			int file_row = crew_dao.fileUpdate(imageDto);
 			logger.info("file_row =>" + file_row);
