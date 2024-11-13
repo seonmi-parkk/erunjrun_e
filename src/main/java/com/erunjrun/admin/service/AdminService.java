@@ -34,8 +34,10 @@ public class AdminService {
    Logger logger = LoggerFactory.getLogger(getClass());
    
    @Autowired AdminDAO admin_dao;
+
    
    @Value("${upload.path}") String paths;
+
 
    public String getAllowedIp(String admin_id) {
         return admin_dao.getAllowedIp(admin_id);

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,8 @@ public class MypageController {
 
 	@Autowired
 	MypageService mypageService;
+    @Value("${upload.path}") String paths;
+    @Value("${uploadTem.path}") String tem_path;
 
 	@GetMapping(value = "/profileDetail")
 	public String profileDetail(Model model, HttpSession session) {
@@ -303,7 +306,8 @@ public class MypageController {
 				String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
 
 				// 파일 저장 경로
-				String uploadDir = "/usr/local/tomcat/webapps/upload/"; // 실제 경로
+
+				String uploadDir = paths; // 실제 경로
 
 				Path path = Paths.get(uploadDir + newFileName);
 
