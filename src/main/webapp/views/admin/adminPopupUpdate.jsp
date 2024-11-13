@@ -151,7 +151,7 @@
 	    <!-- 기존 이미지 미리보기 (수정 페이지에서만 사용) -->
 	    <c:if test="${not empty file}">
 	        <div id="currentImageContainer">
-	            <img alt="${file.img_ori}" src="/photo/${file.img_new}" id="currentImage" style="max-width: 200px;">
+	            <img alt="${file.img_ori}" src="usr/local/tomcat/webapps/upload/${file.img_new}" id="currentImage" style="max-width: 200px;">
 	            <button type="button" class="btn01-m" id="deleteImageBtn">이미지 삭제</button>
 	        </div>
 	    </c:if>

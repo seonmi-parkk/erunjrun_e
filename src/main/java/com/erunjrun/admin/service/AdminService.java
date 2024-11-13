@@ -393,7 +393,9 @@ public class AdminService {
             String ext = img_ori.substring(pos);
             String img_new = UUID.randomUUID()+ext;
             byte[] arr = file.getBytes();
+
             Path path = Paths.get(paths+img_new);
+
             Files.write(path, arr);
             int row = admin_dao.fileWrite(img_ori,img_new,popup_idx,code_name);
             logger.info(""+row);
@@ -460,7 +462,9 @@ public class AdminService {
          String ext = img_ori.substring(pos);
          String img_new = UUID.randomUUID()+ext;
          byte[] arr = file.getBytes();
+
          Path path = Paths.get(paths+img_new);
+
          Files.write(path, arr);
          int row = admin_dao.fileupdate(img_ori,img_new,popup_idx,code_name);
          logger.info(""+row);
