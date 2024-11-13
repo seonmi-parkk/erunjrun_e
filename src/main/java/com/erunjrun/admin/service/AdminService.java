@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,8 @@ public class AdminService {
    Logger logger = LoggerFactory.getLogger(getClass());
    
    @Autowired AdminDAO admin_dao;
+   
+   @Value("${upload.path}") String paths;
 
    public String getAllowedIp(String admin_id) {
         return admin_dao.getAllowedIp(admin_id);
@@ -391,7 +394,7 @@ public class AdminService {
             String img_new = UUID.randomUUID()+ext;
             byte[] arr = file.getBytes();
 
-            Path path = Paths.get("usr/local/tomcat/webapps/upload/"+img_new);
+            Path path = Paths.get(paths+img_new);
 
             Files.write(path, arr);
             int row = admin_dao.fileWrite(img_ori,img_new,popup_idx,code_name);
@@ -460,7 +463,7 @@ public class AdminService {
          String img_new = UUID.randomUUID()+ext;
          byte[] arr = file.getBytes();
 
-         Path path = Paths.get("usr/local/tomcat/webapps/upload/"+img_new);
+         Path path = Paths.get(paths+img_new);
 
          Files.write(path, arr);
          int row = admin_dao.fileupdate(img_ori,img_new,popup_idx,code_name);
