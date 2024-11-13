@@ -123,6 +123,8 @@ public interface MypageDAO {
 	boolean myMateDelete(String mateIdx);
 
 	Map<String, String> getMateIdsByIdx(String mateIdx);
+
+	int countFriendRequesting(String id, int cnt);
 	
 
 }

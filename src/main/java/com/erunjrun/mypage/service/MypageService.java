@@ -150,7 +150,7 @@ public class MypageService {
 		int offset = (page - 1) * cnt;
 
 		// 전체 페이지 수 계산
-	    int totalCount = mypageDAO.countFriendRequests(id, cnt); // ID를 이용해 전체 수 계산
+	    int totalCount = mypageDAO.countFriendRequesting(id, cnt); // ID를 이용해 전체 수 계산
 	    logger.info("Total friend requests count: {}", totalCount);
 
 		// 결과 맵 생성
@@ -317,15 +317,15 @@ public class MypageService {
 		int offset = (page - 1) * cnt;
 
 		// 전체 페이지 수 계산
-		int totalPages = mypageDAO.countCrewMessage(id, cnt); // ID를 이용해 전체 페이지 수 계산
-		logger.info("Total pages: {}", totalPages);
+		int totalCount = mypageDAO.countCrewMessage(id, cnt); // ID를 이용해 전체 페이지 수 계산
+		logger.info("Total pages: {}", totalCount);
 
 		// 결과 맵 생성
 		Map<String, Object> result = new HashMap<>();
-		result.put("totalpages", totalPages);
+		result.put("totalCount", totalCount);
 		result.put("currPage", page);
 		result.put("list", mypageDAO.crewMasterMessageList(limit, offset, id)); // ID를 이용해 리스트 가져오기
-		logger.info("Result map: {}", result);
+	    logger.info("Result map created with totalCount: {}, currPage: {}, list: {}", totalCount, page, result.get("list"));  // 결과 맵과 리스트 로그
 
 		return result;
 	}

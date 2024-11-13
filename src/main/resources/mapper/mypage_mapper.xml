@@ -245,21 +245,30 @@
 		p.image AS friend_image
 		FROM
 		mate_application ma
-		LEFT JOIN profile p ON p.id = ma.id OR p.id =
+		LEFT JOIN profile p ON p.id =
 		ma.unlike_id
-		WHERE ma.id = #{id}
+		WHERE
+		ma.id = #{id}
 		ORDER BY ma.create_date DESC
 		LIMIT
-		#{limit} OFFSET #{offset}
+		#{limit} OFFSET
+		#{offset}
 	</select>
 
 	<select id="countFriendRequests" resultType="int">
-		SELECT CEIL(COUNT(*)
-		/ #{cnt})
+		SELECT COUNT(*)
 		AS
 		pages
 		FROM mate_application
 		WHERE id = #{id}
+	</select>
+
+	<select id="countFriendRequesting" resultType="int">
+		SELECT COUNT(*)
+		AS
+		pages
+		FROM mate_application
+		WHERE unlike_id = #{id}
 	</select>
 
 	<delete id="myMateDelete">
@@ -355,10 +364,10 @@
 	</select>
 
 	<select id="countMyIconList" resultType="int">
-		SELECT CEIL(COUNT(*)
-		/#{cnt})
+		SELECT COUNT(*)
 		AS
-		pages FROM
+		pages
+		FROM
 		icon_buy
 		WHERE id = #{id}
 	</select>
@@ -409,8 +418,7 @@
 	</select>
 
 	<select id="countFriends" resultType="int">
-		SELECT CEIL(COUNT(*)
-		/#{cnt})
+		SELECT COUNT(*)
 		AS
 		pages FROM
 		mate
@@ -462,12 +470,14 @@
 
 	<select id="countComment" resultType="int">
 		SELECT CEIL(COUNT(*) /
-		#{cnt}) AS pages
+		#{cnt})
+		AS pages
 		FROM comment c
-		JOIN board b ON c.board_idx =
-		b.board_idx
-		WHERE b.id = #{id}
+		JOIN board b ON c.board_idx = b.board_idx
+		WHERE
+		b.id = #{id}
 		AND c.code_name IN ('B100', 'B101')
+		AND c.use_yn = 'Y'
 	</select>
 
 	<select id="likedBoardList" resultType="map">
@@ -477,10 +487,12 @@
 		b.create_date,
 		b.subject,
 		b.id AS board_writer_id
-		FROM likes l
+		FROM likes
+		l
 		JOIN board b ON l.board_idx = b.board_idx
 		WHERE l.id = #{id}
-		ORDER BY l.board_idx DESC
+		ORDER BY
+		l.board_idx DESC
 		LIMIT #{limit}
 		OFFSET #{offset}
 	</select>
@@ -509,60 +521,81 @@
 		cl.chat_idx = c.chat_idx
 		JOIN chat_link u1 ON u1.chat_idx = cl.chat_idx
 		JOIN chat_link u2 ON u2.chat_idx = cl.chat_idx
-		LEFT JOIN chat_content
-		cc ON cc.chat_idx = cl.chat_idx
+		LEFT JOIN (
+		SELECT
+		chat_idx, MIN(start_date) AS start_date
+		FROM chat_content
+		GROUP BY
+		chat_idx
+		) cc ON cc.chat_idx = cl.chat_idx
 		WHERE cl.id = #{id}
-		AND u1.id != #{id}
+		AND u1.id
+		!= #{id}
 		AND cl.use_yn = 'N'
 		ORDER BY cc.start_date DESC
-		LIMIT #{limit} OFFSET
-		#{offset}
+		LIMIT #{limit}
+		OFFSET #{offset}
 	</select>
 
 	<select id="countMessage" resultType="int">
 		SELECT CEIL(COUNT(DISTINCT
 		cl.chat_idx) / #{cnt}) AS pages
 		FROM chat_link cl
+		JOIN chat_link u1 ON
+		u1.chat_idx = cl.chat_idx
 		WHERE cl.id = #{id}
-		AND cl.use_yn = 'N'
+		AND u1.id != #{id}
+		AND
+		cl.use_yn = 'N'
 	</select>
 
 	<select id="crewMasterMessageList" resultType="map">
 		SELECT
-		ccl.chat_idx, cc.crew_idx,
+		ccl.chat_idx,
+		cc.crew_idx,
 		CASE
 		WHEN ccl.id = u1.id THEN u2.id
 		ELSE u1.id
-		END AS
-		other_id,
-		MAX(ccc.create_date) AS message_date,
+		END AS other_id,
+		latest_message.message_date,
 		ccl.use_yn
 		FROM
 		crew_chat_link ccl
 		JOIN crew_chat cc ON ccl.chat_idx = cc.chat_idx
 		JOIN
-		crew_chat_content ccc ON ccl.chat_idx = ccc.chat_idx
-		JOIN
-		crew_chat_link u1 ON u1.chat_idx = cc.chat_idx
-		JOIN crew_chat_link u2
-		ON u2.chat_idx = cc.chat_idx AND u2.id != ccl.id
-		WHERE ccl.id = #{id}
+		(
+		SELECT chat_idx, MAX(create_date) AS message_date
+		FROM
+		crew_chat_content
+		GROUP BY chat_idx
+		) latest_message ON
+		latest_message.chat_idx = ccl.chat_idx
+		JOIN crew_chat_link u1 ON
+		u1.chat_idx = cc.chat_idx
+		JOIN crew_chat_link u2 ON u2.chat_idx =
+		cc.chat_idx AND u2.id != ccl.id
+		WHERE
+		ccl.id = #{id}
 		AND cc.code_cp = 'p'
 		AND ccl.use_yn = 'N'
 		GROUP BY
 		ccl.chat_idx,
-		other_id, cc.crew_idx
-		ORDER BY message_date DESC
-		LIMIT #{limit} OFFSET
-		#{offset}
+		other_id,
+		cc.crew_idx,
+		latest_message.message_date
+		ORDER BY
+		latest_message.message_date DESC
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 	<select id="countCrewMessage" resultType="int">
-		SELECT CEIL(COUNT(*) /
-		#{cnt}) AS pages
-		FROM crew_chat_link
-		WHERE id = #{id}
-		AND use_yn = 'N'
+		SELECT COUNT(*) AS pages
+		FROM crew_chat_link ccl
+		JOIN crew_chat cc ON ccl.chat_idx = cc.chat_idx
+		WHERE
+		ccl.id = #{id}
+		AND cc.code_cp = 'p'
+		AND ccl.use_yn = 'N'
 	</select>
 
 	<select id="memberCrewList" resultType="map">
