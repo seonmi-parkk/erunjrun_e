@@ -4,7 +4,6 @@
 	var crew_idx = $('input[name="crew_idx"]').val();
 	var crewone = [];
 	var leaderId = $('input[name="leaderId"]').val();
-	var firstPage = 1;
 	
 	$(document).ready(function(){
 		if(leaderId !== loginId){
@@ -170,7 +169,6 @@
 	}
 	
 	function memberResult(id, nickname, value) {
-		loading();
 	    console.log('ID:', id);
 	    console.log('Nickname:', nickname);
 	    console.log('value:', value);
@@ -185,7 +183,9 @@
 	    }
 	
 	    console.log('code_name : ', code_name);			
+	    console.log('실행됨>');
 	    if(code_name === 'C101'){
+	    console.log('실행??');
 	        $.ajax({
 	            type: 'GET',
 	            url: '/crew/memberFullCheck',
@@ -193,24 +193,22 @@
 	            dataType: 'JSON',
 	            success: function(response){
 	                if(response){
-	                    memberResultUpdate(id, nickname, code_name);
+	                    memberResultUpdate(id, nickname, value);
 	                } else {
 	                	removeAlert();
 	                    layerPopup('크루원이 가득 찼습니다.', '확인', false, applBtn2Act, applBtn2Act);
-	                    loadingComplete();
 	                }
 	            }, 
 	            error: function(e){
 	                console.log('멤버수 체크 중 에러 => ', e);
-	                loadingComplete();
 	            }
 	        });
 	    } else {
-	        memberResultUpdate(id, nickname, code_name);
+	        memberResultUpdate(id, nickname, value);
 	    }
 	}
 	
-	function memberResultUpdate(id, nickname, code_name){
+	function memberResultUpdate(id, nickname, value){
 	    $.ajax({
 	        type: 'POST',
 	        url: '/crew/applicationWrite',
@@ -225,18 +223,15 @@
 	            
 	            if(response.success){
 	                removeAlert();
-	                crewMemberList();
 	                layerPopup(response.msg + ' 완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
-	                loadingComplete();
+	                pageCall(firstPage);
 	            } else {
 	                removeAlert();
 	                layerPopup(response.msg + ' 미완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
-	                loadingComplete();
 	            }
 	        },
 	        error: function(e){
 	            console.log('에러남 => ', e);
-	            loadingComplete();
 	        }
 	    });
 	} 
@@ -270,7 +265,6 @@
 	}
 	
 	function crewAdminOverlay(memberId){
-		loading();
 		console.log('중복 체크 해야하는 id =>', memberId);
 		$.ajax({
 			type: 'GET',
@@ -284,11 +278,9 @@
 				}else{
 					removeAlert();
 					layerPopup('이미 요청한 크루원입니다.', '확인', false, applBtn2Act, applBtn2Act);
-					loadingComplete();
 				}
 			},error: function(e){
 				console.log('권한 중복 체크 중 에러 =>', e);
-				loadingComplete();
 			}
 		})
 	}
@@ -296,7 +288,6 @@
 	
 	
 	function sendCrewAdminUpdate(memberId){
-		
 		var selectedIds = getSelectedIds();
 	    
 	    var leader = crewLeader;
@@ -313,15 +304,12 @@
 				if(response.success){
 					removeAlert();
 					layerPopup('권한 양도 요청이 완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
-					loadingComplete();
 				}else{
 					removeAlert();
 					layerPopup('권한 양도 요청이 미완료되었습니다.', '확인',false,applBtn2Act,applBtn2Act);
-					loadingComplete();
 				}
 			}, error: function(e){
 				console.log('권한 전송 중 에러 => ', e);
-				loadingComplete();
 			}
 		});  
 		
@@ -416,7 +404,6 @@
 			if(idx<5){
 
 				var createDateTime = item.create_date;
-				console.log("createDateTime : ", createDateTime);
 				var createDate = createDateTime.split('T')[0];
 				var createDateList = createDate.split('-');
 				var createDateForm = createDateList[0]+'. '+createDateList[1]+'. '+createDateList[2];

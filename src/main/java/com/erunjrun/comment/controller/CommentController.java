@@ -58,7 +58,7 @@ public class CommentController {
 		
 		try {
 	        if (userId != null && !userId.isEmpty()) {
-	            String board_name = "Y";        
+	            String board_name = "R";        
 	            alarm_controller.boardComment(board_idx, userId, board_name);
 	        } else {
 	            System.out.println("userId가 null이거나 비어 있습니다.");
