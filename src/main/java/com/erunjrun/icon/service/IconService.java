@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +26,7 @@ public class IconService {
 	@Autowired IconDAO iconDAO;
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	
+    @Value("${upload.path}") String paths;
 	
 
 	// 아이콘 몰
@@ -65,7 +66,7 @@ public class IconService {
 		try {
 			byte[] arr = file.getBytes();
 
-			Path path = Paths.get("C:/upload/"+newFileName);
+			Path path = Paths.get(paths+newFileName);
 			Files.write(path, arr);
 			//param.put("newFileName", newFileName);
 			param.put("path", newFileName);
