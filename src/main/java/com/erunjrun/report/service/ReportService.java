@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,9 @@ public class ReportService {
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired ReportDAO reportDAO;
+    @Value("${upload.path}") String paths;
+    @Value("${uploadTem.path}") String tem_path;
+	
 	public boolean report(ReportDTO reportDto, MultipartFile report_img) {
 		
 		 boolean report = reportDAO.report(reportDto) > 0; // 신고 테이블에 저장
@@ -36,7 +40,7 @@ public class ReportService {
 
 	            try {
 	                // 파일 저장
-	                Path path = Paths.get("/usr/local/tomcat/webapps/upload" + newFileName);
+	                Path path = Paths.get(paths + newFileName);
 	                Files.write(path, report_img.getBytes());
 
 	                // 이미지 정보 DTO 생성 및 설정
@@ -83,7 +87,7 @@ public class ReportService {
 
             try {
                 // 파일 저장
-                Path path = Paths.get("/usr/local/tomcat/webapps/upload" + newFileName);
+                Path path = Paths.get(paths + newFileName);
                 Files.write(path, report_img.getBytes());
 
                 // 이미지 정보 DTO 생성 및 설정
@@ -117,7 +121,7 @@ public class ReportService {
 
             try {
                 // 파일 저장
-                Path path = Paths.get("/usr/local/tomcat/webapps/upload" + newFileName);
+                Path path = Paths.get(paths + newFileName);
                 Files.write(path, report_img.getBytes());
 
                 // 이미지 정보 DTO 생성 및 설정

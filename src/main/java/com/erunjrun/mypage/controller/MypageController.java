@@ -38,7 +38,10 @@ public class MypageController {
 
 	@Autowired
 	MypageService mypageService;
+<<<<<<< HEAD
 	
+=======
+>>>>>>> origin/master
     @Value("${upload.path}") String paths;
     @Value("${uploadTem.path}") String tem_path;
 
@@ -307,6 +310,7 @@ public class MypageController {
 				String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 새로운 파일 이름 생성
 
 				// 파일 저장 경로
+
 				String uploadDir = paths; // 실제 경로
 
 				Path path = Paths.get(uploadDir + newFileName);

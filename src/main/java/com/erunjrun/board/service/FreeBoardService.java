@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +31,8 @@ public class FreeBoardService {
 	Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired FreeBoardDAO freeBoardDAO;
 	
+    @Value("${upload.path}") String paths;
+    @Value("${uploadTem.path}") String tem_path;
 	
 	public int count(int cnt_) {
 		
@@ -58,7 +61,7 @@ public class FreeBoardService {
 		        Map<String, Object> resultFileMap = new HashMap<>();
 
 		        // 파일 경로
-		        String uploadDir = "/usr/local/tomcat/webapps/uploadTemporary/";
+		        String uploadDir = tem_path;
 		        File dir = new File(uploadDir);
 
 		        if (!dir.exists()) {
@@ -127,9 +130,9 @@ public class FreeBoardService {
 	        logger.info("파일까지 가는 경로 가능하냐!!");
 
 	        // 복사할 파일
-	        File srcFile = new File("/usr/local/tomcat/webapps/uploadTemporary/" + img.getImg_new());
+	        File srcFile = new File(tem_path + img.getImg_new());
 	        // 목적지 파일
-	        File descDir = new File("/usr/local/tomcat/webapps/upload" + img.getImg_new());
+	        File descDir = new File(paths + img.getImg_new());
 
 	        try {
 	            // 파일 복사
