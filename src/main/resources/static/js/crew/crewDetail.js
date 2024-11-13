@@ -153,9 +153,7 @@
 						        // loginId가 result.id와 다르고, 또한 crewLeader와 다를 때만 접근 차단
 						        if (crewone.includes(loginId) || loginId == crewLeader) {
 						            location.href = "/crewNoticeList/" + crew_idx;
-						        } else if($('input[name="adminYn"]').val() === 'Y'){
-						        	location.href = "/crewNoticeList/" + crew_idx;
-						        }else {
+						        } else {
 						            // 접근 차단
 						            $('.crewAccess').attr('href', 'javascript:void(0);');
 						            console.log('로그인 했지만 크루원이나 크루장만 접근 가능합니다.');
@@ -291,7 +289,6 @@
     
 	// 크루 버튼 클릭 시 신청, 취소, 탈퇴 요청 함수
 	function crewMemberUpdate(){
-		loading();
 		$.ajax({
 			type: 'POST',
 			url: '/crew/applicationWrite',
@@ -306,22 +303,18 @@
 					removeAlert();
 					layerPopup(response.msg + ' 완료되었습니다.', '확인', '', function() {
 	                    applBtn2Act();
-	                    loadingComplete();
 	                    location.reload(); // 페이지 새로고침
 	                }, function() {
 	                    applBtn2Act();
-	                    loadingComplete();
 	                    location.reload(); // 페이지 새로고침
 	                });
 	            } else {
 	                removeAlert();
 	                layerPopup(response.msg + ' 미완료되었습니다.', '확인', false, applBtn2Act, applBtn2Act);
-	            	loadingComplete();
 	            }
 				
 			},error: function(e){
 				console.log('버튼 요청 시 에러남 =>', e);
-				loadingComplete();
 			}
 		});
 		
@@ -385,7 +378,7 @@
     function crewDelete(){
     	
     	console.log('delete?');
-    	loading();
+    	
     	$.ajax({
     		type: 'DELETE',
     		url: '/crew/delete',
@@ -397,20 +390,16 @@
 					layerPopup('완료되었습니다.', '확인', '', function() {
 						console.log('삭제성공');
 	                    applBtn2Act();
-	                    loadingComplete();
 	                    location.href = '/crewList' // 크루 리스트 페이지로 이동
 	                }, function() {
 	                    applBtn2Act();
-	                    loadingComplete();
 	                    location.href = '/loginView' 
 	                });
     			}else{
     				alert('크루 삭제 실패');
-    				loadingComplete();
     			}
     		},error: function(e){
     			console.log('삭제 에러 => ',e);
-    			loadingComplete();
     		}
     		
     	});

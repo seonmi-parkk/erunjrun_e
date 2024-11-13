@@ -36,7 +36,7 @@
 					}else if(item.tag_idx == 4){
 						tag_img = '<img src="/resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
 					}else if(item.tag_idx == 5){
-						tag_img = '<img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="/resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
+						tag_img = '<img src="/resources/img/common/ico_male.png" width="9px" class="tagImg-01"/><img src="resources/img/common/ico_female.png" width="9px" class="tagImg-01"/>';
 					}
 				
 					content += '<label>';
@@ -172,23 +172,8 @@
 	    }
 	});
 		
-		
-	function writeCheck(){
-
-    	if($('input[name="crew_name"]').val() !== '' && $('#crew_img').attr('src') !== '' && dayCheckboxes.length >= 1 && tagCheckboxes.length >= 1 && $('input[name="member"]').val() !== '' && $('input[name="minute"]').val() !== '' && $('input[name="distance"]').val() !== '' && $('input[name="address"]').val() !== ''){
-    		layerPopup('크루를 수정하시겠습니까?', '확인', '취소', submitUpdatePost, applBtn2Act)
-    		console.log('글 전송 함수 실행');
-    	}else{
-    		layerPopup('필수 정보를 입력해주세요', '확인', false, applBtn2Act, applBtn2Act);
-    	}
-    	
-    }	
-		
-		
-		
 	// 수정 데이터 전송
     function submitUpdatePost() {
-  		loading();
         var formData = new FormData($('form')[0]);
         var content = $('#summernote').summernote('code'); // summernote 코드
 
@@ -260,12 +245,10 @@
                 if(response.success){
 	                removeAlert();
 	                layerPopup('크루 수정이 완료되었습니다.', '확인', false, locationHrdf, locationHrdf);
-                	loadingComplete();
                 }
             },
             error: function (e) {
                 console.log('글 수정 에러:', e);
-                loadingComplete();
             }
         });
     }
