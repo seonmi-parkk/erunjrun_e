@@ -58,7 +58,7 @@ public class FreeBoardService {
 		        Map<String, Object> resultFileMap = new HashMap<>();
 
 		        // 파일 경로
-		        String uploadDir = "C:/uploadTemporary/";
+		        String uploadDir = "/usr/local/tomcat/webapps/uploadTemporary/";
 		        File dir = new File(uploadDir);
 
 		        if (!dir.exists()) {
@@ -127,9 +127,9 @@ public class FreeBoardService {
 	        logger.info("파일까지 가는 경로 가능하냐!!");
 
 	        // 복사할 파일
-	        File srcFile = new File("C:/uploadTemporary/" + img.getImg_new());
+	        File srcFile = new File("/usr/local/tomcat/webapps/uploadTemporary/" + img.getImg_new());
 	        // 목적지 파일
-	        File descDir = new File("C:/upload/" + img.getImg_new());
+	        File descDir = new File("/usr/local/tomcat/webapps/upload" + img.getImg_new());
 
 	        try {
 	            // 파일 복사
