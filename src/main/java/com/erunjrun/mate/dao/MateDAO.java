@@ -1,12 +1,10 @@
 package com.erunjrun.mate.dao;
 
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.annotations.Mapper;
-
 import com.erunjrun.mate.dto.MateDTO;
 import com.erunjrun.mate.dto.MateProfileDTO;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface MateDAO {
@@ -18,8 +16,6 @@ public interface MateDAO {
 	int checkMate(String fromUserId, String toUserId);
 
 	int checkBlock(String fromUserId, String toUserId);
-
-	String profileOpen(String toUserId);
 
 	int checkLike(String fromUserId, String toUserId);
 

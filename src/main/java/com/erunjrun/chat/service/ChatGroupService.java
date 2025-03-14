@@ -19,7 +19,11 @@ import com.erunjrun.crew.dto.CrewDTO;
 @Service
 public class ChatGroupService {
 
-	@Autowired ChatGroupDAO chatGroupDAO;
+	private final ChatGroupDAO chatGroupDAO;
+	public ChatGroupService(ChatGroupDAO chatGroupDAO) {
+		this.chatGroupDAO = chatGroupDAO;
+	}
+
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 
@@ -31,9 +35,7 @@ public class ChatGroupService {
 		Map<String, Object> values = new HashMap<String, Object>();
 		
 		CrewDTO crewInfo = chatGroupDAO.getCrewInfo(crewIdx);
-
 		String crewLeader = chatGroupDAO.getCrewLeader(crewIdx);
-
 		List<ChatCrewDTO> msgList = chatGroupDAO.getCrewContent(chatIdx);
 		
 		// 날짜 비교 (날짜 바뀔경우 체크)
@@ -43,13 +45,7 @@ public class ChatGroupService {
 	    
         for(ChatCrewDTO msg : msgList) {
         	LocalDate msgDate = msg.getCreate_date().toLocalDate();
-        	logger.info("msg.getStart_date(): "+msg.getCreate_date());
-        	logger.info("msgDate: "+msgDate);
-        	
         	if(previousDate == null || !msgDate.equals(previousDate)) {
-        		logger.info("previousDate: "+previousDate);
-        		logger.info("msgDate: "+msgDate);
-        		logger.info("msgDate.format(dateFormatter): "+msgDate.format(dateFormatter));
         		msg.setFirstOfDay(msgDate.format(dateFormatter));
         		previousDate = msgDate;
         	}
@@ -59,26 +55,12 @@ public class ChatGroupService {
         values.put("crewLeader", crewLeader);
         values.put("msgList", msgList);
 		return values;
-		
 	}
 
 	public Object sendCrewMessage(Map<String, Object> param) {
-		return chatGroupDAO.sendCrewMessage(param)>0 ? true : false;
+		return chatGroupDAO.sendCrewMessage(param) > 0;
 	}
 
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
 

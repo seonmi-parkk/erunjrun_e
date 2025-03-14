@@ -21,21 +21,22 @@ import com.erunjrun.chat.dto.ChatPersonalDTO;
 @Service
 public class ChatPersonalService {
 
-	@Autowired ChatPersonalDAO chatPersonalDAO;
+	private final ChatPersonalDAO chatPersonalDAO;
+
+	public ChatPersonalService(ChatPersonalDAO chatPersonalDAO) {
+		this.chatPersonalDAO = chatPersonalDAO;
+	}
+
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	
 	public Map<String, Object> getContent(String chatIdx, String baseUser) {
 		Map<String, Object> values = new HashMap<String, Object>();
 		String otherUser = chatPersonalDAO.getOtherUser(chatIdx, baseUser);
-		boolean blockYn = chatPersonalDAO.checkBlock(chatIdx, baseUser,otherUser) > 0 ? true : false;
+		boolean blockYn = chatPersonalDAO.checkBlock(chatIdx, baseUser,otherUser) > 0;
 		
 		List<ChatPersonalDTO> userList = chatPersonalDAO.getUserName(chatIdx);
-		//logger.info("userNames: "+userList.get(0).getNickname());
-		// userNames들어오는지 check하고 위에 values에 아래 list랑 usernames넣어서 컨트롤러 보내기
-		// 컨트롤러도 수정해야함.
 		List<ChatPersonalDTO> msgList = chatPersonalDAO.getContent(chatIdx, baseUser);
-		//logger.info("msgList getContent: "+msgList.get(0).getContent());
 		
 		// 날짜 비교 (날짜 바뀔경우 체크)
 		LocalDate previousDate = null;
@@ -44,41 +45,28 @@ public class ChatPersonalService {
 	    
         for(ChatPersonalDTO msg : msgList) {
         	LocalDate msgDate = msg.getStart_date().toLocalDate();
-        	//logger.info("msg.getStart_date(): "+msg.getStart_date());
-        	//logger.info("msgDate: "+msgDate);
         	
         	if(previousDate == null || !msgDate.equals(previousDate)) {
-        		//logger.info("previousDate: "+previousDate);
-        		//logger.info("msgDate: "+msgDate);
-        		//logger.info("msgDate.format(dateFormatter): "+msgDate.format(dateFormatter));
         		msg.setFirstOfDay(msgDate.format(dateFormatter));
-        		
         		previousDate = msgDate;
-
         	}
         }
-        
-        //logger.info("getFirstOfDay: "+ msgList.get(0).getFirstOfDay());
-        
+
         values.put("userList", userList);
         values.put("msgList", msgList);
         values.put("blockYn", blockYn);
-        logger.info("blockYn!!!!!!!!"+blockYn);
 		return values;
 	}
 
 
 	public String getRoomNum(String id, String unlikeId) {
-		logger.info("id: {}, unlikeId: {}",id,unlikeId);
 		return chatPersonalDAO.getRoomNum(id,unlikeId);
 	}
 
 
 	public String createRoom(String id, String unlikeId) {
 		Date today = new Date();
-
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		logger.info(" dateFormat.format(today): "+ dateFormat.format(today));
 		
 		ChatPersonalDTO dto = new ChatPersonalDTO();
 		dto.setCreate_date(dateFormat.format(today));
@@ -91,14 +79,12 @@ public class ChatPersonalService {
 		return chat_idx;
 	}
 
-
 	public boolean sendMessage(Map<String, Object> param) {
-		return chatPersonalDAO.sendMessage(param)>0 ? true : false;
+		return chatPersonalDAO.sendMessage(param) > 0;
 	}
 
-
 	public boolean exitRoom(String chatIdx, String user) {
-		return chatPersonalDAO.exitRoom(chatIdx,user) > 0 ? true : false;
+		return chatPersonalDAO.exitRoom(chatIdx,user) > 0;
 	}
 
 	// 3년 지난 데이터 삭제
@@ -106,28 +92,17 @@ public class ChatPersonalService {
 		chatPersonalDAO.deleteChatData();
 	}
 
-
 	public String getCrewLeaderChat(String crewIdx, String baseUser) {
-		logger.info("crewIdx : {}, baseUser: {}",crewIdx,baseUser);
 		return chatPersonalDAO.getCrewLeaderChat(crewIdx, baseUser);
 	}
 
-
-
 	public Map<String, Object> getCrewLeaderContent(String chatIdx, String baseUser) {
-		 logger.info("/crewLdchat/data service 시작");
 		Map<String, Object> values = new HashMap<String, Object>();
 		String otherUser = chatPersonalDAO.getCrewLeaderOtherUser(chatIdx, baseUser);
-		//logger.info("otherUser!!!"+otherUser);
-		boolean blockYn = chatPersonalDAO.crewLeadercheckBlock(chatIdx, baseUser,otherUser) > 0 ? true : false;
+		boolean blockYn = chatPersonalDAO.crewLeadercheckBlock(chatIdx, baseUser,otherUser) > 0 ;
 		
 		List<ChatCrewLeaderDTO> userList = chatPersonalDAO.getCrewLeaderUserName(chatIdx);
-		//logger.info("userNames"+userList.get(0).getNickname());
-		//logger.info("1user is leader"+userList.get(0).getIs_leader());
-		//logger.info("2user is leader"+userList.get(1).getIs_leader());
-
 		List<ChatCrewLeaderDTO> msgList = chatPersonalDAO.getCrewLeaderContent(chatIdx);
-		//logger.info("메세지 내용: " + msgList.get(0).getContent());
 		
 		// 날짜 비교 (날짜 바뀔경우 체크)
 		LocalDate previousDate = null;
@@ -135,31 +110,18 @@ public class ChatPersonalService {
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 	    
         for(ChatCrewLeaderDTO msg : msgList) {
-        	//logger.info("msg.getContent() : "+msg.getContent());
-
         	LocalDate msgDate = msg.getCreate_date().toLocalDate();
-        	//logger.info("msg.getStart_date(): "+msg.getCreate_date());
-        	//logger.info("msgDate: "+msgDate);
-        	
         	if(previousDate == null || !msgDate.equals(previousDate)) {
-        	//	logger.info("previousDate: "+previousDate);
-        	//	logger.info("msgDate: "+msgDate);
-        	//	logger.info("msgDate.format(dateFormatter): "+msgDate.format(dateFormatter));
         		msg.setFirstOfDay(msgDate.format(dateFormatter));
         		previousDate = msgDate;
         	}
-        	
         }
         
         values.put("userList", userList);
         values.put("msgList", msgList);
         values.put("blockYn", blockYn);
-        logger.info("blockYn !!!"+blockYn);
 		return values;
-		
-	
 	}
-
 
 	public String createCrewLeaderRoom(String crewIdx, String baseUser) {
 		ChatCrewLeaderDTO dto = new ChatCrewLeaderDTO();
@@ -175,25 +137,21 @@ public class ChatPersonalService {
 		return chatIdx;
 	}
 
-
 	public Object sendCrewLeaderMessage(Map<String, Object> param) {
-		return chatPersonalDAO.sendCrewLeaderMessage(param)>0 ? true : false;
+		return chatPersonalDAO.sendCrewLeaderMessage(param) > 0;
 	}
-
 
 	public Object exitCrewLeaderRoom(String chatIdx, String user) {
-		return chatPersonalDAO.exitCrewLeaderRoom(chatIdx, user) > 0 ? true : false;
+		return chatPersonalDAO.exitCrewLeaderRoom(chatIdx, user) > 0;
 	}
-
 
 	public List<ChatCrewLeaderDTO> crewLeaderChatList(String crew_idx) {
 		return chatPersonalDAO.crewLeaderChatList(crew_idx);
 	}
 
-
 	public List<ChatCrewLeaderDTO> crewLeaderChatListFull(int crew_idx, int page, int cnt, String keyword) {
-		int limit = cnt; // 15
-		int offset = (page -1) * cnt; // 0
+		int limit = cnt;
+		int offset = (page -1) * cnt;
 		
 		Map<String, Object> parmeterMap = new HashMap<>();
 		parmeterMap.put("limit", limit);
@@ -202,19 +160,12 @@ public class ChatPersonalService {
 		parmeterMap.put("crew_idx", crew_idx);
 		
 		List<ChatCrewLeaderDTO> list = chatPersonalDAO.crewLeaderChatListFull(parmeterMap);
-
 		return list; 
 	}
 
-
 	public boolean checkBlocked(String from_id, String id) {
-		return chatPersonalDAO.checkBlocked(from_id,id) > 0 ? true: false;
+		return chatPersonalDAO.checkBlocked(from_id,id) > 0;
 	}
-
-
-	
-	
-	
 	
 }
 

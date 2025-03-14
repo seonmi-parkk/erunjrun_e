@@ -1,25 +1,25 @@
 package com.erunjrun.mate.service;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.erunjrun.mate.dao.MateDAO;
 import com.erunjrun.mate.dto.MateDTO;
 import com.erunjrun.mate.dto.MateProfileDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Calendar;
+import java.util.List;
 
 
 @Service
 public class MateService {
-	@Autowired MateDAO mateDAO;
+	private final MateDAO mateDAO;
+
+	public MateService(MateDAO mateDAO) {
+		this.mateDAO = mateDAO;
+	}
+
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Transactional
@@ -27,51 +27,25 @@ public class MateService {
 		boolean result = false;
 		int appRst = mateDAO.mateApplication(fromUserId, toUserId);
 		int historyRst = mateDAO.mateHistory(fromUserId, toUserId);
-
-		logger.info("[mateApplication s]appRst: {}, historyRst: {}", appRst, historyRst); 
-		if(appRst > 0 && historyRst > 0) { result = true; }
-		
+		if(appRst > 0 && historyRst > 0) {
+			result = true;
+		}
 		return result;
 	}
 
 	public boolean checkMate(String fromUserId, String toUserId) {
-		boolean isMate = false;
-		if(mateDAO.checkMate(fromUserId,toUserId)>0) {
-			isMate = true;
-		}
-		return isMate;
+        return mateDAO.checkMate(fromUserId, toUserId) > 0;
 	}
 
 	public boolean checkBlock(String fromUserId, String toUserId) {
-		boolean isBlocked = false;
-		if(mateDAO.checkBlock(fromUserId,toUserId)>0) {
-			isBlocked = true;
-		}
-		return isBlocked;
+        return mateDAO.checkBlock(fromUserId, toUserId) > 0;
 	}
 
-//	public boolean profileOpen(String toUserId) {
-//		boolean isOpened = false;
-//		if(mateDAO.profileOpen(toUserId) != null) {
-//			isOpened = true;
-//		}
-//		return isOpened;
-//	}
-
 	public boolean checkLike(String fromUserId, String toUserId) {
-		boolean isLiked = false;
-		if(mateDAO.checkLike(fromUserId,toUserId)>0) {
-			isLiked = true;
-		}
-		return isLiked;
+        return mateDAO.checkLike(fromUserId, toUserId) > 0;
 	}
 
 	public MateProfileDTO getProfile(String toUserId) {
-//		boolean isOpened = false;
-//		if(mateDAO.profileOpen(toUserId).equals("Y")) {
-//			isOpened = true;
-//		}
-		logger.info("toUserId:"+toUserId);
 		MateProfileDTO profileDTO = mateDAO.getProfile(toUserId);
 		int birthYear = Integer.parseInt(profileDTO.getBirth().split("-")[0]);
 		Calendar c = Calendar.getInstance();
@@ -89,28 +63,17 @@ public class MateService {
 	}
 
 	public boolean dislike(String fromUserId, String toUserId) {
-		boolean success = false;
-		if(mateDAO.dislike(fromUserId,toUserId)>0) {
-			success = true;
-		}
-		return success;
+        return mateDAO.dislike(fromUserId, toUserId) > 0;
 	}
 
 	public boolean like(String fromUserId, String toUserId) {
-		boolean success = false;
-		if(mateDAO.like(fromUserId,toUserId)>0) {
-			success = true;
-		}
-		return success;
+        return mateDAO.like(fromUserId, toUserId) > 0;
 	}
 
 	public String checkMateAppl(String fromUserId, String toUserId) {
 		String MateAppl = "none";		
 		MateDTO mateDto = mateDAO.checkMateAppl(fromUserId,toUserId);
-		logger.info("받1111오아와 : {}",mateDto);
-		//check!! .getCode_name() null일 경우 추가해야하는데?? => null point exception 잡아야함...
-		//(원래 checkMateAppl mapper의 id들이 고정값으로 들어가있었음. 
-		
+
 		if(mateDto == null) {
 			return MateAppl;
 		}
@@ -123,44 +86,19 @@ public class MateService {
 		}else if(mateDto.getCode_name().equals("M101")){
 			MateAppl = "mate";
 		}
-		
-		
-		
-		
-//		if(mateDto.getCode_name().equals("M100")) {
-//			if(mateDto.getUnlike_id().equals(fromUserId)) {
-//				MateAppl = "apply";
-//			}else if(mateDto.getUnlike_id().equals(toUserId)) {
-//				MateAppl = "recieve";				
-//			}
-//		}else if(mateDto.getCode_name().equals("M101")){
-//			MateAppl = "mate";
-//		}else{
-//			MateAppl = "none";
-//		}
-		logger.info("[checkMateAppl s]MateAppl : {}",MateAppl);
+
 		return MateAppl;
 	}
 
 	public boolean mateBlock(String fromUserId, String toUserId) {
-		boolean success = false;
-		if(mateDAO.mateBlock(fromUserId, toUserId)>0) {
-			success = true;
-		}
-		return success;
+        return mateDAO.mateBlock(fromUserId, toUserId) > 0;
 	}
 
 	public boolean mateUnblock(String fromUserId, String toUserId) {
-		boolean success = false;
-		if(mateDAO.mateUnblock(fromUserId, toUserId)>0) {
-			success = true;
-		}
-		logger.info("success!!!!!!!!!!!!!!!!"+success);
-		return success;
+        return mateDAO.mateUnblock(fromUserId, toUserId) > 0;
 	}
 
 	public List<MateProfileDTO> searchMateList(MateProfileDTO userPos) {
-		logger.info("[getPos s]fromUserId"+userPos);
 		return mateDAO.searchMateList(userPos);
 	}
 
@@ -181,16 +119,12 @@ public class MateService {
 	}
 
 	public boolean mateOn(String userId) {
-		return mateDAO.mateOn(userId) > 0 ? true : false;
+		return mateDAO.mateOn(userId) > 0;
 	}
 
 	public boolean hasProfile(String fromUserId) {
-		return mateDAO.hasProfile(fromUserId) > 0 ? true : false;
+		return mateDAO.hasProfile(fromUserId) > 0;
 	}
-	
-//	public void getPos(String fromUserId) {
-//		logger.info("fromUserId"+fromUserId);
-//	}
 	
 
 }

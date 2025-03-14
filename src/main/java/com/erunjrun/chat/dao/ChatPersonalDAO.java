@@ -11,15 +11,11 @@ import com.erunjrun.chat.dto.ChatPersonalDTO;
 @Mapper
 public interface ChatPersonalDAO {
 
-	 List<ChatPersonalDTO> getContent(String chatIdx, String baseUser);
+	List<ChatPersonalDTO> getContent(String chatIdx, String baseUser);
 
 	List<ChatPersonalDTO> getUserName(String chatIdx);
 
 	String getRoomNum(String id, String unlikeId);
-
-	//int createRoom(String id, String unlikeId);
-
-	int createRoom(String date);
 
 	int createRoom(ChatPersonalDTO dto);
 

@@ -23,5 +23,4 @@ public interface ChatGroupDAO {
 	int sendCrewMessage(Map<String, Object> param);
 
 
-
 }
